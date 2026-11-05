@@ -1,0 +1,11 @@
+{
+  "grid": {},
+  "hypotheses": [
+    {
+      "name": "reduced-known-grammar-recovery-above-floor",
+      "left": "primitive-one-to-one-accuracy",
+      "right": "primitive-random-relabeling-floor",
+      "family": "known-grammar-lexicon-induction"
+    }
+  ]
+}

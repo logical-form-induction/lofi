@@ -1,0 +1,132 @@
+{
+    "machine_info": {
+        "node": "MacBookPro",
+        "processor": "arm",
+        "machine": "arm64",
+        "python_compiler": "Clang 17.0.0 (clang-1700.6.4.2)",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.14.5",
+        "python_version": "3.14.5",
+        "python_build": [
+            "main",
+            "May 10 2026 10:21:34"
+        ],
+        "release": "24.6.0",
+        "system": "Darwin",
+        "cpu": {
+            "python_version": "3.14.5.final.0 (64 bit)",
+            "cpuinfo_version": [
+                10,
+                1,
+                1
+            ],
+            "cpuinfo_version_string": "10.1.1",
+            "arch": "ARM_8",
+            "bits": 64,
+            "count": 10,
+            "arch_string_raw": "arm64"
+        }
+    },
+    "commit_info": {
+        "id": "6bcb517a300923f6ff0cb2c7cc2f2bc406deef49",
+        "time": "2026-10-07T22:33:40-04:00",
+        "author_time": "2026-10-07T22:33:40-04:00",
+        "dirty": true,
+        "project": "lofi",
+        "branch": "main"
+    },
+    "benchmarks": [
+        {
+            "group": null,
+            "name": "test_a_corpus_record_crosses_the_boundary_within_budget",
+            "fullname": "tests/benchmarks/test_corpus_record.py::test_a_corpus_record_crosses_the_boundary_within_budget",
+            "params": null,
+            "param": null,
+            "extra_info": {
+                "records": 10000,
+                "median_us_per_record": 181.59600409999257,
+                "mean_us_per_record": 245.4928225000913,
+                "source": "in-memory raw JSON; path index I/O excluded",
+                "budget": "P-33"
+            },
+            "options": {
+                "disable_gc": true,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.4427106250004726,
+                "max": 3.7129569169992465,
+                "mean": 2.454928225000913,
+                "stddev": 1.0686147892267093,
+                "rounds": 5,
+                "median": 1.8159600409999257,
+                "iqr": 1.8557127285039314,
+                "q1": 1.7052321567498439,
+                "q3": 3.5609448852537753,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 1.4427106250004726,
+                "hd15iqr": 3.7129569169992465,
+                "ops": 0.4073438847686181,
+                "total": 12.274641125004564,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_featurization_stays_under_two_percent_of_step_wall",
+            "fullname": "tests/benchmarks/test_featurization.py::test_featurization_stays_under_two_percent_of_step_wall",
+            "params": null,
+            "param": null,
+            "extra_info": {
+                "examples": 8,
+                "item_rows": 16,
+                "tokens_per_item": 10,
+                "median_ms_per_batch": 0.28200000087963417,
+                "mean_ms_per_batch": 0.6293880017548078,
+                "median_step_ms": 860.8579159990768,
+                "fraction_of_step": 0.00032758019138658486,
+                "checks": false,
+                "budget": "P-34"
+            },
+            "options": {
+                "disable_gc": true,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.0002773329979390837,
+                "max": 0.035036417000810616,
+                "mean": 0.0006293880017548078,
+                "stddev": 0.0022892489659252727,
+                "rounds": 1775,
+                "median": 0.00028200000087963417,
+                "iqr": 1.3144999684300274e-05,
+                "q1": 0.0002797089982777834,
+                "q3": 0.00029285399796208367,
+                "iqr_outliers": 374,
+                "stddev_outliers": 41,
+                "outliers": "41;374",
+                "ld15iqr": 0.0002773329979390837,
+                "hd15iqr": 0.0003125829971395433,
+                "ops": 1588.8450323359873,
+                "total": 1.1171637031147839,
+                "iterations": 1
+            }
+        }
+    ],
+    "datetime": "2026-10-08T02:33:50.352888+00:00",
+    "version": "5.3.0"
+}

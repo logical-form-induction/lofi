@@ -1,0 +1,40 @@
+# Ill-typed logical forms kept as labeled negatives at a declared proportion.
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.interpretation: first-order
+  - data.datasets.train.dataset.ill_typing.proportion: quarter
+  - data.datasets.train.dataset.ill_typing.operators: argument-swap
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          bounds:
+            Ty: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+            Tm: {layout: complete-tree, depth: 5, nodes: null, order: df, free_ranks: 0}
+            Cat: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+        ill_typing:
+          regime: labeled-negatives
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  encoders:
+    logical-forms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+  decoders:
+    identity: {kind: tree-rnn, width: 4}
+    application: {kind: tree-rnn, width: 4}
+    form-identity: {kind: tree-rnn, width: 4}
+  spaces:
+    semantics: {sort: Tm, encoder: logical-forms, identity: form-identity}
+  readouts:
+    forms:
+      kind: terms
+      space: semantics
+      reads: inside
+      decoding: {strategy: greedy}
+loss:
+  terms+:
+    - objective: {kind: form-typing, readout: forms}
+      weight: 2.0
+trainer:
+  active_groups+: [logical-forms, form-identity]

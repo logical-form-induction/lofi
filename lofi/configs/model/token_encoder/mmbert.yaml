@@ -1,0 +1,5 @@
+kind: pretrained
+checkpoint:
+  kind: hub
+  repository: jhu-clsp/mmBERT-base
+  revision: c5955035435e2bf121cde7f3c8863ef52ff35d82

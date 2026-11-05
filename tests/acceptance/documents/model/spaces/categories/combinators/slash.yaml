@@ -1,0 +1,5 @@
+# Map each composing action of the slash grammar to its decoder.
+merge: concatenate
+decoders:
+  "application:/": application
+  "application:\\": application

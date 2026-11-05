@@ -1,0 +1,11 @@
+kind: chaosnli
+sources:
+  - source: ${lofi.path:chaosnli/chaosNLI_snli.jsonl}
+    release:
+      source_id: chaosnli
+      release_id: "1.0"  # https://github.com/easonnie/ChaosNLI
+      split: test
+      language: en
+      source_method: crowdsourced
+      spdx: CC-BY-NC-4.0  # https://github.com/easonnie/ChaosNLI/blob/master/LICENSE
+      eprint_refs: ["arXiv:2010.03532"]

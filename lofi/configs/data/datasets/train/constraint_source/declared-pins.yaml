@@ -1,0 +1,6 @@
+kind: declared
+policy: syntactic
+pins:
+  - {kind: item-feature, item: word-0, feature: NP}
+  - {kind: span-pattern, pattern: [word-2, null], permitted: ["S\\NP"]}
+  - {kind: sentence-top, permitted: [S]}

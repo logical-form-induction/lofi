@@ -1,0 +1,13 @@
+# Inference pairs over higher-order meanings labeled by a declared higher-order prover.
+defaults:
+  - higher-order-point
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          logic:
+            order: higher
+            negation: not
+            prover: {kind: tptp, engine: vampire, dialect: thf, polymorphism: monomorphize}
+            labeling: {budget: {}}

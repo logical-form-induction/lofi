@@ -1,0 +1,18 @@
+{
+  "grid": {
+    "ambiguity-profile": [
+      "a125-s0-pn", "a125-s0-p0", "a125-s0-pp",
+      "a125-s1-pn", "a125-s1-p0", "a125-s1-pp",
+      "a200-s0-pn", "a200-s0-p0", "a200-s0-pp",
+      "a200-s1-pn", "a200-s1-p0", "a200-s1-pp"
+    ]
+  },
+  "hypotheses": [
+    {
+      "name": "ambiguity-recovery-above-floor",
+      "left": "primitive-many-to-one-accuracy",
+      "right": "primitive-random-relabeling-floor",
+      "family": "lexical-ambiguity"
+    }
+  ]
+}

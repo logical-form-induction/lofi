@@ -1,0 +1,12 @@
+defaults:
+  - composition-point
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          normal_form:
+            kind: all-of
+            normal_forms:
+              - {kind: eisner}
+              - {kind: hockenmaier-bisk}

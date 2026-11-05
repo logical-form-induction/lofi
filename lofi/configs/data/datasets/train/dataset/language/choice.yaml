@@ -1,0 +1,23 @@
+defaults:
+  - _shared/types
+  - _shared/existential
+name: choice
+constants+:
+  - name: epsilon
+    type: "(a -> t) -> a"
+    quantifies: [a]
+    classes: [quantifier]
+    notation: {kind: binder, ascii: "ε", unicode: "ε", bodies: 1}
+    semantics: choice
+  - {name: dog, type: "e -> t", classes: [predicate]}
+binders: {style: curry}
+logic:
+  order: higher
+  equality: false
+  prover:
+    kind: tptp
+    engine: leo3
+    dialect: thf
+    polymorphism: monomorphize
+    timeout: 5.0
+  labeling: {budget: {}}

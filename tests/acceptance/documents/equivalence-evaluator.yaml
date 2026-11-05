@@ -1,0 +1,8 @@
+# Decoded logical forms decided equivalent to the synthesized meanings by proof.
+defaults:
+  - meaning-evaluator
+  - evaluators.equivalence: equivalence
+evaluators:
+  equivalence:
+    readout: decoded-forms
+    interval: {replicates: 20, level: 0.95}

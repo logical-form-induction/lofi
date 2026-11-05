@@ -1,0 +1,4 @@
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.language: defined-gq
+  - data.datasets.train.dataset.interpretation: defined-gq

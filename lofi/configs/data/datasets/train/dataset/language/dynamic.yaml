@@ -1,0 +1,38 @@
+defaults:
+  - _shared/types
+  - _shared/negation-conjunction
+  - _shared/conditional
+  - _shared/equality-universal
+  - _shared/existential
+  - _shared/higher-order-logic
+name: dynamic
+atomic_types:
+  - {name: e, kind: individual}
+  - {name: s, kind: index}
+  - {name: t, kind: proposition}
+constants+:
+  - {name: assign, type: "e -> s -> s"}
+  - {name: referent, type: "s -> e"}
+  - name: d_and
+    type: "(s -> s -> t) -> (s -> s -> t) -> s -> s -> t"
+    definition: '\p:(s -> s -> t). \q:(s -> s -> t). \i:s. \o:s. exists m:s. p(i)(m) & q(m)(o)'
+  - name: d_exists
+    type: "(e -> s -> s -> t) -> s -> s -> t"
+    definition: '\p:(e -> s -> s -> t). \i:s. \o:s. exists x:e. p(x)(i)(o)'
+  - name: introduce
+    type: "(e -> t) -> (e -> t) -> s -> s -> t"
+    definition: '\r:(e -> t). \p:(e -> t). \i:s. \o:s. exists x:e. r(x) & (p(x) & o = assign(x)(i))'
+  - name: pronoun
+    type: "(e -> t) -> s -> s -> t"
+    definition: '\p:(e -> t). \i:s. \o:s. p(referent(i)) & o = i'
+  - name: close
+    type: "(s -> s -> t) -> t"
+    definition: '\p:(s -> s -> t). exists i:s. exists o:s. p(i)(o)'
+  - {name: man, type: "e -> t"}
+  - {name: woman, type: "e -> t"}
+  - {name: walked, type: "e -> t"}
+  - {name: sat, type: "e -> t"}
+logic:
+  domains: {e: 2, s: 2}
+  postulates:
+    - "forall x:e. forall i:s. referent(assign(x)(i)) = x"

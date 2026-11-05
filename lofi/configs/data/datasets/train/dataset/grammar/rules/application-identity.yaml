@@ -1,0 +1,9 @@
+defaults:
+  - application
+name: application-identity
+rules+:
+  - rule: pattern
+    name: identity-combinator
+    premises:
+      - &category {pattern: term, name: X, sort: Cat}
+    conclusion: *category

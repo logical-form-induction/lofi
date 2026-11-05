@@ -1,0 +1,1 @@
+"""Term encoder declarations."""

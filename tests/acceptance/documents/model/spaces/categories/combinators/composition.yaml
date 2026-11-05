@@ -1,0 +1,8 @@
+# Map each composing action of the composition grammar to its decoder.
+merge: concatenate
+decoders:
+  "application:/": application
+  "application:\\": application
+  "composition:/:1:harmonic:unrestricted": application
+  "composition:/:2:harmonic:unrestricted": application
+  "composition:\\:1:crossed:unrestricted": application

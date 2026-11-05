@@ -1,0 +1,15 @@
+# Binary inference trained through differentiable proof search and checked proofs.
+defaults:
+  - rte-inference
+  - model.grounding: neural-proof
+trainer:
+  active_groups:
+    - token_encoder
+    - terms
+    - logical-forms
+    - identity
+    - application
+    - form-identity
+    - controller
+    - parser
+    - scorer

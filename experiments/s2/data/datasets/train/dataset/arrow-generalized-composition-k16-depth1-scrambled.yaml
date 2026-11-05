@@ -1,0 +1,5 @@
+defaults: [arrow-generalized-composition-k16-depth1]
+kind: synthetic
+grammar:
+  lexicon:
+    seed: 151

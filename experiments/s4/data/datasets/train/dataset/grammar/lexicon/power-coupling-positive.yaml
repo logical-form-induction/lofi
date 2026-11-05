@@ -1,0 +1,6 @@
+forms: 16
+categories: 4
+category_shares: {kind: power-law, exponent: 1.0}
+coupling: 0.75
+ambiguity: {spelling: parametric, mean: 1.25, dispersion: 0.0, maximum: 4, placement: 0.0}
+rank_law: {kind: power-law, exponent: 1.0}

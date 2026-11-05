@@ -1,0 +1,21 @@
+{
+  "grid": {
+    "contamination-share": [0.0, 0.05, 0.1, 0.25, 0.5],
+    "lexical-profile": [
+      "baseline",
+      "large-diverse",
+      "power-coupling-negative",
+      "power-coupling-zero",
+      "power-coupling-positive",
+      "ambiguous-frequent"
+    ]
+  },
+  "hypotheses": [
+    {
+      "name": "positive-only-contamination-breakdown",
+      "left": "primitive-many-to-one-accuracy",
+      "right": "primitive-random-relabeling-floor",
+      "family": "positive-only-by-lexical-profile"
+    }
+  ]
+}

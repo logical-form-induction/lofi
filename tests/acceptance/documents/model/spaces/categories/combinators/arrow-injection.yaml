@@ -1,0 +1,4 @@
+# Map each composing action of the arrow-injection grammar to its decoder.
+merge: concatenate
+decoders:
+  apply: application

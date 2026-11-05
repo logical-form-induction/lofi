@@ -1,0 +1,20 @@
+defaults: [slashes-application-k2-depth1]
+from: inline
+grammar:
+  name: arrow-application-k8-depth2
+  signature:
+    name: arrow-application-k8-depth2
+    primitives: [S, P1, P2, P3, P4, P5, P6, P7]
+    constructors:
+      - name: arrow
+        kind: [Cat, Cat, Cat]
+        notation: {style: infix, spelling: "->", precedence: 10, associativity: left}
+    functors:
+      - {name: arrow, constructor: arrow, argument_side: either, opposite: arrow}
+  rules:
+    name: arrow-application
+    rules:
+      - {rule: application, view: arrow}
+  normal_form: {kind: undirected-eisner}
+  lexicon:
+    max_depth: 2

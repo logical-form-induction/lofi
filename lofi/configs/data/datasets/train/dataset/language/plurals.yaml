@@ -1,0 +1,27 @@
+defaults:
+  - _shared/types
+  - _shared/negation-conjunction
+  - _shared/conditional
+  - _shared/biconditional
+  - _shared/equality-universal
+  - _shared/existential
+  - _shared/higher-order-logic
+name: plurals
+constants+:
+  - {name: sum, type: "e -> e -> e", semantics: sum}
+  - {name: part, type: "e -> e -> t", semantics: part-of}
+  - {name: atom, type: "e -> t", semantics: atom}
+  - {name: john, type: e}
+  - {name: mary, type: e}
+  - {name: met, type: "e -> e -> t"}
+  - {name: laughed, type: "e -> t"}
+  - {name: gathered, type: "e -> t"}
+logic:
+  domains: {e: 3}
+  postulates:
+    - "forall x:e. forall y:e. sum(x)(y) = sum(y)(x)"
+    - "forall x:e. forall y:e. forall z:e. sum(sum(x)(y))(z) = sum(x)(sum(y)(z))"
+    - "forall x:e. sum(x)(x) = x"
+    - "forall x:e. forall y:e. part(x)(y) <=> sum(x)(y) = y"
+    - "forall x:e. atom(x) <=> forall y:e. part(y)(x) => y = x"
+    - "forall x:e. forall y:e. laughed(sum(x)(y)) <=> laughed(x) & laughed(y)"

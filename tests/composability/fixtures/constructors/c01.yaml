@@ -1,0 +1,30 @@
+# A directed grammar over the slash pair.
+name: c01-directed
+signature:
+  primitives: [S, P1, P2]
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: "/"}
+rules:
+  name: application
+  rules:
+    - {rule: application, view: /}
+    - {rule: application, view: "\\"}
+lexicon:
+  kind: inline
+  entries:
+    - {form: w0, category: P1}
+    - {form: w1, category: 'S\P1'}
+    - {form: w2, category: '(S\P1)/P2'}
+    - {form: w3, category: P2}
+    - {form: w4, category: 'P1/P2'}
+goal:
+  kind: root
+  categories: [S]
+matching:
+  kind: feature-erasure
+budget:
+  unary_rounds: 1

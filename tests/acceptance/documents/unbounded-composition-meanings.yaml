@@ -1,0 +1,6 @@
+# Unbounded composition interpreted from the concrete derivation-step witness.
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: unbounded-composition
+  - data.datasets.train.dataset.interpretation: first-order
+  - model.spaces.categories.combinators: unbounded-composition

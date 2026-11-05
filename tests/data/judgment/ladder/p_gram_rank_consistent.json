@@ -1,0 +1,24 @@
+{
+  "objective": {"objective": "conditional"},
+  "family": {
+    "family": "rank_consistent",
+    "scheme": "coral"
+  },
+  "levels": 7,
+  "predictor": [
+    {
+      "kind": "link",
+      "readout": "p_gram",
+      "linking": {
+        "family": "logit",
+        "columns": {
+          "complement": "p_gram_complement"
+        }
+      }
+    }
+  ],
+  "identification": {
+    "constraint": "identity_link_on_logit"
+  },
+  "normalization": "identity"
+}

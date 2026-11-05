@@ -1,0 +1,7 @@
+defaults:
+  - synthetic-inference
+proportion:
+  entails: 0.3333333333333333
+  contradicts: 0.3333333333333333
+  neutral: 0.3333333333333334
+  tolerance: 0.01

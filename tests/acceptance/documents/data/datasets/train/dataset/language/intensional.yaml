@@ -1,0 +1,19 @@
+name: intensional
+atomic_types: [{name: e}, {name: s, kind: world}, {name: t, kind: proposition}]
+constructors:
+  - {name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}
+constants:
+  - name: not
+    type: "t -> t"
+    classes: [sentential, negation]
+    notation: {kind: prefix, ascii: "~", unicode: "¬", precedence: 6}
+  - name: box
+    type: "(s -> t) -> s -> t"
+    notation: {kind: prefix, ascii: box, unicode: "□", precedence: 6}
+  - {name: now, type: s}
+binders: {style: curry}
+logic:
+  order: higher
+  negation: not
+  prover: {kind: tptp, engine: vampire, dialect: thf, timeout: 5.0, polymorphism: monomorphize}
+  labeling: {budget: {}}

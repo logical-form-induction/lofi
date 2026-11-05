@@ -1,0 +1,11 @@
+# Higher-order meanings over the dataset's declared learner language.
+erasure:
+  kind: signature-morphism
+  atoms: {S: t, NP: e}
+constants:
+  - {name: john, type: e, classes: [individual]}
+  - {name: mary, type: e, classes: [individual]}
+  - {name: sleep, type: "e -> t", classes: [predicate]}
+  - {name: snore, type: infer, classes: [predicate]}
+  - {name: see, type: "e -> e -> t", classes: [predicate]}
+meanings: {source: {kind: lexical}}

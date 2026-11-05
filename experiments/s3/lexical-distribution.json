@@ -1,0 +1,31 @@
+{
+  "grid": {
+    "length-law": ["uniform", "negative-binomial"],
+    "lexical-profile": [
+      "f16-k4-du-ru-cn", "f16-k4-du-ru-c0", "f16-k4-du-ru-cp",
+      "f16-k4-du-rp-cn", "f16-k4-du-rp-c0", "f16-k4-du-rp-cp",
+      "f16-k4-dp-ru-cn", "f16-k4-dp-ru-c0", "f16-k4-dp-ru-cp",
+      "f16-k4-dp-rp-cn", "f16-k4-dp-rp-c0", "f16-k4-dp-rp-cp",
+      "f16-k8-du-ru-cn", "f16-k8-du-ru-c0", "f16-k8-du-ru-cp",
+      "f16-k8-du-rp-cn", "f16-k8-du-rp-c0", "f16-k8-du-rp-cp",
+      "f16-k8-dp-ru-cn", "f16-k8-dp-ru-c0", "f16-k8-dp-ru-cp",
+      "f16-k8-dp-rp-cn", "f16-k8-dp-rp-c0", "f16-k8-dp-rp-cp",
+      "f32-k4-du-ru-cn", "f32-k4-du-ru-c0", "f32-k4-du-ru-cp",
+      "f32-k4-du-rp-cn", "f32-k4-du-rp-c0", "f32-k4-du-rp-cp",
+      "f32-k4-dp-ru-cn", "f32-k4-dp-ru-c0", "f32-k4-dp-ru-cp",
+      "f32-k4-dp-rp-cn", "f32-k4-dp-rp-c0", "f32-k4-dp-rp-cp",
+      "f32-k8-du-ru-cn", "f32-k8-du-ru-c0", "f32-k8-du-ru-cp",
+      "f32-k8-du-rp-cn", "f32-k8-du-rp-c0", "f32-k8-du-rp-cp",
+      "f32-k8-dp-ru-cn", "f32-k8-dp-ru-c0", "f32-k8-dp-ru-cp",
+      "f32-k8-dp-rp-cn", "f32-k8-dp-rp-c0", "f32-k8-dp-rp-cp"
+    ]
+  },
+  "hypotheses": [
+    {
+      "name": "lexical-recovery-above-floor",
+      "left": "primitive-many-to-one-accuracy",
+      "right": "primitive-random-relabeling-floor",
+      "family": "lexical-distribution"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+%%% A café robot greeted Ada.
+b1 REF x1 % A [0...1] robot [7...12]
+b1 robot "n.01" x1 % robot [7...12]
+b1 REF s1 % café [2...6]
+b1 AttributeOf s1 x1 % café [2...6]
+b1 REF e1 % greeted [13...20]
+b1 Agent e1 x1 % greeted [13...20]
+b1 Theme e1 x2 % greeted [13...20]
+b1 greet "v.01" e1 % greeted [13...20]
+b1 REF x2 % Ada [21...24]
+b1 Name x2 "ada" % Ada [21...24]
+% . [24...25]

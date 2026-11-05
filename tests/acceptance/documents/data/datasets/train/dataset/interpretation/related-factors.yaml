@@ -1,0 +1,34 @@
+# Generated first-order meanings with a declared predicate-arity distribution.
+countermodels:
+  method: exhaustive
+  carriers: {e: 1, v: 1}
+  structures: 16
+  seed: 0
+  full_function_space_cap: 64
+erasure:
+  kind: signature-morphism
+  atoms: {S: t, NP: e, conj: e}
+constants: []
+meanings:
+  source:
+    kind: structured
+    structure:
+      joint:
+        spelling: tabular
+        rows:
+          - {logical_class: predicate, size: 4, share: 0.5}
+          - {logical_class: constant, size: 2, share: 0.5}
+      rank_law: {kind: uniform}
+      arities:
+        arities:
+          - {arity: 1, share: 0.5}
+          - {arity: 2, share: 0.5}
+      assignment:
+        kind: tabular
+        rows:
+          - {category: NP, classes: [{logical_class: constant}]}
+          - {category: "S\\NP", classes: [{logical_class: predicate, arity: 1}]}
+          - {category: "S\\NP/NP", classes: [{logical_class: predicate, arity: 2}]}
+      fragment: {order: first}
+      seed: 0
+      constants: 6

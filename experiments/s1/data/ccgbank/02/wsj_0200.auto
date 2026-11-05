@@ -1,0 +1,4 @@
+ID=wsj_0200.1 PARSER=GOLD NUMPARSE=1
+(<T S[dcl] 0 2> (<L NP NNP NNP John NP>) (<L S[dcl]\NP VBZ VBZ sleeps S[dcl]\NP>) )
+ID=wsj_0200.2 PARSER=GOLD NUMPARSE=1
+(<T S[dcl] 0 2> (<L NP NNP NNP Mary NP>) (<T S[dcl]\NP 0 2> (<L (S[dcl]\NP)/NP VBZ VBZ sees (S[dcl]\NP)/NP>) (<L NP NNP NNP John NP>) ) )

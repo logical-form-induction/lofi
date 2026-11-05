@@ -1,0 +1,84 @@
+defaults:
+  - cfg-collapse
+model:
+  token_encoder:
+    kind: static
+    vectors: lofi.resource:run/synthetic-parser.vec
+    trainable: true
+  readouts:
+    types:
+      kind: terms
+      space: categories
+      reads: inside
+      targets: grammar-goal
+      output: sentences
+    category-terms:
+      decoding: {cap: 320}
+loss:
+  terms:
+    - objective:
+        kind: grammaticality
+        readout: sentences
+    - objective: {kind: coherence, readout: category-terms, space: categories, estimator: truncated, warmup: null}
+      weight: 0.1
+data:
+  datasets:
+    train:
+      dataset:
+        retained: {validation: 0.25}
+        grammar:
+          formalism: declared
+          name: synthetic-parser
+          signature:
+            primitives: [S, NP, conj]
+            operators:
+              - {name: 'NP[conj]', sort: Cat, erases_to: NP}
+            constructors:
+              - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+              - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+            functors:
+              - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+              - {name: '\', constructor: '\', argument_side: left, opposite: "/"}
+            conjunctions:
+              markers: [conj]
+              pairs:
+                - unmarked: NP
+                  marked: NP[conj]
+          rules:
+            name: application
+            rules:
+              - rule: application
+                view: /
+              - rule: application
+                view: "\\"
+          lexicon:
+            entries:
+              - {form: word-0, category: NP}
+              - {form: word-1, category: "S\\NP"}
+              - {form: word-2, category: "S\\NP/NP"}
+              - {form: word-3, category: NP/NP}
+              - {form: word-4, category: NP}
+              - {form: word-5, category: "S\\NP"}
+              - {form: word-6, category: "S\\NP/NP"}
+              - {form: word-7, category: NP/NP}
+          goal: {kind: root}
+          matching:
+            kind: feature-erasure
+          budget: {}
+        size: 4
+        seed: 5
+        length:
+          kind: uniform
+          max_length: 3
+trainer:
+  epochs: 2
+  accumulation_steps: 2
+  active_groups: [token_encoder, identity, application, controller, parser]
+  early_stopping:
+    metric: loss/grammaticality
+    patience: 2
+    keep_best: 2
+  checkpoints:
+    keep: 2
+scheduler:
+  kind: cosine

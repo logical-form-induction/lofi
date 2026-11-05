@@ -1,0 +1,33 @@
+{
+  "joint": {
+    "spelling": "tabular",
+    "rows": [
+      {"logical_class": "quantifier", "size": 1, "share": 0.1},
+      {"logical_class": "connective", "size": 4, "share": 0.2},
+      {"logical_class": "predicate", "size": 4, "share": 0.5},
+      {"logical_class": "constant", "size": 2, "share": 0.2}
+    ]
+  },
+  "rank_law": {"kind": "uniform"},
+  "arities": {"arities": [{"arity": 1, "share": 1.0}]},
+  "assignment": {
+    "kind": "tabular",
+    "rows": [
+      {"category": "NP", "classes": [{"logical_class": "constant"}]},
+      {"category": "N", "classes": [{"logical_class": "predicate", "arity": 1}]},
+      {"category": "S\\NP", "classes": [{"logical_class": "predicate", "arity": 1}]},
+      {"category": "(S/(S\\NP))/N", "classes": [{"logical_class": "quantifier"}]},
+      {"category": "S/S", "classes": [{"logical_class": "connective", "arity": 1}]},
+      {"category": "(S\\S)/S", "classes": [{"logical_class": "connective", "arity": 2}]}
+    ]
+  },
+  "fragment": {
+    "order": "first",
+    "quantifiers": [{"name": "exists"}],
+    "connectives": ["and", "if", "or", "not"],
+    "functions": false,
+    "equality": false
+  },
+  "seed": 0,
+  "constants": 8
+}

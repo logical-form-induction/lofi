@@ -1,0 +1,5 @@
+constants+:
+  - name: or
+    type: "t -> t -> t"
+    classes: [sentential, disjunction]
+    notation: {kind: infix, ascii: "|", unicode: "∨", precedence: 3, associativity: left}

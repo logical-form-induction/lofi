@@ -1,0 +1,5 @@
+defaults:
+  - synthetic-parser
+  - data.datasets.train.constraint_source: gold-lexicon
+  - data.datasets.train.constraint_policy.syntactic: all
+  - loss: pinning

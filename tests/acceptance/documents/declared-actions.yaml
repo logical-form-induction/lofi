@@ -1,0 +1,12 @@
+# Application over the slash pair with each rule's meaning declared rather than derived.
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.interpretation: first-order
+data:
+  datasets:
+    train:
+      dataset:
+        interpretation:
+          actions:
+            "application:/": '\f. \a. f(a)'
+            "application:\\": '\a. \f. f(a)'

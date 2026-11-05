@@ -1,0 +1,5 @@
+# The slash grammar with its represented category space, trained as a tiny point.
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: slash
+  - model.spaces.categories.combinators: slash

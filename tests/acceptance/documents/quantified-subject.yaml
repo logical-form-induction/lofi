@@ -1,0 +1,17 @@
+# A quantified subject whose meaning takes a predicate as its argument, and a
+# predicate modifier whose higher-order type is left to inference from use.
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: quantified
+  - model.spaces.categories.combinators: slash
+  - data.datasets.train.dataset.interpretation: higher-order
+  - data.datasets.train.dataset.language: higher-order
+data:
+  datasets:
+    train:
+      dataset:
+        size: 16
+        interpretation:
+          constants+:
+            - {name: person, type: "e -> t", classes: [predicate]}
+            - {name: quiet, type: infer, classes: [predicate]}

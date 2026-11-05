@@ -1,0 +1,11 @@
+{
+  "grid": {},
+  "hypotheses": [
+    {
+      "name": "reduced-logic-lm-form-versus-inference",
+      "left": "logical-form-normal-form",
+      "right": "inference-accuracy",
+      "family": "lm-plus-prover"
+    }
+  ]
+}

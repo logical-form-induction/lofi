@@ -1,0 +1,10 @@
+defaults: [prover-enumerated]
+scorer:
+  kind: neural-proof
+  order: first
+  instantiations: 8
+  templates: [identity, conjunction-elimination, conjunction-introduction, modus-ponens]
+  depth: 3
+  width: 16
+  similarity: {kind: rbf, temperature: 1.0}
+  verification: {calls_per_step: 512, wall_per_step: 30.0, cpu_seconds: null}

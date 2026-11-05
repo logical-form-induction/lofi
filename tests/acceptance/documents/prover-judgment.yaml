@@ -1,0 +1,20 @@
+# Higher-order proof evidence scored through a declared ordinal response instrument.
+defaults:
+  - prover-in-training
+loss:
+  terms:
+    - objective:
+        kind: inference
+        signal: reward
+        response:
+          kind: judgment
+          probabilities:
+            entails: [0.05, 0.15, 0.8]
+            non-entails: [0.8, 0.15, 0.05]
+        auxiliary_weight: 0.0
+data:
+  datasets:
+    train:
+      dataset:
+        labeling: graded
+        judgments: [2, 2, 2, 2]

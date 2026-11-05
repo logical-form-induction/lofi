@@ -1,0 +1,4 @@
+# Map the unbounded composition action to its decoder.
+merge: concatenate
+decoders:
+  "composition:/:any:harmonic:unrestricted": application

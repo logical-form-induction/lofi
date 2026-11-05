@@ -1,0 +1,5 @@
+defaults:
+  - synthetic-parser
+  - data.datasets.train.constraint_source: declared-pins
+  - data.datasets.train.constraint_policy.syntactic: per-occurrence
+  - loss: pinning

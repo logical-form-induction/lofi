@@ -1,0 +1,69 @@
+# Proof-shaped credit over sampled logical forms and certified gold forms.
+defaults:
+  - higher-order-point
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          bounds:
+            Tm: {layout: complete-tree, depth: 8, nodes: null, order: df, free_ranks: 0}
+          logic:
+            order: higher
+            negation: not
+            prover: {kind: tptp, engine: leo3, dialect: thf, timeout: 5.0, polymorphism: monomorphize}
+            labeling: {budget: {}}
+model:
+  language: {from: data}
+  encoders:
+    logical-forms:
+      kind: transformer
+      width: 4
+      heads: 1
+      layers: 1
+      feedforward_width: 4
+      structure: positions
+      norm_cap: null
+  decoders:
+    form-policy:
+      kind: tree-rnn
+      width: 4
+      type_directed: {prefix: type-grammar, mask: known}
+  spaces:
+    semantics: {sort: Tm, encoder: logical-forms, identity: form-policy}
+  readouts:
+    forms:
+      kind: terms
+      space: semantics
+      reads: inside
+      decoding:
+        strategy: sample
+        restriction: {kind: full}
+        draws: 2
+        rescore_tolerance: 1.0e-5
+        clamp: sleep(john)
+loss:
+  terms:
+    - objective:
+        kind: shaped-proof
+        readout: forms
+        shaping:
+          ill_formed: 0.0
+          well_formed: 0.25
+          type_checks: 0.5
+          proved: 1.0
+          length: 0.001
+        budget: {calls_per_step: 8, wall_per_step: 10.0, cpu_seconds: null}
+trainer:
+  epochs: 1
+  active_groups:
+    - token_encoder
+    - terms
+    - logical-forms
+    - identity
+    - application
+    - form-policy
+    - controller
+    - parser
+  early_stopping:
+    metric: loss/shaped-proof

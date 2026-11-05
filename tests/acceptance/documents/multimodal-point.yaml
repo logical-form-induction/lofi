@@ -1,0 +1,10 @@
+# The multimodal grammar with its represented category space, trained as a tiny point.
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: multimodal
+  - model.spaces.categories.combinators: multimodal
+approximation: {residual_mass: 0.9}
+model:
+  readouts:
+    category-terms:
+      decoding: {strategy: exhaustive, cap: 192}

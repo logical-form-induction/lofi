@@ -1,0 +1,11 @@
+{
+  "grid": {},
+  "hypotheses": [
+    {
+      "name": "reduced-recovery-above-floor",
+      "left": "primitive-many-to-one-accuracy",
+      "right": "primitive-random-relabeling-floor",
+      "family": "reduced-supervision-noise"
+    }
+  ]
+}

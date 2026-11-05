@@ -1,0 +1,4 @@
+ambiguity: union
+selector: {kind: category-role, role: open, share: 0.25}
+coverage: 1.0
+seed: 0

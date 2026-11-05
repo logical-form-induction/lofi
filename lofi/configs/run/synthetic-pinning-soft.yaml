@@ -1,0 +1,9 @@
+defaults:
+  - synthetic-pinning-lexical
+data:
+  datasets:
+    train:
+      constraint_source:
+        clamp:
+          mode: soft
+          penalty: 0.25

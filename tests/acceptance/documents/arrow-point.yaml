@@ -1,0 +1,5 @@
+# The arrow grammar with its represented category space, trained as a tiny point.
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: arrow
+  - model.spaces.categories.combinators: arrow

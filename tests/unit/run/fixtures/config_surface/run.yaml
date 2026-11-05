@@ -1,0 +1,32 @@
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  parser:
+    kind: launcher-unit-parser
+loss:
+  terms:
+    - objective:
+        kind: launcher-unit-loss
+data:
+  datasets:
+    train:
+      dataset:
+        kind: launcher-unit-dataset
+      featurizer:
+        kind: launcher-unit-featurizer
+trainer:
+  kind: launcher-unit-trainer
+  epochs: 3
+release:
+  checkpoint: resume-latest
+optimizer:
+  kind: launcher-unit-optimizer
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000
+sinks:
+  metrics:
+    kind: launcher-unit-sink

@@ -1,0 +1,15 @@
+kind: terms
+dataset: train
+spaces: [categories]
+steps: 1000
+batch_size: 32
+generation:
+  max_depth: 4
+  child_depth: {kind: uniform}
+  branching: {by_arity: [{arity: 2, deepest: [0.5, 0.5]}]}
+  constructor_weights: {}
+  teacher_forcing_saturation: null
+checkpoints:
+  interval: 100
+  keep: 2
+max_grad_norm: null

@@ -1,0 +1,7 @@
+# The slash point under declared label noise and string corruption.
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.noise.grammatical: tenth
+  - data.datasets.train.dataset.noise.ungrammatical: tenth
+  - data.datasets.train.dataset.corruption.proportion: quarter
+  - data.datasets.train.dataset.corruption.operators: swap-deletion

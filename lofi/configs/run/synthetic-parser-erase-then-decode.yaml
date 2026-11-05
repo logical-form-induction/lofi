@@ -1,0 +1,6 @@
+defaults:
+  - synthetic-parser-consistency
+model:
+  spaces:
+    categories:
+      relation: {via: erase-then-decode}

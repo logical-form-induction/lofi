@@ -1,0 +1,19 @@
+participant	list	presentationorder	verb	frame	tense	response	nativeenglish	sentence	version
+p01	1	1	think	NP _ that S	present	7.0	yes	Dana thinks that Lee left.	1
+p01	1	2	think	NP _ to VP	present	2.0	yes	Dana thinks to leave.	1
+p01	1	3	want	NP _ that S	present	2.0	yes	Dana wants that Lee left.	1
+p01	1	4	want	NP _ to VP	present	7.0	yes	Dana wants to leave.	1
+p01	1	5	try	NP _ that S	present	1.0	yes	Dana tries that Lee left.	1
+p01	1	6	try	NP _ to VP	present	6.0	yes	Dana tries to leave.	1
+p02	1	7	think	NP _ that S	present	6.0	yes	Dana thinks that Lee left.	1
+p02	1	8	think	NP _ to VP	present	1.0	yes	Dana thinks to leave.	1
+p02	1	9	want	NP _ that S	present	1.0	yes	Dana wants that Lee left.	1
+p02	1	10	want	NP _ to VP	present	6.0	yes	Dana wants to leave.	1
+p02	1	11	try	NP _ that S	present	1.0	yes	Dana tries that Lee left.	1
+p02	1	12	try	NP _ to VP	present	5.0	yes	Dana tries to leave.	1
+p03	1	13	think	NP _ that S	present	7.0	yes	Dana thinks that Lee left.	1
+p03	1	14	think	NP _ to VP	present	3.0	yes	Dana thinks to leave.	1
+p03	1	15	want	NP _ that S	present	3.0	yes	Dana wants that Lee left.	1
+p03	1	16	want	NP _ to VP	present	7.0	yes	Dana wants to leave.	1
+p03	1	17	try	NP _ that S	present	2.0	yes	Dana tries that Lee left.	1
+p03	1	18	try	NP _ to VP	present	7.0	yes	Dana tries to leave.	1

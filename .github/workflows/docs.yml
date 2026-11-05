@@ -1,0 +1,80 @@
+name: Docs
+
+# build the documentation and publish it to GitHub Pages. a docstring is
+# documentation source, so a change under `lofi/` rebuilds the site as surely as
+# a change under `docs/` does.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "lofi/**"
+      - "pyproject.toml"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# one Pages deployment at a time, and an in-flight deploy finishes rather than
+# being canceled by the commit behind it.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  FORCE_COLOR: "1"
+
+jobs:
+  build:
+    name: Build the site
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.14"
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --locked
+
+      - name: Build
+        # `--strict` is the gate: a link to a page that does not exist, a page
+        # no `nav` entry reaches, or an identifier the API pages ask for and
+        # cannot resolve stops the build and names what is missing. the docs
+        # toolchain layers over the environment for this one command, since
+        # nothing in `lofi` imports it.
+        run: >
+          uv run --with-requirements docs/requirements.txt
+          mkdocs build --strict
+
+      - name: Upload the Pages artifact
+        # a pull request builds the site to prove it still builds. only a push
+        # to main has anything to deploy.
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

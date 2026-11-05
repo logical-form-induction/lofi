@@ -1,0 +1,84 @@
+{
+    "machine_info": {
+        "node": "MacBookPro",
+        "processor": "arm",
+        "machine": "arm64",
+        "python_compiler": "Clang 17.0.0 (clang-1700.6.4.2)",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.14.5",
+        "python_version": "3.14.5",
+        "python_build": [
+            "main",
+            "May 10 2026 10:21:34"
+        ],
+        "release": "24.6.0",
+        "system": "Darwin",
+        "cpu": {
+            "python_version": "3.14.5.final.0 (64 bit)",
+            "cpuinfo_version": [
+                10,
+                1,
+                1
+            ],
+            "cpuinfo_version_string": "10.1.1",
+            "arch": "ARM_8",
+            "bits": 64,
+            "count": 10,
+            "arch_string_raw": "arm64"
+        }
+    },
+    "commit_info": {
+        "id": "413b6f7a879aa2b1eb4fad156392f99e9bf62e2b",
+        "time": "2026-10-07T21:54:59-04:00",
+        "author_time": "2026-10-07T21:54:59-04:00",
+        "dirty": true,
+        "project": "lofi",
+        "branch": "main"
+    },
+    "benchmarks": [
+        {
+            "group": null,
+            "name": "test_five_call_determinism_stays_under_one_second",
+            "fullname": "tests/benchmarks/probe/test_determinism.py::test_five_call_determinism_stays_under_one_second",
+            "params": null,
+            "param": null,
+            "extra_info": {
+                "calls_per_diagnostic": 5,
+                "sites": 1,
+                "mean_ms_per_diagnostic": 10.376360474947433,
+                "budget": "under one second"
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.004306583003199194,
+                "max": 0.03595937500358559,
+                "mean": 0.010376360474947433,
+                "stddev": 0.00593084550501487,
+                "rounds": 40,
+                "median": 0.009161457997834077,
+                "iqr": 0.004724771497421898,
+                "q1": 0.006871624998893822,
+                "q3": 0.01159639649631572,
+                "iqr_outliers": 2,
+                "stddev_outliers": 4,
+                "outliers": "4;2",
+                "ld15iqr": 0.004306583003199194,
+                "hd15iqr": 0.027839916001539677,
+                "ops": 96.37290477854819,
+                "total": 0.4150544189978973,
+                "iterations": 1
+            }
+        }
+    ],
+    "datetime": "2026-10-08T02:12:02.588063+00:00",
+    "version": "5.3.0"
+}

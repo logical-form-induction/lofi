@@ -1,0 +1,32 @@
+# Category and aligned logical-form recovery over one logical-form point.
+defaults:
+  - inference-point
+  - evaluators.category-side: category-side
+  - evaluators.expert: expert-categories
+  - evaluators.logical-form: logical-form
+data:
+  datasets:
+    train:
+      dataset:
+        retained: {dev: 0.16666666666666666, test: 0.16666666666666666}
+model:
+  language: {from: data}
+  readouts:
+    category-terms:
+      kind: terms
+      space: categories
+      reads: inside
+      decoding: {strategy: exhaustive, residual_mass: 0.9, cap: 64}
+evaluators:
+  category-side:
+    interval: {replicates: 20, level: 0.95}
+    alignment:
+      random_floor: {replicates: 20, level: 0.95}
+      stability: {replicates: 20, level: 0.95}
+  expert:
+    interval: {replicates: 20, level: 0.95}
+  logical-form:
+    interval: {replicates: 20, level: 0.95}
+    alignment:
+      random_floor: {replicates: 20, level: 0.95}
+      stability: {replicates: 20, level: 0.95}

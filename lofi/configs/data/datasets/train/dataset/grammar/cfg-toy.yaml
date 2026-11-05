@@ -1,0 +1,59 @@
+formalism: cfg
+name: cfg-toy
+nonterminals: [S, SC, NP, NC, AP, VP, VC, PP, Det, N, V, P, Adj, Adv, C]
+productions:
+  - {name: s-np-vp, parent: S, children: [NP, VP]}
+  - {name: s-pp-s, parent: S, children: [PP, S]}
+  - {name: s-s-sc, parent: S, children: [S, SC]}
+  - {name: sc-c-s, parent: SC, children: [C, S]}
+  - {name: np-det-n, parent: NP, children: [Det, N]}
+  - {name: np-det-ap, parent: NP, children: [Det, AP]}
+  - {name: np-np-pp, parent: NP, children: [NP, PP]}
+  - {name: np-np-nc, parent: NP, children: [NP, NC]}
+  - {name: nc-c-np, parent: NC, children: [C, NP]}
+  - {name: ap-adj-n, parent: AP, children: [Adj, N]}
+  - {name: ap-adj-ap, parent: AP, children: [Adj, AP]}
+  - {name: vp-v-np, parent: VP, children: [V, NP]}
+  - {name: vp-v-pp, parent: VP, children: [V, PP]}
+  - {name: vp-v-s, parent: VP, children: [V, S]}
+  - {name: vp-vp-pp, parent: VP, children: [VP, PP]}
+  - {name: vp-adv-vp, parent: VP, children: [Adv, VP]}
+  - {name: vp-vp-adv, parent: VP, children: [VP, Adv]}
+  - {name: vp-vp-vc, parent: VP, children: [VP, VC]}
+  - {name: vc-c-vp, parent: VC, children: [C, VP]}
+  - {name: pp-p-np, parent: PP, children: [P, NP]}
+lexicon:
+  kind: inline
+  entries:
+    - {form: the, category: Det}
+    - {form: a, category: Det}
+    - {form: every, category: Det}
+    - {form: some, category: Det}
+    - {form: cat, category: N}
+    - {form: dog, category: N}
+    - {form: bird, category: N}
+    - {form: fish, category: N}
+    - {form: girl, category: N}
+    - {form: boy, category: N}
+    - {form: sees, category: V}
+    - {form: likes, category: V}
+    - {form: chases, category: V}
+    - {form: thinks, category: V}
+    - {form: says, category: V}
+    - {form: with, category: P}
+    - {form: near, category: P}
+    - {form: under, category: P}
+    - {form: behind, category: P}
+    - {form: big, category: Adj}
+    - {form: small, category: Adj}
+    - {form: red, category: Adj}
+    - {form: old, category: Adj}
+    - {form: quickly, category: Adv}
+    - {form: quietly, category: Adv}
+    - {form: often, category: Adv}
+    - {form: and, category: C}
+    - {form: or, category: C}
+goal: S
+matching: {kind: identity}
+normal_form: {kind: none}
+budget: {unary_rounds: 1, closure_rounds: 4, closure_nodes: 64}

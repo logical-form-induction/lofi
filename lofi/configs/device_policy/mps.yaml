@@ -1,0 +1,5 @@
+device: mps
+compute_dtype: float32
+deterministic: false
+matmul_precision: medium
+activation_memory_bytes: 8000000000

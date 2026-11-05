@@ -1,0 +1,484 @@
+{
+    "machine_info": {
+        "node": "MacBookPro",
+        "processor": "arm",
+        "machine": "arm64",
+        "python_compiler": "Clang 17.0.0 (clang-1700.6.4.2)",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.14.5",
+        "python_version": "3.14.5",
+        "python_build": [
+            "main",
+            "May 10 2026 10:21:34"
+        ],
+        "release": "24.6.0",
+        "system": "Darwin",
+        "cpu": {
+            "python_version": "3.14.5.final.0 (64 bit)",
+            "cpuinfo_version": [
+                10,
+                1,
+                1
+            ],
+            "cpuinfo_version_string": "10.1.1",
+            "arch": "ARM_8",
+            "bits": 64,
+            "count": 10,
+            "arch_string_raw": "arm64",
+            "brand_raw": "Apple M1 Max"
+        }
+    },
+    "commit_info": {
+        "id": "120807ae37984787ad692fa36fef91aff8bfa3b5",
+        "time": "2026-09-23T22:30:59-04:00",
+        "author_time": "2026-09-23T22:30:59-04:00",
+        "dirty": true,
+        "project": "lofi",
+        "branch": "main"
+    },
+    "benchmarks": [
+        {
+            "group": null,
+            "name": "test_logical_form_hashing_is_within_budget",
+            "fullname": "tests/benchmarks/test_lf.py::test_logical_form_hashing_is_within_budget",
+            "params": null,
+            "param": null,
+            "extra_info": {
+                "repeats": 20000,
+                "ns_per_operation": 55.220800004462944,
+                "loop_overhead_ns": 8.804200001577556,
+                "mean_ns_per_operation": 55.749706745950846,
+                "budget": "P-02"
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.0012356659999568365,
+                "max": 0.0018359999999120191,
+                "mean": 0.001291078134950568,
+                "stddev": 3.275184191820374e-05,
+                "rounds": 778,
+                "median": 0.00128050000012081,
+                "iqr": 2.949900044768583e-05,
+                "q1": 0.0012735419995806296,
+                "q3": 0.0013030410000283155,
+                "iqr_outliers": 31,
+                "stddev_outliers": 88,
+                "outliers": "88;31",
+                "ld15iqr": 0.0012356659999568365,
+                "hd15iqr": 0.0013481249998221756,
+                "ops": 774.5464607672931,
+                "total": 1.004458788991542,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_hashing_a_large_form_stays_inside_the_same_budget",
+            "fullname": "tests/benchmarks/test_lf.py::test_hashing_a_large_form_stays_inside_the_same_budget",
+            "params": null,
+            "param": null,
+            "extra_info": {
+                "repeats": 20000,
+                "ns_per_operation": 53.58749999686552,
+                "loop_overhead_ns": 8.772899991527083,
+                "mean_ns_per_operation": 54.07699340358179,
+                "budget": "P-02",
+                "nodes": 1199
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.0012047499999425781,
+                "max": 0.001866957999936858,
+                "mean": 0.0012569978679021774,
+                "stddev": 3.319809976148809e-05,
+                "rounds": 757,
+                "median": 0.001247207999767852,
+                "iqr": 1.990575026411534e-05,
+                "q1": 0.0012427397497276615,
+                "q3": 0.0012626454999917769,
+                "iqr_outliers": 75,
+                "stddev_outliers": 87,
+                "outliers": "87;75",
+                "ld15iqr": 0.0012132910001128039,
+                "hd15iqr": 0.0012926670001434104,
+                "ops": 795.5462976790207,
+                "total": 0.9515473860019483,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_one_guarded_beta_step_is_within_budget",
+            "fullname": "tests/benchmarks/test_lf.py::test_one_guarded_beta_step_is_within_budget",
+            "params": null,
+            "param": null,
+            "extra_info": {
+                "nodes": 15,
+                "median_ns_per_step": 9959.000180970179,
+                "mean_ns_per_step": 10594.842374452455,
+                "budget_ns": 40000
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 9.749999662744813e-06,
+                "max": 0.0013868329997421824,
+                "mean": 1.0594842374452455e-05,
+                "stddev": 1.4357998579255404e-05,
+                "rounds": 16184,
+                "median": 9.959000180970179e-06,
+                "iqr": 1.2500004231696948e-07,
+                "q1": 9.917000170389656e-06,
+                "q3": 1.0042000212706625e-05,
+                "iqr_outliers": 1894,
+                "stddev_outliers": 44,
+                "outliers": "44;1894",
+                "ld15iqr": 9.749999662744813e-06,
+                "hd15iqr": 1.024999983201269e-05,
+                "ops": 94385.54767094213,
+                "total": 0.17146692898813853,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_clamp_lookup_on_one_edge_is_within_budget",
+            "fullname": "tests/benchmarks/typecheck/test__clamp.py::test_clamp_lookup_on_one_edge_is_within_budget",
+            "params": null,
+            "param": null,
+            "extra_info": {
+                "clamps": 4,
+                "median_ns_per_lookup": 2042.0002329046838,
+                "mean_ns_per_lookup": 2076.630450680881,
+                "budget_ns": 11000
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.915999746415764e-06,
+                "max": 0.00022191700008988846,
+                "mean": 2.076630450680881e-06,
+                "stddev": 8.750471728310573e-07,
+                "rounds": 70383,
+                "median": 2.042000232904684e-06,
+                "iqr": 4.200001058052294e-08,
+                "q1": 2.041999778157333e-06,
+                "q3": 2.083999788737856e-06,
+                "iqr_outliers": 4479,
+                "stddev_outliers": 69,
+                "outliers": "69;4479",
+                "ld15iqr": 1.99999976757681e-06,
+                "hd15iqr": 2.165999831049703e-06,
+                "ops": 481549.3289487893,
+                "total": 0.14615948101027243,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_two_metavariable_subsumption",
+            "fullname": "tests/benchmarks/typecheck/test__unify.py::test_two_metavariable_subsumption",
+            "params": null,
+            "param": null,
+            "extra_info": {
+                "metavariables": 2,
+                "median_ns_per_match": 7250.000180647476,
+                "mean_ns_per_match": 8906.678599325573,
+                "budget_ns": 40000
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 6.999999641266186e-06,
+                "max": 0.0005226250000305299,
+                "mean": 8.906678599325572e-06,
+                "stddev": 2.1419849782493345e-05,
+                "rounds": 62993,
+                "median": 7.250000180647476e-06,
+                "iqr": 1.249995875696186e-07,
+                "q1": 7.209000159491552e-06,
+                "q3": 7.333999747061171e-06,
+                "iqr_outliers": 4276,
+                "stddev_outliers": 356,
+                "outliers": "356;4276",
+                "ld15iqr": 7.040999662422109e-06,
+                "hd15iqr": 7.540999831689987e-06,
+                "ops": 112275.29868156707,
+                "total": 0.5610584050073157,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_deriving_one_rules_actions_is_within_budget[application]",
+            "fullname": "tests/benchmarks/judge/test__proof.py::test_deriving_one_rules_actions_is_within_budget[application]",
+            "params": {
+                "rule_name": "application"
+            },
+            "param": "application",
+            "extra_info": {
+                "rule": "application",
+                "schemata": 1,
+                "median_ns_per_derivation": 50249.9997310224,
+                "mean_ns_per_derivation": 53441.18947970951,
+                "budget_ns": 700000
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 4.8874999720283085e-05,
+                "max": 0.0005175829996915127,
+                "mean": 5.344118947970951e-05,
+                "stddev": 2.691693675489703e-05,
+                "rounds": 5948,
+                "median": 5.02499997310224e-05,
+                "iqr": 8.750002962187864e-07,
+                "q1": 4.987500005881884e-05,
+                "q3": 5.075000035503763e-05,
+                "iqr_outliers": 430,
+                "stddev_outliers": 75,
+                "outliers": "75;430",
+                "ld15iqr": 4.8874999720283085e-05,
+                "hd15iqr": 5.208299990044907e-05,
+                "ops": 18712.15835081064,
+                "total": 0.31786819502531216,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_deriving_one_rules_actions_is_within_budget[composition-1]",
+            "fullname": "tests/benchmarks/judge/test__proof.py::test_deriving_one_rules_actions_is_within_budget[composition-1]",
+            "params": {
+                "rule_name": "composition-1"
+            },
+            "param": "composition-1",
+            "extra_info": {
+                "rule": "composition-1",
+                "schemata": 1,
+                "median_ns_per_derivation": 99291.99995895033,
+                "mean_ns_per_derivation": 103962.1282363959,
+                "budget_ns": 700000
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 9.624999984225724e-05,
+                "max": 0.0004079589998582378,
+                "mean": 0.0001039621282363959,
+                "stddev": 3.228562323642737e-05,
+                "rounds": 4562,
+                "median": 9.929199995895033e-05,
+                "iqr": 1.333999534836039e-06,
+                "q1": 9.870800022326875e-05,
+                "q3": 0.0001000419997581048,
+                "iqr_outliers": 374,
+                "stddev_outliers": 84,
+                "outliers": "84;374",
+                "ld15iqr": 9.67080000009446e-05,
+                "hd15iqr": 0.00010208300000158488,
+                "ops": 9618.887348344144,
+                "total": 0.4742752290144381,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_deriving_one_rules_actions_is_within_budget[crossed-composition-1]",
+            "fullname": "tests/benchmarks/judge/test__proof.py::test_deriving_one_rules_actions_is_within_budget[crossed-composition-1]",
+            "params": {
+                "rule_name": "crossed-composition-1"
+            },
+            "param": "crossed-composition-1",
+            "extra_info": {
+                "rule": "crossed-composition-1",
+                "schemata": 1,
+                "median_ns_per_derivation": 99333.99996953085,
+                "mean_ns_per_derivation": 104030.10044316607,
+                "budget_ns": 700000
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 9.591699972588685e-05,
+                "max": 0.0004658749999180145,
+                "mean": 0.00010403010044316606,
+                "stddev": 3.257101557942193e-05,
+                "rounds": 7477,
+                "median": 9.933399996953085e-05,
+                "iqr": 1.2489999789977446e-06,
+                "q1": 9.879199978968245e-05,
+                "q3": 0.0001000409997686802,
+                "iqr_outliers": 549,
+                "stddev_outliers": 135,
+                "outliers": "135;549",
+                "ld15iqr": 9.695800008557853e-05,
+                "hd15iqr": 0.00010191599994868739,
+                "ops": 9612.60246544049,
+                "total": 0.7778330610135527,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_deriving_one_rules_actions_is_within_budget[substitution-1]",
+            "fullname": "tests/benchmarks/judge/test__proof.py::test_deriving_one_rules_actions_is_within_budget[substitution-1]",
+            "params": {
+                "rule_name": "substitution-1"
+            },
+            "param": "substitution-1",
+            "extra_info": {
+                "rule": "substitution-1",
+                "schemata": 1,
+                "median_ns_per_derivation": 119625.00002482557,
+                "mean_ns_per_derivation": 125579.84793344044,
+                "budget_ns": 700000
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.00011424999956943793,
+                "max": 0.000477457999750186,
+                "mean": 0.00012557984793344043,
+                "stddev": 3.548658170728187e-05,
+                "rounds": 5274,
+                "median": 0.00011962500002482557,
+                "iqr": 3.4989998312084936e-06,
+                "q1": 0.00011829200002466678,
+                "q3": 0.00012179099985587527,
+                "iqr_outliers": 296,
+                "stddev_outliers": 124,
+                "outliers": "124;296",
+                "ld15iqr": 0.00011424999956943793,
+                "hd15iqr": 0.00012704099981419859,
+                "ops": 7963.061083893156,
+                "total": 0.6623081180009649,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_deriving_one_rules_actions_is_within_budget[type-raising]",
+            "fullname": "tests/benchmarks/judge/test__proof.py::test_deriving_one_rules_actions_is_within_budget[type-raising]",
+            "params": {
+                "rule_name": "type-raising"
+            },
+            "param": "type-raising",
+            "extra_info": {
+                "rule": "type-raising",
+                "schemata": 1,
+                "median_ns_per_derivation": 75333.00004070043,
+                "mean_ns_per_derivation": 94560.23136686074,
+                "budget_ns": 700000
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 6.908299974384136e-05,
+                "max": 0.012153874999967229,
+                "mean": 9.456023136686074e-05,
+                "stddev": 0.00024946088218087524,
+                "rounds": 7447,
+                "median": 7.533300004070043e-05,
+                "iqr": 2.2909998733666725e-06,
+                "q1": 7.420900010401965e-05,
+                "q3": 7.649999997738632e-05,
+                "iqr_outliers": 693,
+                "stddev_outliers": 163,
+                "outliers": "163;693",
+                "ld15iqr": 7.079099987095105e-05,
+                "hd15iqr": 7.99579997874389e-05,
+                "ops": 10575.270233004701,
+                "total": 0.704190042989012,
+                "iterations": 1
+            }
+        },
+        {"group":null,"name":"test_the_head_runs_a_forward_and_backward_over_a_batch_of_512","fullname":"tests/benchmarks/test_judgment_head.py::test_the_head_runs_a_forward_and_backward_over_a_batch_of_512","params":null,"param":null,"extra_info":{"batch":512,"levels":7,"participants":727,"items":2000,"dtype":"torch.float32","device":"cpu","budget":"P-49","median_ms_per_step":0.8613335085101426,"mean_ms_per_step":0.8616834995336831},"options":{"disable_gc":false,"timer":"perf_counter","min_rounds":5,"max_time":1,"min_time":5e-06,"precision":null,"confidence":null,"warmup":false},"stats":{"min":0.0007750839577056468,"max":0.0009691669838503003,"mean":0.0008616834995336831,"stddev":5.87132959762925e-05,"rounds":20,"median":0.0008613335085101426,"iqr":8.549948688596487e-05,"q1":0.0008084170112852007,"q3":0.0008939164981711656,"iqr_outliers":0,"stddev_outliers":7,"outliers":"7;0","ld15iqr":0.0007750839577056468,"hd15iqr":0.0009691669838503003,"ops":1160.5189150554347,"total":0.01723366999067366,"data":[0.0009691669838503003,0.0008987499750219285,0.0009560830076225102,0.0008790840511210263,0.000800292007625103,0.000859334017150104,0.0007939590141177177,0.0008378329803235829,0.0008747919928282499,0.0008153750095516443,0.000919792044442147,0.0009651659638620913,0.0008633329998701811,0.000802833994384855,0.0008052500197663903,0.0007750839577056468,0.0008412079769186676,0.0008756669703871012,0.0008890830213204026,0.0008115840028040111],"iterations":1}},
+        {"group":null,"name":"test_the_design_codec_encodes_250000_rows","fullname":"tests/benchmarks/test_judgment_design.py::test_the_design_codec_encodes_250000_rows","params":null,"param":null,"extra_info":{"rows":250000,"participants":500,"items":50000,"levels":7,"factors":["frame","verb"],"readouts":["p_gram"],"dtype":"torch.int64","device":"cpu","budget":"P-50","median_ms_total":616.404208005406,"mean_ms_total":616.404208005406},"options":{"disable_gc":false,"timer":"perf_counter","min_rounds":5,"max_time":1,"min_time":5e-06,"precision":null,"confidence":null,"warmup":false},"stats":{"min":0.616404208005406,"max":0.616404208005406,"mean":0.616404208005406,"stddev":0,"rounds":1,"median":0.616404208005406,"iqr":0,"q1":0.616404208005406,"q3":0.616404208005406,"iqr_outliers":0,"stddev_outliers":0,"outliers":"0;0","ld15iqr":0.616404208005406,"hd15iqr":0.616404208005406,"ops":1.6223120916644194,"total":0.616404208005406,"data":[0.616404208005406],"iterations":1}},
+        {"group":null,"name":"test_the_reference_posterior_fit_runs_the_pinned_nuts_plan","fullname":"tests/benchmarks/test_judgment_nuts.py::test_the_reference_posterior_fit_runs_the_pinned_nuts_plan","params":null,"param":null,"extra_info":{"budget":"P-51","engine":"QuiversNutsFitter","rows":128,"participants":8,"items":16,"levels":7,"readouts":["score"],"random_effects":["participant","item"],"sites":["score_slope","participant_intercept_scale","participant_intercept_offsets","item_intercept_scale","item_intercept_offsets","cutpoint_base","cutpoint_increments","participant_cutpoint_spread","participant_cutpoint_offsets"],"parameters":88,"warmup":500,"retained":1000,"chains":4,"seed":20261008,"device":"cpu","divergences":0,"max_rhat":1.0059211254119873,"min_ess":702.4666748046875,"median_ms_per_fit":3346585.6462909724,"mean_ms_per_fit":3346585.6462909724},"options":{"disable_gc":false,"timer":"perf_counter","min_rounds":5,"max_time":1,"min_time":5e-06,"precision":null,"confidence":null,"warmup":false},"stats":{"min":3346.5856462909724,"max":3346.5856462909724,"mean":3346.5856462909724,"stddev":0,"rounds":1,"median":3346.5856462909724,"iqr":0,"q1":3346.5856462909724,"q3":3346.5856462909724,"iqr_outliers":0,"stddev_outliers":0,"outliers":"0;0","ld15iqr":3346.5856462909724,"hd15iqr":3346.5856462909724,"ops":0.00029881201489891703,"total":3346.5856462909724,"data":[3346.5856462909724],"iterations":1}}
+    ],
+    "datetime": "2026-09-24T12:09:40.565528+00:00",
+    "version": "5.3.0"
+}

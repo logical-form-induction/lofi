@@ -1,0 +1,17 @@
+defaults: [prover-enumerated]
+scorer:
+  kind: model-checking
+  source:
+    kind: learned
+    structures: 4
+    carriers: {e: 2, v: 1}
+    full_function_space_cap: 64
+    henkin_pool: 8
+    denotations: from-vocabulary
+    seed: "${lofi.seed:model-structures}"
+    initialization_scale: 0.25
+  logic: {tnorm: product, implication: residuum, quantifier: extreme, equality: crisp, margin: 0.0}
+  premise_floor: 0.5
+  truth_threshold: 0.5
+  unsatisfied_premise: undecided
+  abstain_band: 0.0

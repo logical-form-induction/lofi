@@ -1,0 +1,24 @@
+{
+  "namespace": "d1547144-8a00-4c23-b341-6d87f38b0f65",
+  "templates": [{"kind": "jsonl", "path": "templates.jsonl"}],
+  "lexicons": [{"kind": "jsonl", "path": "arguments.jsonl", "name": "arguments"}],
+  "generators": [
+    {
+      "kind": "masked-lm",
+      "lexicon": "verbs",
+      "language_code": "eng",
+      "features": {"pos": "VERB"},
+      "checkpoint": {"kind": "hub", "repository": "fixture/masked-lm", "revision": "0123456789abcdef0123456789abcdef01234567"},
+      "artifacts": {"root": "/var/cache/lofi/artifacts", "offline": true},
+      "mask": "<mask>",
+      "count": 2,
+      "prompts": ["Someone <mask> someone."]
+    }
+  ],
+  "filling": {"strategy": "exhaustive"},
+  "template_fillings": {},
+  "item_template": {"kind": "json", "path": "item-template.json"},
+  "constraints": [],
+  "admit": null,
+  "attributes": {"structure": "template.name", "verb": "slots.predicate.lemma"}
+}

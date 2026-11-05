@@ -1,0 +1,9 @@
+retain: forest
+reachability: all
+strategy: {kind: cky}
+span_index: {kind: contiguous}
+chart_store: {kind: native}
+pruner: null
+semiring: {kind: log-inside}
+measure_pruned_mass: false
+refinement_pairs: 65536

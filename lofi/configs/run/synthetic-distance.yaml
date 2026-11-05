@@ -1,0 +1,32 @@
+parse: {retain: forest, reachability: all}
+model: {language: {from: data}, encoders: {terms: {kind: tree-rnn, width: 4}}}
+type_sampler: {kind: exhaustive, max_size: 3}
+data:
+  datasets:
+    "train":
+      dataset:
+        kind: synthetic
+        retained: {validation: 0.1}
+        language:
+          name: synthetic-distance
+          atomic_types: [{name: e}, {name: t, kind: proposition}]
+          constructors: [{name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}]
+          constants: []
+          binders: {style: curry}
+        grammar:
+          formalism: declared
+          name: synthetic-distance
+          signature: {primitives: [S, NP, conj], operators: [{name: "NP[conj]", sort: Cat, erases_to: NP}], constructors: [{name: /, kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}, {name: "\\", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: "\\", precedence: 10, associativity: left}}], functors: [{name: /, constructor: /, argument_side: right, opposite: "\\"}, {name: "\\", constructor: "\\", argument_side: left, opposite: /}], conjunctions: {markers: [conj], pairs: [{unmarked: NP, marked: "NP[conj]"}]}}
+          rules: {name: application, rules: [{rule: application, view: /}, {rule: application, view: "\\"}]}
+          lexicon: {kind: inline, entries: [{form: subject, category: NP}, {form: predicate, category: "S\\NP"}]}
+          goal: {kind: root}
+          matching: {kind: feature-erasure}
+          budget: {}
+        size: 2
+        seed: 5
+        length: {kind: uniform, min_length: 2, max_length: 2}
+trainer: {kind: distance, dataset: train, encoder: terms, sort: Ty, steps: 4, batch_size: 2, checkpoints: {interval: 2, keep: 2}, inverse_distance_power: 0.0, embedding_penalty: 0.0}
+release: {checkpoint: resume-latest}
+optimizer: {kind: adamw, weight_decay: 0.0}
+scheduler: {kind: cosine}
+device_policy: {device: cpu, compute_dtype: float32, deterministic: true, matmul_precision: highest, activation_memory_bytes: 8000000000}

@@ -1,0 +1,12 @@
+# A point trained on derivations read from a declared CCGbank-format corpus.
+defaults:
+  - tagged-combinator-point
+  - data.datasets.train.dataset: ccgbank
+  - data.datasets.train.dataset.grammar: ccgbank
+  - model.spaces.categories.combinators: ccgbank
+data:
+  datasets:
+    train:
+      dataset:
+        source: tests/acceptance/documents/corpora/ccgbank-sample
+        splits: [train, validation]

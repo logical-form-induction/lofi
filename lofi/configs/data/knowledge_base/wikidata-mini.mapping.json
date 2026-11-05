@@ -1,0 +1,12 @@
+{
+  "carriers": {
+    "e": ["Q-JOHN", "Q-MARY"],
+    "v": ["E-0"]
+  },
+  "constants": {
+    "5": {"kind": "item", "item": "Q-JOHN"},
+    "6": {"kind": "item", "item": "Q-MARY"},
+    "7": {"kind": "predicate", "property": "P31", "object": "Q-SLEEPER"},
+    "8": {"kind": "relation", "property": "P-SEE"}
+  }
+}

@@ -1,0 +1,30 @@
+kind: snli
+training_split: train
+sources:
+  - source: ${lofi.path:snli/snli_1.0_train.jsonl}
+    release:
+      source_id: snli
+      release_id: "1.0"  # https://nlp.stanford.edu/projects/snli/
+      split: train
+      language: en
+      source_method: crowdsourced
+      spdx: CC-BY-SA-4.0  # https://nlp.stanford.edu/projects/snli/
+      eprint_refs: ["arXiv:1508.05326"]
+  - source: ${lofi.path:snli/snli_1.0_dev.jsonl}
+    release:
+      source_id: snli
+      release_id: "1.0"
+      split: validation
+      language: en
+      source_method: crowdsourced
+      spdx: CC-BY-SA-4.0
+      eprint_refs: ["arXiv:1508.05326"]
+  - source: ${lofi.path:snli/snli_1.0_test.jsonl}
+    release:
+      source_id: snli
+      release_id: "1.0"
+      split: test
+      language: en
+      source_method: crowdsourced
+      spdx: CC-BY-SA-4.0
+      eprint_refs: ["arXiv:1508.05326"]

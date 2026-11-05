@@ -1,0 +1,17 @@
+# Licensed-data route exercised on a four-section repository fixture.
+defaults:
+  - s1-run
+model:
+  parser: {width: 4}
+  token_encoder: {width: 4}
+  controller: {hidden: [{width: 4, activation: tanh}]}
+  encoders:
+    terms: {width: 4}
+  decoders:
+    identity: {width: 4}
+    application: {width: 4}
+data:
+  datasets:
+    train:
+      dataset:
+        source: experiments/s1/data/ccgbank

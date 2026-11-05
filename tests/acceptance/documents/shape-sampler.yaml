@@ -1,0 +1,18 @@
+# Synthetic sentences admitted by declared derivation-shape bands.
+defaults:
+  - slash-point
+data:
+  datasets:
+    train:
+      dataset:
+        length:
+          kind: tabular
+          masses:
+            - {length: 2, mass: 1.0}
+            - {length: 3, mass: 1.0}
+        shape:
+          default:
+            right_branching: {value: 0.5, tolerance: 0.0}
+            slash_balance: {value: 0.5, tolerance: 0.0}
+            arity: {value: 2.0, tolerance: 0.0}
+            attempts: 100

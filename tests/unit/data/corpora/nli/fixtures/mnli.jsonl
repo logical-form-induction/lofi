@@ -1,0 +1,2 @@
+{"genre":"fiction","gold_label":"neutral","pairID":"mnli-0","promptID":"prompt-7","sentence1":"Lee finished the book.","sentence2":"Lee enjoyed the book."}
+{"genre":"telephone","gold_label":"entailment","pairID":"mnli-1","promptID":"prompt-9","sentence1":"Morgan called Sam.","sentence2":"Sam received a call."}

@@ -1,0 +1,65 @@
+# An arrow and a product constructor with an uncurry combinator and both projections.
+name: arrow-uncurry
+signature:
+  primitives: [S, NP]
+  constructors:
+    - {name: "arrow", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: ->, precedence: 10, associativity: left}}
+    - {name: "*", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '*', precedence: 10, associativity: left}}
+  functors:
+    - {name: "arrow", constructor: "arrow", argument_side: either, opposite: "arrow"}
+rules:
+  name: arrow-uncurry
+  rules:
+    - rule: pattern
+      name: apply
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: arrow}
+          arguments:
+            - &result {pattern: term, name: X}
+            - &argument {pattern: term, name: Y}
+        - *argument
+      conclusion: *result
+    - rule: pattern
+      name: uncurry
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: arrow}
+          arguments:
+            - pattern: node
+              operator: {kind: fixed, name: arrow}
+              arguments: [{pattern: term, name: X}, {pattern: term, name: Z}]
+            - {pattern: term, name: Y}
+      conclusion:
+        pattern: node
+        operator: {kind: fixed, name: arrow}
+        arguments:
+          - {pattern: term, name: X}
+          - pattern: node
+            operator: {kind: fixed, name: "*"}
+            arguments: [{pattern: term, name: Y}, {pattern: term, name: Z}]
+    - rule: pattern
+      name: first
+      premises:
+        - &product
+          pattern: node
+          operator: {kind: fixed, name: "*"}
+          arguments: [{pattern: term, name: A}, {pattern: term, name: B}]
+      conclusion: {pattern: term, name: A}
+    - rule: pattern
+      name: second
+      premises: [*product]
+      conclusion: {pattern: term, name: B}
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: NP}
+    - {form: couple, category: "NP*NP"}
+    - {form: sleeps, category: "S->NP"}
+    - {form: sees, category: "(S->NP)->NP"}
+goal:
+  kind: root
+  categories: [S]
+budget:
+  unary_rounds: 1
+formalism: declared

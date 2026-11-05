@@ -1,0 +1,9 @@
+constants:
+  - name: not
+    type: "t -> t"
+    classes: [sentential, negation]
+    notation: {kind: prefix, ascii: "~", unicode: "¬", precedence: 6}
+  - name: and
+    type: "t -> t -> t"
+    classes: [sentential, conjunction]
+    notation: {kind: infix, ascii: "&", unicode: "∧", precedence: 4, associativity: left}

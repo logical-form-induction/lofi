@@ -1,0 +1,121 @@
+defaults: [pmb/slash-signature]
+formalism: declared
+name: ccgbank
+signature:
+  name: ccgbank
+  primitives: [S, NP, N, PP, conj, '.', ',', ':', ';', LRB, RRB]
+  operators:
+    - {name: 'S[dcl]', sort: Cat, erases_to: S}
+    - {name: 'S[b]', sort: Cat, erases_to: S}
+    - {name: 'S[ng]', sort: Cat, erases_to: S}
+    - {name: 'S[pt]', sort: Cat, erases_to: S}
+    - {name: 'S[pss]', sort: Cat, erases_to: S}
+    - {name: 'S[to]', sort: Cat, erases_to: S}
+    - {name: 'S[adj]', sort: Cat, erases_to: S}
+    - {name: 'N[conj]', sort: Cat, erases_to: N}
+    - {name: 'NP[conj]', sort: Cat, erases_to: NP}
+    - {name: 'S[conj]', sort: Cat, erases_to: S}
+  conjunctions:
+    name: ccgbank-conjunctions
+    markers: [conj, '.', ',', ':', ';', LRB, RRB]
+    pairs:
+      - {unmarked: N, marked: 'N[conj]'}
+      - {unmarked: NP, marked: 'NP[conj]'}
+      - {unmarked: S, marked: 'S[conj]'}
+rules:
+  name: ccgbank
+  rules:
+    - rule: pattern
+      name: n-to-np
+      premises: [&n {pattern: constant, name: N}]
+      conclusion: &np {pattern: constant, name: NP}
+      head_policy: pass-through
+    - rule: absorption
+      name: punctuation-left
+      premises:
+        - &x {pattern: term, name: X, sort: Cat}
+        - &y {pattern: term, name: Y, sort: Cat}
+      conclusion: *y
+      absorbing: ['.', ',', ':', ';', LRB, RRB]
+      side: left
+    - rule: absorption
+      name: punctuation-right
+      premises: [*x, *y]
+      conclusion: *x
+      absorbing: ['.', ',', ':', ';', LRB, RRB]
+      side: right
+    - {rule: clausal-adjunct, name: clausal-adjunct-backward-backward, source_view: '\', target_view: '\'}
+    - {rule: clausal-adjunct, name: clausal-adjunct-backward-forward, source_view: '\', target_view: '/'}
+    - {rule: clausal-adjunct, name: clausal-adjunct-forward-backward, source_view: '/', target_view: '\'}
+    - {rule: clausal-adjunct, name: clausal-adjunct-forward-forward, source_view: '/', target_view: '/'}
+    - rule: pattern
+      name: appositive-np-comma-forward
+      premises: [*np, &comma {pattern: constant, name: ','}]
+      conclusion:
+        pattern: node
+        operator: {kind: fixed, name: '/'}
+        arguments: [&s {pattern: constant, name: S}, *s]
+      head_policy: left-conjunct
+    - rule: pattern
+      name: appositive-comma-np-backward
+      premises: [*comma, *np]
+      conclusion:
+        pattern: node
+        operator: {kind: fixed, name: '\'}
+        arguments: [*s, *s]
+      head_policy: non-absorbing
+    - rule: pattern
+      name: appositive-comma-np-verbal
+      premises: [*comma, *np]
+      conclusion:
+        pattern: node
+        operator: {kind: fixed, name: '\'}
+        arguments:
+          - &s-back-np
+            pattern: node
+            operator: {kind: fixed, name: '\'}
+            arguments: [*s, *np]
+          - *s-back-np
+      head_policy: non-absorbing
+    - {rule: coordination, name: coordination-mark-conj, premises: [&conj {pattern: constant, name: conj}, *x], conclusion: *x, phase: mark, core_relation: same, head_policy: non-absorbing}
+    - {rule: coordination, name: coordination-mark-period, premises: [{pattern: constant, name: '.'}, *x], conclusion: *x, phase: mark, core_relation: same, head_policy: non-absorbing}
+    - {rule: coordination, name: coordination-mark-comma, premises: [*comma, *x], conclusion: *x, phase: mark, core_relation: same, head_policy: non-absorbing}
+    - {rule: coordination, name: coordination-mark-colon, premises: [{pattern: constant, name: ':'}, *x], conclusion: *x, phase: mark, core_relation: same, head_policy: non-absorbing}
+    - {rule: coordination, name: coordination-mark-semicolon, premises: [{pattern: constant, name: ';'}, *x], conclusion: *x, phase: mark, core_relation: same, head_policy: non-absorbing}
+    - {rule: coordination, name: coordination-mark-lrb, premises: [{pattern: constant, name: LRB}, *x], conclusion: *x, phase: mark, core_relation: same, head_policy: non-absorbing}
+    - {rule: coordination, name: coordination-mark-rrb, premises: [{pattern: constant, name: RRB}, *x], conclusion: *x, phase: mark, core_relation: same, head_policy: non-absorbing}
+    - {rule: coordination, name: coordination-merge, premises: [*x, *x], conclusion: *x, phase: merge, core_relation: same, head_policy: left-conjunct}
+    - {rule: coordination, name: coordination-unlike, premises: [*conj, *y], conclusion: *x, phase: mark, core_relation: different, head_policy: non-absorbing}
+    - rule: pattern
+      name: compound-conj-n
+      premises: [*conj, *n]
+      conclusion: *n
+      head_policy: non-absorbing
+    - rule: combinators
+      application: true
+      composition: [1, 2]
+      crossed_composition: [1, 2]
+      substitution: [1]
+      crossed_substitution: [1]
+      direction: steedman
+      type_raising: true
+      raising_targets: [S, 'S[dcl]']
+      raising_arguments: null
+lexicon:
+  kind: inline
+  entries:
+    - {form: John, category: NP}
+    - {form: Mary, category: NP}
+    - {form: sleeps, category: 'S[dcl]\NP'}
+    - {form: sees, category: '(S[dcl]\NP)/NP'}
+    - {form: sentence, category: 'S[dcl]'}
+    - {form: '.', category: '.'}
+goal:
+  kind: root
+  categories: ['S[dcl]']
+matching: {kind: feature-erasure}
+normal_form: {kind: hockenmaier-bisk, order_bound: 2}
+budget:
+  unary_rounds: 2
+  closure_rounds: 0
+  closure_nodes: 4096

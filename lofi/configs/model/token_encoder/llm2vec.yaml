@@ -1,0 +1,5 @@
+kind: llm2vec
+checkpoint:
+  kind: hub
+  repository: princeton-nlp/Sheared-LLaMA-1.3B
+  revision: a4b76938edbf571ea7d7d9904861cbdca08809b4

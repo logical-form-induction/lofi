@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fracas-problems>
+
+<comment class="intro">
+A synthetic problem set in the released FraCaS shape. Every shape the release
+uses appears here once: a multi-premise problem, a problem whose question and
+hypothesis are absent, a qualified answer, a subsubsection, and a pattern gloss.
+</comment>
+
+<comment class="section"> 1 GENERALIZED QUANTIFIERS </comment>
+
+<comment class="subsection"> 1.1 Conservativity </comment>
+
+<comment> Q As are Bs == Q As are As who are Bs </comment>
+
+<problem
+  id="001"
+  fracas_answer="yes">
+  <p idx="1">
+    An Italian became the world&apos;s greatest tenor.
+  </p>
+  <q>
+    Was there an Italian who became the world&apos;s greatest tenor?
+  </q>
+  <h>
+    There was an Italian who became the world&apos;s greatest tenor.
+  </h>
+  <a> Yes </a>
+</problem>
+
+<comment class="subsection"> 1.2 Monotonicity (upwards on second argument) </comment>
+
+<problem
+  id="002"
+  fracas_answer="unknown">
+  <p idx="1">
+    Some delegates at the café finished the survey.
+  </p>
+  <p idx="2">
+    Every delegate who finished the survey was on time.
+  </p>
+  <q>
+    Did every delegate finish the survey?
+  </q>
+  <h>
+    Every delegate finished the survey.
+  </h>
+  <a> Don't know </a>
+  <why> Existential quantification over the first argument is not universal. </why>
+</problem>
+
+<problem
+  id="003"
+  fracas_answer="no">
+  <p idx="1">
+    No delegate finished the survey on time.
+  </p>
+  <p idx="2">
+    Smith is a delegate.
+  </p>
+  <p idx="3">
+    Smith finished the survey.
+  </p>
+  <q>
+    Did Smith finish the survey on time?
+  </q>
+  <h>
+    Smith finished the survey on time.
+  </h>
+  <a> No </a>
+  <note> Three premises, so the sequence is three long. </note>
+</problem>
+
+<comment class="section"> 7 TEMPORAL REFERENCE </comment>
+
+<comment class="subsection"> 7.2 Temporal Adverbials </comment>
+
+<comment class="subsubsection"> 7.2.1 Indexicals </comment>
+
+<problem
+  id="004"
+  fracas_answer="yes"
+  fracas_nonstandard="true">
+  <p idx="1">
+    Smith wrote to a representative every week.
+  </p>
+  <q>
+    Did Smith write to a representative?
+  </q>
+  <h>
+    Smith wrote to a representative.
+  </h>
+  <a> Yes, on one reading </a>
+</problem>
+
+<problem
+  id="005"
+  fracas_answer="undef"
+  fracas_nonstandard="true">
+  <p idx="1">
+    When they opened the M25, traffic increased.
+  </p>
+  <q>
+   
+  </q>
+  <h>
+   
+  </h>
+  <a> </a>
+  <note> Original is degenerate problem; no question or answer given. </note>
+</problem>
+
+</fracas-problems>

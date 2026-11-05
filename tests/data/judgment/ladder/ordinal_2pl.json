@@ -1,0 +1,34 @@
+{
+  "objective": {"objective": "conditional"},
+  "family": {
+    "family": "cumulative",
+    "discrimination": true,
+    "discrimination_group": "item"
+  },
+  "levels": 7,
+  "predictor": [
+    {
+      "kind": "random_intercept",
+      "group": "participant"
+    },
+    {
+      "kind": "random_intercept",
+      "group": "item"
+    }
+  ],
+  "identification": {
+    "constraint": "fixed_cutpoint_variance",
+    "value": 1.0
+  },
+  "priors": {
+    "thresholds": {},
+    "discrimination": {
+      "distribution": "LogNormal",
+      "parameters": [
+        0.0,
+        0.5
+      ]
+    }
+  },
+  "normalization": "identity"
+}

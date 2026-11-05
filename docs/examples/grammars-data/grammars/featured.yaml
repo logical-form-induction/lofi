@@ -1,0 +1,58 @@
+# A declared grammar over a signature with featured sentence categories and a
+# conjunction inventory that two coordination rules run over.
+formalism: declared
+name: featured
+signature:
+  name: featured
+  primitives: [S, NP, N, conj]
+  constructors:
+    - {name: /, kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+  functors:
+    - {name: /, constructor: /, argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: /}
+  operators:
+    - {name: 'S[dcl]', sort: Cat, erases_to: S}
+    - {name: 'S[b]', sort: Cat, erases_to: S}
+    - {name: 'NP[conj]', sort: Cat, erases_to: NP}
+  conjunctions:
+    markers: [conj]
+    pairs:
+      - {unmarked: NP, marked: 'NP[conj]'}
+rules:
+  name: application-coordination
+  rules:
+    - {rule: application, view: /}
+    - {rule: application, view: '\'}
+    - rule: coordination
+      name: coordination-mark
+      premises:
+        - {pattern: constant, name: conj}
+        - &x {pattern: term, name: X, sort: Cat}
+      conclusion: *x
+      phase: mark
+      core_relation: same
+      head_policy: non-absorbing
+    - rule: coordination
+      name: coordination-merge
+      premises: [*x, *x]
+      conclusion: *x
+      phase: merge
+      core_relation: same
+      head_policy: left-conjunct
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: NP}
+    - {form: mary, category: NP}
+    - {form: and, category: conj}
+    - {form: sleeps, category: 'S[dcl]\NP'}
+    - {form: sees, category: '(S[dcl]\NP)/NP'}
+    - {form: sleep, category: 'S[b]\NP'}
+goal:
+  kind: root
+  categories: ['S[dcl]']
+matching:
+  kind: feature-erasure
+budget:
+  unary_rounds: 1

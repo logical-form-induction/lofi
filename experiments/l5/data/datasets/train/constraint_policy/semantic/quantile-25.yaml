@@ -1,0 +1,4 @@
+ambiguity: union
+selector: {kind: quantile, share: 0.25, over: tokens}
+coverage: 1.0
+seed: 0

@@ -1,0 +1,4 @@
+# Generalized composition over the slash pair, each rule's meaning derived from the rule.
+defaults:
+  - composition-point
+  - data.datasets.train.dataset.interpretation: auxiliary

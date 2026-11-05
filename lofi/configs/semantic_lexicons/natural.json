@@ -1,0 +1,36 @@
+{
+  "joint": {
+    "spelling": "tabular",
+    "rows": [
+      {"logical_class": "predicate", "size": 64, "share": 0.40},
+      {"logical_class": "constant", "size": 16, "share": 0.15},
+      {"logical_class": "quantifier", "size": 2, "share": 0.25},
+      {"logical_class": "connective", "size": 2, "share": 0.15},
+      {"logical_class": "identity", "size": 1, "share": 0.05}
+    ]
+  },
+  "rank_law": {"kind": "power-law", "exponent": 1.0},
+  "arities": {
+    "arities": [
+      {"arity": 1, "share": 0.6, "rank_law": {"kind": "power-law", "exponent": 1.0}},
+      {"arity": 2, "share": 0.3, "rank_law": {"kind": "power-law", "exponent": 1.0}},
+      {"arity": 3, "share": 0.1, "rank_law": {"kind": "power-law", "exponent": 1.0}}
+    ]
+  },
+  "assignment": {
+    "kind": "tabular",
+    "rows": [
+      {"category": "NP/N", "classes": [{"logical_class": "quantifier"}]},
+      {"category": "N", "classes": [{"logical_class": "predicate", "arity": 1}]},
+      {"category": "S\\NP", "classes": [{"logical_class": "predicate", "arity": 1}]},
+      {"category": "S\\NP/NP", "classes": [{"logical_class": "predicate", "arity": 2}]},
+      {"category": "S\\NP/NP/NP", "classes": [{"logical_class": "predicate", "arity": 3}]},
+      {"category": "NP", "classes": [{"logical_class": "constant"}]},
+      {"category": "conj", "classes": [{"logical_class": "connective"}]},
+      {"category": "(S\\NP)/(S\\NP)", "classes": [{"logical_class": "identity"}]}
+    ]
+  },
+  "fragment": {"order": "first"},
+  "seed": 0,
+  "constants": 85
+}

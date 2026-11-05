@@ -1,0 +1,2 @@
+strategy: sample
+rescore_tolerance: 1.0e-5

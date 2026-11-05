@@ -1,0 +1,45 @@
+# CCG's own slash pair, spelled / and \, beside a unary modality.
+name: backslash-modal
+signature:
+  primitives: [S, NP]
+  syntax: s-expression
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+    - {name: "<>", kind: [Cat, Cat], notation: {style: prefix, spelling: <>}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: "/"}
+rules:
+  name: backslash-modal
+  rules:
+    - {rule: application, view: /}
+    - {rule: application, view: "\\"}
+    - rule: pattern
+      name: diamond-elimination
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: "<>"}
+          arguments: [{pattern: term, name: X}]
+      conclusion: {pattern: term, name: X}
+    - rule: pattern
+      name: diamond-introduction
+      premises:
+        - &np {pattern: constant, name: NP}
+      conclusion:
+        pattern: node
+        operator: {kind: fixed, name: "<>"}
+        arguments: [*np]
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: '("<>" ("#const[Cat]" "NP"))'}
+    - {form: mary, category: '("#const[Cat]" "NP")'}
+    - {form: sleeps, category: '("\\\\\\\\" ("#const[Cat]" "S") ("#const[Cat]" "NP"))'}
+    - {form: sees, category: '("/" ("\\\\\\\\" ("#const[Cat]" "S") ("#const[Cat]" "NP")) ("#const[Cat]" "NP"))'}
+goal:
+  kind: root
+  categories: ['("#const[Cat]" "S")']
+budget:
+  unary_rounds: 1
+formalism: declared

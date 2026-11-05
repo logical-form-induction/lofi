@@ -1,0 +1,6 @@
+defaults:
+  - application
+name: harmonic-composition
+rules+:
+  - {rule: composition, direction: unrestricted, order: 1, view: /}
+  - {rule: composition, direction: unrestricted, order: 1, view: "\\"}

@@ -1,0 +1,11 @@
+model_name: lofi-synthetic-inference
+datasets: [l1-inference]
+languages: [en]
+source_method: synthetic generation from a declared interpreted grammar
+license_expression: MIT
+licenses:
+  - {identifier: MIT, applies_to: null}
+eprint_refs: []
+code_uri: https://github.com/logical-form-induction/lofi
+command: uv run lofi run --config experiments/l1/l1-run.yaml --root runs/forms --seed 0 --experiment-seed 108
+environment: uv sync from the committed lockfile

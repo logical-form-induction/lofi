@@ -1,0 +1,5 @@
+kind: equivalence
+interval: {replicates: 1000, level: 0.95}
+readout: forms
+budget: {calls_per_step: null, wall_per_step: null, cpu_seconds: null}
+conventions: {punctuation: keep, unary_chains: keep, trivial_spans: keep, minimum_length: 0, aggregation: corpus, coverage: zero, self_arcs: forbid, gold_derivation: canonical}

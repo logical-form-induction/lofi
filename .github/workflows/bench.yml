@@ -1,0 +1,176 @@
+name: Benchmarks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # the same weekly run as ci.yml. Only the instruction counts run on it: a
+  # yanked crate or a runner image change can break their build with no commit
+  # to blame, and with no base commit they record rather than compare.
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  benchmarks:
+    name: Timings (${{ matrix.os }})
+    if: github.event_name != 'schedule'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.14.5"
+          enable-cache: true
+      - name: Rust toolchain
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - name: Install
+        run: uv sync --locked
+      - name: Record timings
+        shell: bash
+        run: |
+          uv run pytest tests/benchmarks --benchmark-only \
+            -o wall_clock_budgets=false \
+            --benchmark-json="$RUNNER_TEMP/benchmarks.json"
+      - name: Upload timings
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: benchmarks-${{ matrix.os }}
+          path: ${{ runner.temp }}/benchmarks.json
+          if-no-files-found: error
+
+  relative:
+    name: Relative timings (${{ matrix.os }})
+    # a hosted machine is too variable for an absolute budget, but the commit
+    # and its parent timed one after the other on it share its speed, so their
+    # ratio is the measure.
+    if: github.event_name != 'schedule'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    env:
+      # the slowdown of a benchmark's median against the parent's that fails
+      # the job. This allowance accounts for variation on shared runners.
+      RELATIVE_REGRESSION: median:20%
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # this commit and its first parent. A pull request checks out its
+          # merge commit, whose first parent is the base branch.
+          fetch-depth: 2
+      # a commit with no parent, such as a squashed release, has nothing to be
+      # timed against. The job then says so in its log and summary and times
+      # nothing, rather than passing as though it had compared.
+      - name: Find the parent
+        id: parent
+        shell: bash
+        run: |
+          if git rev-parse --verify --quiet 'HEAD^1' > /dev/null; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            message="$(git rev-parse HEAD) has no parent commit, so no relative timing comparison ran"
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=No relative timing comparison::$message"
+            echo "$message." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        if: steps.parent.outputs.found == 'true'
+        with:
+          python-version: "3.14.5"
+          enable-cache: true
+      - name: Rust toolchain
+        if: steps.parent.outputs.found == 'true'
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        if: steps.parent.outputs.found == 'true'
+
+      - name: Check out the parent
+        if: steps.parent.outputs.found == 'true'
+        shell: bash
+        run: git worktree add --detach "$RUNNER_TEMP/parent" HEAD^1
+
+      # the parent builds in its own worktree and environment, so its timings
+      # come from its own code. Both runs save to storage outside either tree.
+      - name: Time the parent
+        if: steps.parent.outputs.found == 'true'
+        shell: bash
+        working-directory: ${{ runner.temp }}/parent
+        run: |
+          uv sync --locked
+          uv run pytest tests/benchmarks --benchmark-only \
+            -o wall_clock_budgets=false \
+            --benchmark-storage="$RUNNER_TEMP/relative" \
+            --benchmark-save=parent
+
+      - name: Time this commit against its parent
+        if: steps.parent.outputs.found == 'true'
+        shell: bash
+        run: |
+          uv sync --locked
+          uv run pytest tests/benchmarks --benchmark-only \
+            -o wall_clock_budgets=false \
+            --benchmark-storage="$RUNNER_TEMP/relative" \
+            --benchmark-compare=0001 \
+            --benchmark-compare-fail="$RELATIVE_REGRESSION"
+
+  instructions:
+    name: Instruction counts
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CARGO_TERM_COLOR: always
+      # instruction counts under Valgrind are deterministic, so the limit needs
+      # no allowance for noise.
+      INSTRUCTION_REGRESSION: ir=2%
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Rust toolchain
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - name: Valgrind
+        run: sudo apt-get update && sudo apt-get install --yes valgrind
+      - uses: taiki-e/install-action@8cca0918f8471c33515202b73f56ab27f2bed283 # v2.87.29
+        with:
+          # the runner's version must equal the gungraun version in Cargo.lock
+          tool: gungraun-runner@0.20.0
+
+      - name: Counts at the base commit
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        # a scheduled or manual run, or a base commit without the benchmarks, leaves no
+        # baseline, and the comparison below then records one instead of
+        # comparing. A baseline restored from the cache is never compared.
+        run: |
+          rm -rf target/gungraun
+          if [ -n "$BASE" ] && git cat-file -e "$BASE:crates/lofi-chart/benches/build.rs" 2>/dev/null; then
+            git checkout --quiet --detach "$BASE"
+            cargo bench -p lofi-chart --bench '*' --locked -- --save-baseline=base
+            git checkout --quiet --detach "$GITHUB_SHA"
+          fi
+
+      - name: Counts at this commit against the base
+        run: cargo bench -p lofi-chart --bench '*' --locked -- --baseline=base --callgrind-limits="$INSTRUCTION_REGRESSION"

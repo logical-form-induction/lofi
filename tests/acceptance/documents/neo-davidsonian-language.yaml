@@ -1,0 +1,9 @@
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.language: neo-davidsonian
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          binders: {style: church}

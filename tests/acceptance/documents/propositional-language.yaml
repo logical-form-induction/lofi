@@ -1,0 +1,3 @@
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.language: propositional

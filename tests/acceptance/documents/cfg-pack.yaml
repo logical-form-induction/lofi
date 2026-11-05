@@ -1,0 +1,6 @@
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: cfg
+  - model.spaces.categories.combinators: cfg
+model:
+  parser: {kind: tagged, width: 4, unary_depth: 1}

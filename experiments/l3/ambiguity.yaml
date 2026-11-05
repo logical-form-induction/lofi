@@ -1,0 +1,66 @@
+role: lexical-ambiguity
+freeze_id: freeze/1
+config: {kind: run, path: l3-run.yaml}
+launch: {kind: array, chunk_size: 1, throttle: 32}
+failure: {numerical: final, out_of_memory: retry}
+sweep:
+  grid:
+    - group: data.datasets.train.dataset.source.interpretation.meanings.source.structure.polysemy
+      values:
+        - a125-d0-pn
+        - a125-d0-p0
+        - a125-d0-pp
+        - a125-d1-pn
+        - a125-d1-p0
+        - a125-d1-pp
+        - a200-d0-pn
+        - a200-d0-p0
+        - a200-d0-pp
+        - a200-d1-pn
+        - a200-d1-p0
+        - a200-d1-pp
+    - path: data.datasets.train.dataset.scope
+      values:
+        - {readings: {value: 1.0, tolerance: 0.0}, derivations: 64, attempts: 400, undecided: distinct}
+        - {readings: {value: 3.0, tolerance: 0.5}, derivations: 64, attempts: 400, undecided: distinct}
+  seeds: [0, 1, 2, 3]
+  expected_points: 96
+seed_policy: {root: 402}
+rows:
+  - {evaluator: logical-forms, metric: logical-form-normal-form}
+  - {evaluator: logical-forms, metric: many-to-one-accuracy}
+  - {evaluator: logical-forms, metric: random-relabeling-floor}
+  - {evaluator: logical-forms, metric: fiber-relative-recovery}
+primary: {evaluator: logical-forms, metric: fiber-relative-recovery}
+preregistration: ambiguity.json
+factors:
+  ambiguity-profile: {axis: data.datasets.train.dataset.source.interpretation.meanings.source.structure.polysemy}
+  scope:
+    axis: data.datasets.train.dataset.scope
+    levels:
+      - {level: single-reading, value: {readings: {value: 1.0, tolerance: 0.0}, derivations: 64, attempts: 400, undecided: distinct}}
+      - {level: multiple-reading, value: {readings: {value: 3.0, tolerance: 0.5}, derivations: 64, attempts: 400, undecided: distinct}}
+compute: {kind: unpriced}
+contraction:
+  rungs:
+    - {kind: seeds, floor: 4}
+    - {kind: fallback}
+  factorial: logical-form ambiguity amount, spread, and frequency placement crossed with one- and multiple-reading scope targets
+stop_rules:
+  - name: numerical failure
+    when: {kind: points, statuses: [numerical-failure], at_least: 1}
+decision_point:
+  date: "2027-04-01"
+  signal:
+    kind: metric
+    row: {evaluator: logical-forms, metric: fiber-relative-recovery}
+    statistic: mean
+    direction: above
+    threshold: 0.0
+  fallback: Logical-form recovery does not exceed its fitted fiber floor across the ambiguity grid.
+evaluation:
+  alpha: 0.05
+  correction: {kind: benjamini-hochberg}
+  dependence: prds
+  minimum_seeds: 4
+  seed_budget: {metric: fiber-relative-recovery, target: mean, precision: 0.05, level: 0.95}

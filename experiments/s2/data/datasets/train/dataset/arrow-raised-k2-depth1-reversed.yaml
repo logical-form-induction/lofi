@@ -1,0 +1,5 @@
+defaults: [arrow-raised-k2-depth1]
+kind: synthetic
+grammar:
+  signature:
+    primitives: [P1, S]

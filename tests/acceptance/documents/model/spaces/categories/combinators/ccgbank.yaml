@@ -1,0 +1,32 @@
+# Map every composing action of the CCGbank grammar to the category decoder.
+merge: concatenate
+decoders:
+  "application:/": application
+  "application:\\": application
+  "composition:/:1:crossed:steedman": application
+  "composition:/:1:harmonic:steedman": application
+  "composition:/:2:crossed:steedman": application
+  "composition:/:2:harmonic:steedman": application
+  "composition:\\:1:crossed:steedman": application
+  "composition:\\:1:harmonic:steedman": application
+  "composition:\\:2:crossed:steedman": application
+  "composition:\\:2:harmonic:steedman": application
+  "substitution:/:1:crossed": application
+  "substitution:/:1:harmonic": application
+  "substitution:\\:1:crossed": application
+  "substitution:\\:1:harmonic": application
+  punctuation-left: application
+  punctuation-right: application
+  appositive-np-comma-forward: application
+  appositive-comma-np-backward: application
+  appositive-comma-np-verbal: application
+  coordination-mark-conj: application
+  coordination-mark-period: application
+  coordination-mark-comma: application
+  coordination-mark-colon: application
+  coordination-mark-semicolon: application
+  coordination-mark-lrb: application
+  coordination-mark-rrb: application
+  coordination-merge: application
+  coordination-unlike: application
+  compound-conj-n: application

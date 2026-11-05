@@ -1,0 +1,94 @@
+# A capacity-matched parser point shared by the source-grammar campaign.
+defaults:
+  - data.datasets.train.dataset: s2-source-run
+  - model.language: slashes-application-k2-depth1
+  - model.spaces.categories.combinators: application
+parse: {retain: forest, reachability: all}
+approximation: {residual_mass: 0.99}
+model:
+  capacity: {kind: parameter-count, target: 250000}
+  parser: {kind: tagged, width: 4, unary_depth: 1}
+  token_encoder: {kind: learned, width: 4}
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 4, activation: tanh}]}
+  encoders:
+    terms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+  decoders:
+    identity: {kind: tree-rnn, width: 4}
+    application: {kind: tree-rnn, width: 4}
+  spaces:
+    categories:
+      sort: Cat
+      encoder: terms
+      identity: identity
+  readouts:
+    types:
+      kind: terms
+      space: categories
+      reads: inside
+      targets: grammar-goal
+      output: sentences
+    category-terms:
+      kind: terms
+      space: categories
+      reads: inside
+      decoding: {strategy: exhaustive, cap: 64}
+loss:
+  terms:
+    - objective: {kind: grammaticality, readout: sentences}
+    - objective:
+        kind: coherence
+        readout: category-terms
+        space: categories
+        estimator: truncated
+        warmup: null
+      weight: 0.1
+data:
+  datasets:
+    train:
+      featurizer: {kind: unlabeled}
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 1
+  batch_size: 2
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  max_grad_norm: null
+  active_groups: [token_encoder, terms, identity, application, controller, parser]
+  early_stopping:
+    metric: loss/grammaticality
+    mode: min
+    patience: 2
+    minimum_delta: 0.0
+    keep_best: 1
+  checkpoints: {interval: 1, keep: 1}
+release: {checkpoint: validation-best}
+optimizer: {kind: adamw, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000
+evaluators:
+  held-out:
+    kind: held-out-likelihood
+    measurements: [string, description-length]
+    interval: {replicates: 20, level: 0.95}
+    readout: types
+    output: sentences
+    symbol_cost: {kind: uniform, cost: 1.0}
+    conventions:
+      punctuation: keep
+      unary_chains: keep
+      trivial_spans: keep
+      minimum_length: 0
+      aggregation: sentence
+      coverage: zero
+      self_arcs: allow
+      gold_derivation: canonical
+comparison:
+  source: slashes-application-k2-depth1
+  condition: primary
+  direction: directed
+  twin: observed

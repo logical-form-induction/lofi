@@ -1,0 +1,22 @@
+defaults: [s2-source-run]
+kind: synthetic
+grammar:
+  name: arrow-raised-k2-depth1
+  signature:
+    name: arrow-raised-k2-depth1
+    primitives: [S, P1]
+    constructors:
+      - name: arrow
+        kind: [Cat, Cat, Cat]
+        notation: {style: infix, spelling: "->", precedence: 10, associativity: left}
+    functors:
+      - {name: arrow, constructor: arrow, argument_side: either, opposite: arrow}
+  rules:
+    name: arrow-raised
+    rules:
+      - {rule: application, view: arrow}
+      - {rule: composition, direction: unrestricted, order: 1, view: arrow}
+      - {rule: type-raising, view: arrow, targets: [S], arguments: null}
+  normal_form: {kind: undirected-eisner}
+  lexicon:
+    max_depth: 1

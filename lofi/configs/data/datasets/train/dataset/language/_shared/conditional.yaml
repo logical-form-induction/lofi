@@ -1,0 +1,5 @@
+constants+:
+  - name: if
+    type: "t -> t -> t"
+    classes: [sentential, conditional]
+    notation: {kind: infix, ascii: "=>", unicode: "⇒", precedence: 2, associativity: right}

@@ -1,0 +1,5 @@
+entries:
+  - operator: {kind: swap, edits: 1}
+    weight: 1.0
+  - operator: {kind: deletion, edits: 1}
+    weight: 1.0

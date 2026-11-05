@@ -1,0 +1,18 @@
+# A coercion set that matches its source exactly under a feature-erasing grammar.
+defaults:
+  - coercion-point
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          formalism: declared
+          matching: {kind: feature-erasure}
+          rules:
+            rules:
+              - {rule: application, view: /}
+              - {rule: application, view: "\\"}
+              - rule: coercions
+                label: bare-plural
+                entries: ["N => NP"]
+                matching: {kind: identity}

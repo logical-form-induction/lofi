@@ -1,0 +1,32 @@
+# A logical connective whose type is left to inference from its uses.
+defaults:
+  - higher-order-point
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          constants:
+            - name: not
+              type: "t -> t"
+              classes: [sentential, negation]
+              notation: {kind: prefix, ascii: "~", unicode: "¬", precedence: 6}
+            - name: every
+              type: "(a -> t) -> (a -> t) -> t"
+              quantifies: [a]
+              classes: [quantifier, generalized-universal]
+              notation: {kind: binder, ascii: every, unicode: every, bodies: 2}
+            - name: and
+              type: infer
+              classes: [sentential, conjunction]
+              notation: {kind: infix, ascii: "&&", unicode: "∧", precedence: 4, associativity: left}
+        grammar:
+          lexicon:
+            kind: inline
+            entries:
+              - {form: john, category: NP, meaning: john}
+              - {form: mary, category: NP, meaning: mary}
+              - {form: sleeps, category: "S\\NP", meaning: '\x. sleep(x) && snore(x)'}
+              - {form: sees, category: "S\\NP/NP", meaning: '\y. \x. every z.(see(x)(z), see(z)(y) && sleep(z))'}
+        interpretation:
+          meanings: {source: {kind: lexical}}

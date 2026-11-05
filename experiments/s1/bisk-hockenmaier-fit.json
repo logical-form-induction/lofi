@@ -1,0 +1,23 @@
+{
+  "system": {
+    "kind": "bisk-hockenmaier",
+    "ccgbank_source": "data/bisk-hockenmaier/ccgbank",
+    "dependency_gold_source": "data/bisk-hockenmaier/evaluation.conll",
+    "reference_source": "data/bisk-hockenmaier/reference.json",
+    "reference_tolerance": 0.02,
+    "nominal_category": "N",
+    "sentence_category": "S",
+    "coordination_category": "conj",
+    "gold_sentence_atom": "S",
+    "gold_coordination_atom": "conj",
+    "nominal_tags": ["NN", "NNS", "NNP", "NNPS"],
+    "verbal_tags": ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ"],
+    "coordination_tags": ["CC"],
+    "other_tags": ["JJ", "JJR", "JJS", "RB", ".", ",", ":"],
+    "punctuation_tags": [".", ",", ":"],
+    "headed_or_modifier_arguments": ["N", "S"],
+    "sentence_arguments": ["N"],
+    "em_max_iterations": 50,
+    "convergence_tolerance": 1e-6
+  }
+}

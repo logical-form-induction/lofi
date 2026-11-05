@@ -1,0 +1,284 @@
+site_name: LoFI
+site_description: Induction of categorial grammars and typed logical forms from declared data.
+site_url: https://logical-form-induction.github.io/lofi/
+site_author: Aaron Steven White
+repo_url: https://github.com/logical-form-induction/lofi
+repo_name: logical-form-induction/lofi
+edit_uri: edit/main/docs/
+copyright: LoFI is open source under the MIT License.
+
+# a warning is a broken cross-reference or a symbol the API pages ask for and
+# cannot find, so the build treats one as an error. `mkdocs build --strict` on
+# the command line sets the same thing; this makes a local `mkdocs serve` agree.
+strict: true
+
+# The contributor writing guide is kept with the documentation source.
+exclude_docs: |
+  STYLE.md
+
+theme:
+  name: material
+  language: en
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Use dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Use light mode
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.indexes
+    - navigation.path
+    - navigation.top
+    - navigation.tracking
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.action.edit
+    - content.action.view
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/logical-form-induction/lofi
+      name: LoFI on GitHub
+
+extra_css:
+  - css/custom.css
+
+extra_javascript:
+  - js/mathjax.js
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js
+  - https://cdn.jsdelivr.net/npm/mermaid@10.9.3/dist/mermaid.min.js
+  - js/mermaid-init.js
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      use_pygments: true
+      guess_lang: false
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          # the flat layout: the import package sits at the repository root.
+          paths:
+            - .
+          options:
+            docstring_style: numpy
+            docstring_options:
+              # a value type here is a NamedTuple whose fields are documented in
+              # the Parameters section the numpy convention puts a constructor's
+              # arguments in. there is no written-out signature to match those
+              # fields against, so the parser reports each one as unknown and
+              # untyped, twice per field. every parameter in the tree is
+              # annotated in its signature, which ruff enforces, so these two
+              # warnings can say nothing else here. what strict mode is for, an
+              # identifier a page asks for and cannot resolve, is unaffected.
+              warn_unknown_params: false
+              warn_missing_types: false
+            docstring_section_style: spacy
+            show_root_heading: true
+            show_source: false
+            show_signature_annotations: true
+            separate_signature: true
+            signature_crossrefs: true
+            merge_init_into_class: true
+            inherited_members: false
+            members_order: source
+            heading_level: 2
+            filters:
+              - "!^_"
+
+nav:
+  - Home: index.md
+  - Tutorials:
+      - tutorials/index.md
+      - 1. Your first run: tutorials/01-first-run.md
+      - 2. Declaring a grammar: tutorials/02-declare-a-grammar.md
+      - 3. Inducing a lexicon: tutorials/03-induce-a-lexicon.md
+      - 4. Declaring logical forms: tutorials/04-declare-logical-forms.md
+      - 5. Inducing logical forms: tutorials/05-induce-logical-forms.md
+      - 6. Comparing grammars: tutorials/06-compare-grammars.md
+      - "7. Under the hood: charts and semirings": tutorials/07-charts-and-semirings.md
+  - How-to guides:
+      - how-to/index.md
+      - Set up:
+          - Install LoFI and its extras: how-to/setup/installing.md
+          - Author and compose a configuration: how-to/setup/configuration.md
+      - Grammars and languages:
+          - Declare a category signature: how-to/grammars/declare-a-signature.md
+          - Choose a formalism: how-to/grammars/choose-a-formalism.md
+          - Choose combinatory rules: how-to/grammars/choose-combinatory-rules.md
+          - Choose a normal form, matching and goal: how-to/grammars/choose-normal-form-matching-goal.md
+          - Declare a lexicon: how-to/grammars/declare-a-lexicon.md
+          - Declare a logical-form language: how-to/grammars/declare-a-logical-form-language.md
+          - Declare an interpretation: how-to/grammars/declare-an-interpretation.md
+          - Map between signatures: how-to/grammars/map-between-signatures.md
+      - Synthetic data:
+          - Generate a synthetic corpus: how-to/data/generate-a-synthetic-corpus.md
+          - Corrupt strings and declare negative evidence: how-to/data/corrupt-strings.md
+          - Generate ill-typed logical forms: how-to/data/generate-ill-typed-forms.md
+          - Generate inference pairs: how-to/data/generate-inference-pairs.md
+          - Control logical-form distributions: how-to/data/control-semantic-distributions.md
+      - Corpora and features:
+          - Read a corpus: how-to/data/read-a-corpus.md
+          - Featurize a dataset: how-to/data/featurize-a-dataset.md
+      - Models:
+          - Choose a token encoder: how-to/models/choose-a-token-encoder.md
+          - Configure a chart parser: how-to/models/configure-a-chart-parser.md
+          - Configure term encoders and decoders: how-to/models/configure-term-encoders-and-decoders.md
+          - Configure a controller: how-to/models/configure-a-controller.md
+          - Configure readouts: how-to/models/configure-readouts.md
+      - Training:
+          - Combine losses: how-to/training/combine-losses.md
+          - Supervise and constrain a learner: how-to/training/supervise-and-constrain.md
+          - Reward with a theorem prover: how-to/training/reward-with-a-theorem-prover.md
+          - Reward with model checking: how-to/training/reward-with-model-checking.md
+          - Configure a trainer: how-to/training/configure-a-trainer.md
+          - Choose a device policy: how-to/training/choose-a-device-policy.md
+          - Checkpoint and resume a run: how-to/training/resume-from-a-checkpoint.md
+          - Acquire labels actively: how-to/training/acquire-labels-actively.md
+      - Evaluation:
+          - Evaluate a trained point: how-to/evaluation/evaluate-a-run.md
+          - Decode derivations: how-to/evaluation/decode-derivations.md
+          - Fit an external baseline: how-to/evaluation/fit-a-baseline.md
+      - Experiments:
+          - Run and price a sweep: how-to/experiments/sweeps.md
+          - Choose a sweep design: how-to/experiments/choose-a-sweep-design.md
+          - Contract an experiment: how-to/experiments/contract-an-experiment.md
+          - Reduce and report results: how-to/experiments/reduce-and-report-results.md
+          - Track runs in an experiment tracker: how-to/experiments/track-runs.md
+          - Run on a cluster: how-to/experiments/run-on-a-cluster.md
+          - Publish records: how-to/experiments/publish-records.md
+      - Judgments:
+          - Construct judgment items: how-to/judgments/construct-judgment-items.md
+          - Lay out judgment corpora: how-to/judgments/judgment-corpora.md
+          - Fit a judgment model: how-to/judgments/fit-a-judgment-model.md
+          - Simulate a judgment design: how-to/judgments/simulate-judgment-designs.md
+          - Train on judgments: how-to/judgments/train-on-judgments.md
+      - Probes:
+          - Probe a trained point: how-to/probes/run-probes.md
+          - Run model diagnostics: how-to/probes/run-diagnostics.md
+          - Instrument an external Torch model: how-to/probes/external-model-site-maps.md
+      - Serving:
+          - Export a point to the Hugging Face Hub: how-to/serving/export-to-the-hub.md
+          - Serve predictions through bead: how-to/serving/serve-through-bead.md
+      - Extending:
+          - Package a plugin: how-to/extending/plugins.md
+          - Run the law suites: how-to/extending/laws.md
+          - Turn on the debug checks: how-to/extending/checks.md
+  - Explanation:
+      - explanation/index.md
+      - Foundations:
+          - Logical forms as types: explanation/logical-forms-as-types.md
+          - Grammars as deductive systems: explanation/derivations-as-proofs.md
+          - Charts and approximation: explanation/charts-and-approximation.md
+          - Term-layout capabilities: explanation/term-layout-capabilities.md
+      - Induction:
+          - Induction objectives: explanation/induction-objectives.md
+          - Inference as evidence for logical forms: explanation/inference-as-evidence.md
+          - Judgment models: explanation/judgment-models.md
+          - Probing through published sites: explanation/probing-through-sites.md
+      - Experimental design:
+          - Swappable grammatical assumptions: explanation/swappable-assumptions.md
+          - Source and learner declarations: explanation/synthetic-designs.md
+          - Experiments and commitments: explanation/experiments-and-commitments.md
+      - Architecture:
+          - Documents are the declaration language: explanation/documents-are-the-dsl.md
+          - The layer order: explanation/layering.md
+          - Boundaries: explanation/boundaries.md
+  - Reference:
+      - reference/index.md
+      - Command line: reference/cli.md
+      - Entry-point groups: reference/entry-points.md
+      - Configuration documents:
+          - reference/configuration/index.md
+          - Component roots: reference/configuration/components.md
+          - Grammar: reference/configuration/grammar.md
+          - Logical-form language: reference/configuration/language.md
+          - Datasets and features: reference/configuration/datasets.md
+          - Model: reference/configuration/model.md
+          - Training: reference/configuration/training.md
+          - Evaluation and baselines: reference/configuration/evaluation.md
+      - Symbolic core:
+          - lofi.terms: reference/terms.md
+          - lofi.judge: reference/judge.md
+          - lofi.lexicon: reference/lexicon.md
+          - lofi.deduce: reference/deduce.md
+      - Logical forms:
+          - lofi.interpret: reference/interpret.md
+          - lofi.typecheck: reference/typecheck.md
+          - lofi.lf: reference/lf.md
+      - Grammars:
+          - lofi.formalism: reference/formalism.md
+          - lofi.grammars: reference/grammars.md
+      - Boundaries:
+          - lofi.spec: reference/spec.md
+          - lofi.registry: reference/registry.md
+          - lofi.stats: reference/stats.md
+      - Models and data:
+          - lofi.nn: reference/nn.md
+          - lofi.data: reference/data.md
+          - lofi.probe: reference/probe.md
+          - lofi.judgment: reference/judgment.md
+      - Execution:
+          - lofi.train: reference/train.md
+          - lofi.reward and lofi.baseline: reference/rewards.md
+          - lofi.eval: reference/eval.md
+          - lofi.run: reference/run.md
+          - Checkpoint layout: reference/checkpoints.md
+          - Law suites: reference/laws.md
+  - Contributing:
+      - development/index.md
+      - Testing: development/testing.md
+      - Documentation: development/documentation.md
+      - Public-release preflight: development/public-release.md
+      - Stability: project/stability.md

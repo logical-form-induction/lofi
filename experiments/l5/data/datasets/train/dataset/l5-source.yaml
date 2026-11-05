@@ -1,0 +1,106 @@
+kind: synthetic
+retained: {dev: 0.25, test: 0.25}
+language:
+  name: logical-form-anchoring
+  atomic_types: [{name: e}, {name: t, kind: proposition}]
+  constructors:
+    - name: "->"
+      kind: [Ty, Ty, Ty]
+      notation: {style: infix, spelling: "->", precedence: 1, associativity: right}
+  constants:
+    - name: not
+      type: "t -> t"
+      classes: [sentential, negation]
+      notation: {kind: prefix, ascii: not, unicode: "¬", precedence: 6}
+  binders: {style: curry}
+  logic:
+    equality: false
+    negation: not
+    prover: {kind: truth-table, timeout: 5.0}
+    labeling: {budget: {}}
+  bounds:
+    Ty: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+    Tm: {layout: complete-tree, depth: 6, nodes: null, order: df, free_ranks: 0}
+    Cat: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+grammar:
+  formalism: declared
+  name: logical-form-anchoring
+  signature:
+    primitives: [S, NP]
+    constructors:
+      - name: /
+        kind: [Cat, Cat, Cat]
+        notation: {style: infix, spelling: /, precedence: 10, associativity: left}
+      - name: "\\"
+        kind: [Cat, Cat, Cat]
+        notation: {style: infix, spelling: "\\", precedence: 10, associativity: left}
+    functors:
+      - {name: /, constructor: /, argument_side: right, opposite: "\\"}
+      - {name: "\\", constructor: "\\", argument_side: left, opposite: /}
+  rules:
+    name: application
+    rules:
+      - {rule: application, view: /}
+      - {rule: application, view: "\\"}
+  lexicon:
+    kind: inline
+    entries:
+      - {form: entity-1, category: NP}
+      - {form: entity-2, category: NP}
+      - {form: entity-3, category: NP}
+      - {form: entity-4, category: NP}
+      - {form: predicate-1, category: "S\\NP"}
+      - {form: predicate-2, category: "S\\NP"}
+      - {form: predicate-3, category: "S\\NP"}
+      - {form: predicate-4, category: "S\\NP"}
+      - {form: modifier-1, category: S/S}
+      - {form: modifier-2, category: S/S}
+      - {form: modifier-3, category: S/S}
+      - {form: modifier-4, category: S/S}
+  goal: {kind: root, categories: [S]}
+  matching: {kind: identity}
+  budget: {unary_rounds: 1}
+interpretation:
+  erasure:
+    kind: signature-morphism
+    atoms: {S: t, NP: e}
+  constants: []
+  meanings:
+    source:
+      kind: structured
+      structure:
+        joint:
+          spelling: tabular
+          rows:
+            - {logical_class: constant, size: 4, share: 0.25}
+            - {logical_class: predicate, size: 4, share: 0.25}
+            - {logical_class: connective, size: 1, share: 0.25}
+            - {logical_class: identity, size: 1, share: 0.25}
+        rank_law: {kind: power-law, exponent: 1.0}
+        arities: {arities: [{arity: 1, share: 1.0}]}
+        assignment:
+          kind: tabular
+          rows:
+            - {category: NP, classes: [{logical_class: constant}]}
+            - {category: "S\\NP", classes: [{logical_class: predicate, arity: 1}]}
+            - category: S/S
+              classes:
+                - {logical_class: connective, arity: 1}
+                - {logical_class: identity}
+        fragment:
+          order: first
+          quantifiers: []
+          connectives: [not]
+          functions: false
+          equality: false
+        seed: 0
+        polysemy:
+          spelling: parametric
+          mean: 1.0
+          dispersion: 0.0
+          maximum: 2
+          placement: 0.0
+size: 64
+seed: derived
+length: {kind: uniform, min_length: 2, max_length: 4}
+sampler: {kind: uniform}

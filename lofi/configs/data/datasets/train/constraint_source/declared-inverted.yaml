@@ -1,0 +1,5 @@
+kind: declared
+policy: syntactic
+pins:
+  - {kind: item-feature, item: word-0, feature: S}
+clamp: {negate: true}

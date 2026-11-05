@@ -1,0 +1,11 @@
+formalism: cfg
+name: cfg-collapse
+nonterminals: [S, A]
+productions:
+  - {name: "application:/", parent: S, children: [A, A]}
+  - {name: "application:\\", parent: S, children: [A, S]}
+lexicon: {kind: inline, entries: [{form: a, category: A}]}
+goal: S
+matching: {kind: identity}
+normal_form: {kind: none}
+budget: {unary_rounds: 0, closure_rounds: 4, closure_nodes: 64}

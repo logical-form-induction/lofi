@@ -1,0 +1,58 @@
+defaults:
+  - data.datasets.train.dataset: synthetic
+  - data.datasets.train.dataset.grammar: cfg-collapse
+  - data.datasets.train.featurizer: unlabeled
+parse: {retain: forest, reachability: all}
+approximation: {residual_mass: 0.75}
+model:
+  language: {from: data}
+  parser: {kind: inside-outside, width: 4}
+  token_encoder: {kind: learned, width: 4}
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 4, activation: tanh}]}
+  encoders:
+    terms: {kind: tree-rnn, width: 4}
+  decoders:
+    identity: {kind: tree-rnn, width: 4}
+    application: {kind: tree-rnn, width: 4}
+  spaces:
+    categories:
+      sort: Cat
+      encoder: terms
+      identity: identity
+      combinators:
+        merge: concatenate
+        decoders:
+          "application:/": application
+          "application:\\": application
+  readouts:
+    category-terms:
+      kind: terms
+      space: categories
+      reads: inside
+      decoding: {strategy: exhaustive, cap: 64}
+loss:
+  terms:
+    - objective:
+        kind: coherence
+        readout: category-terms
+        space: categories
+        estimator: truncated
+        warmup: null
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 1
+  batch_size: 2
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  active_groups: [token_encoder, terms, identity, application, controller, parser]
+  early_stopping: {metric: loss/coherence, mode: min, patience: 1, minimum_delta: 0.0, keep_best: 1}
+  checkpoints: {interval: 1, keep: 1}
+release: {checkpoint: validation-best}
+optimizer: {kind: adamw, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000

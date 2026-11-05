@@ -1,0 +1,1193 @@
+[
+  {
+    "inventory": "ccgbank-full",
+    "corpus": "ccgbank-1.1",
+    "language": "en",
+    "training_size": 39604,
+    "checked_steps": 26227,
+    "reachable_steps": 26190,
+    "checked_derivations": 1029,
+    "reachable_derivations": 993,
+    "step_reachability": 0.9985892400960842,
+    "derivation_reachability": 0.9650145772594753,
+    "blocked": {
+      "label": 0,
+      "rule": 0,
+      "construction": 36
+    },
+    "histogram": [
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[ng]\\NP"
+          ],
+          "output": "NP"
+        },
+        "derivations": 8
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]\\S[dcl]",
+            ","
+          ],
+          "output": "S/S"
+        },
+        "derivations": 5
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]"
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 5
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[to]\\NP)/NP"
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 3
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]/S[dcl]",
+            ","
+          ],
+          "output": "(S\\NP)/(S\\NP)"
+        },
+        "derivations": 3
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]/S[dcl]",
+            ","
+          ],
+          "output": "(S\\NP)\\(S\\NP)"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]"
+          ],
+          "output": "(S/S)\\(S/S)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]/S[dcl]",
+            ","
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]"
+          ],
+          "output": "S\\S"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]"
+          ],
+          "output": "((S\\NP)\\(S\\NP))\\((S\\NP)\\(S\\NP))"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]",
+            ","
+          ],
+          "output": "S/S"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]",
+            ","
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]"
+          ],
+          "output": "((S\\NP)/(S\\NP))\\((S\\NP)/(S\\NP))"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]\\S[dcl]"
+          ],
+          "output": "(S\\NP)/(S\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]",
+            ","
+          ],
+          "output": "(S\\NP)\\(S\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[adj]\\NP",
+            ","
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 1
+      }
+    ]
+  },
+  {
+    "inventory": "ccgbank-application",
+    "corpus": "ccgbank-1.1",
+    "language": "en",
+    "training_size": 39604,
+    "checked_steps": 26227,
+    "reachable_steps": 25697,
+    "checked_derivations": 1029,
+    "reachable_derivations": 734,
+    "step_reachability": 0.9797918175925573,
+    "derivation_reachability": 0.7133138969873664,
+    "blocked": {
+      "label": 0,
+      "rule": 0,
+      "construction": 295
+    },
+    "histogram": [
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/(S[b]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/(S[b]\\NP)"
+        },
+        "derivations": 44
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S/(S\\NP)",
+            "(S[dcl]\\NP)/NP"
+          ],
+          "output": "S[dcl]/NP"
+        },
+        "derivations": 42
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/NP",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/NP"
+        },
+        "derivations": 24
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/PP",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/PP"
+        },
+        "derivations": 16
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/(S[pt]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/(S[pt]\\NP)"
+        },
+        "derivations": 14
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[b]\\NP)/NP",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[b]\\NP)/NP"
+        },
+        "derivations": 14
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "NP/NP",
+            "NP[nb]/N"
+          ],
+          "output": "NP[nb]/N"
+        },
+        "derivations": 12
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/(S[pss]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/(S[pss]\\NP)"
+        },
+        "derivations": 12
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/(S[ng]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/(S[ng]\\NP)"
+        },
+        "derivations": 11
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/(S[adj]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/(S[adj]\\NP)"
+        },
+        "derivations": 8
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[ng]\\NP"
+          ],
+          "output": "NP"
+        },
+        "derivations": 8
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S/(S\\NP)",
+            "(S[dcl]\\NP)/S[dcl]"
+          ],
+          "output": "S[dcl]/S[dcl]"
+        },
+        "derivations": 8
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/(S[to]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/(S[to]\\NP)"
+        },
+        "derivations": 6
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[pss]\\NP)/PP",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[pss]\\NP)/PP"
+        },
+        "derivations": 6
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]\\S[dcl]",
+            ","
+          ],
+          "output": "S/S"
+        },
+        "derivations": 5
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]"
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 5
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/S[em]",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/S[em]"
+        },
+        "derivations": 4
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\S[dcl])\\NP",
+            "S\\S"
+          ],
+          "output": "(S[dcl]\\S[dcl])\\NP"
+        },
+        "derivations": 4
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[to]\\NP)/NP"
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 3
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]/S[dcl]",
+            ","
+          ],
+          "output": "(S\\NP)/(S\\NP)"
+        },
+        "derivations": 3
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[pss]\\NP)/(S[to]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[pss]\\NP)/(S[to]\\NP)"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/S[dcl]",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/S[dcl]"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[b]\\NP)/PP",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[b]\\NP)/PP"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[adj]\\NP)/(S[adj]\\NP)",
+            "(S[adj]\\NP)/PP"
+          ],
+          "output": "(S[adj]\\NP)/PP"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S/S)/(S/S)",
+            "(S/S)/N"
+          ],
+          "output": "(S/S)/N"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "((S\\NP)\\(S\\NP))/((S\\NP)\\(S\\NP))",
+            "((S\\NP)\\(S\\NP))/N"
+          ],
+          "output": "((S\\NP)\\(S\\NP))/N"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[ng]\\NP)/NP",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[ng]\\NP)/NP"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[pt]\\NP)/PP",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[pt]\\NP)/PP"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP[thr])/NP",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP[thr])/NP"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[b]\\NP)/(S[adj]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[b]\\NP)/(S[adj]\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[to]\\NP)/(S[b]\\NP)",
+            "(S[b]\\NP)/NP"
+          ],
+          "output": "(S[to]\\NP)/NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "((S[adj]\\NP)/(S[adj]\\NP))/((S[adj]\\NP)/(S[adj]\\NP))",
+            "((S[adj]\\NP)/(S[adj]\\NP))/N"
+          ],
+          "output": "((S[adj]\\NP)/(S[adj]\\NP))/N"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]"
+          ],
+          "output": "(S/S)\\(S/S)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[b]\\NP)/(S[to]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[b]\\NP)/(S[to]\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(NP\\NP)/(NP\\NP)",
+            "(NP\\NP)/N"
+          ],
+          "output": "(NP\\NP)/N"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "((S[dcl]\\NP)/PP)/NP",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "((S[dcl]\\NP)/PP)/NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[wq]/NP",
+            "S\\S"
+          ],
+          "output": "S[wq]/NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]/S[dcl]",
+            ","
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S\\NP)/(S\\NP)",
+            "(S[dcl]\\NP)/(S[pss]\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/(S[pss]\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "((S[dcl]\\NP[expl])/(S[to]\\NP))/(S[adj]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "((S[dcl]\\NP[expl])/(S[to]\\NP))/(S[adj]\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "((S[dcl]\\NP[expl])/S[dcl])/(S[adj]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "((S[dcl]\\NP[expl])/S[dcl])/(S[adj]\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]"
+          ],
+          "output": "S\\S"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]"
+          ],
+          "output": "((S\\NP)\\(S\\NP))\\((S\\NP)\\(S\\NP))"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[to]\\NP)/(S[b]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[to]\\NP)/(S[b]\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]",
+            ","
+          ],
+          "output": "S/S"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]",
+            ","
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[q]/(S[b]\\NP))/NP",
+            "S\\S"
+          ],
+          "output": "(S[q]/(S[b]\\NP))/NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]"
+          ],
+          "output": "((S\\NP)/(S\\NP))\\((S\\NP)/(S\\NP))"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]\\S[dcl]"
+          ],
+          "output": "(S\\NP)/(S\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]",
+            ","
+          ],
+          "output": "(S\\NP)\\(S\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/PP",
+            "PP/NP"
+          ],
+          "output": "(S[dcl]\\NP)/NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[pt]\\NP)/NP",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[pt]\\NP)/NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP[expl])/(S[b]\\NP)",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP[expl])/(S[b]\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]/S[dcl]",
+            ","
+          ],
+          "output": "(S\\NP)\\(S\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/S[bem]",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[dcl]\\NP)/S[bem]"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[pt]\\NP)/S[em]",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S[pt]\\NP)/S[em]"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[ng]\\NP)/PP",
+            "PP/NP"
+          ],
+          "output": "(S[ng]\\NP)/NP"
+        },
+        "derivations": 1
+      }
+    ]
+  },
+  {
+    "inventory": "ccgbank-combinatory",
+    "corpus": "ccgbank-1.1",
+    "language": "en",
+    "training_size": 39604,
+    "checked_steps": 26227,
+    "reachable_steps": 19248,
+    "checked_derivations": 1029,
+    "reachable_derivations": 0,
+    "step_reachability": 0.7339001792046365,
+    "derivation_reachability": 0.0,
+    "blocked": {
+      "label": 0,
+      "rule": 0,
+      "construction": 1029
+    },
+    "histogram": [
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]",
+            "."
+          ],
+          "output": "S[dcl]"
+        },
+        "derivations": 948
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "N"
+          ],
+          "output": "NP"
+        },
+        "derivations": 23
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "NP",
+            "."
+          ],
+          "output": "NP"
+        },
+        "derivations": 9
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            ",",
+            "S[dcl]\\S[dcl]"
+          ],
+          "output": "S[dcl]\\S[dcl]"
+        },
+        "derivations": 6
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]",
+            "S[dcl][conj]"
+          ],
+          "output": "S[dcl]"
+        },
+        "derivations": 4
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            ",",
+            "S[dcl]"
+          ],
+          "output": "S[dcl]"
+        },
+        "derivations": 3
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[b]\\NP",
+            "."
+          ],
+          "output": "S[b]\\NP"
+        },
+        "derivations": 3
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[wq]",
+            "."
+          ],
+          "output": "S[wq]"
+        },
+        "derivations": 3
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[b]",
+            "."
+          ],
+          "output": "S[b]"
+        },
+        "derivations": 3
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]\\PP",
+            "."
+          ],
+          "output": "S[dcl]\\PP"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "LRB",
+            "S[dcl]"
+          ],
+          "output": "S[dcl]"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[inv]",
+            "."
+          ],
+          "output": "S[inv]"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]\\(S[adj]\\NP)",
+            "."
+          ],
+          "output": "S[dcl]\\(S[adj]\\NP)"
+        },
+        "derivations": 2
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "N",
+            "N[conj]"
+          ],
+          "output": "N"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[frg]",
+            "."
+          ],
+          "output": "S[frg]"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]\\NP",
+            ":"
+          ],
+          "output": "S[dcl]\\NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[pss]",
+            "."
+          ],
+          "output": "S[pss]"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[to]\\NP"
+          ],
+          "output": "S/S"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[b]\\NP",
+            ":"
+          ],
+          "output": "S[b]\\NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            ",",
+            "S/S"
+          ],
+          "output": "S/S"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/S[q]",
+            ","
+          ],
+          "output": "(S[dcl]\\NP)/S[q]"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            ".",
+            "S[dcl]\\S[wq]"
+          ],
+          "output": "S[dcl]\\S[wq]"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[to]\\NP"
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S",
+            "."
+          ],
+          "output": "S"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "NP",
+            "NP[conj]"
+          ],
+          "output": "NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[ng]\\NP"
+          ],
+          "output": "NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[adj]\\NP",
+            "."
+          ],
+          "output": "S[adj]\\NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[dcl]/NP"
+          ],
+          "output": "NP\\NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "(S[dcl]\\NP)/S[wq]",
+            ":"
+          ],
+          "output": "(S[dcl]\\NP)/S[wq]"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "LRB",
+            "NP"
+          ],
+          "output": "NP"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            ",",
+            "(S\\NP)\\(S\\NP)"
+          ],
+          "output": "(S\\NP)\\(S\\NP)"
+        },
+        "derivations": 1
+      },
+      {
+        "cell": {
+          "kind": "construction",
+          "inputs": [
+            "S[ng]\\NP",
+            ":"
+          ],
+          "output": "S[ng]\\NP"
+        },
+        "derivations": 1
+      }
+    ]
+  }
+]

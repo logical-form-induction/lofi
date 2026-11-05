@@ -1,0 +1,10 @@
+# Token-level supervision whose pinned categories are a weighted preference.
+defaults:
+  - pinned-point
+data:
+  datasets:
+    train:
+      constraint_source:
+        clamp:
+          mode: soft
+          penalty: 0.5

@@ -1,0 +1,25 @@
+formalism: ab
+name: ab-application
+signature:
+  name: ab-application
+  primitives: [S, NP]
+  constructors:
+    - {name: /, kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+  functors:
+    - {name: /, constructor: /, argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: /}
+rules:
+  name: ab-application
+  rules:
+    - {rule: application, view: /}
+    - {rule: application, view: '\'}
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: NP}
+    - {form: mary, category: NP}
+    - {form: sleeps, category: 'S\NP'}
+    - {form: sees, category: 'S\NP/NP'}
+goal: {kind: root, categories: [S]}
+budget: {unary_rounds: 1, closure_rounds: 2, closure_nodes: 256}

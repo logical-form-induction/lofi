@@ -1,0 +1,15 @@
+{
+  "grid": {
+    "semantic-profile": ["i6-dp-cn", "i6-dp-cp", "i12-dp-cn", "i12-dp-cp"],
+    "ambiguity-profile": ["a125-d0-pn", "a125-d0-pp", "a200-d1-pn", "a200-d1-pp"],
+    "scope": ["single-reading", "multiple-reading"]
+  },
+  "hypotheses": [
+    {
+      "name": "reduced-recovery-above-floor",
+      "left": "many-to-one-accuracy",
+      "right": "random-relabeling-floor",
+      "family": "logical-form-semantic-factors"
+    }
+  ]
+}

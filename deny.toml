@@ -1,0 +1,44 @@
+# the supply-chain policy `cargo deny check` enforces over Cargo.lock.
+
+[graph]
+all-features = true
+
+[advisories]
+# a vulnerability or an unsound crate in the graph fails the check; so does a
+# release its author withdrew.
+unmaintained = "all"
+unsound = "all"
+yanked = "deny"
+
+[licenses]
+allow = [
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "MIT",
+    "Unicode-3.0",
+    "Zlib",
+]
+confidence-threshold = 0.93
+# the list is the policy for every crate the graph may come to hold, not a
+# census of the licenses it holds today.
+unused-allowed-license = "allow"
+
+# pyo3's build configuration depends on target-lexicon, which is Apache-2.0 with
+# the LLVM exception. The exception only widens the grant, and the crate runs at
+# build time and is not linked into the extension.
+[[licenses.exceptions]]
+crate = "target-lexicon"
+allow = ["Apache-2.0 WITH LLVM-exception"]
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+# the workspace's own path dependencies have no version, and none is published
+allow-wildcard-paths = true
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

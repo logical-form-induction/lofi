@@ -1,0 +1,137 @@
+{
+  "rows": {
+    "attribute": "verb",
+    "levels": [
+      "think",
+      "want",
+      "tell",
+      "know",
+      "say",
+      "believe",
+      "hope",
+      "remember",
+      "promise",
+      "persuade",
+      "expect",
+      "wonder"
+    ]
+  },
+  "columns": {
+    "attribute": "frame",
+    "inventory": {
+      "primitive_types": [
+        "NP",
+        "S_that",
+        "S_whether",
+        "VP_to",
+        "PP_to"
+      ],
+      "null_type": "NONE",
+      "levels": [
+        {
+          "label": "_ NP",
+          "arguments": [
+            "NP"
+          ]
+        },
+        {
+          "label": "_ S_that",
+          "arguments": [
+            "S_that"
+          ]
+        },
+        {
+          "label": "_ S_whether",
+          "arguments": [
+            "S_whether"
+          ]
+        },
+        {
+          "label": "_ VP_to",
+          "arguments": [
+            "VP_to"
+          ]
+        },
+        {
+          "label": "_ NP NP",
+          "arguments": [
+            "NP",
+            "NP"
+          ]
+        },
+        {
+          "label": "_ NP S_that",
+          "arguments": [
+            "NP",
+            "S_that"
+          ]
+        },
+        {
+          "label": "_ NP S_whether",
+          "arguments": [
+            "NP",
+            "S_whether"
+          ]
+        },
+        {
+          "label": "_ NP VP_to",
+          "arguments": [
+            "NP",
+            "VP_to"
+          ]
+        },
+        {
+          "label": "_ PP_to S_that",
+          "arguments": [
+            "PP_to",
+            "S_that"
+          ]
+        },
+        {
+          "label": "_ PP_to VP_to",
+          "arguments": [
+            "PP_to",
+            "VP_to"
+          ]
+        },
+        {
+          "label": "_ NP PP_to",
+          "arguments": [
+            "NP",
+            "PP_to"
+          ]
+        },
+        {
+          "label": "_ S_whether S_that",
+          "arguments": [
+            "S_whether",
+            "S_that"
+          ]
+        }
+      ]
+    }
+  },
+  "width": 3,
+  "schedule": {
+    "optimizer": {
+      "kind": "adam",
+      "learning_rate": 0.05,
+      "weight_decay": 0.005
+    },
+    "steps": 400,
+    "batch_size": null,
+    "initial_scale": 0.5
+  },
+  "lift": {
+    "lift": "possession_and_classes",
+    "lexical_primitives": {
+      "names": [
+        "cause",
+        "motion",
+        "attitude",
+        "speech"
+      ]
+    },
+    "classes": 4
+  }
+}
