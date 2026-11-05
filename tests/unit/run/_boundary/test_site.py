@@ -430,3 +430,35 @@ def test_an_allocation_admits_its_share_of_its_hours() -> None:
     for share in (0.0, 1.5):
         with pytest.raises(dx.ValidationError, match="outside"):
             SiteAllocation(accelerator_hours=1000.0, share=share)
+
+
+@pytest.mark.parametrize("field", ["scratch_root", "cache_root"])
+@pytest.mark.parametrize(
+    "root", ["/scratch/runs", r"C:\scratch\runs", r"\\server\share\runs"]
+)
+def test_storage_accepts_absolute_paths_for_each_host_platform(
+    field: str, root: str
+) -> None:
+    document = _edited(_example_document(), f"storage.{field}", root)
+    profile = SiteProfile.model_validate(document)
+
+    assert getattr(profile.storage, field) == root
+
+
+@pytest.mark.parametrize("field", ["scratch_root", "cache_root"])
+@pytest.mark.parametrize("root", ["scratch/runs", r"C:scratch\runs", r"\scratch\runs"])
+def test_storage_refuses_paths_that_depend_on_a_working_directory(
+    tmp_path: Path, field: str, root: str
+) -> None:
+    document = _edited(_example_document(), f"storage.{field}", root)
+
+    with pytest.raises(ConfigValueError, match="not absolute"):
+        _resolve_document(tmp_path, document)
+
+
+@pytest.mark.parametrize("root", ["C:/scratch/runs", "//server/share/runs"])
+def test_a_site_file_resolves_windows_storage_paths(tmp_path: Path, root: str) -> None:
+    document = _edited(_example_document(), "storage.scratch_root", root)
+    profile = _resolve_document(tmp_path, document)
+
+    assert profile.storage.scratch_root == root

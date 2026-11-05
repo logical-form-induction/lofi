@@ -2,7 +2,7 @@
 
 import enum
 import re
-from pathlib import Path, PurePosixPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from string import Formatter
 from typing import TYPE_CHECKING, Final, Protocol, override, runtime_checkable
 
@@ -153,8 +153,9 @@ def _ensure_template(field: str, template: str, *, fields: frozenset[str]) -> st
 
 
 def _ensure_absolute(field: str, root: str) -> str:
-    """Return an absolute POSIX path."""
-    if not PurePosixPath(ensure_name(field, root)).is_absolute():
+    """Return an absolute POSIX or Windows path."""
+    named = ensure_name(field, root)
+    if not (PurePosixPath(named).is_absolute() or PureWindowsPath(named).is_absolute()):
         msg = f"the {field} is not absolute: {root!r}"
         raise ValueError(msg)
 
