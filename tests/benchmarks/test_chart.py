@@ -311,7 +311,7 @@ def test_the_pinned_sentences_parse_within_the_chart_budgets(
     benchmark.extra_info["trials_per_sentence"] = counted.indexed / sentences
     benchmark.extra_info["trials_per_second"] = counted.indexed / sentences / seconds
     benchmark.extra_info["mean_items_per_cell"] = counted.items / counted.cells
-    benchmark.extra_info["budget"] = "P-11 P-12 P-13 P-14"
+    benchmark.extra_info["budget"] = "chart-construction"
 
     # enforce the 80 ms per-sentence budget
     if wall_clock_budget.enforced:

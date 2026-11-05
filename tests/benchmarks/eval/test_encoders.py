@@ -89,7 +89,7 @@ def test_the_registered_encoder_ablation_reducer_meets_its_budget(
         pytest.fail("the reducer ran but pytest-benchmark timed nothing")
 
     median_ms = measured.stats.median * 1e3
-    benchmark.extra_info["budget"] = "P-52"
+    benchmark.extra_info["budget"] = "encoder-evaluation"
     benchmark.extra_info["budget_cell"] = "encoder-ablation-reducer"
     benchmark.extra_info["budget_ms"] = BUDGET_MS
     benchmark.extra_info["median_ms"] = median_ms

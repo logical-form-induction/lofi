@@ -79,7 +79,7 @@ def test_plugin_discovery_meets_its_budgets(
     benchmark.extra_info["plugins"] = PLUGIN_COUNT
     benchmark.extra_info["median_ms_total"] = total_ms
     benchmark.extra_info["median_ms_per_plugin"] = per_plugin_ms
-    benchmark.extra_info["budget"] = "P-37"
+    benchmark.extra_info["budget"] = "component-registry"
 
     # enforce the 200 ms total discovery budget and the 5 ms per-plugin budget
     if wall_clock_budget.enforced:

@@ -136,7 +136,7 @@ def test_the_rung_runs_a_forward_pass_over_a_batch_of_512(
     median_ms = measured.stats.median * 1e3
     benchmark.extra_info["median_ms_per_forward"] = median_ms
     benchmark.extra_info["mean_ms_per_forward"] = measured.stats.mean * 1e3
-    benchmark.extra_info["budget"] = "P-16"
+    benchmark.extra_info["budget"] = "pooled-judgment-fit"
 
     if wall_clock_budget.enforced:
         assert median_ms <= 25.0

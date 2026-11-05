@@ -36,7 +36,7 @@ INDEXED_NAMES: Final = tuple(f"leaf-{payload}" for payload in range(INTERNED_NOD
 EQUALITY_DEPTH: Final = 5
 EQUALITY_NODES: Final = 63
 
-# the comparison P-01 and P-01b time.
+# the comparisons timed within and across stores.
 EQUALITY: Final = "here == there"
 
 
@@ -424,7 +424,7 @@ def test_the_nodes_measured_are_three_distinct_terms(nodes: Nodes) -> None:
 
 
 def _within_one_lineage(nodes: Nodes) -> Context:
-    """Return the two distinct nodes of one store that P-01 compares.
+    """Return the two distinct nodes compared within one store.
 
     Parameters
     ----------
@@ -440,7 +440,7 @@ def _within_one_lineage(nodes: Nodes) -> Context:
 
 
 def _across_lineages(lineages: Lineages) -> Context:
-    """Return the one structure from two stores that P-01b compares.
+    """Return one structure from two stores for an equality comparison.
 
     Parameters
     ----------
@@ -477,7 +477,7 @@ def test_term_equality_is_within_budget(
     benchmark: BenchmarkFixture, nodes: Nodes, wall_clock_budget: WallClockBudget
 ) -> None:
     nanoseconds = _per_operation(benchmark, EQUALITY, _within_one_lineage(nodes))
-    benchmark.extra_info["budget"] = "P-01"
+    benchmark.extra_info["budget"] = "term-equality"
 
     # enforce the 250 ns budget for equality within one store lineage
     if wall_clock_budget.enforced:
@@ -542,7 +542,7 @@ def test_term_equality_across_lineages_is_within_budget(
     benchmark: BenchmarkFixture, lineages: Lineages, wall_clock_budget: WallClockBudget
 ) -> None:
     nanoseconds = _per_operation(benchmark, EQUALITY, _across_lineages(lineages))
-    benchmark.extra_info["budget"] = "P-01b"
+    benchmark.extra_info["budget"] = "cross-store-term-equality"
     benchmark.extra_info["nodes"] = EQUALITY_NODES
 
     if wall_clock_budget.enforced:
@@ -553,7 +553,7 @@ def test_term_hashing_is_within_budget(
     benchmark: BenchmarkFixture, nodes: Nodes, wall_clock_budget: WallClockBudget
 ) -> None:
     nanoseconds = _per_operation(benchmark, "hash(node)", {"node": nodes.branching})
-    benchmark.extra_info["budget"] = "P-02"
+    benchmark.extra_info["budget"] = "term-hashing"
 
     if wall_clock_budget.enforced:
         assert nanoseconds <= 80
@@ -573,7 +573,7 @@ def test_an_interning_hit_is_within_budget(
             "primitive": nodes.primitive,
         },
     )
-    benchmark.extra_info["budget"] = "P-03"
+    benchmark.extra_info["budget"] = "interning-hit"
 
     if wall_clock_budget.enforced:
         assert nanoseconds <= 250
@@ -595,7 +595,7 @@ def test_an_interning_miss_is_within_budget(
         },
         units=BATCH,
     )
-    benchmark.extra_info["budget"] = "P-04"
+    benchmark.extra_info["budget"] = "interning-miss"
 
     if wall_clock_budget.enforced:
         assert nanoseconds <= 10_000
@@ -605,7 +605,7 @@ def test_subterm_access_is_within_budget(
     benchmark: BenchmarkFixture, nodes: Nodes, wall_clock_budget: WallClockBudget
 ) -> None:
     nanoseconds = _per_operation(benchmark, "node.args[1]", {"node": nodes.branching})
-    benchmark.extra_info["budget"] = "P-05"
+    benchmark.extra_info["budget"] = "subterm-access"
 
     if wall_clock_budget.enforced:
         assert nanoseconds <= 100
@@ -615,7 +615,7 @@ def test_the_erased_core_is_within_budget(
     benchmark: BenchmarkFixture, nodes: Nodes, wall_clock_budget: WallClockBudget
 ) -> None:
     nanoseconds = _per_operation(benchmark, "node.core", {"node": nodes.featured})
-    benchmark.extra_info["budget"] = "P-06"
+    benchmark.extra_info["budget"] = "term-erasure"
 
     if wall_clock_budget.enforced:
         assert nanoseconds <= 200
@@ -629,7 +629,7 @@ def test_set_membership_is_within_budget(
         "term in held",
         {"term": members.present, "held": members.members},
     )
-    benchmark.extra_info["budget"] = "P-07"
+    benchmark.extra_info["budget"] = "term-set-membership"
     benchmark.extra_info["members"] = MEMBERS
 
     if wall_clock_budget.enforced:
@@ -645,7 +645,7 @@ def test_interned_node_memory_is_within_budget(benchmark: BenchmarkFixture) -> N
     )
     per_leaf = leaves.held / leaves.nodes
     per_pair = pairs.held / pairs.nodes
-    benchmark.extra_info["budget"] = "P-10"
+    benchmark.extra_info["budget"] = "interned-node-memory"
     benchmark.extra_info["nodes"] = INTERNED_NODES
     benchmark.extra_info["leaf_bytes"] = leaves.held
     benchmark.extra_info["leaf_bytes_per_node"] = per_leaf

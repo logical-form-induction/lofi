@@ -158,7 +158,7 @@ def test_the_head_runs_a_forward_and_backward_over_a_batch_of_512(
     benchmark.extra_info["items"] = ITEMS
     benchmark.extra_info["dtype"] = str(DTYPE)
     benchmark.extra_info["device"] = loss.device.type
-    benchmark.extra_info["budget"] = "P-49"
+    benchmark.extra_info["budget"] = "judgment-head"
     benchmark.extra_info["median_ms_per_step"] = measured.stats.median * 1e3
     mean_ms = measured.stats.mean * 1e3
     benchmark.extra_info["mean_ms_per_step"] = mean_ms

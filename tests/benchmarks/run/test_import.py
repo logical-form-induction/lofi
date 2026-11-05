@@ -64,7 +64,7 @@ def test_importing_the_run_package_in_a_fresh_process_meets_its_budget(
     benchmark.extra_info["median_import_s"] = import_s
     benchmark.extra_info["max_import_s"] = max(imports)
     benchmark.extra_info["median_process_s"] = measured.stats.median
-    benchmark.extra_info["budget"] = "P-40"
+    benchmark.extra_info["budget"] = "package-import"
 
     if wall_clock_budget.enforced:
         assert import_s <= 2

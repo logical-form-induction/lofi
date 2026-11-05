@@ -1,4 +1,4 @@
-"""The B-1 crossing benchmark for the command line's process entry."""
+"""Benchmark the command line's process entry."""
 
 import json
 import subprocess
@@ -217,7 +217,7 @@ def test_showing_a_configuration_from_a_fresh_process_meets_p30(
         pytest.fail("the command ran but pytest-benchmark timed nothing")
 
     process_ms = measured.stats.median * 1e3
-    benchmark.extra_info["budget"] = "P-30"
+    benchmark.extra_info["budget"] = "command-line-entry"
     benchmark.extra_info["budget_cell"] = "cli-show-config"
     benchmark.extra_info["cold_ms"] = result.cold_ms
     benchmark.extra_info["process_ms"] = process_ms

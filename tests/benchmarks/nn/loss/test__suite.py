@@ -690,7 +690,7 @@ def _json_object(value: object, description: str) -> dict[str, JsonValue]:
 
 
 def _baseline_entries() -> tuple[dict[str, JsonValue], ...]:
-    """Read the exact PI-owned objective baseline entries."""
+    """Read the exact saved objective baseline entries."""
     document = _json_object(
         json.loads(BASELINE.read_text(encoding="utf-8")), "the saved run"
     )
@@ -787,19 +787,27 @@ def test_the_fixture_digest_is_deterministic_and_shape_sensitive(
         )
 
 
-def test_the_pi_owned_objective_baseline_matches_the_live_contract(
+def test_the_saved_objective_baseline_matches_the_live_contract(
     cpu_harness: Harness,
 ) -> None:
     """Check that the saved objective run is exact and reproducible."""
     if not BASELINE.is_file():
-        pytest.skip(f"the PI-owned objective baseline is not yet present at {BASELINE}")
+        pytest.skip(f"the saved objective baseline is not yet present at {BASELINE}")
 
     expected: dict[str, tuple[str, int, str, str]] = {}
     source = "tests/benchmarks/nn/loss/test__suite.py"
 
     for test_name, phase, budget in (
-        ("test_the_default_suite_forward_meets_its_budget", "forward", "P-47"),
-        ("test_the_default_suite_backward_meets_its_budget", "backward", "P-48"),
+        (
+            "test_the_default_suite_forward_meets_its_budget",
+            "forward",
+            "objective-forward",
+        ),
+        (
+            "test_the_default_suite_backward_meets_its_budget",
+            "backward",
+            "objective-backward",
+        ),
     ):
         for tokens in LENGTHS:
             name = f"{test_name}[{tokens}-tokens]"
@@ -949,7 +957,7 @@ def test_the_default_suite_forward_meets_its_budget(
         benchmark,
         accelerator_harness,
         raw,
-        budget="P-47",
+        budget="objective-forward",
         phase="forward",
     )
 
@@ -964,7 +972,9 @@ def test_the_default_suite_forward_meets_its_budget(
             case 40:
                 assert mean_ms <= 6_300.0
             case unreachable:
-                pytest.fail(f"no P-47 budget is declared for {unreachable} tokens")
+                pytest.fail(
+                    f"no objective-forward budget is declared for {unreachable} tokens"
+                )
 
 
 @pytest.mark.benchmark(group="default-objective-suite")
@@ -990,7 +1000,7 @@ def test_the_default_suite_backward_meets_its_budget(
         benchmark,
         accelerator_harness,
         raw,
-        budget="P-48",
+        budget="objective-backward",
         phase="backward",
     )
 
@@ -1005,4 +1015,6 @@ def test_the_default_suite_backward_meets_its_budget(
             case 40:
                 assert mean_ms <= 11_200.0
             case unreachable:
-                pytest.fail(f"no P-48 budget is declared for {unreachable} tokens")
+                pytest.fail(
+                    f"no objective-backward budget is declared for {unreachable} tokens"
+                )

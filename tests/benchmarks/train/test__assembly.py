@@ -73,7 +73,7 @@ def test_the_current_production_token_front_wires_within_budget(
         pytest.fail("the component graph wired but pytest-benchmark timed nothing")
 
     median_ms = measured.stats.median * 1e3
-    benchmark.extra_info["budget"] = "P-31"
+    benchmark.extra_info["budget"] = "training-assembly"
     benchmark.extra_info["components"] = len(graph.components)
     benchmark.extra_info["roles"] = list(graph.order)
     benchmark.extra_info["median_ms"] = median_ms

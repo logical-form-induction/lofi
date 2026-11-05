@@ -185,7 +185,7 @@ def test_a_batch_is_parsed_and_differentiated_within_budget(
     benchmark.extra_info["ms_per_batch"] = per_batch_ms
     benchmark.extra_info["mean_ms_per_batch"] = measured.stats.mean * 1e3
     benchmark.extra_info["fastest_ms_per_batch"] = measured.stats.min * 1e3
-    benchmark.extra_info["budget"] = "P-15"
+    benchmark.extra_info["budget"] = "inside-sweep"
 
     # enforce the 2,500 ms per-batch budget, five times the quiet median measured
     # on an M1 Max under mps

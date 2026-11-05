@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 
     from lofi.train import StateTree
 
-# the P-35 matrix: one save and one load with minimal representative state blocks
+# One save and one load with minimal representative state blocks.
 BUDGET_MS: Final = 20.0
 
 ROLES: Final = (
@@ -87,7 +87,7 @@ def _median_ms(benchmark: BenchmarkFixture, cell: str) -> float:
         pytest.fail("the checkpoint operation ran but pytest-benchmark timed nothing")
 
     median_ms = measured.stats.median * 1e3
-    benchmark.extra_info["budget"] = "P-35"
+    benchmark.extra_info["budget"] = "checkpoint-roundtrip"
     benchmark.extra_info["budget_cell"] = cell
     benchmark.extra_info["budget_ms"] = BUDGET_MS
     benchmark.extra_info["median_ms"] = median_ms

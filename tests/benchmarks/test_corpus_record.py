@@ -1,6 +1,6 @@
 """Benchmarks Layers record validation and domain lifting.
 
-Repository-index and path I/O are prepared outside the timed B-4 crossing.
+Repository-index and path I/O are prepared outside the timed corpus boundary.
 """
 
 import json
@@ -379,7 +379,7 @@ def test_a_corpus_record_crosses_the_boundary_within_budget(
         measured.stats.mean / len(scaled_repository.uris) * 1e6
     )
     benchmark.extra_info["source"] = "in-memory raw JSON; path index I/O excluded"
-    benchmark.extra_info["budget"] = "P-33"
+    benchmark.extra_info["budget"] = "corpus-record"
 
     if wall_clock_budget.enforced:
         assert per_record_us <= 200

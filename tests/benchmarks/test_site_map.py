@@ -336,7 +336,7 @@ def test_a_scope_validates_the_map_it_opens_over_within_budget(
     benchmark.extra_info["points"] = len(published.resolved)
     benchmark.extra_info["mean_ms_per_scope"] = per_scope_ms
     benchmark.extra_info["median_ms_per_scope"] = measured.stats.median * 1e3
-    benchmark.extra_info["budget"] = "P-39"
+    benchmark.extra_info["budget"] = "site-map"
     benchmark.extra_info["budget_cell"] = "scope-validation"
 
     # enforce the 10 ms per-scope budget

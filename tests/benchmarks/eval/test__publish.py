@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from pytest_benchmark.fixture import BenchmarkFixture
     from tests.benchmarks.conftest import WallClockBudget
 
-# the P-36 budget: one B-7 crossing, which publishes one artifact
+# Publishing one artifact crosses the output boundary.
 BUDGET_MS: Final = 1000.0
 
 ITEM_ID: Final = ItemId("at://did:plc:lofi/pub.layers.expression.expression/3k2")
@@ -73,7 +73,7 @@ def _median_ms(benchmark: BenchmarkFixture) -> float:
         pytest.fail("the publish ran but pytest-benchmark timed nothing")
 
     median_ms = measured.stats.median * 1e3
-    benchmark.extra_info["budget"] = "P-36"
+    benchmark.extra_info["budget"] = "artifact-publication"
     benchmark.extra_info["budget_cell"] = "layers-prediction-publish"
     benchmark.extra_info["budget_ms"] = BUDGET_MS
     benchmark.extra_info["median_ms"] = median_ms

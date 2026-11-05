@@ -298,7 +298,7 @@ def test_a_999_replicate_bootstrap_over_section_23_meets_its_budget(
     benchmark.pedantic(
         bootstrap.interval, args=(scores, fmean), rounds=5, warmup_rounds=1
     )
-    median = median_ms(benchmark, "P-42")
+    median = median_ms(benchmark, "bootstrap")
 
     if wall_clock_budget.enforced:
         assert median <= 2800.0
@@ -317,7 +317,7 @@ def test_a_999_replicate_paired_permutation_meets_its_budget(
         rounds=5,
         warmup_rounds=1,
     )
-    median = median_ms(benchmark, "P-43")
+    median = median_ms(benchmark, "paired-permutation")
 
     if wall_clock_budget.enforced:
         assert median <= 1500.0
@@ -330,7 +330,7 @@ def test_optimal_assignment_at_the_ccgbank_inventory_meets_its_budget(
     contingency = supertag_contingency(INVENTORY, seed=5)
     policy = OneToOne(tie_break="least-gold-label")
     benchmark.pedantic(policy.fit, args=(contingency,), rounds=5, warmup_rounds=1)
-    median = median_ms(benchmark, "P-44")
+    median = median_ms(benchmark, "optimal-assignment")
 
     if wall_clock_budget.enforced:
         assert median <= 2900.0
@@ -357,7 +357,7 @@ def test_tree_edit_distance_over_a_thirty_one_node_type_pair_meets_its_budget(
         rounds=50,
         warmup_rounds=2,
     )
-    median = median_ms(benchmark, "P-45")
+    median = median_ms(benchmark, "tree-edit-distance")
 
     if wall_clock_budget.enforced:
         assert median <= 15.0
@@ -369,6 +369,6 @@ def test_dependency_scoring_over_section_23_meets_its_budget(
 ) -> None:
     scorer = scored_section(SECTION_23, SENTENCE_LENGTH, seed=3)
     benchmark.pedantic(scorer.rows, rounds=5, warmup_rounds=1)
-    median = median_ms(benchmark, "P-46")
+    median = median_ms(benchmark, "dependency-scoring")
     if wall_clock_budget.enforced:
         assert median <= 3800.0

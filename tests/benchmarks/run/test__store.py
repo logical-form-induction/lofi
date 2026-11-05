@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     from lofi._types import JsonValue
     from lofi.run import ExperimentManifest
 
-# the P-38 budget: one experiment-manifest operation, of which a run performs two
+# One experiment-manifest operation; each run performs two.
 BUDGET_MS: Final = 100.0
 
 
@@ -173,7 +173,7 @@ def _median_ms(benchmark: BenchmarkFixture) -> float:
         pytest.fail("the manifest operation ran but pytest-benchmark timed nothing")
 
     median_ms = measured.stats.median * 1e3
-    benchmark.extra_info["budget"] = "P-38"
+    benchmark.extra_info["budget"] = "experiment-manifest"
     benchmark.extra_info["budget_ms"] = BUDGET_MS
     benchmark.extra_info["median_ms"] = median_ms
 

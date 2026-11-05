@@ -1,4 +1,4 @@
-"""The B-3 crossing benchmark: packaged CCGbank to its native assembly."""
+"""Benchmark lowering packaged CCGbank to its native assembly."""
 
 from typing import TYPE_CHECKING, Final
 
@@ -67,7 +67,7 @@ def test_the_grammar_crossing_meets_budget(
         pytest.fail("the grammar crossing ran but pytest-benchmark timed nothing")
 
     median_ms = measured.stats.median * 1e3
-    benchmark.extra_info["budget"] = "P-32"
+    benchmark.extra_info["budget"] = "grammar-lowering"
     benchmark.extra_info["median_ms"] = median_ms
 
     # enforce the 5 ms per-distinct-grammar crossing budget

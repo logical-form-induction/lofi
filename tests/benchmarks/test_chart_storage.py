@@ -82,7 +82,7 @@ def test_a_chart_at_the_working_point_fits_its_storage_budget(
         iterations=1,
     )
     benchmark.extra_info["bytes"] = allocated.total
-    benchmark.extra_info["budget"] = "P-20"
+    benchmark.extra_info["budget"] = "chart-storage"
 
     # enforce the 40 MB storage budget
     assert allocated.total <= 40_000_000

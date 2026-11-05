@@ -74,7 +74,7 @@ def test_the_design_codec_encodes_250000_rows(
     benchmark.extra_info["readouts"] = list(READOUTS)
     benchmark.extra_info["dtype"] = str(design.responses.dtype)
     benchmark.extra_info["device"] = design.responses.device.type
-    benchmark.extra_info["budget"] = "P-50"
+    benchmark.extra_info["budget"] = "judgment-design"
     benchmark.extra_info["median_ms_total"] = measured.stats.median * 1e3
     mean_ms = measured.stats.mean * 1e3
     benchmark.extra_info["mean_ms_total"] = mean_ms

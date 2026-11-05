@@ -44,7 +44,7 @@
             "params": null,
             "param": null,
             "extra_info": {
-                "budget": "P-42",
+                "budget": "bootstrap",
                 "median_ms": 575.0032080104575
             },
             "options": {
@@ -84,7 +84,7 @@
             "params": null,
             "param": null,
             "extra_info": {
-                "budget": "P-43",
+                "budget": "paired-permutation",
                 "median_ms": 284.58129201317206
             },
             "options": {
@@ -124,7 +124,7 @@
             "params": null,
             "param": null,
             "extra_info": {
-                "budget": "P-44",
+                "budget": "optimal-assignment",
                 "median_ms": 671.0157500347123
             },
             "options": {
@@ -164,7 +164,7 @@
             "params": null,
             "param": null,
             "extra_info": {
-                "budget": "P-45",
+                "budget": "tree-edit-distance",
                 "median_ms": 2.9792915156576782
             },
             "options": {
@@ -204,7 +204,7 @@
             "params": null,
             "param": null,
             "extra_info": {
-                "budget": "P-46",
+                "budget": "dependency-scoring",
                 "median_ms": 863.3617910090834
             },
             "options": {

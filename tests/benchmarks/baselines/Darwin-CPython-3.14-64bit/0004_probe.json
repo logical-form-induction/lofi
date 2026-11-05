@@ -46,7 +46,7 @@
                 "points": 7,
                 "mean_ms_per_scope": 0.0195090919660202,
                 "median_ms_per_scope": 0.00904199987417087,
-                "budget": "P-39"
+                "budget": "site-map"
             },
             "options": {
                 "disable_gc": false,
@@ -89,7 +89,7 @@
                 "mean_open_scope_us_per_forward": 31.243700794584587,
                 "mean_overhead_us_per_forward": 5.385979294584588,
                 "observed_points": 1,
-                "budget": "P-39"
+                "budget": "site-map"
             },
             "options": {
                 "disable_gc": false,

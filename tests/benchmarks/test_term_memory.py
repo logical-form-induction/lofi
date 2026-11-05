@@ -3,23 +3,20 @@
 The store's lifetime discipline is three tiers, and each tier has a budget.
 This module measures all three as live traced bytes under ``tracemalloc``:
 
-- **P-22, the permanent tier.** The closure of CCGbank's distinct categories,
+- **The permanent tier.** The closure of CCGbank's distinct categories,
   interned once into a root store and never released. It needs the licensed
   corpus, so it is an integration benchmark, and it commits the counts and the
   bytes rather than anything the corpus holds.
-- **P-23, the sentence tier.** Exactly 30,000 fresh nodes in one region,
+- **The sentence tier.** Exactly 30,000 fresh nodes in one region,
   measured at the two shapes a sentence region holds: payload leaves, which is
   the least a published node can cost, and logical forms over shared
   structure, which is what a beam publishes.
-- **P-24, the process.** The peak across repeated batches that are released,
+- **The process.** The peak across repeated batches that are released,
   against a retained control that is not.
 
-The figures the design argues from are the 322,560 fresh nodes one batch of 32
-sentences of 20 tokens generates under a beam of 8, and the 80.6 GB that batch
-costs over 1,000 unfreed steps (``design/SYMBOLIC-CORE-DESIGN.md`` §4.5).
-Neither is allocated here. Both are extrapolated from the measured bytes per
-fresh node and recorded as extrapolations beside the measurement they come
-from, which is a bounded sequence of 8-sentence batches.
+The report extrapolates measured bytes per fresh node to larger batches and
+longer training horizons. Those workloads are not allocated here: the
+measurements come from bounded sequences of eight-sentence batches.
 
 What a released region does **not** release is its atom names: they live in a
 table shared with the whole lineage, so a decoder that mints a fresh symbol per
@@ -54,8 +51,7 @@ SENTENCES: Final = 5_000
 #: How many fresh nodes one sentence region is measured over.
 REGION_NODES: Final = 30_000
 
-#: The beam width and the fresh nodes one beam entry contributes, from
-#: `design/SYMBOLIC-CORE-DESIGN.md` §4.5.
+#: The beam width and the fresh nodes one generated beam entry contributes.
 BEAM: Final = 8
 FRESH: Final = 6
 
@@ -68,8 +64,8 @@ REPEATS: Final = 3
 #: How many batches the retained control publishes without releasing any.
 RETAINED: Final = 4
 
-#: The working point the measured batch is extrapolated to, and the step count
-#: §4.5 runs it over. Nothing here allocates either.
+#: The working point and training horizon used for extrapolation.
+#: Neither workload is allocated here.
 WORKING_BATCH: Final = 32
 WORKING_LENGTH: Final = 20
 STEPS: Final = 1_000
@@ -207,9 +203,8 @@ class Beams:
     """Publishes logical forms in the shape a beam generates them.
 
     One beam entry introduces its own event variable and applies the permanent
-    predicates to it, which is the six fresh nodes over already-interned
-    structure that `design/SYMBOLIC-CORE-DESIGN.md` §4.5 prices a beam entry
-    at. The predicates are published in the root store before anything is
+    predicates to it, producing six fresh nodes over already-interned
+    structure. The predicates are published in the root store before anything is
     measured, so a batch pays for its own nodes and not for the lexicon.
     """
 
@@ -765,7 +760,7 @@ def test_the_ccgbank_category_closure_is_within_budget(
         rounds=1,
         iterations=1,
     )
-    benchmark.extra_info["budget"] = "P-22"
+    benchmark.extra_info["budget"] = "permanent-term-storage"
     benchmark.extra_info["sentences_read"] = read.sentences
     benchmark.extra_info["files_read"] = read.files
     benchmark.extra_info["unique_categories"] = closure.categories
@@ -797,7 +792,7 @@ def test_thirty_thousand_fresh_nodes_are_within_budget(
         rounds=1,
         iterations=1,
     )
-    benchmark.extra_info["budget"] = "P-23"
+    benchmark.extra_info["budget"] = "sentence-term-storage"
     benchmark.extra_info["nodes"] = REGION_NODES
     benchmark.extra_info["leaf_bytes"] = leaves.held
     benchmark.extra_info["leaf_bytes_per_node"] = leaves.held / leaves.nodes
@@ -836,7 +831,7 @@ def test_released_batches_hold_one_batch_and_retained_batches_hold_all_of_them(
     fresh = sum(round_.nodes for round_ in measured.released)
     per_node = sum(round_.held for round_ in measured.released) / fresh
     working = WORKING_BATCH * cells(WORKING_LENGTH) * BEAM * FRESH
-    benchmark.extra_info["budget"] = "P-24"
+    benchmark.extra_info["budget"] = "released-term-batches"
     benchmark.extra_info["measured_batches"] = len(measured.released)
     benchmark.extra_info["measured_sentences_per_batch"] = BATCH
     benchmark.extra_info["measured_fresh_nodes"] = fresh

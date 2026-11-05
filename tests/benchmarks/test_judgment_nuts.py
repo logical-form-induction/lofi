@@ -33,7 +33,7 @@ def test_the_reference_posterior_fit_runs_the_pinned_nuts_plan(
         )
 
     diagnostics = fitted.diagnostics
-    benchmark.extra_info["budget"] = "P-51"
+    benchmark.extra_info["budget"] = "posterior-fit"
     benchmark.extra_info["engine"] = type(fitter).__name__
     benchmark.extra_info["rows"] = program.rows
     benchmark.extra_info["participants"] = program.sizes["Participant"]

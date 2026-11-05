@@ -1,4 +1,4 @@
-"""Benchmarks the pair-valued B-5 boundary against a parser step."""
+"""Benchmark pair-valued featurization against a parser step."""
 
 import statistics
 import time
@@ -269,6 +269,6 @@ def test_featurization_stays_under_two_percent_of_step_wall(
     benchmark.extra_info["median_step_ms"] = step_seconds * 1e3
     benchmark.extra_info["fraction_of_step"] = ratio
     benchmark.extra_info["checks"] = _checks.CHECKS
-    benchmark.extra_info["budget"] = "P-34"
+    benchmark.extra_info["budget"] = "featurization"
 
     assert ratio <= 0.02

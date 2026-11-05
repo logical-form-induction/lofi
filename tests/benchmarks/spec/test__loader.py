@@ -1,4 +1,4 @@
-"""The B-1 crossing benchmark for run specifications."""
+"""Benchmark loading run specifications."""
 
 import json
 import subprocess

@@ -47,7 +47,7 @@
                 "median_us_per_record": 181.59600409999257,
                 "mean_us_per_record": 245.4928225000913,
                 "source": "in-memory raw JSON; path index I/O excluded",
-                "budget": "P-33"
+                "budget": "corpus-record"
             },
             "options": {
                 "disable_gc": true,
@@ -94,7 +94,7 @@
                 "median_step_ms": 860.8579159990768,
                 "fraction_of_step": 0.00032758019138658486,
                 "checks": false,
-                "budget": "P-34"
+                "budget": "featurization"
             },
             "options": {
                 "disable_gc": true,
