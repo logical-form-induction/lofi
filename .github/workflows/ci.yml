@@ -99,6 +99,8 @@ jobs:
       - name: Install
         run: uv sync --locked
 
+      - uses: ./.github/actions/setup-vampire
+
       - name: Tests
         # the wider Hypothesis profile is declared in tests/conftest.py for this
         # job: a search worth two hundred examples earns its runtime once per
@@ -132,6 +134,8 @@ jobs:
       - name: Install
         run: uv sync --locked
 
+      - uses: ./.github/actions/setup-vampire
+
       - name: Determinism
         env:
           HYPOTHESIS_PROFILE: ci
@@ -159,6 +163,8 @@ jobs:
 
       - name: Install
         run: uv sync --locked
+
+      - uses: ./.github/actions/setup-vampire
 
       - name: Tests
         # `-O` strips every `assert`, so validation written as one stops raising
@@ -189,6 +195,8 @@ jobs:
 
       - name: Install
         run: uv sync --locked
+
+      - uses: ./.github/actions/setup-vampire
 
       - name: Tests
         # the coarse-grained checks behind LOFI_CHECK are a development aid that

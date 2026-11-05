@@ -1,0 +1,44 @@
+name: Set up Vampire
+description: Install the pinned prover used by the acceptance tests.
+runs:
+  using: composite
+  steps:
+    - name: Install Vampire 5.1.0
+      shell: python
+      run: |
+        import hashlib
+        import io
+        import os
+        import subprocess
+        import urllib.request
+        import zipfile
+        from pathlib import Path
+
+        digests = {
+            "Linux-ARM64": "7abc39224fdf41bdb2c241f8b180a80b7c1a4bce1e46dc79df02cfea2798ad5c",
+            "Linux-X64": "495828dc76cb17a27080d62dedce755e46de96f47f06f5f0ad4be9cdaf6f968f",
+            "macOS-ARM64": "02d88d0669813909e7838e0d05c278fade6e1125f48c68b75e107ce0456cd21b",
+            "macOS-X64": "2a23e57f4f65019f32f4cc13f38588e9e9668090b057d030cc94f505a6d0b6a3",
+            "Windows-ARM64": "3d4a65aafd1caab203571b06f03ad2bab8b77c5616e17230781f03735c2e9de6",
+            "Windows-X64": "b98d0c6b4a42e11c25243ca31b3cbabd1673b437c994263166804b92b715de33",
+        }
+        platform = f"{os.environ['RUNNER_OS']}-{os.environ['RUNNER_ARCH']}"
+        url = (
+            "https://github.com/vprover/vampire/releases/download/v5.1.0/"
+            f"vampire-{platform}.zip"
+        )
+        with urllib.request.urlopen(url, timeout=60) as response:
+            archive = response.read()
+        if hashlib.sha256(archive).hexdigest() != digests[platform]:
+            raise RuntimeError(f"Vampire archive checksum mismatch for {platform}")
+
+        destination = Path(os.environ["RUNNER_TEMP"]) / "vampire"
+        with zipfile.ZipFile(io.BytesIO(archive)) as compressed:
+            compressed.extractall(destination)
+        executable = destination / (
+            "vampire.exe" if os.environ["RUNNER_OS"] == "Windows" else "vampire"
+        )
+        executable.chmod(0o755)
+        subprocess.run([str(executable), "--version"], check=True)
+        with Path(os.environ["GITHUB_PATH"]).open("a", encoding="utf-8") as path:
+            path.write(f"{destination}\n")

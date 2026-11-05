@@ -50,6 +50,11 @@ same way and fails if it differs from the committed file.
 
 ## Checks
 
+The acceptance suite uses [Vampire 5.1.0](https://github.com/vprover/vampire/releases/tag/v5.1.0)
+for higher-order proofs. Download the binary for your operating system and
+architecture and put its directory on `PATH`. On Windows, keep `cygwin1.dll`
+beside `vampire.exe`. CI installs this version and verifies the archive checksum.
+
 Run the standard checks from the repository root:
 
 ```bash
