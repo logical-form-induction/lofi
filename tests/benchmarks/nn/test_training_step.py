@@ -274,7 +274,6 @@ def test_the_step_series_holds_the_declared_activation_budget(
     )
     benchmark.extra_info["device"] = str(stack.device)
     benchmark.extra_info["width"] = stack.width
-    benchmark.extra_info["budget"] = "P-21"
     benchmark.extra_info["activation_budget_bytes"] = budget.max_bytes
     benchmark.extra_info["series"] = [cost._asdict() for cost in costs]
 
