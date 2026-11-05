@@ -1,5 +1,6 @@
 //! Typed intermediate representations of validated declarations.
 
+use std::fmt::Write;
 use std::{collections::HashMap, fmt};
 
 use indexmap::IndexMap;
@@ -929,8 +930,9 @@ struct LogicIr {
     labeling: Option<IndexMap<String, IndexMap<String, serde_json::Value>>>,
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Default)]
 enum Present<T> {
+    #[default]
     Missing,
     Value(Option<T>),
 }
@@ -938,12 +940,6 @@ enum Present<T> {
 impl<T> Present<T> {
     const fn is_missing(&self) -> bool {
         matches!(self, Self::Missing)
-    }
-}
-
-impl<T> Default for Present<T> {
-    fn default() -> Self {
-        Self::Missing
     }
 }
 
@@ -1388,8 +1384,8 @@ enum OpaqueJsonValue {
     Bool(bool),
     Number(Number),
     String(String),
-    Array(Vec<OpaqueJsonValue>),
-    Object(IndexMap<String, OpaqueJsonValue>),
+    Array(Vec<Self>),
+    Object(IndexMap<String, Self>),
 }
 
 impl OpaqueJsonValue {
@@ -2094,6 +2090,40 @@ fn opaque_runtime(
     })
 }
 
+fn opaque_theory(
+    rule: &OpaqueRuleIr,
+    location: RulePlanLocation,
+) -> Result<OpaqueTheoryIr, RulePlanError> {
+    let theory_value = rule.extension.get("theory").ok_or_else(|| {
+        theory_refusal(
+            location,
+            format!(
+                "late rule {:?} does not declare a native theory contract",
+                rule.rule
+            ),
+        )
+    })?;
+    let theory_document = serde_json::to_value(theory_value).map_err(|error| {
+        theory_refusal(
+            location,
+            format!(
+                "late rule {:?} has an invalid theory contract: {error}",
+                rule.rule
+            ),
+        )
+    })?;
+    let theory: OpaqueTheoryIr = serde_json::from_value(theory_document).map_err(|error| {
+        theory_refusal(
+            location,
+            format!(
+                "late rule {:?} has an invalid theory contract: {error}",
+                rule.rule
+            ),
+        )
+    })?;
+    Ok(theory)
+}
+
 fn opaque_pattern_recipe(
     rule: &OpaqueRuleIr,
     grammar: &GrammarIr,
@@ -2152,33 +2182,7 @@ fn opaque_pattern_recipe(
         linked,
         location,
     )?;
-    let theory_value = rule.extension.get("theory").ok_or_else(|| {
-        theory_refusal(
-            location,
-            format!(
-                "late rule {:?} does not declare a native theory contract",
-                rule.rule
-            ),
-        )
-    })?;
-    let theory_document = serde_json::to_value(theory_value).map_err(|error| {
-        theory_refusal(
-            location,
-            format!(
-                "late rule {:?} has an invalid theory contract: {error}",
-                rule.rule
-            ),
-        )
-    })?;
-    let theory: OpaqueTheoryIr = serde_json::from_value(theory_document).map_err(|error| {
-        theory_refusal(
-            location,
-            format!(
-                "late rule {:?} has an invalid theory contract: {error}",
-                rule.rule
-            ),
-        )
-    })?;
+    let theory = opaque_theory(rule, location)?;
     let OpaqueTheoryIr::Schemata { name, schemata, .. } = theory else {
         return Err(theory_refusal(
             location,
@@ -2239,7 +2243,7 @@ impl RuleIr {
         }
     }
 
-    fn matching(&self) -> Option<&MatchingIr> {
+    const fn matching(&self) -> Option<&MatchingIr> {
         match self {
             Self::Application(rule) => rule.matching.as_ref(),
             Self::Composition(rule) => rule.matching.as_ref(),
@@ -2254,7 +2258,7 @@ impl RuleIr {
         }
     }
 
-    fn restriction(&self) -> Option<&RuleRestrictionIr> {
+    const fn restriction(&self) -> Option<&RuleRestrictionIr> {
         match self {
             Self::Application(rule) => rule.restriction.as_ref(),
             Self::Composition(rule) => rule.restriction.as_ref(),
@@ -2464,31 +2468,7 @@ impl RuleIr {
                 },
             },
             Self::Coordination(rule) => LinkedRuleKind::Coordination {
-                recipe: LinkedCoordinationRecipe {
-                    pattern: linked_pattern_recipe(
-                        &rule.name,
-                        &rule.premises,
-                        &rule.conclusion,
-                        rule.head_policy,
-                        inferred_head_slot(
-                            rule.head_policy,
-                            &rule.premises,
-                            &rule.conclusion,
-                            &grammar.signature.category_sort,
-                        ),
-                        rule.targets.as_deref(),
-                        coordination_normal_form_role(),
-                    ),
-                    phase: match rule.phase {
-                        CoordinationPhase::Mark => "mark",
-                        CoordinationPhase::Merge => "merge",
-                    },
-                    core_relation: match rule.core_relation {
-                        CoreRelation::Same => "same",
-                        CoreRelation::Different => "different",
-                    },
-                    conjunction_feature: rule.conjunction_feature.clone(),
-                },
+                recipe: linked_coordination_recipe(rule, &grammar.signature.category_sort),
             },
             Self::Coercion(rule) => LinkedRuleKind::Coercion {
                 label: rule.label.clone(),
@@ -2500,6 +2480,37 @@ impl RuleIr {
                 recipe: opaque_pattern_recipe(rule, grammar, linked, location)?,
             },
         })
+    }
+}
+
+fn linked_coordination_recipe(
+    rule: &CoordinationRuleIr,
+    category_sort: &str,
+) -> LinkedCoordinationRecipe {
+    LinkedCoordinationRecipe {
+        pattern: linked_pattern_recipe(
+            &rule.name,
+            &rule.premises,
+            &rule.conclusion,
+            rule.head_policy,
+            inferred_head_slot(
+                rule.head_policy,
+                &rule.premises,
+                &rule.conclusion,
+                category_sort,
+            ),
+            rule.targets.as_deref(),
+            coordination_normal_form_role(),
+        ),
+        phase: match rule.phase {
+            CoordinationPhase::Mark => "mark",
+            CoordinationPhase::Merge => "merge",
+        },
+        core_relation: match rule.core_relation {
+            CoreRelation::Same => "same",
+            CoreRelation::Different => "different",
+        },
+        conjunction_feature: rule.conjunction_feature.clone(),
     }
 }
 
@@ -2853,9 +2864,9 @@ impl<'a> RulePlanner<'a> {
         kind: LinkedRuleKind,
         matching: Option<&MatchingIr>,
         restriction: Option<&RuleRestrictionIr>,
-        introduces: Option<&[String]>,
-        consumes: Option<&[String]>,
+        markers: (Option<&[String]>, Option<&[String]>),
     ) -> Result<(), RulePlanError> {
+        let (introduces, consumes) = markers;
         let identifier = u32::try_from(self.rules.len()).map_err(|_| {
             RulePlanError::located(
                 location,
@@ -2875,8 +2886,10 @@ impl<'a> RulePlanner<'a> {
             kind,
             linked_matching(matching, location)?,
             restriction,
-            introduces.map(<[String]>::to_vec),
-            consumes.map(<[String]>::to_vec),
+            (
+                introduces.map(<[String]>::to_vec),
+                consumes.map(<[String]>::to_vec),
+            ),
         ));
         Ok(())
     }
@@ -2887,6 +2900,10 @@ impl<'a> RulePlanner<'a> {
         declaration: &CombinatorSetIr,
     ) -> Result<(), RulePlanError> {
         let first = self.rules.len();
+        let markers = (
+            declaration.introduces.as_deref(),
+            declaration.consumes.as_deref(),
+        );
         let functors = self
             .linked
             .ir()
@@ -2906,8 +2923,7 @@ impl<'a> RulePlanner<'a> {
                     LinkedRuleKind::Application { functor },
                     declaration.matching.as_ref(),
                     declaration.restriction.as_ref(),
-                    declaration.introduces.as_deref(),
-                    declaration.consumes.as_deref(),
+                    markers,
                 )?;
                 member += 1;
             }
@@ -2931,8 +2947,7 @@ impl<'a> RulePlanner<'a> {
                         },
                         declaration.matching.as_ref(),
                         declaration.restriction.as_ref(),
-                        declaration.introduces.as_deref(),
-                        declaration.consumes.as_deref(),
+                        markers,
                     )?;
                     member += 1;
                 }
@@ -2956,8 +2971,7 @@ impl<'a> RulePlanner<'a> {
                         },
                         declaration.matching.as_ref(),
                         declaration.restriction.as_ref(),
-                        declaration.introduces.as_deref(),
-                        declaration.consumes.as_deref(),
+                        markers,
                     )?;
                     member += 1;
                 }
@@ -2977,8 +2991,7 @@ impl<'a> RulePlanner<'a> {
                     },
                     declaration.matching.as_ref(),
                     declaration.restriction.as_ref(),
-                    declaration.introduces.as_deref(),
-                    declaration.consumes.as_deref(),
+                    markers,
                 )?;
                 member += 1;
             }
@@ -3049,8 +3062,10 @@ impl<'a> RulePlanner<'a> {
                 },
                 declaration.matching.as_ref(),
                 declaration.restriction.as_ref(),
-                declaration.introduces.as_deref(),
-                declaration.consumes.as_deref(),
+                (
+                    declaration.introduces.as_deref(),
+                    declaration.consumes.as_deref(),
+                ),
             )?;
         }
         Ok(())
@@ -3267,41 +3282,28 @@ fn erase_category_constants(pattern: &mut PatternIr, linked: &LinkedGrammar) {
     let PatternIr::Node(node) = pattern else {
         return;
     };
-    if let Some(PayloadPatternIr::Fixed(payload)) = &mut node.payload {
-        if let Some(vocabulary) =
+    if let Some(PayloadPatternIr::Fixed(payload)) = &mut node.payload
+        && let Some(vocabulary) =
             linked.ir().vocabularies().iter().find(|vocabulary| {
                 vocabulary.sort() == linked.ir().category_syntax().category_sort()
             })
-            && let Ok(identifier) = usize::try_from(payload.value)
-            && let Some(core) = vocabulary.cores().get(identifier)
-            && let Ok(core) = i64::try_from(*core)
-        {
-            payload.value = core;
-        }
+        && let Ok(identifier) = usize::try_from(payload.value)
+        && let Some(core) = vocabulary.cores().get(identifier)
+        && let Ok(core) = i64::try_from(*core)
+    {
+        payload.value = core;
     }
     for argument in &mut node.arguments {
         erase_category_constants(argument, linked);
     }
 }
 
-fn planned_relation_value(
+fn planned_rule_relation(
     grammar: &GrammarIr,
     linked: &LinkedGrammar,
     rule: &LinkedRule,
 ) -> Result<Value, RulePlanError> {
-    let matching = effective_matching_value(grammar, rule).map_err(|error| {
-        theory_refusal(
-            rule.location(),
-            format!("matching relation cannot be encoded: {error}"),
-        )
-    })?;
-    let restriction = rule.restriction().map(|value| {
-        json!({
-            "primary_targets": value.primary_targets(),
-            "secondary_patterns": value.secondary_patterns(),
-        })
-    });
-    let relation = match rule.kind() {
+    Ok(match rule.kind() {
         LinkedRuleKind::Application { functor } => {
             json!([
                 "composition",
@@ -3379,7 +3381,27 @@ fn planned_relation_value(
                 erased_category_value(target, linked, rule.location(), erase)?,
             ])
         }
-    };
+    })
+}
+
+fn planned_relation_value(
+    grammar: &GrammarIr,
+    linked: &LinkedGrammar,
+    rule: &LinkedRule,
+) -> Result<Value, RulePlanError> {
+    let matching = effective_matching_value(grammar, rule).map_err(|error| {
+        theory_refusal(
+            rule.location(),
+            format!("matching relation cannot be encoded: {error}"),
+        )
+    })?;
+    let restriction = rule.restriction().map(|value| {
+        json!({
+            "primary_targets": value.primary_targets(),
+            "secondary_patterns": value.secondary_patterns(),
+        })
+    });
+    let relation = planned_rule_relation(grammar, linked, rule)?;
     let (head_policy, head_slot, normal_form_role) = match rule.kind() {
         LinkedRuleKind::Application { .. }
         | LinkedRuleKind::Composition { .. }
@@ -3582,7 +3604,7 @@ fn generated_rule_name(linked: &LinkedGrammar, kind: &LinkedRuleKind) -> String 
             functor,
             targets,
             arguments,
-        } => raising_name(&view(*functor), targets.as_deref(), arguments.as_deref()),
+        } => raising_name(view(*functor), targets.as_deref(), arguments.as_deref()),
         LinkedRuleKind::ClausalAdjunct { .. }
         | LinkedRuleKind::Pattern { .. }
         | LinkedRuleKind::Absorption { .. }
@@ -3653,7 +3675,7 @@ fn encode_identifier(name: &str) -> String {
             encoded.push(character);
         } else {
             encoded.push('_');
-            encoded.push_str(&format!("{:x}", u32::from(character)));
+            let _ = write!(encoded, "{:x}", u32::from(character));
             encoded.push('_');
         }
     }
@@ -3870,112 +3892,143 @@ fn theory_pattern(
                 pattern.name
             ),
         )),
-        PatternIr::Node(pattern) => {
-            let OperatorPatternIr::Fixed(fixed) = &pattern.operator else {
-                let OperatorPatternIr::Variable(variable) = &pattern.operator else {
-                    unreachable!();
-                };
-                return Err(theory_refusal(
-                    location,
-                    format!(
-                        "rule {rule:?} has nondeterministic operator variable {:?}",
-                        variable.name
-                    ),
-                ));
-            };
-            let operator = linked
-                .ir()
-                .operators()
-                .iter()
-                .find(|operator| operator.name() == fixed.name)
-                .ok_or_else(|| {
-                    theory_refusal(
-                        location,
-                        format!("rule {rule:?} names unknown operator {:?}", fixed.name),
-                    )
-                })?;
-            if operator.sort() != expected_sort
-                || operator.arguments().len() != pattern.arguments.len()
-            {
-                return Err(theory_refusal(
-                    location,
-                    format!(
-                        "rule {rule:?} applies operator {:?} at the wrong sort or arity",
-                        fixed.name
-                    ),
-                ));
-            }
-            let payload = match (&pattern.payload, operator.payload()) {
-                (None, LinkedPayloadKind::None) => Value::Null,
-                (Some(PayloadPatternIr::Fixed(value)), LinkedPayloadKind::Constant)
-                | (Some(PayloadPatternIr::Fixed(value)), LinkedPayloadKind::Index)
-                | (Some(PayloadPatternIr::Fixed(value)), LinkedPayloadKind::Free) => {
-                    json!({"kind": "fixed", "value": value.value})
-                }
-                (
-                    Some(PayloadPatternIr::Variable(variable)),
-                    payload @ (LinkedPayloadKind::Constant
-                    | LinkedPayloadKind::Index
-                    | LinkedPayloadKind::Free),
-                ) => {
-                    theory_variable(
-                        variables,
-                        format!("payload_{}", encode_identifier(&variable.name)),
-                        TheoryVariableSort::Payload(payload),
-                        rule,
-                        location,
-                    )?;
-                    json!({
-                        "kind": "variable",
-                        "name": format!("payload_{}", encode_identifier(&variable.name)),
-                        "payload": format!("{payload:?}").to_lowercase(),
-                    })
-                }
-                (None, _) => {
-                    return Err(theory_refusal(
-                        location,
-                        format!(
-                            "rule {rule:?} omits the payload required by operator {:?}",
-                            fixed.name
-                        ),
-                    ));
-                }
-                (Some(_), LinkedPayloadKind::None) => {
-                    return Err(theory_refusal(
-                        location,
-                        format!(
-                            "rule {rule:?} gives operator {:?} a payload it does not accept",
-                            fixed.name
-                        ),
-                    ));
-                }
-            };
-            let mut arguments = Vec::with_capacity(pattern.arguments.len());
-            for (position, (argument, sort)) in pattern
-                .arguments
-                .iter()
-                .zip(operator.arguments())
-                .enumerate()
-            {
-                let scoped = operator
-                    .binding()
-                    .iter()
-                    .filter(|site| site.arguments().contains(&position))
-                    .count();
-                arguments.push(theory_pattern(
-                    argument, *sort, scoped, linked, variables, rule, location,
-                )?);
-            }
-            Ok(json!({
-                "kind": "node",
-                "operator": fixed.name,
-                "sort": linked.ir().sorts().get(usize::from(expected_sort)),
-                "binders": binders,
-                "payload": payload,
-                "arguments": arguments,
-            }))
-        }
+        PatternIr::Node(pattern) => theory_node(
+            pattern,
+            expected_sort,
+            binders,
+            linked,
+            variables,
+            rule,
+            location,
+        ),
     }
+}
+
+fn theory_node(
+    pattern: &NodePatternIr,
+    expected_sort: SortId,
+    binders: usize,
+    linked: &LinkedGrammar,
+    variables: &mut IndexMap<String, TheoryVariableSort>,
+    rule: &str,
+    location: RulePlanLocation,
+) -> Result<Value, RulePlanError> {
+    let OperatorPatternIr::Fixed(fixed) = &pattern.operator else {
+        let OperatorPatternIr::Variable(variable) = &pattern.operator else {
+            unreachable!();
+        };
+        return Err(theory_refusal(
+            location,
+            format!(
+                "rule {rule:?} has nondeterministic operator variable {:?}",
+                variable.name
+            ),
+        ));
+    };
+    let operator = linked
+        .ir()
+        .operators()
+        .iter()
+        .find(|operator| operator.name() == fixed.name)
+        .ok_or_else(|| {
+            theory_refusal(
+                location,
+                format!("rule {rule:?} names unknown operator {:?}", fixed.name),
+            )
+        })?;
+    if operator.sort() != expected_sort || operator.arguments().len() != pattern.arguments.len() {
+        return Err(theory_refusal(
+            location,
+            format!(
+                "rule {rule:?} applies operator {:?} at the wrong sort or arity",
+                fixed.name
+            ),
+        ));
+    }
+    let payload = theory_payload(
+        pattern.payload.as_ref(),
+        operator.payload(),
+        &fixed.name,
+        variables,
+        rule,
+        location,
+    )?;
+    let mut arguments = Vec::with_capacity(pattern.arguments.len());
+    for (position, (argument, sort)) in pattern
+        .arguments
+        .iter()
+        .zip(operator.arguments())
+        .enumerate()
+    {
+        let scoped = operator
+            .binding()
+            .iter()
+            .filter(|site| site.arguments().contains(&position))
+            .count();
+        arguments.push(theory_pattern(
+            argument, *sort, scoped, linked, variables, rule, location,
+        )?);
+    }
+    Ok(json!({
+        "kind": "node",
+        "operator": fixed.name,
+        "sort": linked.ir().sorts().get(usize::from(expected_sort)),
+        "binders": binders,
+        "payload": payload,
+        "arguments": arguments,
+    }))
+}
+
+fn theory_payload(
+    payload: Option<&PayloadPatternIr>,
+    kind: LinkedPayloadKind,
+    operator_name: &str,
+    variables: &mut IndexMap<String, TheoryVariableSort>,
+    rule: &str,
+    location: RulePlanLocation,
+) -> Result<Value, RulePlanError> {
+    Ok(match (payload, kind) {
+        (None, LinkedPayloadKind::None) => Value::Null,
+        (
+            Some(PayloadPatternIr::Fixed(value)),
+            LinkedPayloadKind::Constant | LinkedPayloadKind::Index | LinkedPayloadKind::Free,
+        ) => {
+            json!({"kind": "fixed", "value": value.value})
+        }
+        (
+            Some(PayloadPatternIr::Variable(variable)),
+            payload @ (LinkedPayloadKind::Constant
+            | LinkedPayloadKind::Index
+            | LinkedPayloadKind::Free),
+        ) => {
+            theory_variable(
+                variables,
+                format!("payload_{}", encode_identifier(&variable.name)),
+                TheoryVariableSort::Payload(payload),
+                rule,
+                location,
+            )?;
+            json!({
+                "kind": "variable",
+                "name": format!("payload_{}", encode_identifier(&variable.name)),
+                "payload": format!("{payload:?}").to_lowercase(),
+            })
+        }
+        (None, _) => {
+            return Err(theory_refusal(
+                location,
+                format!("rule {rule:?} omits the payload required by operator {operator_name:?}"),
+            ));
+        }
+        (Some(_), LinkedPayloadKind::None) => {
+            return Err(theory_refusal(
+                location,
+                format!(
+                    "rule {rule:?} gives operator {operator_name:?} a payload it does not accept"
+                ),
+            ));
+        }
+    })
 }
 
 #[derive(Clone)]
@@ -4053,17 +4106,18 @@ fn theory_contexts(
         .map(|occurrence| occurrence.min_order)
         .max()
         .unwrap_or(0);
-    let mut high = occurrences
-        .iter()
-        .filter_map(|occurrence| occurrence.max_order)
-        .min()
-        .unwrap_or(0);
-    if occurrences
+    let high = if occurrences
         .iter()
         .any(|occurrence| occurrence.slot != first.slot)
     {
-        high = high.min(0);
-    }
+        0
+    } else {
+        occurrences
+            .iter()
+            .filter_map(|occurrence| occurrence.max_order)
+            .min()
+            .unwrap_or(0)
+    };
 
     let slot = usize::try_from(first.slot).ok()?;
     let mut frames = Vec::new();
@@ -4145,7 +4199,9 @@ fn instantiate_theory_pattern(
                             let sibling = position - usize::from(position > frame.slot);
                             let mut sibling = frame.arguments[sibling].clone();
                             if let PatternIr::Term(term) = &mut sibling {
-                                term.name = term.name.replace("{depth}", &depth.to_string());
+                                term.name = term
+                                    .name
+                                    .replace(concat!("{", "depth", "}"), &depth.to_string());
                             }
                             sibling
                         }
@@ -4220,10 +4276,10 @@ fn theory_constructor(
     premises: &[PatternIr],
     conclusion: &PatternIr,
     forward_complete: bool,
-    category_sort: SortId,
     linked: &LinkedGrammar,
     location: RulePlanLocation,
 ) -> Result<LinkedTheoryConstructor, RulePlanError> {
+    let category_sort = linked.ir().category_syntax().category_sort();
     let mut variables = IndexMap::new();
     let mut premise_indices = Vec::with_capacity(premises.len());
     for premise in premises {
@@ -4236,11 +4292,11 @@ fn theory_constructor(
             rule,
             location,
         )?;
-        premise_indices.push(theory_expression(expression, location)?);
+        premise_indices.push(theory_expression(&expression, location)?);
     }
     let inferred = variables.keys().cloned().collect::<Vec<_>>();
     let conclusion_index = theory_expression(
-        theory_pattern(
+        &theory_pattern(
             conclusion,
             category_sort,
             0,
@@ -4276,8 +4332,8 @@ fn theory_constructor(
     ))
 }
 
-fn theory_expression(value: Value, location: RulePlanLocation) -> Result<String, RulePlanError> {
-    let bytes = canonical::value_bytes(&value).map_err(|error| {
+fn theory_expression(value: &Value, location: RulePlanLocation) -> Result<String, RulePlanError> {
+    let bytes = canonical::value_bytes(value).map_err(|error| {
         theory_refusal(location, format!("theory index cannot be encoded: {error}"))
     })?;
     String::from_utf8(bytes).map_err(|error| {
@@ -4288,18 +4344,19 @@ fn theory_expression(value: Value, location: RulePlanLocation) -> Result<String,
     })
 }
 
+type TheoryOutput<'a> = (&'a mut Vec<LinkedTheoryConstructor>, &'a mut Vec<String>);
+
 fn pattern_theory(
     name: &str,
     premises: &[PatternIr],
     conclusion: &PatternIr,
     targets: Option<&[String]>,
     forward_complete: bool,
-    category_sort: SortId,
-    linked: &LinkedGrammar,
-    location: RulePlanLocation,
-    constructors: &mut Vec<LinkedTheoryConstructor>,
-    elaborated: &mut Vec<String>,
+    context: (&LinkedGrammar, RulePlanLocation),
+    output: TheoryOutput<'_>,
 ) -> Result<(), RulePlanError> {
+    let (linked, location) = context;
+    let (constructors, elaborated) = output;
     let Some(schemata) = theory_schemata(premises, conclusion, linked) else {
         elaborated.push(name.to_owned());
         return Ok(());
@@ -4318,7 +4375,6 @@ fn pattern_theory(
                 &premises,
                 &conclusion,
                 false,
-                category_sort,
                 linked,
                 location,
             )?;
@@ -4331,7 +4387,7 @@ fn pattern_theory(
                     premises.len(),
                     template.premise_indices().to_vec(),
                     theory_expression(
-                        json!({
+                        &json!({
                             "template": template.conclusion_index(),
                             "target": target,
                         }),
@@ -4347,7 +4403,6 @@ fn pattern_theory(
                 &premises,
                 &conclusion,
                 forward_complete,
-                category_sort,
                 linked,
                 location,
             )?);
@@ -4697,7 +4752,7 @@ impl<'a> CategoryPatternParser<'a> {
                     .vocabularies()
                     .iter()
                     .filter(|vocabulary| vocabulary.sort() == category_sort)
-                    .flat_map(|vocabulary| vocabulary.names())
+                    .flat_map(LinkedVocabulary::names)
                     .map(|name| (name.as_str(), true)),
             )
             .collect::<Vec<_>>();
@@ -4941,12 +4996,12 @@ fn composition_constructors(
     name: &str,
     functor_identifier: u32,
     order: u64,
-    direction: LinkedCompositionDirection,
-    crossed: bool,
+    spine: (LinkedCompositionDirection, bool),
     linked: &LinkedGrammar,
     location: RulePlanLocation,
     constructors: &mut Vec<LinkedTheoryConstructor>,
 ) -> Result<(), RulePlanError> {
+    let (direction, crossed) = spine;
     let functor = functor_or_refusal(linked, functor_identifier, name, location)?;
     let orientations: &[bool] = match functor.argument_side() {
         LinkedArgumentSide::Right => &[true],
@@ -5007,7 +5062,6 @@ fn composition_constructors(
         }
     }
     let mut serial = 0;
-    let category_sort = linked.ir().category_syntax().category_sort();
     for (container, conclusion) in pairs {
         for principal_first in orientations {
             let premises = if *principal_first {
@@ -5021,7 +5075,6 @@ fn composition_constructors(
                 &premises,
                 &conclusion,
                 true,
-                category_sort,
                 linked,
                 location,
             )?);
@@ -5065,7 +5118,6 @@ fn substitution_constructors(
     let arguments = (0..order)
         .map(|index| theory_term(format!("Z{index}")))
         .collect::<Vec<_>>();
-    let category_sort = linked.ir().category_syntax().category_sort();
     let mut serial = 0;
     for sequence in slash_sequences(&slashes, deepest, order) {
         let principal = theory_spine(linked, &sequence, foot.clone(), &arguments, name, location)?;
@@ -5097,7 +5149,6 @@ fn substitution_constructors(
                 &premises,
                 &conclusion,
                 true,
-                category_sort,
                 linked,
                 location,
             )?);
@@ -5160,7 +5211,6 @@ fn type_raising_constructors(
             std::slice::from_ref(input),
             &conclusion,
             forward_complete,
-            linked.ir().category_syntax().category_sort(),
             linked,
             location,
         )?);
@@ -5205,16 +5255,7 @@ fn clausal_adjunct_constructor(
         name,
         location,
     )?;
-    theory_constructor(
-        name,
-        0,
-        &[premise],
-        &conclusion,
-        false,
-        linked.ir().category_syntax().category_sort(),
-        linked,
-        location,
-    )
+    theory_constructor(name, 0, &[premise], &conclusion, false, linked, location)
 }
 
 fn coercion_constructor(
@@ -5230,10 +5271,110 @@ fn coercion_constructor(
         &[category_pattern(source, linked, name, location)?],
         &category_pattern(target, linked, name, location)?,
         true,
-        linked.ir().category_syntax().category_sort(),
         linked,
         location,
     )
+}
+
+fn opaque_theory_constructors(
+    rule: &OpaqueRuleIr,
+    linked: &LinkedGrammar,
+    location: RulePlanLocation,
+    constructors: &mut Vec<LinkedTheoryConstructor>,
+) -> Result<(), RulePlanError> {
+    let theory = opaque_theory(rule, location)?;
+    match theory {
+        OpaqueTheoryIr::Elaborated { name } => {
+            return Err(theory_refusal(
+                location,
+                format!(
+                    "late rule {name:?} declares a pattern runtime but only elaborated proof evidence"
+                ),
+            ));
+        }
+        OpaqueTheoryIr::Schemata {
+            name,
+            forward_complete,
+            schemata,
+        } => {
+            if schemata.len() != 1 {
+                return Err(theory_refusal(
+                    location,
+                    format!(
+                        "late pattern rule {name:?} must declare exactly one deterministic schema"
+                    ),
+                ));
+            }
+            for (serial, schema) in schemata.iter().enumerate() {
+                constructors.push(theory_constructor(
+                    &name,
+                    serial,
+                    &schema.premises,
+                    &schema.conclusion,
+                    forward_complete,
+                    linked,
+                    location,
+                )?);
+            }
+        }
+    }
+    Ok(())
+}
+
+fn theory_functor_identifier(
+    linked: &LinkedGrammar,
+    view: &str,
+    name: &str,
+    location: RulePlanLocation,
+) -> Result<u32, RulePlanError> {
+    linked
+        .ir()
+        .category_syntax()
+        .functors()
+        .iter()
+        .position(|functor| functor.name() == view)
+        .and_then(|index| u32::try_from(index).ok())
+        .ok_or_else(|| {
+            theory_refusal(
+                location,
+                format!("rule {name:?} lost its linked functor view"),
+            )
+        })
+}
+
+fn explicit_composition_theory(
+    rule: &CompositionRuleIr,
+    name: &str,
+    linked: &LinkedGrammar,
+    location: RulePlanLocation,
+    constructors: &mut Vec<LinkedTheoryConstructor>,
+    elaborated: &mut Vec<String>,
+) -> Result<(), RulePlanError> {
+    if let Some(order) = rule.order {
+        let functor = theory_functor_identifier(linked, &rule.view, name, location)?;
+        let slashes = linked.ir().category_syntax().functors().len();
+        match rule.direction {
+            CompositionRestriction::Steedman => 1,
+            CompositionRestriction::Kuhlmann => {
+                checked_schema_power(slashes, order.saturating_sub(1), name, location)?
+            }
+            CompositionRestriction::Unrestricted => {
+                checked_schema_power(slashes, order, name, location)?
+            }
+        };
+        composition_constructors(
+            name,
+            functor,
+            order,
+            (linked_direction(rule.direction), rule.crossed),
+            linked,
+            location,
+            constructors,
+        )?;
+    } else {
+        elaborated.push(name.to_owned());
+    }
+    Ok(())
 }
 
 fn explicit_theory(
@@ -5244,7 +5385,6 @@ fn explicit_theory(
     elaborated: &mut Vec<String>,
 ) -> Result<(), RulePlanError> {
     let name = explicit_rule_name(source);
-    let category_sort = linked.ir().category_syntax().category_sort();
     match source {
         RuleIr::Pattern(rule) => pattern_theory(
             &name,
@@ -5252,11 +5392,8 @@ fn explicit_theory(
             &rule.conclusion,
             rule.targets.as_deref(),
             rule.targets.is_some(),
-            category_sort,
-            linked,
-            location,
-            constructors,
-            elaborated,
+            (linked, location),
+            (constructors, elaborated),
         )?,
         RuleIr::Absorption(rule) => pattern_theory(
             &name,
@@ -5264,11 +5401,8 @@ fn explicit_theory(
             &rule.conclusion,
             None,
             true,
-            category_sort,
-            linked,
-            location,
-            constructors,
-            elaborated,
+            (linked, location),
+            (constructors, elaborated),
         )?,
         RuleIr::Coordination(rule) => pattern_theory(
             &name,
@@ -5276,94 +5410,30 @@ fn explicit_theory(
             &rule.conclusion,
             rule.targets.as_deref(),
             rule.phase == CoordinationPhase::Merge || rule.targets.is_some(),
-            category_sort,
-            linked,
-            location,
-            constructors,
-            elaborated,
+            (linked, location),
+            (constructors, elaborated),
         )?,
         RuleIr::Application(rule) => {
-            let functor = linked
-                .ir()
-                .category_syntax()
-                .functors()
-                .iter()
-                .position(|functor| functor.name() == rule.view)
-                .and_then(|index| u32::try_from(index).ok())
-                .ok_or_else(|| {
-                    theory_refusal(
-                        location,
-                        format!("rule {name:?} lost its linked functor view"),
-                    )
-                })?;
+            let functor = theory_functor_identifier(linked, &rule.view, &name, location)?;
             composition_constructors(
                 &name,
                 functor,
                 0,
-                LinkedCompositionDirection::Unrestricted,
-                false,
+                (LinkedCompositionDirection::Unrestricted, false),
                 linked,
                 location,
                 constructors,
             )?;
         }
         RuleIr::Composition(rule) => {
-            if let Some(order) = rule.order {
-                let functor = linked
-                    .ir()
-                    .category_syntax()
-                    .functors()
-                    .iter()
-                    .position(|functor| functor.name() == rule.view)
-                    .and_then(|index| u32::try_from(index).ok())
-                    .ok_or_else(|| {
-                        theory_refusal(
-                            location,
-                            format!("rule {name:?} lost its linked functor view"),
-                        )
-                    })?;
-                let slashes = linked.ir().category_syntax().functors().len();
-                match rule.direction {
-                    CompositionRestriction::Steedman => 1,
-                    CompositionRestriction::Kuhlmann => {
-                        checked_schema_power(slashes, order.saturating_sub(1), &name, location)?
-                    }
-                    CompositionRestriction::Unrestricted => {
-                        checked_schema_power(slashes, order, &name, location)?
-                    }
-                };
-                composition_constructors(
-                    &name,
-                    functor,
-                    order,
-                    linked_direction(rule.direction),
-                    rule.crossed,
-                    linked,
-                    location,
-                    constructors,
-                )?;
-            } else {
-                elaborated.push(name);
-            }
+            explicit_composition_theory(rule, &name, linked, location, constructors, elaborated)?;
         }
         RuleIr::Substitution(rule) => {
             let Some(order) = rule.order else {
                 elaborated.push(name);
                 return Ok(());
             };
-            let functor = linked
-                .ir()
-                .category_syntax()
-                .functors()
-                .iter()
-                .position(|functor| functor.name() == rule.view)
-                .and_then(|index| u32::try_from(index).ok())
-                .ok_or_else(|| {
-                    theory_refusal(
-                        location,
-                        format!("rule {name:?} lost its linked functor view"),
-                    )
-                })?;
+            let functor = theory_functor_identifier(linked, &rule.view, &name, location)?;
             checked_schema_power(
                 linked.ir().category_syntax().functors().len(),
                 order.saturating_sub(1),
@@ -5411,71 +5481,101 @@ fn explicit_theory(
                 location,
             )?);
         }
-        RuleIr::Opaque(rule) => {
-            let value = rule.extension.get("theory").ok_or_else(|| {
-                theory_refusal(
-                    location,
-                    format!(
-                        "late rule {:?} does not declare a native theory contract",
-                        rule.rule
-                    ),
-                )
-            })?;
-            let document = serde_json::to_value(value).map_err(|error| {
-                theory_refusal(
-                    location,
-                    format!(
-                        "late rule {:?} has an invalid theory contract: {error}",
-                        rule.rule
-                    ),
-                )
-            })?;
-            let theory: OpaqueTheoryIr = serde_json::from_value(document).map_err(|error| {
-                theory_refusal(
-                    location,
-                    format!(
-                        "late rule {:?} has an invalid theory contract: {error}",
-                        rule.rule
-                    ),
-                )
-            })?;
-            match theory {
-                OpaqueTheoryIr::Elaborated { name } => {
-                    return Err(theory_refusal(
-                        location,
-                        format!(
-                            "late rule {name:?} declares a pattern runtime but only elaborated proof evidence"
-                        ),
-                    ));
-                }
-                OpaqueTheoryIr::Schemata {
-                    name,
-                    forward_complete,
-                    schemata,
-                } => {
-                    if schemata.len() != 1 {
-                        return Err(theory_refusal(
-                            location,
-                            format!(
-                                "late pattern rule {name:?} must declare exactly one deterministic schema"
-                            ),
-                        ));
-                    }
-                    for (serial, schema) in schemata.iter().enumerate() {
-                        constructors.push(theory_constructor(
-                            &name,
-                            serial,
-                            &schema.premises,
-                            &schema.conclusion,
-                            forward_complete,
-                            category_sort,
-                            linked,
-                            location,
-                        )?);
-                    }
-                }
-            }
+        RuleIr::Opaque(rule) => opaque_theory_constructors(rule, linked, location, constructors)?,
+    }
+    Ok(())
+}
+
+fn generated_theory(
+    rule: &LinkedRule,
+    linked: &LinkedGrammar,
+    constructors: &mut Vec<LinkedTheoryConstructor>,
+    elaborated: &mut Vec<String>,
+) -> Result<(), RulePlanError> {
+    let location = rule.location();
+    let name = generated_rule_name(linked, rule.kind());
+    match rule.kind() {
+        LinkedRuleKind::Application { functor } => {
+            composition_constructors(
+                &name,
+                *functor,
+                0,
+                (LinkedCompositionDirection::Unrestricted, false),
+                linked,
+                location,
+                constructors,
+            )?;
         }
+        LinkedRuleKind::Composition { order: None, .. }
+        | LinkedRuleKind::Substitution { order: None, .. } => elaborated.push(name),
+        LinkedRuleKind::Composition {
+            functor,
+            direction,
+            order: Some(order),
+            crossed,
+        } => {
+            let slashes = linked.ir().category_syntax().functors().len();
+            match direction {
+                LinkedCompositionDirection::Steedman => 1,
+                LinkedCompositionDirection::Kuhlmann => {
+                    checked_schema_power(slashes, order.saturating_sub(1), &name, location)?
+                }
+                LinkedCompositionDirection::Unrestricted => {
+                    checked_schema_power(slashes, *order, &name, location)?
+                }
+            };
+            composition_constructors(
+                &name,
+                *functor,
+                *order,
+                (*direction, *crossed),
+                linked,
+                location,
+                constructors,
+            )?;
+        }
+        LinkedRuleKind::Substitution {
+            functor,
+            order: Some(order),
+            crossed,
+        } => {
+            checked_schema_power(
+                linked.ir().category_syntax().functors().len(),
+                order.saturating_sub(1),
+                &name,
+                location,
+            )?;
+            substitution_constructors(
+                &name,
+                *functor,
+                *order,
+                *crossed,
+                linked,
+                location,
+                constructors,
+            )?;
+        }
+        LinkedRuleKind::TypeRaising {
+            functor,
+            targets,
+            arguments,
+        } => {
+            type_raising_constructors(
+                &name,
+                *functor,
+                targets.as_deref(),
+                arguments.as_deref(),
+                linked,
+                location,
+                constructors,
+            )?;
+        }
+        LinkedRuleKind::ClausalAdjunct { .. }
+        | LinkedRuleKind::Pattern { .. }
+        | LinkedRuleKind::Absorption { .. }
+        | LinkedRuleKind::Coordination { .. }
+        | LinkedRuleKind::Extension { .. }
+        | LinkedRuleKind::Coercion { .. } => unreachable!(),
     }
     Ok(())
 }
@@ -5496,95 +5596,7 @@ fn compile_theory(
                 }
             }
             RulePlanSource::Combinator => {
-                let name = generated_rule_name(linked, rule.kind());
-                match rule.kind() {
-                    LinkedRuleKind::Application { functor } => {
-                        composition_constructors(
-                            &name,
-                            *functor,
-                            0,
-                            LinkedCompositionDirection::Unrestricted,
-                            false,
-                            linked,
-                            location,
-                            &mut constructors,
-                        )?;
-                    }
-                    LinkedRuleKind::Composition { order: None, .. } => elaborated.push(name),
-                    LinkedRuleKind::Composition {
-                        functor,
-                        direction,
-                        order: Some(order),
-                        crossed,
-                    } => {
-                        let slashes = linked.ir().category_syntax().functors().len();
-                        match direction {
-                            LinkedCompositionDirection::Steedman => 1,
-                            LinkedCompositionDirection::Kuhlmann => checked_schema_power(
-                                slashes,
-                                order.saturating_sub(1),
-                                &name,
-                                location,
-                            )?,
-                            LinkedCompositionDirection::Unrestricted => {
-                                checked_schema_power(slashes, *order, &name, location)?
-                            }
-                        };
-                        composition_constructors(
-                            &name,
-                            *functor,
-                            *order,
-                            *direction,
-                            *crossed,
-                            linked,
-                            location,
-                            &mut constructors,
-                        )?;
-                    }
-                    LinkedRuleKind::Substitution {
-                        functor,
-                        order: Some(order),
-                        crossed,
-                    } => {
-                        checked_schema_power(
-                            linked.ir().category_syntax().functors().len(),
-                            order.saturating_sub(1),
-                            &name,
-                            location,
-                        )?;
-                        substitution_constructors(
-                            &name,
-                            *functor,
-                            *order,
-                            *crossed,
-                            linked,
-                            location,
-                            &mut constructors,
-                        )?;
-                    }
-                    LinkedRuleKind::Substitution { order: None, .. } => elaborated.push(name),
-                    LinkedRuleKind::TypeRaising {
-                        functor,
-                        targets,
-                        arguments,
-                    } => {
-                        type_raising_constructors(
-                            &name,
-                            *functor,
-                            targets.as_deref(),
-                            arguments.as_deref(),
-                            linked,
-                            location,
-                            &mut constructors,
-                        )?;
-                    }
-                    LinkedRuleKind::ClausalAdjunct { .. }
-                    | LinkedRuleKind::Pattern { .. }
-                    | LinkedRuleKind::Absorption { .. }
-                    | LinkedRuleKind::Coordination { .. }
-                    | LinkedRuleKind::Extension { .. }
-                    | LinkedRuleKind::Coercion { .. } => unreachable!(),
-                }
+                generated_theory(rule, linked, &mut constructors, &mut elaborated)?;
             }
             RulePlanSource::Coercion => {
                 let LinkedRuleKind::Coercion {
@@ -5663,8 +5675,7 @@ impl GrammarIr {
                     kind,
                     rule.matching(),
                     rule.restriction(),
-                    rule.introduces(),
-                    rule.consumes(),
+                    (rule.introduces(), rule.consumes()),
                 )
                 .map_err(|source| CompileError::RulePlan { source })?;
         }
@@ -7731,7 +7742,7 @@ mod tests {
     ) -> Result<PreparedGrammarIr, Box<dyn Error>> {
         let language_bytes = canonical::language_bytes(language)?;
         let grammar_bytes = canonical::grammar_bytes(grammar)?;
-        Ok(GrammarCompiler.prepare(
+        Ok(GrammarCompiler::prepare(
             DeclarationEnvelope::new(&language_bytes),
             DeclarationEnvelope::new(&grammar_bytes),
         )?)
@@ -7742,7 +7753,7 @@ mod tests {
         grammar: &GrammarIr,
     ) -> Result<LinkedGrammar, Box<dyn Error>> {
         let prepared = prepare_through_boundary(language, grammar)?;
-        Ok(GrammarCompiler.link(&prepared)?)
+        Ok(GrammarCompiler::link(&prepared)?)
     }
 
     fn grammar_with(
@@ -7758,8 +7769,8 @@ mod tests {
     fn plan_with(field: &str, declaration: &serde_json::Value) -> Result<(), Box<dyn Error>> {
         let (language, grammar) = grammar_with(field, declaration)?;
         let prepared = prepare_through_boundary(&language, &grammar)?;
-        let linked = GrammarCompiler.link(&prepared)?;
-        GrammarCompiler.plan_rules(&prepared, &linked)?;
+        let linked = GrammarCompiler::link(&prepared)?;
+        GrammarCompiler::plan_rules(&prepared, &linked)?;
         Ok(())
     }
 
@@ -8287,7 +8298,7 @@ mod tests {
         let (language, mut grammar) = packaged_declarations()?;
         grammar.signature.primitives.push("S".to_owned());
         let prepared = prepare_through_boundary(&language, &grammar)?;
-        let Err(error) = GrammarCompiler.link(&prepared) else {
+        let Err(error) = GrammarCompiler::link(&prepared) else {
             return Err("a duplicate category primitive was linked".into());
         };
         assert!(matches!(
@@ -8303,7 +8314,7 @@ mod tests {
         let (language, mut grammar) = packaged_declarations()?;
         grammar.signature.primitives.push("S[dcl]".to_owned());
         let prepared = prepare_through_boundary(&language, &grammar)?;
-        let Err(error) = GrammarCompiler.link(&prepared) else {
+        let Err(error) = GrammarCompiler::link(&prepared) else {
             return Err("a primitive-featured category collision was linked".into());
         };
 
@@ -8324,7 +8335,7 @@ mod tests {
             .vocabularies
             .insert("Cat".to_owned(), vec!["S".to_owned()]);
         let prepared = prepare_through_boundary(&language, &grammar)?;
-        let Err(error) = GrammarCompiler.link(&prepared) else {
+        let Err(error) = GrammarCompiler::link(&prepared) else {
             return Err("a primitive-explicit category collision was linked".into());
         };
 
@@ -8345,7 +8356,7 @@ mod tests {
             .vocabularies
             .insert("Cat".to_owned(), vec!["S[dcl]".to_owned()]);
         let prepared = prepare_through_boundary(&language, &grammar)?;
-        let Err(error) = GrammarCompiler.link(&prepared) else {
+        let Err(error) = GrammarCompiler::link(&prepared) else {
             return Err("a featured-explicit category collision was linked".into());
         };
 
@@ -8374,6 +8385,59 @@ mod tests {
         Ok(())
     }
 
+    fn modal_application_rule() -> Result<OpaqueRuleIr, Box<dyn Error>> {
+        Ok(OpaqueRuleIr {
+            head_policy: HeadPolicy::PassThrough,
+            restriction: None,
+            matching: None,
+            introduces: None,
+            consumes: None,
+            rule: "modal-application".to_owned(),
+            extension: indexmap::IndexMap::from([
+                (
+                    "name".to_owned(),
+                    serde_json::from_value(json!("modal-application"))?,
+                ),
+                (
+                    "premises".to_owned(),
+                    serde_json::from_value(json!([{"pattern": "term", "name": "X"}]))?,
+                ),
+                (
+                    "conclusion".to_owned(),
+                    serde_json::from_value(json!({"pattern": "term", "name": "X"}))?,
+                ),
+                ("targets".to_owned(), serde_json::from_value(json!(null))?),
+                (
+                    "normal_form_role".to_owned(),
+                    serde_json::from_value(json!({
+                        "kind": "other",
+                        "direction": null,
+                        "principal_slot": null,
+                        "order": null,
+                        "crossed": false,
+                    }))?,
+                ),
+                ("mode".to_owned(), serde_json::from_value(json!("box"))?),
+                (
+                    "runtime".to_owned(),
+                    serde_json::from_value(json!({"kind": "pattern", "head_slot": 0}))?,
+                ),
+                (
+                    "theory".to_owned(),
+                    serde_json::from_value(json!({
+                        "kind": "schemata",
+                        "name": "modal-application",
+                        "forward_complete": true,
+                        "schemata": [{
+                            "premises": [{"pattern": "term", "name": "X"}],
+                            "conclusion": {"pattern": "term", "name": "X"},
+                        }],
+                    }))?,
+                ),
+            ]),
+        })
+    }
+
     #[test]
     fn opaque_extension_rules_traverse_the_same_dense_plan() -> Result<(), Box<dyn Error>> {
         let (language, mut grammar) = packaged_declarations()?;
@@ -8385,60 +8449,11 @@ mod tests {
             .ok_or("the packaged grammar declares no combinator set")?;
         grammar.rules.rules.insert(
             position,
-            RuleEntryIr::Rule(RuleIr::Opaque(OpaqueRuleIr {
-                head_policy: HeadPolicy::PassThrough,
-                restriction: None,
-                matching: None,
-                introduces: None,
-                consumes: None,
-                rule: "modal-application".to_owned(),
-                extension: indexmap::IndexMap::from([
-                    (
-                        "name".to_owned(),
-                        serde_json::from_value(json!("modal-application"))?,
-                    ),
-                    (
-                        "premises".to_owned(),
-                        serde_json::from_value(json!([{"pattern": "term", "name": "X"}]))?,
-                    ),
-                    (
-                        "conclusion".to_owned(),
-                        serde_json::from_value(json!({"pattern": "term", "name": "X"}))?,
-                    ),
-                    ("targets".to_owned(), serde_json::from_value(json!(null))?),
-                    (
-                        "normal_form_role".to_owned(),
-                        serde_json::from_value(json!({
-                            "kind": "other",
-                            "direction": null,
-                            "principal_slot": null,
-                            "order": null,
-                            "crossed": false,
-                        }))?,
-                    ),
-                    ("mode".to_owned(), serde_json::from_value(json!("box"))?),
-                    (
-                        "runtime".to_owned(),
-                        serde_json::from_value(json!({"kind": "pattern", "head_slot": 0}))?,
-                    ),
-                    (
-                        "theory".to_owned(),
-                        serde_json::from_value(json!({
-                            "kind": "schemata",
-                            "name": "modal-application",
-                            "forward_complete": true,
-                            "schemata": [{
-                                "premises": [{"pattern": "term", "name": "X"}],
-                                "conclusion": {"pattern": "term", "name": "X"},
-                            }],
-                        }))?,
-                    ),
-                ]),
-            })),
+            RuleEntryIr::Rule(RuleIr::Opaque(modal_application_rule()?)),
         );
         let prepared = prepare_through_boundary(&language, &grammar)?;
-        let linked = GrammarCompiler.link(&prepared)?;
-        let plan = GrammarCompiler.plan_rules(&prepared, &linked)?;
+        let linked = GrammarCompiler::link(&prepared)?;
+        let plan = GrammarCompiler::plan_rules(&prepared, &linked)?;
 
         assert_eq!(plan.rules().len(), 37);
         assert_eq!(plan.explicit_rules(), 21);
@@ -8471,8 +8486,9 @@ mod tests {
             }))?,
         );
         let prepared = prepare_through_boundary(&language, &grammar)?;
-        let linked = GrammarCompiler.link(&prepared)?;
-        let Err(CompileError::RulePlan { source }) = GrammarCompiler.plan_rules(&prepared, &linked)
+        let linked = GrammarCompiler::link(&prepared)?;
+        let Err(CompileError::RulePlan { source }) =
+            GrammarCompiler::plan_rules(&prepared, &linked)
         else {
             return Err("a late runtime relation diverged from its proof schema".into());
         };
@@ -8504,8 +8520,9 @@ mod tests {
                 view: "missing".to_owned(),
             })));
         let prepared = prepare_through_boundary(&language, &grammar)?;
-        let linked = GrammarCompiler.link(&prepared)?;
-        let Err(CompileError::RulePlan { source }) = GrammarCompiler.plan_rules(&prepared, &linked)
+        let linked = GrammarCompiler::link(&prepared)?;
+        let Err(CompileError::RulePlan { source }) =
+            GrammarCompiler::plan_rules(&prepared, &linked)
         else {
             return Err("an unknown functor reference was planned".into());
         };
@@ -8535,8 +8552,9 @@ mod tests {
         };
         combinators.direction = CompositionRestriction::Unrestricted;
         let prepared = prepare_through_boundary(&language, &grammar)?;
-        let linked = GrammarCompiler.link(&prepared)?;
-        let Err(CompileError::RulePlan { source }) = GrammarCompiler.plan_rules(&prepared, &linked)
+        let linked = GrammarCompiler::link(&prepared)?;
+        let Err(CompileError::RulePlan { source }) =
+            GrammarCompiler::plan_rules(&prepared, &linked)
         else {
             return Err("coinciding generated composition relations were planned".into());
         };
@@ -8561,11 +8579,11 @@ mod tests {
     fn rule_planning_refuses_a_linked_signature_from_another_pair() -> Result<(), Box<dyn Error>> {
         let (language, grammar) = packaged_declarations()?;
         let first = prepare_through_boundary(&language, &grammar)?;
-        let linked = GrammarCompiler.link(&first)?;
+        let linked = GrammarCompiler::link(&first)?;
         let mut other = grammar;
         other.name.push_str("-other");
         let second = prepare_through_boundary(&language, &other)?;
-        let Err(CompileError::RulePlan { source }) = GrammarCompiler.plan_rules(&second, &linked)
+        let Err(CompileError::RulePlan { source }) = GrammarCompiler::plan_rules(&second, &linked)
         else {
             return Err("a foreign linked signature was accepted by rule planning".into());
         };

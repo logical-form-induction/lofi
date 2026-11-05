@@ -116,7 +116,7 @@ enum OutputFrame {
     Node {
         operator: OperatorId,
         payload: Option<u64>,
-        arguments: Vec<OutputFrame>,
+        arguments: Vec<Self>,
     },
 }
 
@@ -3631,15 +3631,6 @@ impl RuleKernel {
             }
             return rule.rule.output_factors(representatives, term, slot, key);
         }
-        let frames_factor =
-            |functors: &FunctorSpec, frames: Vec<Frame>| -> Result<RuleOutputFactor, RuleError> {
-                Ok(RuleOutputFactor(OutputFactorKind::Frames(
-                    frames
-                        .into_iter()
-                        .map(|frame| OutputFrame::from_term(&frame.term, &functors.result_path))
-                        .collect::<Result<Vec<_>, _>>()?,
-                )))
-            };
         match (self, key) {
             (
                 Self::Composition(rule),
@@ -3666,7 +3657,7 @@ impl RuleKernel {
                     let Some((frames, _)) = walk_frames(&rule.functors, term, *order)? else {
                         return Ok(Vec::new());
                     };
-                    Ok(vec![frames_factor(&rule.functors, frames)?])
+                    Ok(vec![Self::frames_factor(&rule.functors, frames)?])
                 } else {
                     Ok(Vec::new())
                 }
@@ -3696,29 +3687,7 @@ impl RuleKernel {
                 if slot != container {
                     return Ok(Vec::new());
                 }
-                let mut current = term.clone();
-                let mut frames = Vec::new();
-                let mut factors = Vec::new();
-                loop {
-                    if rule.admitted_order(frames.len())
-                        && rule.licensed(&frames)
-                        && representatives.key(&current)? == representative
-                    {
-                        let factor = frames_factor(&rule.functors, frames.clone())?;
-                        if !factors.contains(&factor) {
-                            factors.push(factor);
-                        }
-                    }
-                    if !rule.functors.is_functor(&current) {
-                        break;
-                    }
-                    frames.push(Frame {
-                        term: current.clone(),
-                        slot: *rule.functors.result_path.first().unwrap_or(&0),
-                    });
-                    current = at_path(&current, &rule.functors.result_path)?;
-                }
-                Ok(factors)
+                Self::unbounded_composition_factors(rule, representatives, term, representative)
             }
             (
                 Self::Substitution(rule),
@@ -3746,13 +3715,56 @@ impl RuleKernel {
                     let Some((frames, _)) = walk_frames(&rule.functors, term, *order)? else {
                         return Ok(Vec::new());
                     };
-                    Ok(vec![frames_factor(&rule.functors, frames)?])
+                    Ok(vec![Self::frames_factor(&rule.functors, frames)?])
                 } else {
                     Ok(Vec::new())
                 }
             }
             _ => Ok(Vec::new()),
         }
+    }
+
+    fn frames_factor(
+        functors: &FunctorSpec,
+        frames: Vec<Frame>,
+    ) -> Result<RuleOutputFactor, RuleError> {
+        Ok(RuleOutputFactor(OutputFactorKind::Frames(
+            frames
+                .into_iter()
+                .map(|frame| OutputFrame::from_term(&frame.term, &functors.result_path))
+                .collect::<Result<Vec<_>, _>>()?,
+        )))
+    }
+
+    fn unbounded_composition_factors(
+        rule: &CompositionRule,
+        representatives: &RepresentativeTable,
+        term: &Term,
+        representative: &Term,
+    ) -> Result<Vec<RuleOutputFactor>, RuleError> {
+        let mut current = term.clone();
+        let mut frames = Vec::new();
+        let mut factors = Vec::new();
+        loop {
+            if rule.admitted_order(frames.len())
+                && rule.licensed(&frames)
+                && representatives.key(&current)? == representative
+            {
+                let factor = Self::frames_factor(&rule.functors, frames.clone())?;
+                if !factors.contains(&factor) {
+                    factors.push(factor);
+                }
+            }
+            if !rule.functors.is_functor(&current) {
+                break;
+            }
+            frames.push(Frame {
+                term: current.clone(),
+                slot: *rule.functors.result_path.first().unwrap_or(&0),
+            });
+            current = at_path(&current, &rule.functors.result_path)?;
+        }
+        Ok(factors)
     }
 
     /// Apply this rule to exact premise terms.
@@ -4064,7 +4076,7 @@ mod tests {
         }
 
         for (patterns, terms) in [
-            (vec![operator.clone(), operator], vec![a.clone(), b]),
+            (vec![operator.clone(), operator], vec![a, b]),
             (vec![payload.clone(), payload], vec![free_x, free_y]),
             (vec![repeated.clone()], vec![aa]),
             (vec![repeated], vec![ab]),
@@ -4162,8 +4174,6 @@ mod tests {
         let aa = store.intern(3, vec![a.clone(), a.clone()], None)?;
         let ab = store.intern(3, vec![a.clone(), b.clone()], None)?;
         let bc = store.intern(3, vec![b.clone(), c.clone()], None)?;
-        let free_x = store.free(0, "x")?;
-        let free_y = store.free(0, "y")?;
         let other = store.intern(6, vec![], None)?;
         let container = Pattern::Node {
             operator: OperatorPattern::Fixed(Some(3)),
@@ -4184,46 +4194,6 @@ mod tests {
             (
                 vec![
                     Pattern::Node {
-                        operator: OperatorPattern::Variable("operator".to_owned()),
-                        arguments: Vec::new(),
-                        payload: PayloadPattern::None,
-                    },
-                    Pattern::Node {
-                        operator: OperatorPattern::Variable("operator".to_owned()),
-                        arguments: Vec::new(),
-                        payload: PayloadPattern::None,
-                    },
-                ],
-                Pattern::Node {
-                    operator: OperatorPattern::Variable("operator".to_owned()),
-                    arguments: Vec::new(),
-                    payload: PayloadPattern::None,
-                },
-                vec![vec![a.clone(), b.clone()], vec![a.clone(), b.clone()]],
-            ),
-            (
-                vec![
-                    Pattern::Node {
-                        operator: OperatorPattern::Fixed(Some(5)),
-                        arguments: Vec::new(),
-                        payload: PayloadPattern::Variable("payload".to_owned()),
-                    },
-                    Pattern::Node {
-                        operator: OperatorPattern::Fixed(Some(5)),
-                        arguments: Vec::new(),
-                        payload: PayloadPattern::Variable("payload".to_owned()),
-                    },
-                ],
-                Pattern::Node {
-                    operator: OperatorPattern::Fixed(Some(5)),
-                    arguments: Vec::new(),
-                    payload: PayloadPattern::Variable("payload".to_owned()),
-                },
-                vec![vec![free_x.clone(), free_y.clone()], vec![free_x, free_y]],
-            ),
-            (
-                vec![
-                    Pattern::Node {
                         operator: OperatorPattern::Fixed(Some(3)),
                         arguments: vec![variable("same"), variable("same")],
                         payload: PayloadPattern::None,
@@ -4240,7 +4210,7 @@ mod tests {
                     arguments: Vec::new(),
                     payload: PayloadPattern::None,
                 },
-                vec![vec![a.clone(), b.clone()], vec![b.clone(), c.clone()]],
+                vec![vec![a.clone(), b.clone()], vec![b.clone(), c]],
             ),
             (
                 vec![
@@ -4257,11 +4227,7 @@ mod tests {
                     arguments: vec![variable("x"), variable("y")],
                     payload: PayloadPattern::None,
                 },
-                vec![
-                    vec![a.clone(), b.clone()],
-                    vec![ab.clone(), bc, ca.clone()],
-                    vec![b.clone()],
-                ],
+                vec![vec![a.clone(), b.clone()], vec![ab, bc, ca], vec![b]],
             ),
             (
                 vec![
@@ -4275,12 +4241,22 @@ mod tests {
                     },
                 ],
                 variable("shared"),
-                vec![vec![a.clone()], vec![other]],
+                vec![vec![a], vec![other]],
             ),
         ] {
             assert_binding_thread_matches_cartesian(&store, &premises, &conclusion, &pools)?;
         }
 
+        Ok(())
+    }
+
+    #[test]
+    fn binding_thread_matches_cartesian_spine_evaluation() -> Result<(), Box<dyn std::error::Error>>
+    {
+        let store = store()?;
+        let a = store.intern(0, vec![], None)?;
+        let b = store.intern(1, vec![], None)?;
+        let c = store.intern(2, vec![], None)?;
         let inner = store.intern(3, vec![a.clone(), b.clone()], None)?;
         let outer = store.intern(3, vec![inner, c.clone()], None)?;
         let spine = |core: &str| Pattern::Spine {
@@ -4336,6 +4312,42 @@ mod tests {
             reachability_build(&result, &store, bindings)
                 .is_ok_and(|output| output.is_some_and(|output| output.is_identical(&target)))
         }));
+        Ok(())
+    }
+
+    #[test]
+    fn binding_thread_matches_shared_operators_and_payloads()
+    -> Result<(), Box<dyn std::error::Error>> {
+        let store = store()?;
+        let a = store.intern(0, vec![], None)?;
+        let b = store.intern(1, vec![], None)?;
+        let free_x = store.free(0, "x")?;
+        let free_y = store.free(0, "y")?;
+        for (pattern, pool) in [
+            (
+                Pattern::Node {
+                    operator: OperatorPattern::Variable("operator".to_owned()),
+                    arguments: Vec::new(),
+                    payload: PayloadPattern::None,
+                },
+                vec![a, b],
+            ),
+            (
+                Pattern::Node {
+                    operator: OperatorPattern::Fixed(Some(5)),
+                    arguments: Vec::new(),
+                    payload: PayloadPattern::Variable("payload".to_owned()),
+                },
+                vec![free_x, free_y],
+            ),
+        ] {
+            assert_binding_thread_matches_cartesian(
+                &store,
+                &[pattern.clone(), pattern.clone()],
+                &pattern,
+                &[pool.clone(), pool],
+            )?;
+        }
         Ok(())
     }
 
@@ -4659,7 +4671,7 @@ mod tests {
         let b = store.intern(1, vec![], None)?;
         let c = store.intern(2, vec![], None)?;
         let d = b.clone();
-        let principal = store.intern(3, vec![b.clone(), a.clone()], None)?;
+        let principal = store.intern(3, vec![b, a.clone()], None)?;
         let shallow = store.intern(3, vec![a.clone(), c.clone()], None)?;
         let inner = store.intern(3, vec![a.clone(), c], None)?;
         let deep = store.intern(3, vec![inner, d], None)?;
@@ -4690,13 +4702,13 @@ mod tests {
                 .ok_or("the container has the principal join key")?;
             let factors = rule.output_factors(&representatives, &container, 1, &key)?;
             let applied = rule.apply(&store, &representatives, &[principal.clone(), container])?;
-            let combined = factors
-                .iter()
-                .map(|factor| {
-                    combine_output_factors(&store, &principal_factor, factor)
-                        .map(|output| output.expect("the factors are complementary"))
-                })
-                .collect::<Result<Vec<_>, _>>()?;
+            let mut combined = Vec::new();
+            for factor in &factors {
+                combined.push(
+                    combine_output_factors(&store, &principal_factor, factor)?
+                        .ok_or("the factors are complementary")?,
+                );
+            }
             assert_eq!(combined, applied);
         }
         Ok(())

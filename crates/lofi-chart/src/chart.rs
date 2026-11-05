@@ -387,7 +387,7 @@ impl PairBatch {
 
     /// Return the number of non-singleton position entries in the shared arena.
     #[must_use]
-    pub fn axis_items(&self) -> usize {
+    pub const fn axis_items(&self) -> usize {
         self.axis_items.len()
     }
 }
@@ -4112,6 +4112,15 @@ struct ForestLocal<L, W> {
     weight: W,
 }
 
+struct FactoredForestRectangle<'a, W> {
+    span: Span,
+    split: usize,
+    product: &'a FactoredPairProduct,
+    tag: TagId,
+    inputs: [CategoryId; 2],
+    sources: [&'a [(ForestKey, W)]; 2],
+}
+
 struct ForestCategoryProduct<'a, W> {
     span: Span,
     parts: &'a [Span],
@@ -4566,54 +4575,31 @@ impl<L: Clone, W: Clone> ForestTable<L, W> {
                             groups[1][positions[1][0]].category,
                         ];
                         Self::emit_factored_forest_rectangle(
-                            span,
-                            parts,
-                            product,
-                            tag,
-                            &inputs,
-                            left_sources,
-                            right_sources,
+                            &FactoredForestRectangle {
+                                span,
+                                split: parts[0].1,
+                                product,
+                                tag,
+                                inputs,
+                                sources: [left_sources, right_sources],
+                            },
                             resolver,
                             emissions,
                         )?;
                     }
                     NormalDecision::Premises(tag) => {
-                        let mut left_positions = Vec::new();
-                        for left in positions[0] {
-                            let Some(group) = groups[0].get(*left) else {
-                                return Err(SweepError::Table(TableError::InvalidPair {
-                                    left: *left,
-                                    left_categories: groups[0].len(),
-                                    right: positions[1].first().copied().unwrap_or(0),
-                                    right_categories: groups[1].len(),
-                                }));
-                            };
-                            if group
-                                .tagged
+                        let [left_positions, right_positions] = [0, 1].map(|axis| {
+                            positions[axis]
                                 .iter()
-                                .any(|(key, _)| key.item.tag == *left_tag)
-                            {
-                                left_positions.push(*left);
-                            }
-                        }
-                        let mut right_positions = Vec::new();
-                        for right in positions[1] {
-                            let Some(group) = groups[1].get(*right) else {
-                                return Err(SweepError::Table(TableError::InvalidPair {
-                                    left: positions[0].first().copied().unwrap_or(0),
-                                    left_categories: groups[0].len(),
-                                    right: *right,
-                                    right_categories: groups[1].len(),
-                                }));
-                            };
-                            if group
-                                .tagged
-                                .iter()
-                                .any(|(key, _)| key.item.tag == *right_tag)
-                            {
-                                right_positions.push(*right);
-                            }
-                        }
+                                .copied()
+                                .filter(|position| {
+                                    groups[axis][*position]
+                                        .tagged
+                                        .iter()
+                                        .any(|(key, _)| key.item.tag == tags[axis])
+                                })
+                                .collect::<Vec<_>>()
+                        });
                         if left_positions.is_empty() || right_positions.is_empty() {
                             continue;
                         }
@@ -4641,13 +4627,14 @@ impl<L: Clone, W: Clone> ForestTable<L, W> {
                             let inputs =
                                 [groups[0][left[0]].category, groups[1][right[0]].category];
                             Self::emit_factored_forest_rectangle(
-                                span,
-                                parts,
-                                product,
-                                tag,
-                                &inputs,
-                                &left_sources,
-                                &right_sources,
+                                &FactoredForestRectangle {
+                                    span,
+                                    split: parts[0].1,
+                                    product,
+                                    tag,
+                                    inputs,
+                                    sources: [&left_sources, &right_sources],
+                                },
                                 resolver,
                                 emissions,
                             )?;
@@ -4661,21 +4648,23 @@ impl<L: Clone, W: Clone> ForestTable<L, W> {
     }
 
     fn emit_factored_forest_rectangle<R, E>(
-        span: Span,
-        parts: &[Span],
-        product: &FactoredPairProduct,
-        tag: TagId,
-        inputs: &[CategoryId; 2],
-        left: &[(ForestKey, W)],
-        right: &[(ForestKey, W)],
+        rectangle: &FactoredForestRectangle<'_, W>,
         resolver: &mut R,
         emissions: &mut Vec<ForestEmission<L, W>>,
     ) -> Result<(), SweepError<R::Error, E>>
     where
         R: ForestResolver<W, L>,
     {
+        let FactoredForestRectangle {
+            span,
+            split,
+            product,
+            tag,
+            inputs,
+            sources: [left, right],
+        } = *rectangle;
         let weight = resolver
-            .local_weight(product.rule, inputs, product.output, span, Some(parts[0].1))
+            .local_weight(product.rule, &inputs, product.output, span, Some(split))
             .map_err(SweepError::Resolver)?;
         let (label, order) = resolver
             .label_order(product.rule)
@@ -4693,7 +4682,7 @@ impl<L: Clone, W: Clone> ForestTable<L, W> {
                 ],
                 output: product.output,
                 weight,
-                split: Some(parts[0].1),
+                split: Some(split),
                 order,
             },
             below: vec![

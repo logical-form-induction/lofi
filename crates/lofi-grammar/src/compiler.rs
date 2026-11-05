@@ -5,7 +5,7 @@ use sha2::{Digest, Sha256};
 
 use crate::{
     CanonicalGrammarIr, CanonicalLanguageIr, CompileError, DeclarationKind, LinkDeclarations,
-    LinkedGrammar, LinkedRulePlan, canonical,
+    LinkedGrammar, LinkedRulePlan, PreparedGrammarIr, canonical,
 };
 
 /// Canonical declaration bytes handed to the compiler.
@@ -26,13 +26,6 @@ impl<'a> DeclarationEnvelope<'a> {
     pub const fn canonical_bytes(self) -> &'a [u8] {
         self.canonical
     }
-}
-
-/// The typed declarations inside native grammar compilation.
-#[derive(Clone, Debug, PartialEq)]
-pub(crate) struct PreparedGrammarIr {
-    language: CanonicalLanguageIr,
-    grammar: CanonicalGrammarIr,
 }
 
 impl PreparedGrammarIr {
@@ -99,13 +92,12 @@ impl GrammarCompiler {
     /// Returns [`CompileError`] when a canonical envelope, linked signature, or
     /// rule recipe is invalid.
     pub fn compile(
-        self,
         language: DeclarationEnvelope<'_>,
         grammar: DeclarationEnvelope<'_>,
     ) -> Result<CompiledGrammar, CompileError> {
-        let prepared = self.prepare(language, grammar)?;
-        let linked = self.link(&prepared)?;
-        let rules = self.plan_rules(&prepared, &linked)?;
+        let prepared = Self::prepare(language, grammar)?;
+        let linked = Self::link(&prepared)?;
+        let rules = Self::plan_rules(&prepared, &linked)?;
         Ok(CompiledGrammar { linked, rules })
     }
 
@@ -116,7 +108,6 @@ impl GrammarCompiler {
     /// Returns [`CompileError`] when a declaration does not match its typed
     /// schema or its bytes are not the one compact ASCII canonical form.
     pub(crate) fn prepare(
-        self,
         language: DeclarationEnvelope<'_>,
         grammar: DeclarationEnvelope<'_>,
     ) -> Result<PreparedGrammarIr, CompileError> {
@@ -147,7 +138,7 @@ impl GrammarCompiler {
     ///
     /// Returns [`CompileError`] when the two declarations cannot form one semantic signature
     /// or the requested term-store capacity cannot initialize the native store.
-    pub(crate) fn link(self, prepared: &PreparedGrammarIr) -> Result<LinkedGrammar, CompileError> {
+    pub(crate) fn link(prepared: &PreparedGrammarIr) -> Result<LinkedGrammar, CompileError> {
         let linked = prepared
             .language
             .declaration()
@@ -163,7 +154,6 @@ impl GrammarCompiler {
     /// a rule names an absent dense signature member, or a generated inventory cannot be
     /// represented by the native rule identifier.
     pub(crate) fn plan_rules(
-        self,
         prepared: &PreparedGrammarIr,
         linked: &LinkedGrammar,
     ) -> Result<LinkedRulePlan, CompileError> {
@@ -208,66 +198,64 @@ mod tests {
     const LANGUAGE: &[u8] = br#"{"abstraction":"lam","application":"eval","atomic_types":[{"kind":"type","name":"e"}],"binder_family":"binder","binders":{"style":"curry"},"bounds":{"Ty":{"depth":4,"free_ranks":0,"layout":"complete-tree","nodes":null,"order":"df"}},"category_sort":"Cat","constant_family":"constant","constants":[],"constructors":[],"function_type":"->","leaf_lexicon":null,"logic":{"domains":{},"equality":true,"functions":true,"intensional":false,"order":"first","postulates":[]},"name":"tiny","store_nodes":1000000,"term_sort":"Tm","type_sort":"Ty","variable_family":"variable"}"#;
     const GRAMMAR: &[u8] = br#"{"budget":{"beam":8,"beta_fuel":1000,"closure_nodes":2048,"closure_rounds":2,"depth":5,"mass":1.0,"max_category_arity":null,"max_category_size":null,"threads":1,"unary_rounds":1},"capacity_evidence":null,"formalism":"declared","goal":{"categories":["S"],"kind":"root","root_weights":null},"interpretations":[],"lexicon":{"entries":[],"kind":"inline"},"matching":{"kind":"identity"},"max_hypotheses":0,"name":"tiny","normal_form":{"kind":"none"},"rules":{"name":"none","rules":[]},"signature":{"allows_vacuous_binding":true,"category_sort":"Cat","classifiers":{},"conjunctions":null,"constructors":[{"kind":["Cat","Cat","Cat"],"name":"/","notation":{"associativity":"left","precedence":10,"spelling":"/","style":"infix"}},{"kind":["Cat","Cat","Cat"],"name":"\\","notation":{"associativity":"left","precedence":10,"spelling":"\\","style":"infix"}}],"feature_delimiter":"brackets","functors":[{"argument":1,"argument_side":"right","constructor":"/","name":"/","opposite":"\\","result":0},{"argument":1,"argument_side":"left","constructor":"\\","name":"\\","opposite":"/","result":0}],"holes":false,"name":"tiny","open_sorts":[],"operators":[],"primitives":["S"],"sorts":["Cat"],"syntax":"declared","vocabularies":{}}}"#;
 
-    fn grammar_with_rule(rule: &str) -> Vec<u8> {
-        let document: serde_json::Value =
-            serde_json::from_str(rule).expect("the rule fixture is JSON");
+    fn grammar_with_rule(rule: &str) -> Result<Vec<u8>, Box<dyn Error>> {
+        let document: serde_json::Value = serde_json::from_str(rule)?;
         let theory = document
             .get("theory")
-            .expect("the late rule fixture declares a theory");
+            .ok_or("the late rule fixture declares a theory")?;
         let schema = theory
             .get("schemata")
             .and_then(serde_json::Value::as_array)
             .and_then(|schemata| schemata.first())
-            .expect("the late rule fixture declares one schema");
+            .ok_or("the late rule fixture declares one schema")?;
         let name = serde_json::to_string(
             theory
                 .get("name")
-                .expect("the late rule theory declares a name"),
-        )
-        .expect("the theory name is JSON");
+                .ok_or("the late rule theory declares a name")?,
+        )?;
         let premises = schema
             .get("premises")
-            .expect("the late rule schema declares premises");
+            .ok_or("the late rule schema declares premises")?;
         let conclusion = schema
             .get("conclusion")
-            .expect("the late rule schema declares a conclusion");
+            .ok_or("the late rule schema declares a conclusion")?;
         let head_slot = premises
             .as_array()
             .filter(|premises| !premises.is_empty())
             .map_or("null", |_| "0");
         let runtime = format!(
             "\"rule\":\"late\",\"head_policy\":\"pass-through\",\"name\":{name},\"premises\":{},\"conclusion\":{},\"targets\":null,\"normal_form_role\":{{\"kind\":\"other\",\"direction\":null,\"principal_slot\":null,\"order\":null,\"crossed\":false}},\"runtime\":{{\"kind\":\"pattern\",\"head_slot\":{head_slot}}}",
-            serde_json::to_string(premises).expect("the schema premises are JSON"),
-            serde_json::to_string(conclusion).expect("the schema conclusion is JSON"),
+            serde_json::to_string(premises)?,
+            serde_json::to_string(conclusion)?,
         );
         let rule = rule.replace(
             "\"rule\":\"late\",\"head_policy\":\"pass-through\"",
             &runtime,
         );
         canonical_document(
-            &String::from_utf8(GRAMMAR.to_vec())
-                .expect("the fixture is UTF-8")
+            &String::from_utf8(GRAMMAR.to_vec())?
                 .replace("\"rules\":[]}", &format!("\"rules\":[{rule}]}}")),
         )
     }
 
-    fn canonical_document(document: &str) -> Vec<u8> {
-        let value: serde_json::Value =
-            serde_json::from_str(document).expect("the spliced fixture is JSON");
-        crate::canonical::value_bytes(&value).expect("the spliced fixture is canonical JSON")
+    fn canonical_document(document: &str) -> Result<Vec<u8>, Box<dyn Error>> {
+        let value: serde_json::Value = serde_json::from_str(document)?;
+        Ok(crate::canonical::value_bytes(&value)?)
     }
 
-    fn grammar_with_operator_and_rule(operator: &str, rule: &str) -> Vec<u8> {
+    fn grammar_with_operator_and_rule(
+        operator: &str,
+        rule: &str,
+    ) -> Result<Vec<u8>, Box<dyn Error>> {
         canonical_document(
-            &String::from_utf8(grammar_with_rule(rule))
-                .expect("the fixture is UTF-8")
+            &String::from_utf8(grammar_with_rule(rule)?)?
                 .replace("\"operators\":[]", &format!("\"operators\":[{operator}]")),
         )
     }
 
     #[test]
     fn compiler_prepares_only_the_stage_it_implements() -> Result<(), Box<dyn Error>> {
-        let prepared = GrammarCompiler.prepare(
+        let prepared = GrammarCompiler::prepare(
             DeclarationEnvelope::new(LANGUAGE),
             DeclarationEnvelope::new(GRAMMAR),
         )?;
@@ -282,7 +270,7 @@ mod tests {
     #[test]
     fn compiler_refuses_a_language_declaration_that_does_not_decode() -> Result<(), Box<dyn Error>>
     {
-        let Err(error) = GrammarCompiler.prepare(
+        let Err(error) = GrammarCompiler::prepare(
             DeclarationEnvelope::new(b"not json"),
             DeclarationEnvelope::new(GRAMMAR),
         ) else {
@@ -303,7 +291,7 @@ mod tests {
     fn compiler_refuses_noncanonical_whitespace() -> Result<(), Box<dyn Error>> {
         let mut language = LANGUAGE.to_vec();
         language.push(b' ');
-        let Err(error) = GrammarCompiler.prepare(
+        let Err(error) = GrammarCompiler::prepare(
             DeclarationEnvelope::new(&language),
             DeclarationEnvelope::new(GRAMMAR),
         ) else {
@@ -323,14 +311,14 @@ mod tests {
     fn compiler_refuses_a_complete_late_schema_with_a_free_result_index()
     -> Result<(), Box<dyn Error>> {
         let grammar = grammar_with_rule(
-            r##"{"restriction":null,"matching":null,"introduces":null,"consumes":null,"rule":"late","head_policy":"pass-through","theory":{"forward_complete":true,"kind":"schemata","name":"dishonest","schemata":[{"conclusion":{"name":"Y","pattern":"term","sort":"Cat"},"premises":[{"name":"X","pattern":"term","sort":"Cat"}]}]}}"##,
-        );
-        let error = GrammarCompiler
-            .compile(
-                DeclarationEnvelope::new(LANGUAGE),
-                DeclarationEnvelope::new(&grammar),
-            )
-            .expect_err("a complete rule left its result index free");
+            r#"{"restriction":null,"matching":null,"introduces":null,"consumes":null,"rule":"late","head_policy":"pass-through","theory":{"forward_complete":true,"kind":"schemata","name":"dishonest","schemata":[{"conclusion":{"name":"Y","pattern":"term","sort":"Cat"},"premises":[{"name":"X","pattern":"term","sort":"Cat"}]}]}}"#,
+        )?;
+        let error = GrammarCompiler::compile(
+            DeclarationEnvelope::new(LANGUAGE),
+            DeclarationEnvelope::new(&grammar),
+        )
+        .err()
+        .ok_or("a complete rule left its result index free")?;
 
         assert!(error.to_string().contains("index_Y"), "{error}");
         assert!(error.to_string().contains("free"), "{error}");
@@ -340,14 +328,14 @@ mod tests {
     #[test]
     fn compiler_refuses_a_nondeterministic_late_schema() -> Result<(), Box<dyn Error>> {
         let grammar = grammar_with_rule(
-            r##"{"restriction":null,"matching":null,"introduces":null,"consumes":null,"rule":"late","head_policy":"pass-through","theory":{"forward_complete":false,"kind":"schemata","name":"nondeterministic","schemata":[{"conclusion":{"arguments":[],"operator":{"kind":"variable","name":"F"},"pattern":"node","payload":null},"premises":[]}]}}"##,
-        );
-        let error = GrammarCompiler
-            .compile(
-                DeclarationEnvelope::new(LANGUAGE),
-                DeclarationEnvelope::new(&grammar),
-            )
-            .expect_err("an operator-variable schema was accepted");
+            r#"{"restriction":null,"matching":null,"introduces":null,"consumes":null,"rule":"late","head_policy":"pass-through","theory":{"forward_complete":false,"kind":"schemata","name":"nondeterministic","schemata":[{"conclusion":{"arguments":[],"operator":{"kind":"variable","name":"F"},"pattern":"node","payload":null},"premises":[]}]}}"#,
+        )?;
+        let error = GrammarCompiler::compile(
+            DeclarationEnvelope::new(LANGUAGE),
+            DeclarationEnvelope::new(&grammar),
+        )
+        .err()
+        .ok_or("an operator-variable schema was accepted")?;
 
         assert!(
             error
@@ -362,15 +350,15 @@ mod tests {
     fn compiler_refuses_late_schema_sort_arity_and_payload_faults() -> Result<(), Box<dyn Error>> {
         let cases = [
             (
-                r##"{"name":"X","pattern":"term","sort":"Nonexistent"}"##,
+                r#"{"name":"X","pattern":"term","sort":"Nonexistent"}"#,
                 "unknown sort \"Nonexistent\"",
             ),
             (
-                r##"{"name":"X","pattern":"term","sort":"Ty"}"##,
+                r#"{"name":"X","pattern":"term","sort":"Ty"}"#,
                 "not \"Cat\"",
             ),
             (
-                r##"{"arguments":[],"operator":{"kind":"fixed","name":"/"},"pattern":"node","payload":null}"##,
+                r#"{"arguments":[],"operator":{"kind":"fixed","name":"/"},"pattern":"node","payload":null}"#,
                 "arity 2 where sort \"Cat\" and arity 0 are required",
             ),
             (
@@ -378,22 +366,22 @@ mod tests {
                 "incompatible pattern payload None",
             ),
             (
-                r##"{"arguments":[{"name":"X","pattern":"term","sort":"Cat"},{"name":"Y","pattern":"term","sort":"Cat"}],"operator":{"kind":"fixed","name":"/"},"pattern":"node","payload":{"kind":"fixed","value":0}}"##,
+                r#"{"arguments":[{"name":"X","pattern":"term","sort":"Cat"},{"name":"Y","pattern":"term","sort":"Cat"}],"operator":{"kind":"fixed","name":"/"},"pattern":"node","payload":{"kind":"fixed","value":0}}"#,
                 "incompatible pattern payload Some",
             ),
         ];
 
         for (conclusion, message) in cases {
             let rule = format!(
-                r##"{{"restriction":null,"matching":null,"introduces":null,"consumes":null,"rule":"late","head_policy":"pass-through","theory":{{"forward_complete":false,"kind":"schemata","name":"malformed","schemata":[{{"conclusion":{conclusion},"premises":[]}}]}}}}"##
+                r#"{{"restriction":null,"matching":null,"introduces":null,"consumes":null,"rule":"late","head_policy":"pass-through","theory":{{"forward_complete":false,"kind":"schemata","name":"malformed","schemata":[{{"conclusion":{conclusion},"premises":[]}}]}}}}"#
             );
-            let grammar = grammar_with_rule(&rule);
-            let error = GrammarCompiler
-                .compile(
-                    DeclarationEnvelope::new(LANGUAGE),
-                    DeclarationEnvelope::new(&grammar),
-                )
-                .expect_err("a malformed late schema was accepted");
+            let grammar = grammar_with_rule(&rule)?;
+            let error = GrammarCompiler::compile(
+                DeclarationEnvelope::new(LANGUAGE),
+                DeclarationEnvelope::new(&grammar),
+            )
+            .err()
+            .ok_or("a malformed late schema was accepted")?;
 
             assert!(error.to_string().contains(message), "{error}");
         }
@@ -403,15 +391,15 @@ mod tests {
     #[test]
     fn compiler_refuses_one_index_variable_at_incompatible_binder_scopes()
     -> Result<(), Box<dyn Error>> {
-        let operator = r##"{"name":"bind","sort":"Cat","arg_sorts":["Cat"],"binding":[{"arguments":[0],"sort":"Cat","annotation":null}],"family":"binder","erases_to":null}"##;
-        let rule = r##"{"restriction":null,"matching":null,"introduces":null,"consumes":null,"rule":"late","head_policy":"pass-through","theory":{"forward_complete":false,"kind":"schemata","name":"binder-fault","schemata":[{"conclusion":{"arguments":[{"name":"X","pattern":"term","sort":"Cat"}],"operator":{"kind":"fixed","name":"bind"},"pattern":"node","payload":null},"premises":[{"name":"X","pattern":"term","sort":"Cat"}]}]}}"##;
-        let grammar = grammar_with_operator_and_rule(operator, rule);
-        let error = GrammarCompiler
-            .compile(
-                DeclarationEnvelope::new(LANGUAGE),
-                DeclarationEnvelope::new(&grammar),
-            )
-            .expect_err("one index variable crossed incompatible binder scopes");
+        let operator = r#"{"name":"bind","sort":"Cat","arg_sorts":["Cat"],"binding":[{"arguments":[0],"sort":"Cat","annotation":null}],"family":"binder","erases_to":null}"#;
+        let rule = r#"{"restriction":null,"matching":null,"introduces":null,"consumes":null,"rule":"late","head_policy":"pass-through","theory":{"forward_complete":false,"kind":"schemata","name":"binder-fault","schemata":[{"conclusion":{"arguments":[{"name":"X","pattern":"term","sort":"Cat"}],"operator":{"kind":"fixed","name":"bind"},"pattern":"node","payload":null},"premises":[{"name":"X","pattern":"term","sort":"Cat"}]}]}}"#;
+        let grammar = grammar_with_operator_and_rule(operator, rule)?;
+        let error = GrammarCompiler::compile(
+            DeclarationEnvelope::new(LANGUAGE),
+            DeclarationEnvelope::new(&grammar),
+        )
+        .err()
+        .ok_or("one index variable crossed incompatible binder scopes")?;
 
         assert!(error.to_string().contains("incompatible sorts"), "{error}");
         Ok(())

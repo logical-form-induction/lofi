@@ -485,7 +485,9 @@ impl fmt::Display for RulePlanErrorKind {
             Self::UnknownConstant { sort, name } => {
                 write!(formatter, "unknown constant {name:?} of sort {sort:?}")
             }
-            Self::InvalidPatternShape { reason } => formatter.write_str(reason),
+            Self::InvalidPatternShape { reason } | Self::UnenforceableRestriction { reason } => {
+                formatter.write_str(reason)
+            }
             Self::MalformedBuiltinComponent { family, kind } => {
                 write!(
                     formatter,
@@ -507,7 +509,6 @@ impl fmt::Display for RulePlanErrorKind {
                 "declares the same relation twice: {}, which does not change the relation over categories",
                 pairs.join("; ")
             ),
-            Self::UnenforceableRestriction { reason } => formatter.write_str(reason),
             Self::InventoryOverflow { size } => {
                 write!(
                     formatter,

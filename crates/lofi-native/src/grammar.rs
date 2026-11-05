@@ -81,7 +81,7 @@ impl PyCompiledPattern {
     }
 
     #[getter]
-    fn kind(&self) -> &'static str {
+    const fn kind(&self) -> &'static str {
         match &self.pattern {
             LinkedPattern::Term { .. } => "term",
             LinkedPattern::Constant { .. } => "constant",
@@ -205,7 +205,7 @@ impl PyCompiledPattern {
     }
 
     #[getter]
-    fn slot(&self) -> Option<u64> {
+    const fn slot(&self) -> Option<u64> {
         match &self.pattern {
             LinkedPattern::Spine { slot, .. } => Some(*slot),
             _ => None,
@@ -213,7 +213,7 @@ impl PyCompiledPattern {
     }
 
     #[getter]
-    fn min_order(&self) -> Option<u64> {
+    const fn min_order(&self) -> Option<u64> {
         match &self.pattern {
             LinkedPattern::Spine { min_order, .. } => Some(*min_order),
             _ => None,
@@ -221,7 +221,7 @@ impl PyCompiledPattern {
     }
 
     #[getter]
-    fn max_order(&self) -> Option<u64> {
+    const fn max_order(&self) -> Option<u64> {
         match &self.pattern {
             LinkedPattern::Spine { max_order, .. } => *max_order,
             _ => None,
@@ -338,14 +338,14 @@ impl PyCompiledRule {
         self.direct_schemata = recipe.has_direct_schemata();
     }
 
-    fn from_linked(rule: &LinkedRule, linked: &LinkedGrammar) -> PyResult<Self> {
+    fn from_metadata(rule: &LinkedRule) -> Self {
         let location = rule.location();
         let source = match location.source() {
             RulePlanSource::Explicit => "explicit",
             RulePlanSource::Combinator => "combinator",
             RulePlanSource::Coercion => "coercion",
         };
-        let mut entry = Self {
+        Self {
             identifier: rule.identifier(),
             tag: rule.tag().to_owned(),
             source,
@@ -391,7 +391,11 @@ impl PyCompiledRule {
             introduces: rule.introduces().map(<[String]>::to_vec),
             consumes: rule.consumes().map(<[String]>::to_vec),
             direct_schemata: false,
-        };
+        }
+    }
+
+    fn from_linked(rule: &LinkedRule, linked: &LinkedGrammar) -> PyResult<Self> {
+        let mut entry = Self::from_metadata(rule);
         match rule.kind() {
             LinkedRuleKind::Application { functor } => {
                 entry.kind = "application";
@@ -934,7 +938,6 @@ impl PyCompiledRule {
 
     fn coordination_phase_kernel(
         &self,
-        py: Python<'_>,
         pattern: &Bound<'_, PyRuleKernel>,
         pairs: &Bound<'_, PyAny>,
         targets: &Bound<'_, PyAny>,
@@ -942,6 +945,7 @@ impl PyCompiledRule {
         core_relation: &str,
         marking: Option<&str>,
     ) -> PyResult<Py<PyRuleKernel>> {
+        let py = pattern.py();
         if self.tag != "coordination" {
             return Err(PyValueError::new_err(format!(
                 "compiled rule {:?} is not coordination",
@@ -1183,12 +1187,11 @@ pub fn compile_grammar(
     language: &Bound<'_, PyBytes>,
     grammar: &Bound<'_, PyBytes>,
 ) -> PyResult<PyCompiledGrammar> {
-    let compiled = GrammarCompiler
-        .compile(
-            DeclarationEnvelope::new(language.as_bytes()),
-            DeclarationEnvelope::new(grammar.as_bytes()),
-        )
-        .map_err(|error| PyValueError::new_err(error.to_string()))?;
+    let compiled = GrammarCompiler::compile(
+        DeclarationEnvelope::new(language.as_bytes()),
+        DeclarationEnvelope::new(grammar.as_bytes()),
+    )
+    .map_err(|error| PyValueError::new_err(error.to_string()))?;
     let (linked, rules) = compiled.into_parts();
     Ok(PyCompiledGrammar { linked, rules })
 }

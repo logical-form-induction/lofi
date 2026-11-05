@@ -11,8 +11,6 @@ mod error;
 mod ir;
 mod rules;
 
-#[cfg(test)]
-pub(crate) use compiler::PreparedGrammarIr;
 pub use compiler::{CompiledGrammar, DeclarationEnvelope, GrammarCompiler};
 pub use error::{
     CompileError, DeclarationKind, LinkComponent, LinkError, LinkErrorKind, LinkLocation,
@@ -31,6 +29,13 @@ pub use rules::{
     LinkedPatternRecipe, LinkedPayloadPattern, LinkedRule, LinkedRuleKind, LinkedRulePlan,
     LinkedRuleRestriction, LinkedTheory, LinkedTheoryConstructor,
 };
+
+/// The typed declarations inside native grammar compilation.
+#[derive(Clone, Debug, PartialEq)]
+struct PreparedGrammarIr {
+    language: CanonicalLanguageIr,
+    grammar: CanonicalGrammarIr,
+}
 
 trait LinkDeclarations {
     fn link_declarations(&self, grammar: &GrammarIr) -> Result<LinkedGrammar, CompileError>;

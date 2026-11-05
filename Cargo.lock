@@ -246,7 +246,6 @@ name = "lofi-chart"
 version = "0.1.0"
 dependencies = [
  "gungraun",
- "indexmap",
  "num-bigint",
  "proptest",
  "rayon",

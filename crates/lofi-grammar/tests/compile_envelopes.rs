@@ -19,7 +19,7 @@ fn fixture_document(source: &[u8]) -> &[u8] {
 fn packaged_propositional_and_ccgbank_envelopes_compile() -> Result<(), Box<dyn Error>> {
     let language = fixture_document(PROPOSITIONAL);
     let grammar = fixture_document(CCGBANK);
-    let compiled = GrammarCompiler.compile(
+    let compiled = GrammarCompiler::compile(
         DeclarationEnvelope::new(language),
         DeclarationEnvelope::new(grammar),
     )?;
@@ -33,7 +33,7 @@ fn packaged_propositional_and_ccgbank_envelopes_compile() -> Result<(), Box<dyn 
 fn a_data_derived_resembling_lexicon_traverses_the_compile_route() -> Result<(), Box<dyn Error>> {
     let language = fixture_document(PROPOSITIONAL);
     let grammar = fixture_document(RESEMBLING);
-    let compiled = GrammarCompiler.compile(
+    let compiled = GrammarCompiler::compile(
         DeclarationEnvelope::new(language),
         DeclarationEnvelope::new(grammar),
     )?;
@@ -51,11 +51,11 @@ fn packaged_propositional_and_ccgbank_signatures_link_deterministically()
 -> Result<(), Box<dyn Error>> {
     let language = fixture_document(PROPOSITIONAL);
     let grammar = fixture_document(CCGBANK);
-    let first = GrammarCompiler.compile(
+    let first = GrammarCompiler::compile(
         DeclarationEnvelope::new(language),
         DeclarationEnvelope::new(grammar),
     )?;
-    let second = GrammarCompiler.compile(
+    let second = GrammarCompiler::compile(
         DeclarationEnvelope::new(language),
         DeclarationEnvelope::new(grammar),
     )?;
@@ -148,11 +148,11 @@ fn packaged_propositional_and_ccgbank_signatures_link_deterministically()
 
 #[test]
 fn packaged_ccgbank_rules_expand_to_one_exact_dense_plan() -> Result<(), Box<dyn Error>> {
-    let first = GrammarCompiler.compile(
+    let first = GrammarCompiler::compile(
         DeclarationEnvelope::new(fixture_document(PROPOSITIONAL)),
         DeclarationEnvelope::new(fixture_document(CCGBANK)),
     )?;
-    let second = GrammarCompiler.compile(
+    let second = GrammarCompiler::compile(
         DeclarationEnvelope::new(fixture_document(PROPOSITIONAL)),
         DeclarationEnvelope::new(fixture_document(CCGBANK)),
     )?;
@@ -165,7 +165,7 @@ fn packaged_ccgbank_rules_expand_to_one_exact_dense_plan() -> Result<(), Box<dyn
     assert_eq!(first.rules().len(), 36);
     assert_eq!(first.explicit_rules(), 20);
     assert_eq!(first.theory().constructors().len(), 38);
-    assert!(first.theory().elaborated().is_empty());
+    assert_eq!(first.theory().elaborated(), <[String; 0]>::default());
     assert_eq!(first.theory().constructors()[0].rule(), "n-to-np");
     assert_eq!(first.theory().constructors()[0].premises(), 1);
     assert_eq!(
@@ -255,7 +255,7 @@ fn identity_in_place_of_n_to_np(source: &str, category: &str) -> Result<String, 
         .ok_or("the fixture declares the n-to-np rule")?;
     let constant = serde_json::json!({"name": category, "pattern": "constant", "sort": null});
     rule["name"] = serde_json::json!("identity");
-    rule["premises"] = serde_json::json!([constant.clone()]);
+    rule["premises"] = serde_json::json!([constant]);
     rule["conclusion"] = constant;
     let declaration: GrammarIr = serde_json::from_value(document)?;
     Ok(String::from_utf8(canonical::grammar_bytes(&declaration)?)?)
@@ -272,7 +272,7 @@ fn rule_fingerprints_ignore_set_labels_and_distinguish_compiled_relations()
     let np = identity_in_place_of_n_to_np(&source, "NP")?;
     let vp = identity_in_place_of_n_to_np(&source, "VP")?;
     let compile = |grammar: &[u8]| {
-        GrammarCompiler.compile(
+        GrammarCompiler::compile(
             DeclarationEnvelope::new(fixture_document(PROPOSITIONAL)),
             DeclarationEnvelope::new(grammar),
         )
@@ -294,7 +294,7 @@ fn rule_fingerprints_ignore_set_labels_and_distinguish_compiled_relations()
 
 #[test]
 fn runtime_categories_name_absorbed_adjunct_and_raising_atoms_once() -> Result<(), Box<dyn Error>> {
-    let compiled = GrammarCompiler.compile(
+    let compiled = GrammarCompiler::compile(
         DeclarationEnvelope::new(fixture_document(PROPOSITIONAL)),
         DeclarationEnvelope::new(fixture_document(CCGBANK)),
     )?;
@@ -309,7 +309,7 @@ fn runtime_categories_name_absorbed_adjunct_and_raising_atoms_once() -> Result<(
 #[test]
 fn only_pattern_recipes_without_targets_or_spines_have_direct_schemata()
 -> Result<(), Box<dyn Error>> {
-    let compiled = GrammarCompiler.compile(
+    let compiled = GrammarCompiler::compile(
         DeclarationEnvelope::new(fixture_document(PROPOSITIONAL)),
         DeclarationEnvelope::new(fixture_document(CCGBANK)),
     )?;
@@ -325,7 +325,7 @@ fn only_pattern_recipes_without_targets_or_spines_have_direct_schemata()
         })
         .collect::<Vec<_>>();
 
-    assert!(!recipes.is_empty());
+    assert_ne!(recipes.len(), 0);
     for recipe in recipes {
         let direct = recipe.targets().is_none()
             && recipe.premises().iter().all(LinkedPattern::is_direct)

@@ -5,7 +5,7 @@ use lofi_chart::rule::{
     RaisingRule, RepresentativeKernel, RepresentativeTable, RestrictedRule, RuleError, RuleKernel,
     SubstitutionRule,
 };
-use lofi_chart::term::{OperatorSpec, PayloadKind, SignatureSpec, Term, TermStore};
+use lofi_chart::term::{OperatorSpec, PayloadKind, SignatureSpec, Term, TermError, TermStore};
 
 const NAMES: [&str; 5] = ["x", "y", "z0", "z1", "z2"];
 const FORWARD: u32 = 5;
@@ -35,7 +35,7 @@ fn slash(name: &str, erased: u32) -> OperatorSpec {
     }
 }
 
-fn store() -> TermStore {
+fn store() -> Result<TermStore, TermError> {
     let mut operators = NAMES
         .iter()
         .zip(0..)
@@ -58,7 +58,6 @@ fn store() -> TermStore {
         },
         256,
     )
-    .expect("the fixture signature is well formed")
 }
 
 struct Atoms {
@@ -67,17 +66,13 @@ struct Atoms {
     arguments: [Term; 3],
 }
 
-fn atoms(store: &TermStore) -> Atoms {
-    let intern = |operator| {
-        store
-            .intern(operator, vec![], None)
-            .expect("constants intern")
-    };
-    Atoms {
-        x: intern(0),
-        y: intern(1),
-        arguments: [intern(2), intern(3), intern(4)],
-    }
+fn atoms(store: &TermStore) -> Result<Atoms, TermError> {
+    let intern = |operator| store.intern(operator, vec![], None);
+    Ok(Atoms {
+        x: intern(0)?,
+        y: intern(1)?,
+        arguments: [intern(2)?, intern(3)?, intern(4)?],
+    })
 }
 
 fn functors() -> FunctorSpec {
@@ -90,18 +85,21 @@ fn functors() -> FunctorSpec {
     }
 }
 
-fn make(store: &TermStore, slash: u32, result: &Term, argument: &Term) -> Term {
-    store
-        .intern(slash, vec![result.clone(), argument.clone()], None)
-        .expect("functors intern")
+fn make(store: &TermStore, slash: u32, result: &Term, argument: &Term) -> Result<Term, TermError> {
+    store.intern(slash, vec![result.clone(), argument.clone()], None)
 }
 
-fn spine(store: &TermStore, foot: &Term, slashes: &[u32], arguments: &[Term]) -> Term {
+fn spine(
+    store: &TermStore,
+    foot: &Term,
+    slashes: &[u32],
+    arguments: &[Term],
+) -> Result<Term, TermError> {
     slashes
         .iter()
         .zip(arguments)
         .rev()
-        .fold(foot.clone(), |built, (slash, argument)| {
+        .try_fold(foot.clone(), |built, (slash, argument)| {
             make(store, *slash, &built, argument)
         })
 }
@@ -117,25 +115,24 @@ fn composition(order: Option<usize>, restriction: CompositionRestriction) -> Com
 }
 
 #[test]
-fn composition_witnesses_name_the_orientation_and_the_carried_spine() {
-    let store = store();
-    let atoms = atoms(&store);
-    let principal = make(&store, FORWARD, &atoms.x, &atoms.y);
-    let container = spine(&store, &atoms.y, &[FORWARD, FORWARD], &atoms.arguments[..2]);
-    let output = spine(&store, &atoms.x, &[FORWARD, FORWARD], &atoms.arguments[..2]);
+fn composition_witnesses_name_the_orientation_and_the_carried_spine()
+-> Result<(), Box<dyn std::error::Error>> {
+    let store = store()?;
+    let atoms = atoms(&store)?;
+    let principal = make(&store, FORWARD, &atoms.x, &atoms.y)?;
+    let container = spine(&store, &atoms.y, &[FORWARD, FORWARD], &atoms.arguments[..2])?;
+    let output = spine(&store, &atoms.x, &[FORWARD, FORWARD], &atoms.arguments[..2])?;
     let rule = composition(None, CompositionRestriction::Steedman);
     let mut table = RepresentativeTable::default();
     let inputs = [principal, container];
 
-    let witnesses = rule
-        .witnesses(
-            &store,
-            &RepresentativeKernel::Identity,
-            &mut table,
-            &inputs,
-            &output,
-        )
-        .expect("the step is well formed");
+    let witnesses = rule.witnesses(
+        &store,
+        &RepresentativeKernel::Identity,
+        &mut table,
+        &inputs,
+        &output,
+    )?;
 
     assert_eq!(
         witnesses,
@@ -168,25 +165,27 @@ fn composition_witnesses_name_the_orientation_and_the_carried_spine() {
         Ok(None),
         "a conclusion the rule does not draw has no order"
     );
+    Ok(())
 }
 
 #[test]
-fn composition_witnesses_refuse_a_spine_the_restriction_forbids() {
-    let store = store();
-    let atoms = atoms(&store);
-    let principal = make(&store, FORWARD, &atoms.x, &atoms.y);
+fn composition_witnesses_refuse_a_spine_the_restriction_forbids()
+-> Result<(), Box<dyn std::error::Error>> {
+    let store = store()?;
+    let atoms = atoms(&store)?;
+    let principal = make(&store, FORWARD, &atoms.x, &atoms.y)?;
     let container = spine(
         &store,
         &atoms.y,
         &[BACKWARD, FORWARD],
         &atoms.arguments[..2],
-    );
+    )?;
     let output = spine(
         &store,
         &atoms.x,
         &[BACKWARD, FORWARD],
         &atoms.arguments[..2],
-    );
+    )?;
     let inputs = [principal, container];
     let mut table = RepresentativeTable::default();
 
@@ -195,51 +194,46 @@ fn composition_witnesses_refuse_a_spine_the_restriction_forbids() {
         (CompositionRestriction::Kuhlmann, true),
         (CompositionRestriction::Unrestricted, true),
     ] {
-        let witnesses = composition(Some(2), restriction)
-            .witnesses(
-                &store,
-                &RepresentativeKernel::Identity,
-                &mut table,
-                &inputs,
-                &output,
-            )
-            .expect("the step is well formed");
+        let witnesses = composition(Some(2), restriction).witnesses(
+            &store,
+            &RepresentativeKernel::Identity,
+            &mut table,
+            &inputs,
+            &output,
+        )?;
         assert_eq!(
             !witnesses.is_empty(),
             licensed,
             "{restriction:?} decides a mixed shallow frame"
         );
     }
+    Ok(())
 }
 
 #[test]
-fn composition_residuals_recover_each_missing_premise() {
-    let store = store();
-    let atoms = atoms(&store);
-    let principal = make(&store, FORWARD, &atoms.x, &atoms.y);
-    let container = spine(&store, &atoms.y, &[FORWARD], &atoms.arguments[..1]);
-    let output = spine(&store, &atoms.x, &[FORWARD], &atoms.arguments[..1]);
+fn composition_residuals_recover_each_missing_premise() -> Result<(), Box<dyn std::error::Error>> {
+    let store = store()?;
+    let atoms = atoms(&store)?;
+    let principal = make(&store, FORWARD, &atoms.x, &atoms.y)?;
+    let container = spine(&store, &atoms.y, &[FORWARD], &atoms.arguments[..1])?;
+    let output = spine(&store, &atoms.x, &[FORWARD], &atoms.arguments[..1])?;
     let kernel = RuleKernel::Composition(composition(Some(1), CompositionRestriction::Steedman));
     let mut table = RepresentativeTable::default();
 
-    let principals = kernel
-        .residuate(
-            &store,
-            &RepresentativeKernel::Identity,
-            &mut table,
-            &output,
-            &[None, Some(container.clone())],
-        )
-        .expect("the hole is supported");
-    let containers = kernel
-        .residuate(
-            &store,
-            &RepresentativeKernel::Identity,
-            &mut table,
-            &output,
-            &[Some(principal.clone()), None],
-        )
-        .expect("the hole is supported");
+    let principals = kernel.residuate(
+        &store,
+        &RepresentativeKernel::Identity,
+        &mut table,
+        &output,
+        &[None, Some(container.clone())],
+    )?;
+    let containers = kernel.residuate(
+        &store,
+        &RepresentativeKernel::Identity,
+        &mut table,
+        &output,
+        &[Some(principal.clone()), None],
+    )?;
 
     assert_eq!(principals, vec![principal], "the principal is recovered");
     assert_eq!(containers, vec![container], "the container is recovered");
@@ -254,17 +248,19 @@ fn composition_residuals_recover_each_missing_premise() {
         Ok(Vec::new()),
         "two holes have no finite residual"
     );
+    Ok(())
 }
 
 #[test]
-fn substitution_residuals_rebuild_the_conclusion_spine_around_the_argument() {
-    let store = store();
-    let atoms = atoms(&store);
+fn substitution_residuals_rebuild_the_conclusion_spine_around_the_argument()
+-> Result<(), Box<dyn std::error::Error>> {
+    let store = store()?;
+    let atoms = atoms(&store)?;
     let shared = &atoms.arguments[0];
-    let foot = make(&store, FORWARD, &atoms.x, &atoms.y);
-    let functor = make(&store, FORWARD, &foot, shared);
-    let container = make(&store, FORWARD, &atoms.y, shared);
-    let output = make(&store, FORWARD, &atoms.x, shared);
+    let foot = make(&store, FORWARD, &atoms.x, &atoms.y)?;
+    let functor = make(&store, FORWARD, &foot, shared)?;
+    let container = make(&store, FORWARD, &atoms.y, shared)?;
+    let output = make(&store, FORWARD, &atoms.x, shared)?;
     let kernel = RuleKernel::Substitution(SubstitutionRule {
         functors: functors(),
         order: Some(1),
@@ -295,14 +291,16 @@ fn substitution_residuals_rebuild_the_conclusion_spine_around_the_argument() {
         Ok(true),
         "the forward step is admitted"
     );
+    Ok(())
 }
 
 #[test]
-fn undeclared_raising_targets_admit_and_residuate_without_enumerating() {
-    let store = store();
-    let atoms = atoms(&store);
-    let inner = make(&store, BACKWARD, &atoms.x, &atoms.y);
-    let raised = make(&store, FORWARD, &atoms.x, &inner);
+fn undeclared_raising_targets_admit_and_residuate_without_enumerating()
+-> Result<(), Box<dyn std::error::Error>> {
+    let store = store()?;
+    let atoms = atoms(&store)?;
+    let inner = make(&store, BACKWARD, &atoms.x, &atoms.y)?;
+    let raised = make(&store, FORWARD, &atoms.x, &inner)?;
     let open = RuleKernel::Raising(RaisingRule {
         functors: functors(),
         slash: "fwd".to_owned(),
@@ -344,20 +342,22 @@ fn undeclared_raising_targets_admit_and_residuate_without_enumerating() {
         Ok(false),
         "a target outside the declared set is refused"
     );
+    Ok(())
 }
 
 #[test]
-fn declared_raising_arguments_bound_every_direction_of_the_rule() {
-    let store = store();
-    let atoms = atoms(&store);
+fn declared_raising_arguments_bound_every_direction_of_the_rule()
+-> Result<(), Box<dyn std::error::Error>> {
+    let store = store()?;
+    let atoms = atoms(&store)?;
     let target = atoms.arguments[0].clone();
-    let functor = make(&store, FORWARD, &atoms.x, &atoms.y);
-    let raise = |input: &Term| {
-        let inner = make(&store, BACKWARD, &target, input);
+    let functor = make(&store, FORWARD, &atoms.x, &atoms.y)?;
+    let raise = |input: &Term| -> Result<Term, TermError> {
+        let inner = make(&store, BACKWARD, &target, input)?;
         make(&store, FORWARD, &target, &inner)
     };
-    let raised_atom = raise(&atoms.x);
-    let raised_functor = raise(&functor);
+    let raised_atom = raise(&atoms.x)?;
+    let raised_functor = raise(&functor)?;
     let rule = RuleKernel::Raising(RaisingRule {
         functors: functors(),
         slash: "fwd".to_owned(),
@@ -411,21 +411,23 @@ fn declared_raising_arguments_bound_every_direction_of_the_rule() {
         Ok(vec![atoms.x]),
         "a raised declared argument is recovered"
     );
+    Ok(())
 }
 
 #[test]
-fn a_restricted_kernel_admits_only_declared_primary_targets_and_secondaries() {
-    let store = store();
-    let atoms = atoms(&store);
+fn a_restricted_kernel_admits_only_declared_primary_targets_and_secondaries()
+-> Result<(), Box<dyn std::error::Error>> {
+    let store = store()?;
+    let atoms = atoms(&store)?;
     let z = atoms.arguments[0].clone();
     let allowed = make(
         &store,
         FORWARD,
-        &make(&store, FORWARD, &atoms.x, &z),
+        &make(&store, FORWARD, &atoms.x, &z)?,
         &atoms.y,
-    );
-    let refused = make(&store, FORWARD, &atoms.y, &atoms.y);
-    let output = make(&store, FORWARD, &atoms.x, &z);
+    )?;
+    let refused = make(&store, FORWARD, &atoms.y, &atoms.y)?;
+    let output = make(&store, FORWARD, &atoms.x, &z)?;
     let rule = RuleKernel::Restricted(Box::new(RestrictedRule {
         rule: RuleKernel::Composition(composition(Some(0), CompositionRestriction::Unrestricted)),
         restriction: PremiseRestriction {
@@ -504,12 +506,13 @@ fn a_restricted_kernel_admits_only_declared_primary_targets_and_secondaries() {
         Ok(Vec::new()),
         "an undeclared secondary has no residual"
     );
+    Ok(())
 }
 
 #[test]
-fn a_kernel_without_a_residual_refuses_residuation() {
-    let store = store();
-    let atoms = atoms(&store);
+fn a_kernel_without_a_residual_refuses_residuation() -> Result<(), Box<dyn std::error::Error>> {
+    let store = store()?;
+    let atoms = atoms(&store)?;
     let mut table = RepresentativeTable::default();
 
     assert!(
@@ -525,4 +528,5 @@ fn a_kernel_without_a_residual_refuses_residuation() {
         ),
         "an empty kernel declares no residual"
     );
+    Ok(())
 }

@@ -42,7 +42,7 @@ pub enum LinkedPattern {
         /// Fixed or variable operator position.
         operator: LinkedOperatorPattern,
         /// Child patterns in operator-argument order.
-        arguments: Vec<LinkedPattern>,
+        arguments: Vec<Self>,
         /// Optional fixed or variable payload position.
         payload: Option<LinkedPayloadPattern>,
     },
@@ -51,7 +51,7 @@ pub enum LinkedPattern {
         /// Shared spine-variable name.
         name: String,
         /// Pattern at the foot of the spine.
-        core: Box<LinkedPattern>,
+        core: Box<Self>,
         /// Operators admitted at each frame.
         operators: Vec<String>,
         /// Child slot that continues the spine.
@@ -556,16 +556,16 @@ impl LinkedTheory {
 }
 
 impl LinkedRule {
-    pub(crate) const fn new(
+    pub(crate) fn new(
         identifier: u32,
         tag: String,
         location: RulePlanLocation,
         kind: LinkedRuleKind,
         matching: Option<String>,
         restriction: Option<LinkedRuleRestriction>,
-        introduces: Option<Vec<String>>,
-        consumes: Option<Vec<String>>,
+        markers: (Option<Vec<String>>, Option<Vec<String>>),
     ) -> Self {
+        let (introduces, consumes) = markers;
         Self {
             identifier,
             tag,

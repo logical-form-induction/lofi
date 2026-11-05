@@ -17,7 +17,8 @@ use lofi_chart::semiring::{
 };
 
 #[test]
-fn factored_pair_axes_reject_empty_rows_and_remap_owned_ranges() {
+fn factored_pair_axes_reject_empty_rows_and_remap_owned_ranges()
+-> Result<(), Box<dyn std::error::Error>> {
     let mut selected = PairBatch::default();
     assert_eq!(
         selected.push_product(0, 1, Vec::new(), vec![0]),
@@ -27,19 +28,13 @@ fn factored_pair_axes_reject_empty_rows_and_remap_owned_ranges() {
         selected.push_product(0, 1, vec![0], Vec::new()),
         Err(ChartError::EmptyFactoredAxis)
     );
-    assert!(selected.products.is_empty());
+    assert_eq!(selected.products.len(), 0);
     assert_eq!(selected.axis_items(), 0);
 
-    selected
-        .push_product(1, 8, vec![2, 0, 2], vec![3, 1])
-        .expect("fixture axes are nonempty");
+    selected.push_product(1, 8, vec![2, 0, 2], vec![3, 1])?;
     let mut incoming = PairBatch::default();
-    incoming
-        .push_product(0, 7, vec![4, 2], vec![5])
-        .expect("fixture axes are nonempty");
-    selected
-        .extend_products(incoming)
-        .expect("fixture arenas fit the compact offset width");
+    incoming.push_product(0, 7, vec![4, 2], vec![5])?;
+    selected.extend_products(incoming)?;
     selected.sort_products();
 
     let rows = selected
@@ -47,12 +42,10 @@ fn factored_pair_axes_reject_empty_rows_and_remap_owned_ranges() {
         .iter()
         .enumerate()
         .map(|(product_at, product)| {
-            let [left, right] = selected
-                .product_axes_at(product_at)
-                .expect("each product belongs to the selected batch");
-            (product.rule, product.output, left.to_vec(), right.to_vec())
+            let [left, right] = selected.product_axes_at(product_at)?;
+            Ok::<_, ChartError>((product.rule, product.output, left.to_vec(), right.to_vec()))
         })
-        .collect::<Vec<_>>();
+        .collect::<Result<Vec<_>, _>>()?;
     assert_eq!(
         rows,
         vec![(1, 8, vec![0, 2], vec![1, 3]), (0, 7, vec![2, 4], vec![5]),]
@@ -64,6 +57,7 @@ fn factored_pair_axes_reject_empty_rows_and_remap_owned_ranges() {
             products: 2,
         })
     );
+    Ok(())
 }
 
 #[derive(Default)]
@@ -115,7 +109,7 @@ struct MultiOutputResolver {
 }
 
 impl InsideResolver<Count> for MultiOutputResolver {
-    type Error = Infallible;
+    type Error = ChartError;
 
     fn rules_of_arity(&mut self, arity: usize) -> Result<Vec<u16>, Self::Error> {
         Ok((arity == 2).then_some(0).into_iter().collect())
@@ -150,14 +144,12 @@ impl InsideResolver<Count> for MultiOutputResolver {
                     .into_iter()
                     .filter(|output| self.kept.is_none_or(|kept| kept == *output))
                 {
-                    selected
-                        .push_product(
-                            0,
-                            output,
-                            (0..batch.left.len()).collect(),
-                            (0..batch.right.len()).collect(),
-                        )
-                        .expect("fixture product axes are nonempty");
+                    selected.push_product(
+                        0,
+                        output,
+                        (0..batch.left.len()).collect(),
+                        (0..batch.right.len()).collect(),
+                    )?;
                 }
                 Ok(selected)
             })
@@ -1418,7 +1410,8 @@ fn inside_sweep_factors_child_products_across_rule_outputs() {
 }
 
 #[test]
-fn premise_products_preserve_sparse_raised_feature_rows_inside_and_forest() {
+fn premise_products_preserve_sparse_raised_feature_rows_inside_and_forest()
+-> Result<(), Box<dyn std::error::Error>> {
     let semiring = Counting;
     let mut inside = InsideTable::new(2);
     let mut forest = ForestTable::new(2);
@@ -1487,7 +1480,7 @@ fn premise_products_preserve_sparse_raised_feature_rows_inside_and_forest() {
     ];
     assert_eq!(inside.tagged_at((0, 2)), Ok(admitted.to_vec()));
     assert_eq!(
-        require_table(forest.items_at((0, 2)))
+        require_table(forest.items_at((0, 2)))?
             .into_iter()
             .map(|key| (key.item, forest.inside(key, &semiring)))
             .collect::<Vec<_>>(),
@@ -1501,7 +1494,7 @@ fn premise_products_preserve_sparse_raised_feature_rows_inside_and_forest() {
             tag: 2,
         },
     };
-    let products = require_table(forest.products(premise_key));
+    let products = require_table(forest.products(premise_key))?;
     assert_eq!(
         products
             .iter()
@@ -1511,10 +1504,11 @@ fn premise_products_preserve_sparse_raised_feature_rows_inside_and_forest() {
         "equal admitted-right sets form disjoint rectangles"
     );
     assert_eq!(
-        require_table(forest.edges(premise_key)).len(),
+        require_table(forest.edges(premise_key))?.len(),
         5,
         "rectangle expansion preserves exact edge multiplicity"
     );
+    Ok(())
 }
 
 #[test]
@@ -1731,24 +1725,23 @@ fn forest_table_preserves_child_order_exact_tags_and_inside_weights() {
     assert_eq!(table.num_edges(), 4);
 }
 
-fn forest_key(span: Span, category: u32) -> ForestKey {
+const fn forest_key(span: Span, category: u32) -> ForestKey {
     ForestKey {
         span,
         item: ItemId { category, tag: 0 },
     }
 }
 
-fn require_table<T, E: std::fmt::Debug>(result: Result<T, E>) -> T {
-    match result {
-        Ok(value) => value,
-        Err(error) => panic!("the product fixture is valid: {error:?}"),
-    }
+fn require_table<T, E: std::fmt::Debug>(result: Result<T, E>) -> Result<T, String> {
+    result.map_err(|error| format!("the product fixture is invalid: {error:?}"))
 }
+
+type ForestValue<W> = (W, Vec<ForestEdge<u16, W>>);
 
 fn product_and_flat<W, S>(
     semiring: &S,
-    weights: [W; 5],
-) -> ((W, Vec<ForestEdge<u16, W>>), (W, Vec<ForestEdge<u16, W>>))
+    weights: &[W; 5],
+) -> Result<(ForestValue<W>, ForestValue<W>), String>
 where
     W: Clone,
     S: Semiring<Weight = W>,
@@ -1777,7 +1770,7 @@ where
                     order: 0,
                 },
                 semiring,
-            ));
+            ))?;
         }
     }
     let local = weights[4].clone();
@@ -1792,7 +1785,7 @@ where
             order: 2,
         },
         semiring,
-    ));
+    ))?;
     for first in left {
         for second in right {
             require_table(flat.add(
@@ -1806,49 +1799,50 @@ where
                     order: 2,
                 },
                 semiring,
-            ));
+            ))?;
         }
     }
-    (
+    Ok((
         (
             product.inside(parent, semiring),
-            require_table(product.edges(parent)),
+            require_table(product.edges(parent))?,
         ),
         (
             flat.inside(parent, semiring),
-            require_table(flat.edges(parent)),
+            require_table(flat.edges(parent))?,
         ),
-    )
+    ))
 }
 
 #[test]
-fn product_alternatives_equal_flat_edges_under_every_native_semiring() {
+fn product_alternatives_equal_flat_edges_under_every_native_semiring()
+-> Result<(), Box<dyn std::error::Error>> {
     let (product, flat) = product_and_flat(
         &Counting,
-        [
+        &[
             Count::Small(2),
             Count::Small(3),
             Count::Small(5),
             Count::Small(7),
             Count::Small(11),
         ],
-    );
+    )?;
     assert_eq!(product, flat);
 
-    let (product, flat) = product_and_flat(&Boolean, [true; 5]);
+    let (product, flat) = product_and_flat(&Boolean, &[true; 5])?;
     assert_eq!(product, flat);
 
-    let (product, flat) = product_and_flat(&Viterbi, [1.0, 2.0, 3.0, 4.0, 5.0]);
+    let (product, flat) = product_and_flat(&Viterbi, &[1.0, 2.0, 3.0, 4.0, 5.0])?;
     assert_eq!(product, flat);
 
     let logs = [0.2_f64, 0.3, 0.5, 0.7, 0.9].map(f64::ln);
-    let (product, flat) = product_and_flat(&LogInside, logs);
+    let (product, flat) = product_and_flat(&LogInside, &logs)?;
     assert!((product.0 - flat.0).abs() <= 1e-12);
     assert_eq!(product.1, flat.1);
 
     let width = NonZeroUsize::new(3).unwrap_or(NonZeroUsize::MIN);
     let ranked = [1.0, 2.0, 3.0, 4.0, 5.0].map(|weight| vec![weight].into_boxed_slice());
-    let (product, flat) = product_and_flat(&KBest::new(width), ranked);
+    let (product, flat) = product_and_flat(&KBest::new(width), &ranked)?;
     assert_eq!(product, flat);
 
     let expected = [
@@ -1858,12 +1852,14 @@ fn product_alternatives_equal_flat_edges_under_every_native_semiring() {
         (7.0, vec![4.0].into_boxed_slice()),
         (11.0, vec![5.0].into_boxed_slice()),
     ];
-    let (product, flat) = product_and_flat(&Expectation::new(NonZeroUsize::MIN), expected);
+    let (product, flat) = product_and_flat(&Expectation::new(NonZeroUsize::MIN), &expected)?;
     assert_eq!(product, flat);
+    Ok(())
 }
 
 #[test]
-fn product_alternatives_preserve_order_and_edge_occurrence_multiplicity() {
+fn product_alternatives_preserve_order_and_edge_occurrence_multiplicity()
+-> Result<(), Box<dyn std::error::Error>> {
     let semiring = Counting;
     let left = [forest_key((0, 1), 0), forest_key((0, 1), 1)];
     let right = forest_key((1, 2), 2);
@@ -1881,7 +1877,7 @@ fn product_alternatives_preserve_order_and_edge_occurrence_multiplicity() {
                 order: 0,
             },
             &semiring,
-        ));
+        ))?;
     }
     let alternative = ProductAlternative {
         label: 7,
@@ -1891,10 +1887,10 @@ fn product_alternatives_preserve_order_and_edge_occurrence_multiplicity() {
         split: Some(1),
         order: 0,
     };
-    require_table(table.add_product(parent, alternative.clone(), &semiring));
-    require_table(table.add_product(parent, alternative, &semiring));
+    require_table(table.add_product(parent, alternative.clone(), &semiring))?;
+    require_table(table.add_product(parent, alternative, &semiring))?;
 
-    let edges = require_table(table.edges(parent));
+    let edges = require_table(table.edges(parent))?;
     assert_eq!(edges.len(), 4);
     assert_eq!(edges[0].children, vec![left[0], right]);
     assert_eq!(edges[1].children, vec![left[1], right]);
@@ -1902,10 +1898,12 @@ fn product_alternatives_preserve_order_and_edge_occurrence_multiplicity() {
     assert_eq!(edges[3], edges[1]);
     assert_eq!(table.inside(parent, &semiring), Count::Small(50));
     assert_eq!(table.num_edges(), 7);
+    Ok(())
 }
 
 #[test]
-fn restricting_product_axes_matches_restricting_flat_edges() {
+fn restricting_product_axes_matches_restricting_flat_edges()
+-> Result<(), Box<dyn std::error::Error>> {
     let semiring = Counting;
     let first = forest_key((0, 1), 0);
     let second = forest_key((0, 1), 1);
@@ -1925,7 +1923,7 @@ fn restricting_product_axes_matches_restricting_flat_edges() {
                     order: 0,
                 },
                 &semiring,
-            ));
+            ))?;
         }
     }
     require_table(product.add_product(
@@ -1939,7 +1937,7 @@ fn restricting_product_axes_matches_restricting_flat_edges() {
             order: 0,
         },
         &semiring,
-    ));
+    ))?;
     for child in [first, second] {
         require_table(flat.add(
             parent,
@@ -1952,11 +1950,11 @@ fn restricting_product_axes_matches_restricting_flat_edges() {
                 order: 0,
             },
             &semiring,
-        ));
+        ))?;
     }
 
-    require_table(product.restrict((0, 1), &[first, parent], &semiring, true));
-    require_table(flat.restrict((0, 1), &[first, parent], &semiring, true));
+    require_table(product.restrict((0, 1), &[first, parent], &semiring, true))?;
+    require_table(flat.restrict((0, 1), &[first, parent], &semiring, true))?;
 
     assert_eq!(product.items_at((0, 1)), flat.items_at((0, 1)));
     assert_eq!(
@@ -1965,4 +1963,5 @@ fn restricting_product_axes_matches_restricting_flat_edges() {
     );
     assert_eq!(product.edges(parent), flat.edges(parent));
     assert_eq!(product.num_edges(), flat.num_edges());
+    Ok(())
 }

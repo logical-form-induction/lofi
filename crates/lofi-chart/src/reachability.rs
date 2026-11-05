@@ -2558,11 +2558,11 @@ mod tests {
 
     #[test]
     fn root_demands_refine_lexical_spans_and_binary_applications()
-    -> Result<(), crate::rule::RuleError> {
+    -> Result<(), Box<dyn std::error::Error>> {
         let (store, terms, plan) = sentence()?;
         let c = store.intern(2, Vec::new(), None)?;
         let [a, b, root] = terms.as_slice() else {
-            panic!("the fixture supplies two leaves and one root")
+            return Err("the fixture supplies two leaves and one root".into());
         };
 
         assert!(plan.keeps((0, 1), a));
