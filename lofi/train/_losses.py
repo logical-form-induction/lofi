@@ -292,7 +292,7 @@ class LossBindingContext(FrozenValue):
         role : str
             Role named by the loss declaration.
         expected : type[ComponentT]
-            Concrete family admitted at this B-2 slot.
+            Concrete component family required by this loss role.
         family : str
             Component-family name used in errors.
 

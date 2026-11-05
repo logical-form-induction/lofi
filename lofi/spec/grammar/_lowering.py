@@ -202,7 +202,7 @@ def _native_plan(
     *,
     name: str,
 ) -> _CompiledGrammar:
-    """Compile one immutable declaration envelope pair through native B-3."""
+    """Compile one immutable declaration envelope pair with the native compiler."""
     try:
         return _compile_grammar(language, grammar)
     except (KeyError, TypeError, ValueError) as error:
@@ -467,7 +467,7 @@ def _assemble(
 
 
 class GrammarIso:
-    """Convert declaration envelopes through the one native B-3 compiler.
+    """Convert declaration envelopes through the native grammar compiler.
 
     A converter compiles each equal declaration pair once. A fresh converter
     still performs the complete native crossing on its first call.
