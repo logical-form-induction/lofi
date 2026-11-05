@@ -87,12 +87,19 @@ def draw(run):
     return PLUGIN.lower(PLUGIN.check(declaration), policy).inference
 
 
-joint = "data/datasets/train/dataset/source/interpretation/meanings/source/structure/joint"
+joint = (
+    "data/datasets/train/dataset/source/interpretation/meanings/source/structure/joint"
+)
 
 for profile in ("i6-du-c0", "i12-dp-cp"):
     run = codec(Path("experiments/l3/l3-run.yaml"), overrides=(f"{joint}={profile}",))
     semantic = draw(run).semantic
-    print(profile, dict(semantic.lexicon.sizes), dict(semantic.symbols_used), semantic.concordance)
+    print(
+        profile,
+        dict(semantic.lexicon.sizes),
+        dict(semantic.symbols_used),
+        semantic.concordance,
+    )
 ```
 
 ```text

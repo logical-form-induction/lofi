@@ -51,7 +51,7 @@ def variations() -> dict[str, LaunchRequest]:
         "root": a_request(root="/elsewhere"),
         "points": a_request(points=("a", "b", "c")),
         "program": a_request(program=("-m", "lofi.run")),
-        "profile": a_request(profile=a_profile(Path("/sites"), tag="varied")),
+        "profile": a_request(profile=a_profile(Path("sites").resolve(), tag="varied")),
     }
 
 

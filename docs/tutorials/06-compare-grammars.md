@@ -287,8 +287,17 @@ source-win-threshold None None
 The verdict row records which conditions the source grammar met:
 
 ```python
-[verdict] = (row for row in reduction.rows if row["reducer"] == "source-comparison-verdict")
-for key in ("winner", "source_rank", "beats_candidates", "beats_twins", "validity_controls_pass", "positive"):
+[verdict] = (
+    row for row in reduction.rows if row["reducer"] == "source-comparison-verdict"
+)
+for key in (
+    "winner",
+    "source_rank",
+    "beats_candidates",
+    "beats_twins",
+    "validity_controls_pass",
+    "positive",
+):
     print(key, verdict[key])
 ```
 

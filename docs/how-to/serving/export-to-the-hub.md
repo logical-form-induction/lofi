@@ -51,9 +51,13 @@ from pathlib import Path
 from lofi.run import HubReleaseDeclaration
 from lofi.spec import SpecLoader
 
-release = SpecLoader().compose_traced(
-    Path("docs/examples/running/release.yaml"), schema=HubReleaseDeclaration
-).spec
+release = (
+    SpecLoader()
+    .compose_traced(
+        Path("docs/examples/running/release.yaml"), schema=HubReleaseDeclaration
+    )
+    .spec
+)
 print(release.model_name, release.datasets, release.license_expression)
 ```
 

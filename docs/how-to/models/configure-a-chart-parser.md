@@ -69,9 +69,15 @@ document does:
 ```python
 tagged = codec(
     document,
-    overrides=('model.parser={"kind": "tagged", "width": 8, "unary_depth": 2, "k_best": 4}',),
+    overrides=(
+        'model.parser={"kind": "tagged", "width": 8, "unary_depth": 2, "k_best": 4}',
+    ),
 )
-print(tagged.model.parser.kind, tagged.model.parser.unary_depth, tagged.model.parser.k_best)
+print(
+    tagged.model.parser.kind,
+    tagged.model.parser.unary_depth,
+    tagged.model.parser.k_best,
+)
 print(sorted(tagged.model.parser.chart_outputs()))
 ```
 
@@ -231,7 +237,10 @@ component does:
 
 ```python
 try:
-    codec(document, overrides=("/parse=viterbi-beam", 'parse.semiring={"kind": "counting"}'))
+    codec(
+        document,
+        overrides=("/parse=viterbi-beam", 'parse.semiring={"kind": "counting"}'),
+    )
 except ConfigValueError as refused:
     print(refused)
 ```
@@ -253,7 +262,10 @@ sentence. It needs a sum over derivations, so it is refused under `viterbi`:
 ```python
 measured = codec(
     document,
-    overrides=('parse.pruner={"kind": "top-k", "width": 8}', "parse.measure_pruned_mass=true"),
+    overrides=(
+        'parse.pruner={"kind": "top-k", "width": 8}',
+        "parse.measure_pruned_mass=true",
+    ),
 )
 print(measured.parse.build().measure_pruned_mass)
 

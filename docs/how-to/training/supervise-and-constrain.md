@@ -272,7 +272,9 @@ document = Path("docs/examples/models-training/negative-brackets.yaml")
 brackets = codec(document)
 source = brackets.data.datasets["train"].constraint_source
 pinning = brackets.loss.terms[-1].objective
-print(source.kind, source.constraint_route(), pinning.readout, pinning.constraint_route())
+print(
+    source.kind, source.constraint_route(), pinning.readout, pinning.constraint_route()
+)
 print(trainer_plugin(brackets.trainer).plan(brackets.trainer, brackets))
 ```
 
@@ -288,7 +290,9 @@ switched to brackets still carries a `pinning` term that reads `types`:
 ```python
 mismatched = codec(
     Path("lofi/configs/run/synthetic-pinning-constituent.yaml"),
-    overrides=("data.datasets.train.constraint_source.clamp.require_constituent=false",),
+    overrides=(
+        "data.datasets.train.constraint_source.clamp.require_constituent=false",
+    ),
 )
 try:
     trainer_plugin(mismatched.trainer).plan(mismatched.trainer, mismatched)
@@ -332,8 +336,13 @@ negated; both combinations are refused at composition:
 
 ```python
 refusal(document, ("data.datasets.train.constraint_source.clamp.negate=true",))
-refusal(document, ("data.datasets.train.constraint_source.clamp.mode=soft",
-                   "data.datasets.train.constraint_source.clamp.penalty=0.25"))
+refusal(
+    document,
+    (
+        "data.datasets.train.constraint_source.clamp.mode=soft",
+        "data.datasets.train.constraint_source.clamp.penalty=0.25",
+    ),
+)
 ```
 
 ```text

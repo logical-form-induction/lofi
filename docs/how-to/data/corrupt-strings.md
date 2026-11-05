@@ -194,7 +194,10 @@ decides how often that label is observed as grammatical. The negative-data
 from lofi.spec import UnknownSettingError
 
 try:
-    codec(document, overrides=("data.datasets.train.dataset.corruption.regime=label-flips",))
+    codec(
+        document,
+        overrides=("data.datasets.train.dataset.corruption.regime=label-flips",),
+    )
 except UnknownSettingError as refused:
     print(str(refused).split(";")[0])
 ```

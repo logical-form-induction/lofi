@@ -190,7 +190,12 @@ The record's top-level fields:
 import json
 
 layer = json.loads(record)
-print({key: layer[key] for key in ("expression", "formalism", "kind", "subkind", "sourceMethod")})
+print(
+    {
+        key: layer[key]
+        for key in ("expression", "formalism", "kind", "subkind", "sourceMethod")
+    }
+)
 print(layer["licensing"])
 ```
 

@@ -130,12 +130,14 @@ corpus = plan_training(run).lower_dataset("train").corpus
 
 print(corpus.length.achieved, corpus.length.resampled)
 print(Counter(example.item.split for example in corpus.examples))
-print(Counter(
-    node.rule
-    for example in corpus.examples
-    for node in example.supervision.derivation.nodes.values()
-    if node.rule is not None
-))
+print(
+    Counter(
+        node.rule
+        for example in corpus.examples
+        for node in example.supervision.derivation.nodes.values()
+        if node.rule is not None
+    )
+)
 ```
 
 ```text

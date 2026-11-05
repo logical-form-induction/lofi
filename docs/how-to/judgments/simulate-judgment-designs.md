@@ -34,7 +34,10 @@ one cutpoint at each interior boundary, so a design over `levels` levels on
 Draw one and read what its provenance records:
 
 ```python
-from lofi.judgment.synthetic_designs import KNOWN_RANDOM_EFFECTS, PRIOR_PREDICTIVE_REFERENCE
+from lofi.judgment.synthetic_designs import (
+    KNOWN_RANDOM_EFFECTS,
+    PRIOR_PREDICTIVE_REFERENCE,
+)
 from lofi.spec import load_plugins
 
 load_plugins()
@@ -135,9 +138,13 @@ from lofi.judgment import (
 from lofi.run.fits import RegisteredDesigns
 from lofi.spec import SpecLoader
 
-fit = SpecLoader(search_path=()).compose_traced(
-    Path("docs/examples/judgments/calibrated.yaml"), schema=JudgmentFitSpec
-).spec
+fit = (
+    SpecLoader(search_path=())
+    .compose_traced(
+        Path("docs/examples/judgments/calibrated.yaml"), schema=JudgmentFitSpec
+    )
+    .spec
+)
 compiled = ResponseCompiler.installed().compile(fit.response)
 ensure_participant_thresholds(compiled)
 design = RegisteredDesigns().read(fit.dataset).design
@@ -155,7 +162,10 @@ campaign = prior_predictive_calibration(
     seeds=CalibrationSeeds(simulation=2, inference=3, rank=4),
 )
 for record in campaign.records:
-    bounds = {method.value: round(bound, 1) for method, bound in record.evidence_bounds.items()}
+    bounds = {
+        method.value: round(bound, 1)
+        for method, bound in record.evidence_bounds.items()
+    }
     print(record.replicate, record.retained, dict(record.failures), bounds)
 print(campaign.report)
 print(campaign.report.clears_floor)

@@ -46,8 +46,17 @@ document = Path("docs/examples/synthetic-parser.yaml")
 ```python
 run = codec(document)
 for name, readout in run.model.readouts.items():
-    print(name, readout.space, readout.reads, readout.targets, readout.output, readout.decoding)
-    print("  requires", sorted(readout.required_chart_outputs()), readout.estimate_kind())
+    print(
+        name,
+        readout.space,
+        readout.reads,
+        readout.targets,
+        readout.output,
+        readout.decoding,
+    )
+    print(
+        "  requires", sorted(readout.required_chart_outputs()), readout.estimate_kind()
+    )
 ```
 
 ```text
@@ -143,7 +152,9 @@ Replace the exhaustive decoding of `category-terms` with a beam:
 ```python
 beam = codec(
     document,
-    overrides=('model.readouts.category-terms.decoding={"strategy": "beam", "width": 16}',),
+    overrides=(
+        'model.readouts.category-terms.decoding={"strategy": "beam", "width": 16}',
+    ),
 )
 print(beam.model.readouts["category-terms"].decoding)
 ```

@@ -751,6 +751,7 @@ dev = [
     "lofi[cross-engine]",
     "lofi[judgments]",
     "lofi[tracking]",
+  "lofi[provers]",
 ]
 
 [tool.ruff]

@@ -80,7 +80,9 @@ from lofi.registry import ComponentPlugin
 from lofi.spec.encoders.hrr import HrrTermEncoderSettings
 
 
-def _build(settings: HrrTermEncoderSettings, context: BuildContext, /) -> HrrTermEncoder:
+def _build(
+    settings: HrrTermEncoderSettings, context: BuildContext, /
+) -> HrrTermEncoder:
     return place(
         HrrTermEncoder(
             codec=context.codec,
@@ -244,7 +246,12 @@ floats for model checking and on tensors for learned structures:
 
 ```python
 from lofi.lf.models import (
-    CRISP, FLOAT_ARITHMETIC, MATERIAL, TNORM_QUANTIFIER, Arithmetic, FuzzyAlgebra
+    CRISP,
+    FLOAT_ARITHMETIC,
+    MATERIAL,
+    TNORM_QUANTIFIER,
+    Arithmetic,
+    FuzzyAlgebra,
 )
 
 
@@ -278,7 +285,11 @@ class Hamacher:
 
 
 algebra = FuzzyAlgebra(
-    Hamacher(), implication=MATERIAL, quantifier=TNORM_QUANTIFIER, equality=CRISP, margin=0.0
+    Hamacher(),
+    implication=MATERIAL,
+    quantifier=TNORM_QUANTIFIER,
+    equality=CRISP,
+    margin=0.0,
 )
 print(algebra.name, round(algebra.conjunction(0.5, 0.5), 4))
 print(round(algebra.conjoin(FLOAT_ARITHMETIC, 0.5, 0.5), 4))

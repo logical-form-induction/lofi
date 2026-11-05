@@ -126,7 +126,9 @@ it was:
 ```python
 for row in read_probe_rows(Path("runs/probes/patched.json")):
     if row.probe == "patch":
-        print(row.probe, row.kind, row.measure, row.site, round(row.value, 4), row.count)
+        print(
+            row.probe, row.kind, row.measure, row.site, round(row.value, 4), row.count
+        )
 ```
 
 ```text

@@ -59,7 +59,9 @@ images for the featured grammar and erase three categories:
 ```python
 from lofi.spec.grammar import SignatureMorphismErasureSpec
 
-erasure = SignatureMorphismErasureSpec(atoms={"S": "t", "NP": "e", "N": "⟨e,t⟩", "conj": "e"})
+erasure = SignatureMorphismErasureSpec(
+    atoms={"S": "t", "NP": "e", "N": "⟨e,t⟩", "conj": "e"}
+)
 image = erasure.build(assembly, type_syntax="angle")
 
 for category in ("S[dcl]\\NP", "(S[dcl]\\NP)/NP", "NP/N"):
@@ -132,7 +134,11 @@ images = SignatureMorphismErasureSpec(
 )
 image = images.build(tlg_assembly, type_syntax="angle")
 category = '("/_linear" ("/_linear" ("#const[Cat]" "S") ("#const[Cat]" "NP")) ("#const[Cat]" "NP"))'
-print(tlg_assembly.language.print_type(image(tlg_assembly.syntax.parse(tlg_assembly.store, category))))
+print(
+    tlg_assembly.language.print_type(
+        image(tlg_assembly.syntax.parse(tlg_assembly.store, category))
+    )
+)
 ```
 
 ```text

@@ -193,7 +193,9 @@ trainer:
 ```python
 alternating = Path("docs/examples/models-training/alternating-trainer.yaml")
 run = codec(alternating)
-print(run.trainer.kind, [task.name for task in run.trainer.tasks], run.trainer.mixing.kind)
+print(
+    run.trainer.kind, [task.name for task in run.trainer.tasks], run.trainer.mixing.kind
+)
 ```
 
 ```text
@@ -358,7 +360,12 @@ is a complete distance run:
 
 ```python
 distance = codec(Path("lofi/configs/run/synthetic-distance.yaml"))
-print(distance.trainer.kind, distance.trainer.steps, distance.trainer.checkpoints, distance.release.checkpoint)
+print(
+    distance.trainer.kind,
+    distance.trainer.steps,
+    distance.trainer.checkpoints,
+    distance.release.checkpoint,
+)
 print(distance.type_sampler)
 ```
 

@@ -23,7 +23,9 @@ from lofi.spec.language import registered_language
 load_plugins()
 path = Path("lofi/configs/data/datasets/train/dataset/grammar/directed.yaml")
 loader = SpecLoader(search_path=config_search_path(Path.cwd()))
-directed = json.loads(loader.compose_traced(path, schema=GrammarSpec).spec.model_dump_json())
+directed = json.loads(
+    loader.compose_traced(path, schema=GrammarSpec).spec.model_dump_json()
+)
 directed["rules"]["rules"] += [
     {"rule": "composition", "direction": "unrestricted", "order": 1, "view": "/"},
     {"rule": "composition", "direction": "unrestricted", "order": 1, "view": "\\"},
@@ -56,9 +58,15 @@ for normal_form in (
     {"kind": "none"},
     {"kind": "eisner"},
     {"kind": "hockenmaier-bisk", "order_bound": 1},
-    {"kind": "all-of", "normal_forms": [{"kind": "eisner"}, {"kind": "hockenmaier-bisk"}]},
+    {
+        "kind": "all-of",
+        "normal_forms": [{"kind": "eisner"}, {"kind": "hockenmaier-bisk"}],
+    },
 ):
-    print(normal_form["kind"], type(compiled(normal_form=normal_form).normal_form).__name__)
+    print(
+        normal_form["kind"],
+        type(compiled(normal_form=normal_form).normal_form).__name__,
+    )
 ```
 
 ```text
@@ -94,7 +102,11 @@ The `lofi.matching` group registers six congruences:
 for matching in (
     {"kind": "identity"},
     {"kind": "feature-erasure"},
-    {"kind": "product", "left": {"kind": "feature-erasure"}, "right": {"kind": "alpha"}},
+    {
+        "kind": "product",
+        "left": {"kind": "feature-erasure"},
+        "right": {"kind": "alpha"},
+    },
 ):
     print(matching["kind"], compiled(matching=matching).matching.name.split(":")[0])
 ```
@@ -169,7 +181,12 @@ for budget in ({"closure_rounds": 2}, {"closure_rounds": 1}, {"closure_rounds": 
     except DeclarationError as refused:
         print(budget, str(refused).split(" in ClosureReport")[0])
     else:
-        print(budget, report["closure-reached"], report["closure-saturated"], report["closure-category-set"])
+        print(
+            budget,
+            report["closure-reached"],
+            report["closure-saturated"],
+            report["closure-category-set"],
+        )
 ```
 
 ```text

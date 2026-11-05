@@ -81,7 +81,10 @@ codec = RunSpecCodec(search_path=config_search_path(Path.cwd()))
 run = codec(Path("docs/examples/tutorials/interpreted-grammar.yaml"))
 
 declaration = run.data.datasets["train"].dataset
-print(declaration.language.name, [constant.name for constant in declaration.language.constants])
+print(
+    declaration.language.name,
+    [constant.name for constant in declaration.language.constants],
+)
 print(declaration.interpretation.erasure.atoms)
 ```
 

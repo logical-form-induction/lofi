@@ -172,7 +172,9 @@ def refuse(*overrides):
 refuse("signature.conjunctions=null")
 refuse('signature.primitives+=["NP"]')
 refuse('signature.operators+=[{"name": "VP[ng]", "sort": "Cat", "erases_to": "VP"}]')
-refuse('signature.functors=[{"name": "/", "constructor": "/", "argument_side": "right", "opposite": "\\\\"}]')
+refuse(
+    'signature.functors=[{"name": "/", "constructor": "/", "argument_side": "right", "opposite": "\\\\"}]'
+)
 ```
 
 ```text

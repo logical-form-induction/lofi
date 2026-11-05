@@ -87,7 +87,9 @@ def compiled_rules(rules):
 
 
 for name in ("application", "composition", "type-raising", "application-identity"):
-    rules = loader.compose_traced(packaged / "rules" / f"{name}.yaml", schema=RuleSetSpec).spec
+    rules = loader.compose_traced(
+        packaged / "rules" / f"{name}.yaml", schema=RuleSetSpec
+    ).spec
     print(f"{rules.name}: {compiled_rules(rules)}")
 ```
 
@@ -117,18 +119,22 @@ It expands, at its position in the list, over every functor view the
 signature publishes:
 
 ```python
-concise = RuleSetSpec.model_validate({
-    "name": "concise",
-    "rules": [{
-        "rule": "combinators",
-        "application": True,
-        "composition": [1, 2],
-        "crossed_composition": [1],
-        "direction": "steedman",
-        "type_raising": True,
-        "raising_targets": ["S"],
-    }],
-})
+concise = RuleSetSpec.model_validate(
+    {
+        "name": "concise",
+        "rules": [
+            {
+                "rule": "combinators",
+                "application": True,
+                "composition": [1, 2],
+                "crossed_composition": [1],
+                "direction": "steedman",
+                "type_raising": True,
+                "raising_targets": ["S"],
+            }
+        ],
+    }
+)
 for name in compiled_rules(concise):
     print(name)
 ```
@@ -201,7 +207,9 @@ its views and categories against the signature when the grammar is:
 ```python
 def refuse(rules):
     try:
-        directed.with_(rules=RuleSetSpec.model_validate({"name": "trial", "rules": rules}))
+        directed.with_(
+            rules=RuleSetSpec.model_validate({"name": "trial", "rules": rules})
+        )
     except Exception as refused:
         print(str(refused).splitlines()[1].strip())
 

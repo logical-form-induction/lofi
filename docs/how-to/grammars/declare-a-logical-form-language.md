@@ -81,9 +81,19 @@ fragment = Path("lofi/configs/data/datasets/train/dataset/language/propositional
 propositional = loader.compose_traced(fragment, schema=LanguageDecl).spec
 print(propositional.name, [constant.name for constant in propositional.constants])
 
-plurals = loader.compose_traced(fragment.with_name("plurals.yaml"), schema=LanguageDecl).spec
-print(plurals.name, plurals.logic.order, plurals.logic.prover.kind, plurals.logic.domains)
-print([(constant.name, constant.semantics) for constant in plurals.constants if constant.semantics])
+plurals = loader.compose_traced(
+    fragment.with_name("plurals.yaml"), schema=LanguageDecl
+).spec
+print(
+    plurals.name, plurals.logic.order, plurals.logic.prover.kind, plurals.logic.domains
+)
+print(
+    [
+        (constant.name, constant.semantics)
+        for constant in plurals.constants
+        if constant.semantics
+    ]
+)
 print(len(plurals.logic.postulates))
 ```
 
@@ -114,13 +124,35 @@ declared = {
     "name": "generalized-quantifiers",
     "atomic_types": [{"name": "e"}, {"name": "t", "kind": "proposition"}],
     "constructors": [
-        {"name": "->", "kind": ["Ty", "Ty", "Ty"],
-         "notation": {"style": "infix", "spelling": "->", "precedence": 1, "associativity": "right"}},
+        {
+            "name": "->",
+            "kind": ["Ty", "Ty", "Ty"],
+            "notation": {
+                "style": "infix",
+                "spelling": "->",
+                "precedence": 1,
+                "associativity": "right",
+            },
+        },
     ],
     "constants": [
-        {"name": "not", "type": "t -> t", "classes": ["sentential", "negation"],
-         "notation": {"kind": "prefix", "ascii": "~", "unicode": "¬", "precedence": 6}},
-        {"name": "most", "type": "(e -> t) -> (e -> t) -> t", "classes": ["quantifier"], "semantics": "most"},
+        {
+            "name": "not",
+            "type": "t -> t",
+            "classes": ["sentential", "negation"],
+            "notation": {
+                "kind": "prefix",
+                "ascii": "~",
+                "unicode": "¬",
+                "precedence": 6,
+            },
+        },
+        {
+            "name": "most",
+            "type": "(e -> t) -> (e -> t) -> t",
+            "classes": ["quantifier"],
+            "semantics": "most",
+        },
         {"name": "dog", "type": "e -> t", "classes": ["predicate"]},
     ],
     "binders": {"style": "curry"},

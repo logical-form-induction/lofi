@@ -305,14 +305,6 @@ jobs:
           # this commit and its first parent. A pull request checks out its
           # merge commit, whose first parent is the base branch.
           fetch-depth: 2
-      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
-        with:
-          python-version: "3.14.5"
-          enable-cache: true
-      - name: Rust toolchain
-        run: rustup toolchain install
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
-
       # a commit with no parent, such as a squashed release, has nothing to be
       # timed against. The job then says so in its log and summary and times
       # nothing, rather than passing as though it had compared.
@@ -328,6 +320,17 @@ jobs:
             echo "::notice title=No relative timing comparison::$message"
             echo "$message." >> "$GITHUB_STEP_SUMMARY"
           fi
+
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        if: steps.parent.outputs.found == 'true'
+        with:
+          python-version: "3.14.5"
+          enable-cache: true
+      - name: Rust toolchain
+        if: steps.parent.outputs.found == 'true'
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        if: steps.parent.outputs.found == 'true'
 
       - name: Check out the parent
         if: steps.parent.outputs.found == 'true'
@@ -392,9 +395,9 @@ jobs:
           rm -rf target/gungraun
           if [ -n "$BASE" ] && git cat-file -e "$BASE:crates/lofi-chart/benches/build.rs" 2>/dev/null; then
             git checkout --quiet --detach "$BASE"
-            cargo bench -p lofi-chart --locked -- --save-baseline=base
+            cargo bench -p lofi-chart --bench '*' --locked -- --save-baseline=base
             git checkout --quiet --detach "$GITHUB_SHA"
           fi
 
       - name: Counts at this commit against the base
-        run: cargo bench -p lofi-chart --locked -- --baseline=base --callgrind-limits="$INSTRUCTION_REGRESSION"
+        run: cargo bench -p lofi-chart --bench '*' --locked -- --baseline=base --callgrind-limits="$INSTRUCTION_REGRESSION"

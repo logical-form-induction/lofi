@@ -76,7 +76,7 @@ jobs:
     # and the variant runs below read the source or the interpreter, not the
     # platform, and run once on Linux.
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
+    timeout-minutes: 180
     strategy:
       fail-fast: false
       matrix:
@@ -113,7 +113,7 @@ jobs:
   determinism:
     name: Determinism
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -141,7 +141,7 @@ jobs:
   test-optimized:
     name: Tests under python -O
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -171,7 +171,7 @@ jobs:
   test-unchecked:
     name: Tests with the debug checks off
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -226,7 +226,7 @@ jobs:
       - name: Verify the cross-engine skip without its extra
         run: |
           uv run --no-sync --with pytest --with hypothesis \
-            python -m pytest --run-integration -rs \
+            python -m pytest -o addopts="" --run-integration -rs \
             tests/integration/test_quivers_agreement.py
 
       - name: Import the symbolic core

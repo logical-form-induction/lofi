@@ -102,12 +102,16 @@ learning rate must be positive:
 ```python
 def refusal(*overrides):
     try:
-        loader.compose_traced(document, schema=JudgmentFitSpec, overrides=overrides).spec
+        loader.compose_traced(
+            document, schema=JudgmentFitSpec, overrides=overrides
+        ).spec
     except Exception as refused:
         print(type(refused).__name__, "|", str(refused).splitlines()[-1])
 
 
-refusal('calibration={"replicates": 2, "guide_iterations": 20, "guide_learning_rate": 0.01}')
+refusal(
+    'calibration={"replicates": 2, "guide_iterations": 20, "guide_learning_rate": 0.01}'
+)
 refusal("inference.learning_rate=0")
 ```
 

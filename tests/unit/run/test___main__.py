@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 from typing import TYPE_CHECKING
@@ -13,6 +14,7 @@ def run_module(*arguments: str, cwd: Path) -> subprocess.CompletedProcess[str]:
         capture_output=True,
         encoding="utf-8",
         cwd=cwd,
+        env={**os.environ, "NO_COLOR": "1"},
     )
 
 

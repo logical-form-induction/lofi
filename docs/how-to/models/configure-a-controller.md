@@ -104,7 +104,12 @@ transformer = codec(
         ' "normalizer": {"kind": "entmax", "alpha": 1.5}}',
     ),
 ).model.controller
-print(transformer.layers, transformer.heads, transformer.activation, transformer.normalizer)
+print(
+    transformer.layers,
+    transformer.heads,
+    transformer.activation,
+    transformer.normalizer,
+)
 ```
 
 ```text

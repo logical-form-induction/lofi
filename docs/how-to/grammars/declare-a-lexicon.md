@@ -30,7 +30,9 @@ load_plugins()
 packaged = Path("lofi/configs/data/datasets/train/dataset/grammar")
 loader = SpecLoader(search_path=config_search_path(Path.cwd()))
 directed = json.loads(
-    loader.compose_traced(packaged / "directed.yaml", schema=GrammarSpec).spec.model_dump_json()
+    loader.compose_traced(
+        packaged / "directed.yaml", schema=GrammarSpec
+    ).spec.model_dump_json()
 )
 language = registered_language("propositional")
 
@@ -41,7 +43,10 @@ def show(lexicon):
     assembly = GrammarIso().forward(grammar, language)
     for form in assembly.lexicon.forms:
         categories = [
-            (assembly.syntax.render(assembly.store, entry.category), round(exp(entry.weight), 3))
+            (
+                assembly.syntax.render(assembly.store, entry.category),
+                round(exp(entry.weight), 3),
+            )
             for entry in assembly.lexicon.entries(form)
         ]
         print(form, round(exp(assembly.lexicon.log_mass(form)), 3), categories)
@@ -97,8 +102,12 @@ structured = {
             {"category": "S\\NP/NP", "share": 1.0},
         ],
     },
-    "ambiguity": {"spelling": "histogram", "maximum": 2, "placement": 0.0,
-                  "buckets": [{"categories": 1, "share": 2.0}, {"categories": 2, "share": 1.0}]},
+    "ambiguity": {
+        "spelling": "histogram",
+        "maximum": 2,
+        "placement": 0.0,
+        "buckets": [{"categories": 1, "share": 2.0}, {"categories": 2, "share": 1.0}],
+    },
     "rank_law": {"kind": "power-law", "exponent": 1.0},
     "seed": 7,
 }
@@ -150,7 +159,13 @@ generated = {
     "categories": 4,
     "category_shares": {"kind": "uniform"},
     "coupling": 0.0,
-    "ambiguity": {"spelling": "parametric", "mean": 1.0, "dispersion": 0.0, "maximum": 1, "placement": 0.0},
+    "ambiguity": {
+        "spelling": "parametric",
+        "mean": 1.0,
+        "dispersion": 0.0,
+        "maximum": 1,
+        "placement": 0.0,
+    },
     "rank_law": {"kind": "uniform"},
     "seed": 3,
     "max_depth": 2,
@@ -204,7 +219,9 @@ def refuse(lexicon):
         print(str(refused).splitlines()[1].strip())
 
 
-refuse({**generated, "ambiguity": {**generated["ambiguity"], "maximum": 6, "mean": 2.0}})
+refuse(
+    {**generated, "ambiguity": {**generated["ambiguity"], "maximum": 6, "mean": 2.0}}
+)
 refuse({**structured, "forms": 1})
 refuse({"kind": "inline", "entries": []})
 ```

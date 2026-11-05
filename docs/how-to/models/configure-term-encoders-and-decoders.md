@@ -233,7 +233,14 @@ for role, encoder in model.encoders.items():
 for role, decoder in model.decoders.items():
     print("decoder", role, decoder.kind)
 for name, space in model.spaces.items():
-    print(name, space.sort, space.encoder, space.identity, space.combinators.merge, space.relation)
+    print(
+        name,
+        space.sort,
+        space.encoder,
+        space.identity,
+        space.combinators.merge,
+        space.relation,
+    )
 ```
 
 ```text
@@ -275,7 +282,9 @@ active groups. A `mapped` relation without a mapping is refused:
 try:
     codec(
         document,
-        overrides=('model.spaces.categories.relation={"space": "categories", "via": "mapped"}',),
+        overrides=(
+            'model.spaces.categories.relation={"space": "categories", "via": "mapped"}',
+        ),
     )
 except ConfigValueError as refused:
     print(refused)

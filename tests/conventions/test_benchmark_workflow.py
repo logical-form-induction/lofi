@@ -586,3 +586,23 @@ def test_instruction_counts_compare_against_the_base_on_linux() -> None:
     )
     assert '--callgrind-limits="$INSTRUCTION_REGRESSION"' in compare
     assert "--baseline=base" in compare
+
+
+def test_relative_tool_setup_waits_for_an_available_parent() -> None:
+    steps = _steps("relative")
+    lookup = next(i for i, step in enumerate(steps) if step.get("id") == "parent")
+
+    for index, step in enumerate(steps):
+        if (
+            step.get("uses") in (SETUP_UV, RUST_CACHE)
+            or step.get("name") == "Rust toolchain"
+        ):
+            assert index > lookup
+            assert step["if"] == "steps.parent.outputs.found == 'true'"
+
+
+def test_instruction_counts_select_only_the_custom_benchmark_harnesses() -> None:
+    for name in ("Counts at the base commit", "Counts at this commit against the base"):
+        script = _text(_named_step(name, "instructions")["run"])
+
+        assert "--bench '*'" in script

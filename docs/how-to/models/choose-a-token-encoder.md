@@ -214,7 +214,11 @@ llm2vec = (
 )
 adaptation = codec(document, overrides=(llm2vec, cache)).model.token_encoder.adaptation
 print(adaptation.parameterization, adaptation.rank, adaptation.alpha, adaptation.steps)
-print(adaptation.replacement, adaptation.mask_probability, adaptation.optimizer.learning_rate)
+print(
+    adaptation.replacement,
+    adaptation.mask_probability,
+    adaptation.optimizer.learning_rate,
+)
 ```
 
 ```text

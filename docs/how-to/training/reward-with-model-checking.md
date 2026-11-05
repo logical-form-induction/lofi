@@ -54,14 +54,23 @@ codec = RunSpecCodec(search_path=config_search_path(Path.cwd()))
 document = Path("experiments/l1/l1-run.yaml")
 
 with run_context(RunContext(data_root=Path.cwd(), seed=11)):
-    for option in ("model-checking-sampled", "model-checking-learned", "model-checking-given"):
+    for option in (
+        "model-checking-sampled",
+        "model-checking-learned",
+        "model-checking-given",
+    ):
         run = codec(document, overrides=(f"model/grounding={option}",))
         scorer = run.model.grounding.scorer
         print(option, scorer.kind, scorer.source.kind)
 
 print(scorer.logic)
 print(scorer.source.knowledge_base)
-print(scorer.truth_threshold, scorer.abstain_band, scorer.premise_floor, scorer.unsatisfied_premise)
+print(
+    scorer.truth_threshold,
+    scorer.abstain_band,
+    scorer.premise_floor,
+    scorer.unsatisfied_premise,
+)
 ```
 
 ```text

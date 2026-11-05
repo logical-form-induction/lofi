@@ -53,8 +53,8 @@ same way and fails if it differs from the committed file.
 Run the standard checks from the repository root:
 
 ```bash
-uv run ruff format --check lofi tests scripts
-uv run ruff check lofi tests scripts
+uv run ruff format --check .
+uv run ruff check .
 uv run ty check --error-on-warning
 uv run lint-imports
 uv run pytest

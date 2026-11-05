@@ -9,11 +9,7 @@ from unittest.mock import patch
 
 import didactic.api as dx
 import pytest
-import torch
 from hypothesis import Verbosity, settings
-
-import lofi
-from lofi import _checks
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
@@ -31,11 +27,6 @@ os.environ.setdefault("LOFI_CHECK", "0" if "--benchmark-only" in sys.argv else "
 # platform's locale encoding, so its text output decodes the same everywhere.
 # the variable is read at interpreter start, so it reaches children only
 os.environ["PYTHONUTF8"] = "1"
-
-# reload the import-time check flag after setting its default, then the package
-# that publishes its law error, so both name one class
-importlib.reload(_checks)
-importlib.reload(lofi)
 
 # development varies examples, while CI uses reproducible examples
 settings.register_profile("dev", max_examples=25, deadline=None)
@@ -133,7 +124,8 @@ def reload_with_checks(monkeypatch: pytest.MonkeyPatch) -> Iterator[ChecksReload
     ChecksReload
         The reload function.
     """
-    snapshots = _module_snapshots(_checks, dict(vars(_checks)))
+    checks = importlib.import_module("lofi._checks")
+    snapshots = _module_snapshots(checks, dict(vars(checks)))
 
     def reload(*modules: ModuleType, on: bool) -> None:
         monkeypatch.setenv("LOFI_CHECK", "1" if on else "0")
@@ -142,7 +134,7 @@ def reload_with_checks(monkeypatch: pytest.MonkeyPatch) -> Iterator[ChecksReload
             if module not in snapshots:
                 snapshots[module] = dict(vars(module))
 
-        importlib.reload(_checks)
+        importlib.reload(checks)
 
         for module in modules:
             importlib.reload(module)
@@ -192,6 +184,12 @@ def restore_global_torch_state() -> Iterator[None]:
     None
         Once, with the settings restored afterwards.
     """
+    torch = sys.modules.get("torch")
+
+    if torch is None:
+        yield
+        return
+
     deterministic = torch.are_deterministic_algorithms_enabled()
     precision = torch.get_float32_matmul_precision()
 

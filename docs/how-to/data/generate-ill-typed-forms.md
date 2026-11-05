@@ -71,7 +71,9 @@ ill_typing = (
     "data/datasets/train/dataset/ill_typing/proportion=quarter",
     "data.datasets.train.dataset.size=48",
 )
-corpus = plan_training(codec(document, overrides=ill_typing)).lower_dataset("train").corpus
+corpus = (
+    plan_training(codec(document, overrides=ill_typing)).lower_dataset("train").corpus
+)
 
 report = corpus.ill_typing
 print(len(corpus.forms), len(corpus.ill_typed))

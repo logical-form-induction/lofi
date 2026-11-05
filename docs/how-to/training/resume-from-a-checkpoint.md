@@ -67,7 +67,12 @@ point = Path("runs/checkpointed/runs/0b721a54def66af5")
 for checkpoint in sorted((point / "checkpoints").iterdir()):
     manifest = json.loads((checkpoint / "manifest.json").read_text())
     fitting = manifest["fitting"]
-    print(checkpoint.name[:6], manifest["step"], fitting["kind"], fitting["completed_epochs"])
+    print(
+        checkpoint.name[:6],
+        manifest["step"],
+        fitting["kind"],
+        fitting["completed_epochs"],
+    )
 ```
 
 ```text

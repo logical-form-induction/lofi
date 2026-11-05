@@ -81,12 +81,20 @@ run = codec(
     ),
 )
 declaration = run.data.datasets["train"].dataset
-print(declaration.labeling, declaration.pairing.kind, declaration.size, declaration.candidates)
+print(
+    declaration.labeling,
+    declaration.pairing.kind,
+    declaration.size,
+    declaration.candidates,
+)
 
 inference = draw(run)
 pair = inference.pairs[0]
 print(pair.premise.text, "|", pair.hypothesis.text, "|", pair.label.value, pair.split)
-print({label.value: count for label, count in inference.inference.labels.items()}, inference.inference.rejected)
+print(
+    {label.value: count for label, count in inference.inference.labels.items()},
+    inference.inference.rejected,
+)
 ```
 
 ```text

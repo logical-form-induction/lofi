@@ -1842,7 +1842,7 @@ tracking = [
 dev = [
     { name = "hypothesis" },
     { name = "import-linter" },
-    { name = "lofi", extra = ["corpora", "cross-engine", "judgments", "nn", "tracking"] },
+    { name = "lofi", extra = ["corpora", "cross-engine", "judgments", "nn", "provers", "tracking"] },
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-benchmark" },
@@ -1888,6 +1888,7 @@ dev = [
     { name = "lofi", extras = ["cross-engine"] },
     { name = "lofi", extras = ["judgments"] },
     { name = "lofi", extras = ["nn"] },
+    { name = "lofi", extras = ["provers"] },
     { name = "lofi", extras = ["tracking"] },
     { name = "pre-commit" },
     { name = "pytest" },

@@ -192,7 +192,9 @@ bare = grammar.with_(
     )
 )
 try:
-    lower_interpretation(bare, dataset.language, interpretation, GrammarIso(), LanguageIso())
+    lower_interpretation(
+        bare, dataset.language, interpretation, GrammarIso(), LanguageIso()
+    )
 except DeclarationError as refused:
     print(refused)
 ```

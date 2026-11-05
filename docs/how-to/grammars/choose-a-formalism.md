@@ -79,7 +79,9 @@ reads them. The packaged `ccgbank.yaml` takes its slash constructors and
 functor views from `pmb/slash-signature`:
 
 ```python
-ccgbank = declare_grammar(loader.compose_traced(packaged / "ccgbank.yaml", schema=GrammarSpec).spec)
+ccgbank = declare_grammar(
+    loader.compose_traced(packaged / "ccgbank.yaml", schema=GrammarSpec).spec
+)
 
 print(ccgbank.signature.name, [functor.name for functor in ccgbank.signature.functors])
 ```
@@ -133,12 +135,16 @@ validated. Four refusals, each an override on a packaged example:
 ```python
 def refuse(name, *overrides):
     try:
-        loader.compose_traced(packaged / f"{name}.yaml", schema=GrammarSpec, overrides=overrides).spec
+        loader.compose_traced(
+            packaged / f"{name}.yaml", schema=GrammarSpec, overrides=overrides
+        ).spec
     except Exception as refused:
         print(refused)
 
 
-composition = '{"rule": "composition", "direction": "unrestricted", "order": 1, "view": "/"}'
+composition = (
+    '{"rule": "composition", "direction": "unrestricted", "order": 1, "view": "/"}'
+)
 refuse("ab", f"rules.rules+=[{composition}]")
 refuse("cfg", "goal=VP2")
 refuse("nl-diamond", "goal=N")

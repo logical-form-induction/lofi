@@ -65,8 +65,10 @@ def test_the_extension_is_the_packages_one_stable_abi_module() -> None:
         if path.name.endswith(tuple(EXTENSION_SUFFIXES))
     )
 
-    assert compiled == ["_native.abi3.so"]
-    assert Path(_native.__file__).name == "_native.abi3.so"
+    expected = "_native.pyd" if sys.platform == "win32" else "_native.abi3.so"
+
+    assert compiled == [expected]
+    assert Path(_native.__file__).name == expected
 
 
 @pytest.mark.parametrize("name", _declared(STUB.body))

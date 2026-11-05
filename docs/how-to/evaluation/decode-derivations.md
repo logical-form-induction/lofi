@@ -186,7 +186,9 @@ for section, field, value in (
     ("decoded-types", "output", "logical-forms"),
 ):
     document = deepcopy(declared)
-    target = document["parse"] if section == "parse" else document["evaluators"][section]
+    target = (
+        document["parse"] if section == "parse" else document["evaluators"][section]
+    )
     target[field] = value
     try:
         RunSpec.model_validate(document)

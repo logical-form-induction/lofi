@@ -95,9 +95,16 @@ load_plugins()
 codec = RunSpecCodec(search_path=config_search_path(Path.cwd()))
 run = codec(Path("experiments/s1/s1-reduced-run.yaml"))
 declaration = run.data.datasets["train"].dataset
-print(declaration.kind, declaration.source, declaration.splits, declaration.unknown_words.kind)
+print(
+    declaration.kind,
+    declaration.source,
+    declaration.splits,
+    declaration.unknown_words.kind,
+)
 
-dataset = PLUGIN.lower(PLUGIN.check(declaration), ParsePolicy(Retain.FOREST, Reachability.ALL))
+dataset = PLUGIN.lower(
+    PLUGIN.check(declaration), ParsePolicy(Retain.FOREST, Reachability.ALL)
+)
 report = dataset.report
 print(report.records_seen, report.emitted, dict(report.skips_by_reason))
 print(Counter(example.item.split for example in dataset.corpus.examples))
@@ -128,7 +135,9 @@ its grammar included, is kept:
 ```python
 local = codec(
     Path("experiments/s1/s1-reduced-run.yaml"),
-    overrides=('data.datasets.train.dataset={"kind": "ccgbank", "source": "experiments/s1/data/ccgbank/00"}',),
+    overrides=(
+        'data.datasets.train.dataset={"kind": "ccgbank", "source": "experiments/s1/data/ccgbank/00"}',
+    ),
 )
 print(local.data.datasets["train"].dataset.source)
 ```

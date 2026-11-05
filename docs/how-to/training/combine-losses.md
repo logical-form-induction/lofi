@@ -170,8 +170,12 @@ def refusal(overrides):
         print(type(refused).__name__, "|", str(refused).splitlines()[-1])
 
 
-refusal(('loss.terms+=[{"objective": {"kind": "coherence",'
-         ' "readout": "category-terms", "space": "categories"}}]',))
+refusal(
+    (
+        'loss.terms+=[{"objective": {"kind": "coherence",'
+        ' "readout": "category-terms", "space": "categories"}}]',
+    )
+)
 ```
 
 ```text
@@ -188,9 +192,15 @@ is built:
 
 ```python
 refusal(('loss.terms+=[{"objective": {"kind": "chart-scale"}, "weight": -1.0}]',))
-refusal(('loss.terms+=[{"objective": {"kind": "chart-scale"}, "name": "scale/cells"}]',))
-refusal(('loss.terms+=[{"objective": {"kind": "chart-scale"},'
-         ' "schedule": {"start": 0.0, "steps": 0}}]',))
+refusal(
+    ('loss.terms+=[{"objective": {"kind": "chart-scale"}, "name": "scale/cells"}]',)
+)
+refusal(
+    (
+        'loss.terms+=[{"objective": {"kind": "chart-scale"},'
+        ' "schedule": {"start": 0.0, "steps": 0}}]',
+    )
+)
 ```
 
 ```text

@@ -1,6 +1,7 @@
 import itertools
 import json
 import os
+import shutil
 import subprocess
 import sys
 from datetime import date
@@ -1099,7 +1100,13 @@ def test_a_seed_policy_naming_no_experiment_seed_is_refused(
 @pytest.mark.parametrize(
     "path",
     [
-        path
+        pytest.param(
+            path,
+            marks=pytest.mark.skipif(
+                path.stem == "source-factors" and shutil.which("vampire") is None,
+                reason="the source-factor declaration requires the Vampire prover",
+            ),
+        )
         for pattern in ("experiments/*/*.yaml", "docs/examples/experiments/*.yaml")
         for path in sorted(Path(__file__).resolve().parents[3].glob(pattern))
         if not path.stem.endswith("-run")

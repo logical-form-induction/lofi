@@ -81,7 +81,10 @@ print(resolved["data"]["datasets"]["train"]["dataset"]["judgments"])
 recorded = read_metrics(directory)
 for epoch in recorded.fitting.epochs:
     for step in epoch.steps:
-        print(round(step.metrics["loss/inference"], 4), step.metrics["loss/inference/questions"])
+        print(
+            round(step.metrics["loss/inference"], 4),
+            step.metrics["loss/inference/questions"],
+        )
 ```
 
 ```text
