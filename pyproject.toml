@@ -701,7 +701,7 @@ snli = "lofi.data.corpora.nli._codec:SnliCodec"
 unli = "lofi.data.corpora.nli._codec:UnliCodec"
 
 [build-system]
-requires = ["maturin>=1.15,<2"]
+requires = ["maturin>=1.16.0,<2"]
 build-backend = "maturin"
 
 # the Rust workspace under crates/ builds the one extension module, lofi._native,
