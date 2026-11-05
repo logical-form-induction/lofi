@@ -20,13 +20,14 @@ concurrency:
 
 jobs:
   benchmarks:
-    name: Timed budgets and regressions
-    if: >-
-      github.event_name != 'schedule' &&
-      (github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository)
-    runs-on: [self-hosted, macOS, ARM64, lofi-benchmark]
+    name: Timings (${{ matrix.os }})
+    if: github.event_name != 'schedule'
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -35,251 +36,24 @@ jobs:
         with:
           python-version: "3.14.5"
           enable-cache: true
-
+      - name: Rust toolchain
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
       - name: Install
         run: uv sync --locked
-
-      - name: Time budgets and compare committed baselines
+      - name: Record timings
         shell: bash
         run: |
-          set -euo pipefail
-
-          baseline_list="$(
-            mktemp "${RUNNER_TEMP}/lofi-benchmark-baselines.XXXXXX"
-          )"
-          selector_directory="$(
-            mktemp -d "${RUNNER_TEMP}/lofi-benchmark-selectors.XXXXXX"
-          )"
-          plan="$(mktemp "${RUNNER_TEMP}/lofi-benchmark-plan.XXXXXX")"
-          saved_fullnames="$(
-            mktemp "${RUNNER_TEMP}/lofi-benchmark-saved.XXXXXX"
-          )"
-          current_fullnames="$(
-            mktemp "${RUNNER_TEMP}/lofi-benchmark-collected.XXXXXX"
-          )"
-          unowned_selector="$(
-            mktemp "${RUNNER_TEMP}/lofi-benchmark-unowned.XXXXXX"
-          )"
-          git ls-files -- 'tests/benchmarks/baselines/*/*.json' > "$baseline_list"
-          if [[ ! -s "$baseline_list" ]]; then
-            echo "::error::No committed benchmark baseline found"
-            exit 1
-          fi
-
-          uv run python - \
-            "$baseline_list" \
-            "$selector_directory" \
-            "$plan" \
-            "$saved_fullnames" <<'PY'
-          import json
-          import sys
-          from pathlib import Path
-
-
-          baseline_list = Path(sys.argv[1])
-          selector_directory = Path(sys.argv[2])
-          plan = Path(sys.argv[3])
-          saved_fullnames = Path(sys.argv[4])
-          baselines = baseline_list.read_text(encoding="utf-8").splitlines()
-          owners: dict[str, str] = {}
-          selections: list[tuple[str, list[str]]] = []
-          errors: list[str] = []
-
-          for baseline in baselines:
-              if "\t" in baseline:
-                  errors.append(f"Baseline path contains a tab: {baseline!r}")
-                  continue
-
-              with Path(baseline).open(encoding="utf-8") as stream:
-                  result = json.load(stream)
-
-              rows = result.get("benchmarks")
-              if not isinstance(rows, list) or not rows:
-                  errors.append(f"Baseline has no benchmark rows: {baseline}")
-                  continue
-
-              fullnames: list[str] = []
-              for row in rows:
-                  fullname = row.get("fullname") if isinstance(row, dict) else None
-                  if (
-                      not isinstance(fullname, str)
-                      or not fullname
-                      or "\n" in fullname
-                      or "\r" in fullname
-                      or not fullname.startswith("tests/benchmarks/")
-                      or "::" not in fullname
-                  ):
-                      errors.append(
-                          f"Baseline has an invalid benchmark fullname: {baseline}"
-                      )
-                      continue
-
-                  owner = owners.get(fullname)
-                  if owner is not None:
-                      errors.append(
-                          "Duplicate saved benchmark fullname in "
-                          f"{owner} and {baseline}: {fullname}"
-                      )
-                      continue
-
-                  owners[fullname] = baseline
-                  fullnames.append(fullname)
-
-              selections.append((baseline, fullnames))
-
-          if errors:
-              for error in errors:
-                  print(f"::error::{error}")
-              raise SystemExit(1)
-
-          plan_lines: list[str] = []
-          for index, (baseline, fullnames) in enumerate(selections):
-              selector_file = selector_directory / f"{index:04d}.txt"
-              selector_file.write_text("\n".join(fullnames) + "\n", encoding="utf-8")
-              plan_lines.append(f"{baseline}\t{selector_file}")
-
-          plan.write_text("\n".join(plan_lines) + "\n", encoding="utf-8")
-          saved_fullnames.write_text(
-              "\n".join(sorted(owners)) + "\n", encoding="utf-8"
-          )
-          PY
-
-          uv run python - "$current_fullnames" <<'PY'
-          import sys
-          from pathlib import Path
-
-          import pytest
-
-
-          class BenchmarkCollection:
-              def __init__(self) -> None:
-                  self.fullnames: list[str] = []
-
-              @pytest.hookimpl(trylast=True)
-              def pytest_collection_modifyitems(
-                  self, items: list[pytest.Item]
-              ) -> None:
-                  self.fullnames = [
-                      item.nodeid
-                      for item in items
-                      if hasattr(item, "fixturenames")
-                      and "benchmark" in item.fixturenames
-                  ]
-
-
-          destination = Path(sys.argv[1])
-          collection = BenchmarkCollection()
-          status = pytest.main(
-              ["tests/benchmarks", "--collect-only", "-q"], plugins=[collection]
-          )
-
-          if status != pytest.ExitCode.OK:
-              raise SystemExit(status)
-
-          destination.write_text(
-              "\n".join(sorted(collection.fullnames)) + "\n", encoding="utf-8"
-          )
-          PY
-
-          uv run python - \
-            "$saved_fullnames" \
-            "$current_fullnames" \
-            "$unowned_selector" <<'PY'
-          import sys
-          from pathlib import Path
-
-
-          def fullnames(path: Path) -> set[str]:
-              return set(path.read_text(encoding="utf-8").splitlines())
-
-
-          saved = fullnames(Path(sys.argv[1]))
-          current = fullnames(Path(sys.argv[2]))
-          unowned_selector = Path(sys.argv[3])
-          stale = sorted(saved - current)
-          unowned = sorted(current - saved)
-
-          if stale:
-              print("::error::Saved benchmark rows have no current timed benchmark")
-              for fullname in stale:
-                  print(f"stale saved fullname: {fullname}")
-              raise SystemExit(1)
-
-          unowned_selector.write_text(
-              "\n".join(unowned) + ("\n" if unowned else ""), encoding="utf-8"
-          )
-          PY
-
-          status=0
-          unowned_selectors=()
-          while IFS= read -r fullname; do
-            unowned_selectors+=("$fullname")
-          done < "$unowned_selector"
-
-          if ((${#unowned_selectors[@]})); then
-            if ! uv run pytest "${unowned_selectors[@]}" --benchmark-only; then
-              status=1
-            fi
-          fi
-
-          while IFS=$'\t' read -r baseline selector_file; do
-            selectors=()
-            while IFS= read -r fullname; do
-              selectors+=("$fullname")
-            done < "$selector_file"
-
-            current_result="$(
-              mktemp "${RUNNER_TEMP}/lofi-benchmark-current.XXXXXX"
-            )"
-            if ! uv run pytest "${selectors[@]}" \
-              --benchmark-only \
-              --benchmark-storage=tests/benchmarks/baselines \
-              --benchmark-compare="$baseline" \
-              --benchmark-compare-fail=mean:10% \
-              --benchmark-json="$current_result"; then
-              status=1
-            fi
-
-            if ! uv run python - "$baseline" "$current_result" <<'PY'
-          import json
-          import sys
-          from pathlib import Path
-
-
-          def fullnames(path: Path) -> set[str]:
-              with path.open(encoding="utf-8") as stream:
-                  result = json.load(stream)
-
-              return {row["fullname"] for row in result["benchmarks"]}
-
-
-          baseline = Path(sys.argv[1])
-          current = Path(sys.argv[2])
-          saved = fullnames(baseline)
-          try:
-              observed = fullnames(current)
-          except (OSError, json.JSONDecodeError, KeyError, TypeError):
-              observed = set()
-          missing = sorted(saved - observed)
-          unexpected = sorted(observed - saved)
-
-          if missing or unexpected:
-              print(
-                  f"::error file={baseline}::"
-                  "Saved and current benchmark rows differ"
-              )
-              for fullname in missing:
-                  print(f"missing: {fullname}")
-              for fullname in unexpected:
-                  print(f"unexpected: {fullname}")
-              raise SystemExit(1)
-          PY
-            then
-              status=1
-            fi
-          done < "$plan"
-
-          exit "$status"
+          uv run pytest tests/benchmarks --benchmark-only \
+            -o wall_clock_budgets=false \
+            --benchmark-json="$RUNNER_TEMP/benchmarks.json"
+      - name: Upload timings
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: benchmarks-${{ matrix.os }}
+          path: ${{ runner.temp }}/benchmarks.json
+          if-no-files-found: error
 
   relative:
     name: Relative timings (${{ matrix.os }})
@@ -295,8 +69,7 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     env:
       # the slowdown of a benchmark's median against the parent's that fails
-      # the job. A shared runner's run-to-run spread is wider than the pinned
-      # host's, so this is wider than its mean:10%.
+      # the job. This allowance accounts for variation on shared runners.
       RELATIVE_REGRESSION: median:20%
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

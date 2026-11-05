@@ -88,9 +88,9 @@ lines a pull request changes.
 Integration tests are opt-in and must skip cleanly when their prerequisites are
 absent. Benchmarks time operations and compare budgets. Ordinary tests assert
 behavior outside timed benchmark bodies. An absolute wall-clock budget is
-asserted only under `wall_clock_budget.enforced`, because only the fixed
-benchmark machine is held to it; hosted runners compare each commit's timings
-with its parent's instead. See [Testing](docs/development/testing.md).
+asserted only under `wall_clock_budget.enforced`, for measurements on the local
+reference machine. GitHub-hosted runners record timings and compare each commit
+with its parent on the same runner. See [Testing](docs/development/testing.md).
 
 ## Conventions
 

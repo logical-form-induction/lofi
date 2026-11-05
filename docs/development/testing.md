@@ -89,14 +89,17 @@ no fixture.
 
 Continuous integration splits the benchmarks by what they measure.
 
-1. On the fixed `lofi-benchmark` Mac, the absolute wall-clock budgets and the
-   comparison against the baselines committed under `tests/benchmarks/baselines`.
+1. On GitHub-hosted Linux, macOS and Windows runners, every timed benchmark,
+   with results saved as workflow artifacts. Absolute wall-clock budgets are
+   disabled because shared runners vary in speed. Committed local measurements
+   are not used as thresholds for different machines.
 2. On hosted Linux, macOS and Windows runners, the commit against its parent.
    One job builds and times the parent in a worktree, then times the commit on
    the same machine with `-o wall_clock_budgets=false`, and fails when a median
    regresses past the `RELATIVE_REGRESSION` threshold declared in
    `.github/workflows/bench.yml`. A commit with no parent is timed against
-   nothing: the job says so in a notice and its summary and runs no benchmark.
+   nothing: the comparison job records a notice and skips the comparison.
+   The timing job still records every benchmark for that commit.
 3. On Linux, the Rust core's instruction counts under Valgrind, which fail on a
    rise past the declared `INSTRUCTION_REGRESSION` over the base commit. They
    also run weekly, recording counts without a base to compare against.

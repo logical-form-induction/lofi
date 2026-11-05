@@ -107,7 +107,7 @@ jobs:
           HYPOTHESIS_PROFILE: ci
           LOFI_CHECK: "1"
         # a hosted runner's speed varies from run to run, so the absolute
-        # wall-clock budgets hold only on the fixed benchmark machine.
+        # wall-clock budgets are disabled on hosted machines.
         run: uv run pytest -o wall_clock_budgets=false --cov=lofi --cov-report=term-missing
 
   determinism:

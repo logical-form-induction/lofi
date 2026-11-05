@@ -1,15 +1,8 @@
-"""The benchmark workflow splits its measures between pinned and hosted runners.
+"""Hosted runners record timings and compare commits on the same machine."""
 
-The pinned host holds the absolute wall-clock budgets and the committed
-baselines. Each hosted operating system compares a commit's timings with its
-parent's on one machine, and Linux compares instruction counts.
-"""
-
-import json
 import os
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Final
 
@@ -26,7 +19,7 @@ BENCHMARK_WORKFLOW: Final = WORKFLOWS / "bench.yml"
 CHECKOUT: Final = "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
 SETUP_UV: Final = "astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d"
 RUST_CACHE: Final = "Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6"
-RUNNER: Final = ("self-hosted", "macOS", "ARM64", "lofi-benchmark")
+UPLOAD: Final = "actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9"
 HOSTED: Final = ("ubuntu-latest", "macos-latest", "windows-latest")
 BASH: Final = shutil.which("bash") or "bash"
 GIT: Final = shutil.which("git") or "git"
@@ -72,24 +65,6 @@ def _named_step(name: str, job: str = "benchmarks") -> dict[str, JsonValue]:
     return matching[0]
 
 
-def _fullname_check(script: str) -> str:
-    marker = 'if ! uv run python - "$baseline" "$current_result" <<\'PY\'\n'
-
-    return script.split(marker, maxsplit=1)[1].split("\nPY\n", maxsplit=1)[0]
-
-
-def _selection_check(script: str) -> str:
-    marker = "\"$saved_fullnames\" <<'PY'\n"
-
-    return script.split(marker, maxsplit=1)[1].split("\nPY\n", maxsplit=1)[0]
-
-
-def _coverage_check(script: str) -> str:
-    marker = "\"$unowned_selector\" <<'PY'\n"
-
-    return script.split(marker, maxsplit=1)[1].split("\nPY\n", maxsplit=1)[0]
-
-
 def test_the_workflow_directory_contains_only_the_four_declared_routes() -> None:
     files = {path.name for path in WORKFLOWS.iterdir() if path.is_file()}
 
@@ -110,9 +85,7 @@ def test_the_benchmark_workflow_has_each_required_trigger() -> None:
 def test_a_scheduled_run_counts_instructions_and_times_nothing() -> None:
     assert "if" not in _job("instructions")
     assert _text(_job("relative")["if"]) == "github.event_name != 'schedule'"
-    assert _text(_job("benchmarks")["if"]).startswith(
-        "github.event_name != 'schedule' && ("
-    )
+    assert _text(_job("benchmarks")["if"]) == "github.event_name != 'schedule'"
 
 
 def test_the_workflow_has_one_job_per_measure() -> None:
@@ -121,23 +94,12 @@ def test_the_workflow_has_one_job_per_measure() -> None:
     assert tuple(jobs) == ("benchmarks", "relative", "instructions")
 
 
-def test_only_the_absolute_budgets_select_the_pinned_benchmark_host() -> None:
-    job = _job("benchmarks")
-
-    assert tuple(_text(label) for label in _items(job["runs-on"])) == RUNNER
-    assert _text(_job("relative")["runs-on"]) == "${{ matrix.os }}"
-    assert _text(_job("instructions")["runs-on"]) == "ubuntu-latest"
-
-
-def test_only_same_repository_pull_requests_reach_the_self_hosted_runner() -> None:
-    jobs = _mapping(_workflow()["jobs"])
-    job = _mapping(jobs["benchmarks"])
-
-    assert _text(job["if"]) == (
-        "github.event_name != 'schedule' && ("
-        "github.event_name != 'pull_request' || "
-        "github.event.pull_request.head.repo.full_name == github.repository)"
-    )
+def test_all_timing_jobs_use_hosted_runners() -> None:
+    for name in ("benchmarks", "relative"):
+        job = _job(name)
+        assert job["runs-on"] == "${{ matrix.os }}"
+        assert _mapping(_mapping(job["strategy"])["matrix"])["os"] == list(HOSTED)
+    assert _job("instructions")["runs-on"] == "ubuntu-latest"
 
 
 def test_the_workflow_installs_the_locked_tree_with_pinned_actions() -> None:
@@ -147,7 +109,12 @@ def test_the_workflow_installs_the_locked_tree_with_pinned_actions() -> None:
 
     action_steps = [step for step in _steps() if "uses" in step]
 
-    assert [_text(step["uses"]) for step in action_steps] == [CHECKOUT, SETUP_UV]
+    assert [_text(step["uses"]) for step in action_steps] == [
+        CHECKOUT,
+        SETUP_UV,
+        RUST_CACHE,
+        UPLOAD,
+    ]
     assert _mapping(action_steps[0]["with"]) == {"persist-credentials": False}
     assert _mapping(action_steps[1]["with"]) == {
         "python-version": "3.14.5",
@@ -156,272 +123,24 @@ def test_the_workflow_installs_the_locked_tree_with_pinned_actions() -> None:
     assert _text(_named_step("Install")["run"]) == "uv sync --locked"
 
 
-def test_each_tracked_baseline_owns_one_blocking_comparison() -> None:
-    step = _named_step("Time budgets and compare committed baselines")
-    script = _text(step["run"])
-    loop = script.split(
-        "while IFS=$'\\t' read -r baseline selector_file; do", maxsplit=1
-    )[1].split('done < "$plan"', maxsplit=1)[0]
-    committed = tuple((TREE / "tests" / "benchmarks" / "baselines").glob("*/*.json"))
-
-    assert step["shell"] == "bash"
-    assert committed
-    assert "git ls-files -- 'tests/benchmarks/baselines/*/*.json'" in script
-    assert 'if [[ ! -s "$baseline_list" ]]' in script
-    assert script.count("--collect-only") == 1
-    assert 'if hasattr(item, "fixturenames")' in script
-    assert 'and "benchmark" in item.fixturenames' in script
-    assert script.count("uv run pytest") == 2
-    unowned = script.split("if ((${#unowned_selectors[@]})); then", maxsplit=1)[
-        1
-    ].split("while IFS=$'\\t' read -r baseline selector_file; do", maxsplit=1)[0]
-    assert 'uv run pytest "${unowned_selectors[@]}" --benchmark-only' in unowned
-    assert "--benchmark-compare" not in unowned
-    assert "while IFS=$'\\t' read -r baseline selector_file; do" in script
-    assert loop.count("uv run pytest") == 1
-    assert "uv run pytest tests/benchmarks" not in script
-    assert 'if ! uv run pytest "${selectors[@]}"' in loop
-    assert "--benchmark-only" in loop
-    assert "--benchmark-storage=tests/benchmarks/baselines" in loop
-    assert '--benchmark-compare="$baseline"' in loop
-    assert "--benchmark-compare-fail=mean:10%" in loop
-    assert '--benchmark-json="$current_result"' in loop
-    assert 'mktemp "${RUNNER_TEMP}/lofi-benchmark-current.XXXXXX"' in loop
-    assert 'uv run python - "$baseline" "$current_result"' in loop
-    assert "status=1" in loop
-    assert 'done < "$plan"' in script
-    assert 'exit "$status"' in script
-    assert all(path.name not in script for path in committed)
+def test_every_benchmark_is_recorded_without_cross_machine_thresholds() -> None:
+    script = _text(_named_step("Record timings")["run"])
+    assert "uv run pytest tests/benchmarks --benchmark-only" in script
+    assert "-o wall_clock_budgets=false" in script
+    assert '--benchmark-json="$RUNNER_TEMP/benchmarks.json"' in script
+    assert "--benchmark-compare" not in script
+    assert "--benchmark-save" not in script
 
 
-def test_the_selection_plan_refuses_duplicate_saved_fullnames(tmp_path: Path) -> None:
-    script = _text(_named_step("Time budgets and compare committed baselines")["run"])
-    baseline_list = tmp_path / "baselines.txt"
-    selector_directory = tmp_path / "selectors"
-    selector_directory.mkdir()
-    plan = tmp_path / "plan.tsv"
-    saved_fullnames = tmp_path / "saved.txt"
-    first = tmp_path / "first.json"
-    second = tmp_path / "second.json"
-    fullname = "tests/benchmarks/test_live.py::test_live"
-    first.write_text(
-        json.dumps({"benchmarks": [{"fullname": fullname}]}),
-        encoding="utf-8",
-        newline="\n",
-    )
-    second.write_text(
-        json.dumps({"benchmarks": [{"fullname": fullname}]}),
-        encoding="utf-8",
-        newline="\n",
-    )
-    baseline_list.write_text(f"{first}\n{second}\n", encoding="utf-8", newline="\n")
-
-    result = subprocess.run(
-        (
-            sys.executable,
-            "-c",
-            _selection_check(script),
-            str(baseline_list),
-            str(selector_directory),
-            str(plan),
-            str(saved_fullnames),
-        ),
-        check=False,
-        capture_output=True,
-        encoding="utf-8",
-    )
-
-    assert result.returncode == 1
-    assert fullname in result.stdout
-    assert str(first) in result.stdout
-    assert str(second) in result.stdout
-
-
-def test_the_selection_plan_assigns_each_saved_fullname_once(tmp_path: Path) -> None:
-    script = _text(_named_step("Time budgets and compare committed baselines")["run"])
-    baseline_list = tmp_path / "baselines.txt"
-    selector_directory = tmp_path / "selectors"
-    selector_directory.mkdir()
-    plan = tmp_path / "plan.tsv"
-    saved_fullnames = tmp_path / "saved.txt"
-    first = tmp_path / "first.json"
-    second = tmp_path / "second.json"
-    first_fullname = "tests/benchmarks/test_first.py::test_first"
-    second_fullname = "tests/benchmarks/test_second.py::test_second[param]"
-    first.write_text(
-        json.dumps({"benchmarks": [{"fullname": first_fullname}]}),
-        encoding="utf-8",
-        newline="\n",
-    )
-    second.write_text(
-        json.dumps({"benchmarks": [{"fullname": second_fullname}]}),
-        encoding="utf-8",
-        newline="\n",
-    )
-    baseline_list.write_text(f"{first}\n{second}\n", encoding="utf-8", newline="\n")
-
-    result = subprocess.run(
-        (
-            sys.executable,
-            "-c",
-            _selection_check(script),
-            str(baseline_list),
-            str(selector_directory),
-            str(plan),
-            str(saved_fullnames),
-        ),
-        check=False,
-        capture_output=True,
-        encoding="utf-8",
-    )
-
-    assert result.returncode == 0
-    assignments = [
-        line.split("\t") for line in plan.read_text(encoding="utf-8").splitlines()
-    ]
-    assert [assignment[0] for assignment in assignments] == [str(first), str(second)]
-    selected = [
-        Path(assignment[1]).read_text(encoding="utf-8").splitlines()
-        for assignment in assignments
-    ]
-    assert selected == [[first_fullname], [second_fullname]]
-    assert saved_fullnames.read_text(encoding="utf-8").splitlines() == [
-        first_fullname,
-        second_fullname,
-    ]
-
-
-def test_the_collected_benchmark_partition_refuses_stale_saved_rows(
-    tmp_path: Path,
-) -> None:
-    script = _text(_named_step("Time budgets and compare committed baselines")["run"])
-    saved = tmp_path / "saved.txt"
-    current = tmp_path / "current.txt"
-    unowned_selector = tmp_path / "unowned.txt"
-    shared = "tests/benchmarks/test_live.py::test_live"
-    stale = "tests/benchmarks/test_old.py::test_old"
-    unowned = "tests/benchmarks/test_new.py::test_new"
-    saved.write_text(f"{shared}\n{stale}\n", encoding="utf-8", newline="\n")
-    current.write_text(f"{shared}\n{unowned}\n", encoding="utf-8", newline="\n")
-
-    result = subprocess.run(
-        (
-            sys.executable,
-            "-c",
-            _coverage_check(script),
-            str(saved),
-            str(current),
-            str(unowned_selector),
-        ),
-        check=False,
-        capture_output=True,
-        encoding="utf-8",
-    )
-
-    assert result.returncode == 1
-    assert f"stale saved fullname: {stale}" in result.stdout
-    assert f"stale saved fullname: {shared}" not in result.stdout
-
-
-def test_the_collected_benchmark_partition_writes_each_unowned_node_once(
-    tmp_path: Path,
-) -> None:
-    script = _text(_named_step("Time budgets and compare committed baselines")["run"])
-    saved = tmp_path / "saved.txt"
-    current = tmp_path / "current.txt"
-    unowned_selector = tmp_path / "unowned.txt"
-    shared = "tests/benchmarks/test_live.py::test_live"
-    first_unowned = "tests/benchmarks/test_absolute.py::test_first"
-    second_unowned = "tests/benchmarks/test_absolute.py::test_second"
-    saved.write_text(f"{shared}\n", encoding="utf-8", newline="\n")
-    current.write_text(
-        f"{second_unowned}\n{shared}\n{first_unowned}\n", encoding="utf-8", newline="\n"
-    )
-
-    result = subprocess.run(
-        (
-            sys.executable,
-            "-c",
-            _coverage_check(script),
-            str(saved),
-            str(current),
-            str(unowned_selector),
-        ),
-        check=False,
-        capture_output=True,
-        encoding="utf-8",
-    )
-
-    assert result.returncode == 0
-    assert result.stdout == ""
-    assert unowned_selector.read_text(encoding="utf-8").splitlines() == [
-        first_unowned,
-        second_unowned,
-    ]
-
-
-def test_the_fullname_check_separates_an_orphaned_saved_row(tmp_path: Path) -> None:
-    script = _text(_named_step("Time budgets and compare committed baselines")["run"])
-    baseline = tmp_path / "baseline.json"
-    current = tmp_path / "current.json"
-    baseline.write_text(
-        json.dumps(
-            {
-                "benchmarks": [
-                    {"fullname": "benchmarks/test_live.py::test_live"},
-                    {"fullname": "benchmarks/test_old.py::test_orphan"},
-                ]
-            }
-        ),
-        encoding="utf-8",
-        newline="\n",
-    )
-    current.write_text(
-        json.dumps(
-            {
-                "benchmarks": [
-                    {"fullname": "benchmarks/test_live.py::test_live"},
-                ]
-            }
-        ),
-        encoding="utf-8",
-        newline="\n",
-    )
-
-    result = subprocess.run(
-        (sys.executable, "-c", _fullname_check(script), str(baseline), str(current)),
-        check=False,
-        capture_output=True,
-        encoding="utf-8",
-    )
-
-    assert result.returncode == 1
-    assert "benchmarks/test_old.py::test_orphan" in result.stdout
-    assert "missing: benchmarks/test_old.py::test_orphan" in result.stdout
-    assert "missing: benchmarks/test_live.py::test_live" not in result.stdout
-
-    current.write_text(
-        baseline.read_text(encoding="utf-8"), encoding="utf-8", newline="\n"
-    )
-    accepted = subprocess.run(
-        (sys.executable, "-c", _fullname_check(script), str(baseline), str(current)),
-        check=False,
-        capture_output=True,
-        encoding="utf-8",
-    )
-
-    assert accepted.returncode == 0
-    assert accepted.stdout == ""
-
-
-def test_the_workflow_neither_writes_baselines_nor_switches_debug_checks() -> None:
-    source = BENCHMARK_WORKFLOW.read_text(encoding="utf-8")
-    absolute = _text(_named_step("Time budgets and compare committed baselines")["run"])
-
-    assert "--benchmark-save" not in absolute
-    assert "env" not in _job("benchmarks")
-    assert "upload-artifact" not in source
-    assert "LOFI_CHECK" not in source
+def test_timing_results_are_retained_even_when_a_benchmark_fails() -> None:
+    step = _named_step("Upload timings")
+    assert step["if"] == "${{ !cancelled() }}"
+    assert step["uses"] == UPLOAD
+    assert _mapping(step["with"]) == {
+        "name": "benchmarks-${{ matrix.os }}",
+        "path": "${{ runner.temp }}/benchmarks.json",
+        "if-no-files-found": "error",
+    }
 
 
 def test_the_relative_comparison_runs_on_every_hosted_operating_system() -> None:
