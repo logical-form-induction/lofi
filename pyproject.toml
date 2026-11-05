@@ -58,7 +58,7 @@ judgments = [
     "scipy>=1.18",
     "torchdiffeq>=0.2.5",
 ]
-reporting = ["pyarrow>=25"]
+reporting = ["pyarrow>=26.0.0"]
 publish = [
     "huggingface-hub>=1",
     "lairs>=0.9.0",
