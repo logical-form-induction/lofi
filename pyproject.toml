@@ -44,7 +44,7 @@ dependencies = [
 # capability imports directly. two capabilities may share a wheel: quivers
 # requires torch, so `judgments` gets torch too, without `nn` naming quivers.
 [project.optional-dependencies]
-nn = ["numpy>=2", "torch>=2", "transformers[sentencepiece]>=4"]
+nn = ["numpy>=2.5.4", "torch>=2.15.0", "transformers[sentencepiece]>=4"]
 corpora = ["lairs[conllu]>=0.9.0"]
 cross-engine = ["quivers>=0.25.2"]
 # quivers[diagnostics] rather than plain quivers: the PSIS-LOO and ELPD comparison
@@ -62,8 +62,8 @@ reporting = ["pyarrow>=25"]
 publish = [
     "huggingface-hub>=1",
     "lairs>=0.9.0",
-    "numpy>=2",
-    "torch>=2",
+    "numpy>=2.5.4",
+    "torch>=2.15.0",
     "transformers[sentencepiece]>=4",
 ]
 tracking = ["wandb", "mlflow", "trackio"]
@@ -73,7 +73,7 @@ tracking = ["wandb", "mlflow", "trackio"]
 laws = ["hypothesis>=6"]
 # The SMT arm runs the z3 executable installed by this wheel. TPTP users may
 # select E or Vampire from their site environment through the same prover API.
-provers = ["z3-solver>=4.15"]
+provers = ["z3-solver>=5.3.3.0"]
 
 [project.urls]
 Homepage = "https://github.com/logical-form-induction/lofi"
