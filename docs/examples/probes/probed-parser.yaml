@@ -1,0 +1,5 @@
+defaults:
+  - run/synthetic-parser
+probes:
+  diag:
+    kind: diagnostics

@@ -1,0 +1,24 @@
+{
+  "grid": {
+    "source-fragment": [
+      "quantifier-free",
+      "universal-only",
+      "existential-only",
+      "second-order"
+    ],
+    "candidate-logic": [
+      "quantifier-free",
+      "universal-only",
+      "existential-only",
+      "second-order"
+    ]
+  },
+  "hypotheses": [
+    {"name": "qf-universal", "left": "quantifier-free", "right": "universal-only", "family": "source-logic", "margin": 0.1},
+    {"name": "qf-existential", "left": "quantifier-free", "right": "existential-only", "family": "source-logic", "margin": 0.1},
+    {"name": "qf-second", "left": "quantifier-free", "right": "second-order", "family": "source-logic", "margin": 0.1},
+    {"name": "universal-existential", "left": "universal-only", "right": "existential-only", "family": "source-logic", "margin": 0.1},
+    {"name": "universal-second", "left": "universal-only", "right": "second-order", "family": "source-logic", "margin": 0.1},
+    {"name": "existential-second", "left": "existential-only", "right": "second-order", "family": "source-logic", "margin": 0.1}
+  ]
+}

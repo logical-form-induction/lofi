@@ -1,0 +1,3 @@
+# The packaged parser decodes categories before erasing them into its type language.
+defaults:
+  - run/synthetic-parser-erase-then-decode

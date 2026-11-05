@@ -1,0 +1,10 @@
+# Intensional meanings over worlds in the dataset's declared learner language.
+erasure:
+  kind: signature-morphism
+  atoms: {S: t, NP: e}
+constants:
+  - {name: john, type: e, classes: [individual]}
+  - {name: mary, type: e, classes: [individual]}
+  - {name: sleep_at, type: "s -> e -> t", classes: [predicate]}
+  - {name: see_at, type: "s -> e -> e -> t", classes: [predicate]}
+meanings: {source: {kind: lexical}}

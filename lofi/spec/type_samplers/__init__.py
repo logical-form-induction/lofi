@@ -1,0 +1,1 @@
+"""Synthetic type-sampler declarations."""

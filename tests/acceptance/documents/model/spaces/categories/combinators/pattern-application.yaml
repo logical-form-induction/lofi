@@ -1,0 +1,6 @@
+# Map each composing action of the pattern-application grammar to its decoder.
+merge: concatenate
+decoders:
+  forward: application
+  backward: application
+  conjoin: application

@@ -1,0 +1,8 @@
+defaults:
+  - synthetic-decode-supertag
+evaluators:
+  decoded-types:
+    astar:
+      strategy: {kind: linear}
+      heuristic: {kind: zero}
+    decode: {kind: viterbi}

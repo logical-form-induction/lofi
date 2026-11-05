@@ -1,0 +1,5 @@
+defaults: [s2-source-run]
+kind: synthetic
+grammar:
+  signature:
+    primitives: [P1, S]

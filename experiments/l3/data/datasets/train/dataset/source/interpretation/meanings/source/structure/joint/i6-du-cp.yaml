@@ -1,0 +1,5 @@
+spelling: parametric
+members: [predicate, constant]
+largest_class: 6
+class_sizes: {kind: uniform}
+coupling: 0.75

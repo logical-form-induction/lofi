@@ -1,0 +1,2 @@
+{"annotator_labels":["entailment","entailment","neutral"],"gold_label":"entailment","pairID":"snli-0","sentence1":"A café opens.","sentence2":"A business opens."}
+{"annotator_labels":["contradiction","contradiction"],"gold_label":"contradiction","pairID":"snli-1","sentence1":"The dog sleeps.","sentence2":"The dog runs."}

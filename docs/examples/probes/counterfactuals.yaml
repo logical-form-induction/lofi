@@ -1,0 +1,9 @@
+counterfactuals:
+  sentences: docs/examples/probes/candidates.txt
+  unary_depth: 0
+  readings: 16
+  render: declared
+  pieces: all
+  specials: exclude
+  contiguous: true
+  seed: 0

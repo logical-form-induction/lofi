@@ -1,0 +1,2 @@
+kind: expert-ratings
+source: ${lofi.path:expert-ratings.json}

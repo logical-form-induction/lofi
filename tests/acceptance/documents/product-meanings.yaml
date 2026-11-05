@@ -1,0 +1,22 @@
+# The slash grammar with a product category interpreted into product types, the
+# first projection's meaning declared.
+defaults:
+  - slash-product-point
+  - data.datasets.train.dataset.interpretation: products
+  - data.datasets.train.dataset.language: products
+data:
+  datasets:
+    train:
+      dataset:
+        interpretation:
+          erasure:
+            constructors:
+              "*": "prod(a0, a1)"
+          constants:
+            - {name: john, type: e, classes: [individual]}
+            - {name: mary, type: e, classes: [individual]}
+            - {name: sleep, type: "e -> t", classes: [predicate]}
+            - {name: see, type: "e -> e -> t", classes: [predicate]}
+          meanings: {source: {kind: lexical}}
+          actions:
+            first: '\p. fst(p)'

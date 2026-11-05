@@ -1,0 +1,13 @@
+grid:
+  - group: data.datasets.train.dataset.complexity.premise.controls.meaning_depth
+    values: [shallow, deep]
+  - group: data.datasets.train.dataset.complexity.hypothesis.controls.meaning_depth
+    values: [shallow, deep]
+  - group: data.datasets.train.dataset.complexity.premise.controls.operator_nesting
+    values: [flat, nested]
+  - group: data.datasets.train.dataset.complexity.hypothesis.controls.operator_nesting
+    values: [flat, nested]
+  - group: data.datasets.train.dataset.source.interpretation.meanings.source.structure.arities
+    values: [unary-heavy, binary-heavy]
+seeds: [0]
+expected_points: 32

@@ -1,0 +1,400 @@
+name: Benchmarks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # the same weekly run as ci.yml. Only the instruction counts run on it: a
+  # yanked crate or a runner image change can break their build with no commit
+  # to blame, and with no base commit they record rather than compare.
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  benchmarks:
+    name: Timed budgets and regressions
+    if: >-
+      github.event_name != 'schedule' &&
+      (github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: [self-hosted, macOS, ARM64, lofi-benchmark]
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.14.5"
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --locked
+
+      - name: Time budgets and compare committed baselines
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          baseline_list="$(
+            mktemp "${RUNNER_TEMP}/lofi-benchmark-baselines.XXXXXX"
+          )"
+          selector_directory="$(
+            mktemp -d "${RUNNER_TEMP}/lofi-benchmark-selectors.XXXXXX"
+          )"
+          plan="$(mktemp "${RUNNER_TEMP}/lofi-benchmark-plan.XXXXXX")"
+          saved_fullnames="$(
+            mktemp "${RUNNER_TEMP}/lofi-benchmark-saved.XXXXXX"
+          )"
+          current_fullnames="$(
+            mktemp "${RUNNER_TEMP}/lofi-benchmark-collected.XXXXXX"
+          )"
+          unowned_selector="$(
+            mktemp "${RUNNER_TEMP}/lofi-benchmark-unowned.XXXXXX"
+          )"
+          git ls-files -- 'tests/benchmarks/baselines/*/*.json' > "$baseline_list"
+          if [[ ! -s "$baseline_list" ]]; then
+            echo "::error::No committed benchmark baseline found"
+            exit 1
+          fi
+
+          uv run python - \
+            "$baseline_list" \
+            "$selector_directory" \
+            "$plan" \
+            "$saved_fullnames" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+
+          baseline_list = Path(sys.argv[1])
+          selector_directory = Path(sys.argv[2])
+          plan = Path(sys.argv[3])
+          saved_fullnames = Path(sys.argv[4])
+          baselines = baseline_list.read_text(encoding="utf-8").splitlines()
+          owners: dict[str, str] = {}
+          selections: list[tuple[str, list[str]]] = []
+          errors: list[str] = []
+
+          for baseline in baselines:
+              if "\t" in baseline:
+                  errors.append(f"Baseline path contains a tab: {baseline!r}")
+                  continue
+
+              with Path(baseline).open(encoding="utf-8") as stream:
+                  result = json.load(stream)
+
+              rows = result.get("benchmarks")
+              if not isinstance(rows, list) or not rows:
+                  errors.append(f"Baseline has no benchmark rows: {baseline}")
+                  continue
+
+              fullnames: list[str] = []
+              for row in rows:
+                  fullname = row.get("fullname") if isinstance(row, dict) else None
+                  if (
+                      not isinstance(fullname, str)
+                      or not fullname
+                      or "\n" in fullname
+                      or "\r" in fullname
+                      or not fullname.startswith("tests/benchmarks/")
+                      or "::" not in fullname
+                  ):
+                      errors.append(
+                          f"Baseline has an invalid benchmark fullname: {baseline}"
+                      )
+                      continue
+
+                  owner = owners.get(fullname)
+                  if owner is not None:
+                      errors.append(
+                          "Duplicate saved benchmark fullname in "
+                          f"{owner} and {baseline}: {fullname}"
+                      )
+                      continue
+
+                  owners[fullname] = baseline
+                  fullnames.append(fullname)
+
+              selections.append((baseline, fullnames))
+
+          if errors:
+              for error in errors:
+                  print(f"::error::{error}")
+              raise SystemExit(1)
+
+          plan_lines: list[str] = []
+          for index, (baseline, fullnames) in enumerate(selections):
+              selector_file = selector_directory / f"{index:04d}.txt"
+              selector_file.write_text("\n".join(fullnames) + "\n", encoding="utf-8")
+              plan_lines.append(f"{baseline}\t{selector_file}")
+
+          plan.write_text("\n".join(plan_lines) + "\n", encoding="utf-8")
+          saved_fullnames.write_text(
+              "\n".join(sorted(owners)) + "\n", encoding="utf-8"
+          )
+          PY
+
+          uv run python - "$current_fullnames" <<'PY'
+          import sys
+          from pathlib import Path
+
+          import pytest
+
+
+          class BenchmarkCollection:
+              def __init__(self) -> None:
+                  self.fullnames: list[str] = []
+
+              @pytest.hookimpl(trylast=True)
+              def pytest_collection_modifyitems(
+                  self, items: list[pytest.Item]
+              ) -> None:
+                  self.fullnames = [
+                      item.nodeid
+                      for item in items
+                      if hasattr(item, "fixturenames")
+                      and "benchmark" in item.fixturenames
+                  ]
+
+
+          destination = Path(sys.argv[1])
+          collection = BenchmarkCollection()
+          status = pytest.main(
+              ["tests/benchmarks", "--collect-only", "-q"], plugins=[collection]
+          )
+
+          if status != pytest.ExitCode.OK:
+              raise SystemExit(status)
+
+          destination.write_text(
+              "\n".join(sorted(collection.fullnames)) + "\n", encoding="utf-8"
+          )
+          PY
+
+          uv run python - \
+            "$saved_fullnames" \
+            "$current_fullnames" \
+            "$unowned_selector" <<'PY'
+          import sys
+          from pathlib import Path
+
+
+          def fullnames(path: Path) -> set[str]:
+              return set(path.read_text(encoding="utf-8").splitlines())
+
+
+          saved = fullnames(Path(sys.argv[1]))
+          current = fullnames(Path(sys.argv[2]))
+          unowned_selector = Path(sys.argv[3])
+          stale = sorted(saved - current)
+          unowned = sorted(current - saved)
+
+          if stale:
+              print("::error::Saved benchmark rows have no current timed benchmark")
+              for fullname in stale:
+                  print(f"stale saved fullname: {fullname}")
+              raise SystemExit(1)
+
+          unowned_selector.write_text(
+              "\n".join(unowned) + ("\n" if unowned else ""), encoding="utf-8"
+          )
+          PY
+
+          status=0
+          unowned_selectors=()
+          while IFS= read -r fullname; do
+            unowned_selectors+=("$fullname")
+          done < "$unowned_selector"
+
+          if ((${#unowned_selectors[@]})); then
+            if ! uv run pytest "${unowned_selectors[@]}" --benchmark-only; then
+              status=1
+            fi
+          fi
+
+          while IFS=$'\t' read -r baseline selector_file; do
+            selectors=()
+            while IFS= read -r fullname; do
+              selectors+=("$fullname")
+            done < "$selector_file"
+
+            current_result="$(
+              mktemp "${RUNNER_TEMP}/lofi-benchmark-current.XXXXXX"
+            )"
+            if ! uv run pytest "${selectors[@]}" \
+              --benchmark-only \
+              --benchmark-storage=tests/benchmarks/baselines \
+              --benchmark-compare="$baseline" \
+              --benchmark-compare-fail=mean:10% \
+              --benchmark-json="$current_result"; then
+              status=1
+            fi
+
+            if ! uv run python - "$baseline" "$current_result" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+
+          def fullnames(path: Path) -> set[str]:
+              with path.open(encoding="utf-8") as stream:
+                  result = json.load(stream)
+
+              return {row["fullname"] for row in result["benchmarks"]}
+
+
+          baseline = Path(sys.argv[1])
+          current = Path(sys.argv[2])
+          saved = fullnames(baseline)
+          try:
+              observed = fullnames(current)
+          except (OSError, json.JSONDecodeError, KeyError, TypeError):
+              observed = set()
+          missing = sorted(saved - observed)
+          unexpected = sorted(observed - saved)
+
+          if missing or unexpected:
+              print(
+                  f"::error file={baseline}::"
+                  "Saved and current benchmark rows differ"
+              )
+              for fullname in missing:
+                  print(f"missing: {fullname}")
+              for fullname in unexpected:
+                  print(f"unexpected: {fullname}")
+              raise SystemExit(1)
+          PY
+            then
+              status=1
+            fi
+          done < "$plan"
+
+          exit "$status"
+
+  relative:
+    name: Relative timings (${{ matrix.os }})
+    # a hosted machine is too variable for an absolute budget, but the commit
+    # and its parent timed one after the other on it share its speed, so their
+    # ratio is the measure.
+    if: github.event_name != 'schedule'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    env:
+      # the slowdown of a benchmark's median against the parent's that fails
+      # the job. A shared runner's run-to-run spread is wider than the pinned
+      # host's, so this is wider than its mean:10%.
+      RELATIVE_REGRESSION: median:20%
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # this commit and its first parent. A pull request checks out its
+          # merge commit, whose first parent is the base branch.
+          fetch-depth: 2
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.14.5"
+          enable-cache: true
+      - name: Rust toolchain
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+
+      # a commit with no parent, such as a squashed release, has nothing to be
+      # timed against. The job then says so in its log and summary and times
+      # nothing, rather than passing as though it had compared.
+      - name: Find the parent
+        id: parent
+        shell: bash
+        run: |
+          if git rev-parse --verify --quiet 'HEAD^1' > /dev/null; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            message="$(git rev-parse HEAD) has no parent commit, so no relative timing comparison ran"
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=No relative timing comparison::$message"
+            echo "$message." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Check out the parent
+        if: steps.parent.outputs.found == 'true'
+        shell: bash
+        run: git worktree add --detach "$RUNNER_TEMP/parent" HEAD^1
+
+      # the parent builds in its own worktree and environment, so its timings
+      # come from its own code. Both runs save to storage outside either tree.
+      - name: Time the parent
+        if: steps.parent.outputs.found == 'true'
+        shell: bash
+        working-directory: ${{ runner.temp }}/parent
+        run: |
+          uv sync --locked
+          uv run pytest tests/benchmarks --benchmark-only \
+            -o wall_clock_budgets=false \
+            --benchmark-storage="$RUNNER_TEMP/relative" \
+            --benchmark-save=parent
+
+      - name: Time this commit against its parent
+        if: steps.parent.outputs.found == 'true'
+        shell: bash
+        run: |
+          uv sync --locked
+          uv run pytest tests/benchmarks --benchmark-only \
+            -o wall_clock_budgets=false \
+            --benchmark-storage="$RUNNER_TEMP/relative" \
+            --benchmark-compare=0001 \
+            --benchmark-compare-fail="$RELATIVE_REGRESSION"
+
+  instructions:
+    name: Instruction counts
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CARGO_TERM_COLOR: always
+      # instruction counts under Valgrind are deterministic, so the limit needs
+      # no allowance for noise.
+      INSTRUCTION_REGRESSION: ir=2%
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Rust toolchain
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - name: Valgrind
+        run: sudo apt-get update && sudo apt-get install --yes valgrind
+      - uses: taiki-e/install-action@8cca0918f8471c33515202b73f56ab27f2bed283 # v2.87.29
+        with:
+          # the runner's version must equal the gungraun version in Cargo.lock
+          tool: gungraun-runner@0.20.0
+
+      - name: Counts at the base commit
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        # a scheduled or manual run, or a base commit without the benchmarks, leaves no
+        # baseline, and the comparison below then records one instead of
+        # comparing. A baseline restored from the cache is never compared.
+        run: |
+          rm -rf target/gungraun
+          if [ -n "$BASE" ] && git cat-file -e "$BASE:crates/lofi-chart/benches/build.rs" 2>/dev/null; then
+            git checkout --quiet --detach "$BASE"
+            cargo bench -p lofi-chart --locked -- --save-baseline=base
+            git checkout --quiet --detach "$GITHUB_SHA"
+          fi
+
+      - name: Counts at this commit against the base
+        run: cargo bench -p lofi-chart --locked -- --baseline=base --callgrind-limits="$INSTRUCTION_REGRESSION"

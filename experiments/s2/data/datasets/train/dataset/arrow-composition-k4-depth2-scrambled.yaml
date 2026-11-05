@@ -1,0 +1,5 @@
+defaults: [arrow-composition-k4-depth2]
+kind: synthetic
+grammar:
+  lexicon:
+    seed: 139

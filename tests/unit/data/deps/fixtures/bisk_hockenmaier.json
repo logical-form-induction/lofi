@@ -1,0 +1,139 @@
+{
+  "functors": {
+    "S/N": {
+      "result": "S",
+      "argument": "N",
+      "shares_head": false
+    },
+    "S\\N": {
+      "result": "S",
+      "argument": "N",
+      "shares_head": false
+    },
+    "S/S": {
+      "result": "S",
+      "argument": "S",
+      "shares_head": true
+    }
+  },
+  "coordination_marks": ["coordination-mark"],
+  "cases": [
+    {
+      "name": "forward application",
+      "tokens": ["eats", "fish"],
+      "root": 2,
+      "nodes": [
+        {"id": 0, "span": [0, 1], "label": "S/N"},
+        {"id": 1, "span": [1, 2], "label": "N"},
+        {
+          "id": 2,
+          "span": [0, 2],
+          "label": "S",
+          "rule": "forward-application",
+          "children": [0, 1]
+        }
+      ],
+      "selections": {
+        "forward-application": ["functor", 0]
+      },
+      "arcs": [[1, 2], [0, 1]]
+    },
+    {
+      "name": "backward application",
+      "tokens": ["birds", "sing"],
+      "root": 2,
+      "nodes": [
+        {"id": 0, "span": [0, 1], "label": "N"},
+        {"id": 1, "span": [1, 2], "label": "S\\N"},
+        {
+          "id": 2,
+          "span": [0, 2],
+          "label": "S",
+          "rule": "backward-application",
+          "children": [0, 1]
+        }
+      ],
+      "selections": {
+        "backward-application": ["functor", 1]
+      },
+      "arcs": [[2, 1], [0, 2]]
+    },
+    {
+      "name": "unary preservation",
+      "tokens": ["birds"],
+      "root": 1,
+      "nodes": [
+        {"id": 0, "span": [0, 1], "label": "N"},
+        {
+          "id": 1,
+          "span": [0, 1],
+          "label": "NP",
+          "rule": "type-change",
+          "children": [0]
+        }
+      ],
+      "selections": {
+        "type-change": ["pass-through", 0]
+      },
+      "arcs": [[0, 1]]
+    },
+    {
+      "name": "modifier inversion",
+      "tokens": ["quietly", "sleeps"],
+      "root": 2,
+      "nodes": [
+        {"id": 0, "span": [0, 1], "label": "S/S"},
+        {"id": 1, "span": [1, 2], "label": "S"},
+        {
+          "id": 2,
+          "span": [0, 2],
+          "label": "S",
+          "rule": "forward-modifier",
+          "children": [0, 1]
+        }
+      ],
+      "selections": {
+        "forward-modifier": ["functor", 0]
+      },
+      "arcs": [[2, 1], [0, 2]]
+    },
+    {
+      "name": "coordination",
+      "tokens": ["cats", "and", "dogs", "sleep"],
+      "root": 6,
+      "nodes": [
+        {"id": 0, "span": [0, 1], "label": "N"},
+        {"id": 1, "span": [1, 2], "label": "conj"},
+        {"id": 2, "span": [2, 3], "label": "N"},
+        {
+          "id": 3,
+          "span": [1, 3],
+          "label": "N[conj]",
+          "rule": "coordination-mark",
+          "children": [1, 2]
+        },
+        {
+          "id": 4,
+          "span": [0, 3],
+          "label": "N",
+          "rule": "coordination-merge",
+          "children": [0, 3]
+        },
+        {"id": 5, "span": [3, 4], "label": "S\\N"},
+        {
+          "id": 6,
+          "span": [0, 4],
+          "label": "S",
+          "rule": "backward-application",
+          "children": [4, 5]
+        }
+      ],
+      "selections": {
+        "coordination-mark": ["non-absorbing", 1],
+        "coordination-merge": ["left-conjunct", 0],
+        "backward-application": ["functor", 1]
+      },
+      "arcs": [[1, 2], [2, 3], [4, 1], [0, 4]]
+    }
+  ]
+}

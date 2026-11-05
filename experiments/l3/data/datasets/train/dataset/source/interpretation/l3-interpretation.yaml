@@ -1,0 +1,49 @@
+countermodels:
+  method: exhaustive
+  carriers: {e: 1, v: 1}
+  structures: 64
+  seed: 0
+  full_function_space_cap: 64
+erasure:
+  kind: signature-morphism
+  atoms: {S: t, NP: e, conj: e}
+constants:
+  - {name: john, type: e, classes: [individual]}
+  - {name: mary, type: e, classes: [individual]}
+  - {name: sleep, type: "e -> t", classes: [predicate]}
+  - {name: snore, type: "e -> t", classes: [predicate]}
+  - {name: love, type: "e -> e -> t", classes: [predicate]}
+meanings:
+  source:
+    kind: structured
+    structure:
+      joint:
+        spelling: parametric
+        members: [predicate, constant]
+        largest_class: 6
+        class_sizes: {kind: uniform}
+        coupling: 0.0
+      rank_law: {kind: uniform}
+      arities:
+        arities:
+          - {arity: 1, share: 0.5, rank_law: {kind: uniform}}
+          - {arity: 2, share: 0.5, rank_law: {kind: uniform}}
+      assignment:
+        kind: tabular
+        rows:
+          - {category: NP, classes: [{logical_class: constant}]}
+          - {category: "S\\NP", classes: [{logical_class: predicate, arity: 1}]}
+          - {category: "S\\NP/NP", classes: [{logical_class: predicate, arity: 2}]}
+      fragment:
+        order: first
+        quantifiers: []
+        connectives: []
+        functions: false
+        equality: false
+      seed: 0
+      polysemy:
+        spelling: parametric
+        mean: 1.0
+        dispersion: 0.0
+        maximum: 3
+        placement: 0.0

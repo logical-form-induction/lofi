@@ -1,0 +1,11 @@
+types:
+  kind: terms
+  space: categories
+  reads: inside
+  targets: grammar-goal
+  output: sentences
+category-terms:
+  kind: terms
+  space: categories
+  reads: inside
+  decoding: {strategy: exhaustive, residual_mass: 0.01, cap: 64}

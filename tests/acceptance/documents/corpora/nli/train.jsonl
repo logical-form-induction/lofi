@@ -1,0 +1,4 @@
+{"annotator_labels": ["entailment"], "gold_label": "entailment", "pairID": "slash-0", "sentence1": "john sleeps", "sentence2": "john sleeps"}
+{"annotator_labels": ["neutral"], "gold_label": "neutral", "pairID": "slash-1", "sentence1": "mary sees john", "sentence2": "mary sleeps"}
+{"annotator_labels": ["neutral"], "gold_label": "neutral", "pairID": "slash-2", "sentence1": "john sees mary", "sentence2": "john sleeps"}
+{"annotator_labels": ["entailment"], "gold_label": "entailment", "pairID": "slash-3", "sentence1": "mary sleeps", "sentence2": "mary sleeps"}

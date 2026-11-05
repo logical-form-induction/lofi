@@ -1,0 +1,19 @@
+{
+  "grid": {
+    "ambiguity-profile": [
+      "a125-d0-pn", "a125-d0-p0", "a125-d0-pp",
+      "a125-d1-pn", "a125-d1-p0", "a125-d1-pp",
+      "a200-d0-pn", "a200-d0-p0", "a200-d0-pp",
+      "a200-d1-pn", "a200-d1-p0", "a200-d1-pp"
+    ],
+    "scope": ["single-reading", "multiple-reading"]
+  },
+  "hypotheses": [
+    {
+      "name": "ambiguity-recovery-above-floor",
+      "left": "many-to-one-accuracy",
+      "right": "random-relabeling-floor",
+      "family": "logical-form-ambiguity"
+    }
+  ]
+}

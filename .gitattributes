@@ -1,0 +1,7 @@
+# Every text file is stored and checked out with LF line ends on every
+# platform, so fixtures read as bytes, hashed or compared are identical on
+# Linux, macOS and Windows.
+* text=auto eol=lf
+
+# A panproto repository's objects are content-addressed bytes.
+**/.panproto/** -text

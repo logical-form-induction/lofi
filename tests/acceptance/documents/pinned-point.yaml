@@ -1,0 +1,8 @@
+# Token-level supervision: half of the gold lexical categories pin the chart.
+defaults:
+  - slash-point
+  - data.datasets.train.constraint_source: gold-lexicon
+  - data.datasets.train.constraint_policy.syntactic: partial
+loss:
+  terms+:
+    - objective: {kind: pinning, readout: types}

@@ -1,0 +1,23 @@
+# Application over one undirected arrow constructor.
+name: arrow
+signature:
+  primitives: [S, NP]
+  constructors:
+    - {name: "arrow", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: ->, precedence: 10, associativity: left}}
+  functors:
+    - {name: "arrow", constructor: "arrow", argument_side: either, opposite: "arrow"}
+rules:
+  name: arrow-application
+  rules:
+    - {rule: application, view: arrow}
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: NP, meaning: john}
+    - {form: mary, category: NP, meaning: mary}
+    - {form: sleeps, category: "S->NP", meaning: '\x. sleep(x)'}
+    - {form: sees, category: "(S->NP)->NP", meaning: '\y. \x. see(x)(y)'}
+goal:
+  kind: root
+  categories: [S]
+formalism: declared

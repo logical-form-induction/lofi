@@ -1,0 +1,9 @@
+{
+  "merge": "concatenate",
+  "decoders": {
+    "application:/": "application",
+    "application:\\": "application",
+    "composition:/:1:harmonic:unrestricted": "application",
+    "composition:\\:1:harmonic:unrestricted": "application"
+  }
+}

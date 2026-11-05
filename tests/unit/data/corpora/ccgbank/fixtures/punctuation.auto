@@ -1,0 +1,4 @@
+ID=lofi.2 PARSER=GOLD NUMPARSE=1
+(<T S[dcl] 0 2> (<T S[dcl] 1 2> (<T NP 0 1> (<L N PRP PRP they N>) ) (<L S[dcl]\NP VBD VBD left S[dcl]_1\NP_2>) ) (<L . . . . .>) )
+ID=lofi.2b PARSER=GOLD NUMPARSE=1
+(<T NP 1 2> (<L , , , , ,>) (<T NP 0 1> (<L N NNP NNP Bombay N>) ) )

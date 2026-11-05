@@ -1,0 +1,11 @@
+defaults: [prover-enumerated]
+scorer:
+  kind: guided-proof
+  readout: forms
+  order: first
+  steps: 128
+  depth: 12
+  top_k: 8
+  instantiations: 16
+  hidden: 32
+  verification: {calls_per_step: 512, wall_per_step: 30.0, cpu_seconds: null}

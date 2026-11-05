@@ -1,0 +1,34 @@
+{
+  "system": "released-parser",
+  "budget": {"depth": 4, "beam": 8, "mass": 0.02},
+  "items": [
+    {
+      "item_id": "dev-1",
+      "split": "dev",
+      "length": 4,
+      "punctuation": [],
+      "gold": [
+        {"start": 0, "end": 4, "label": "S", "depth": 0},
+        {"start": 2, "end": 4, "label": "VP", "depth": 1}
+      ],
+      "spans": [
+        {"start": 0, "end": 4, "label": "c0"},
+        {"start": 2, "end": 4, "label": "c1"}
+      ]
+    },
+    {
+      "item_id": "test-1",
+      "split": "test",
+      "length": 4,
+      "punctuation": [],
+      "gold": [
+        {"start": 0, "end": 4, "label": "S", "depth": 0},
+        {"start": 2, "end": 4, "label": "VP", "depth": 1}
+      ],
+      "spans": [
+        {"start": 0, "end": 4, "label": "c0"},
+        {"start": 2, "end": 4, "label": "c1"}
+      ]
+    }
+  ]
+}

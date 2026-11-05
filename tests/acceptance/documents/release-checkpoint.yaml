@@ -1,0 +1,5 @@
+# A run that declares which of its checkpoints it releases.
+defaults:
+  - slash-point
+release:
+  checkpoint: validation-best

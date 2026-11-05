@@ -1,0 +1,4 @@
+defaults: [known-effects]
+dataset: prior-predictive-reference
+inference: {inference: nuts, warmup: 5, retained: 8, chains: 2}
+calibration: {replicates: 2, guide_iterations: 20, guide_learning_rate: 0.01}

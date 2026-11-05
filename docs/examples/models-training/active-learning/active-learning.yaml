@@ -1,0 +1,28 @@
+acquisition:
+  kind: rc2.1
+  batch_size: 2
+  allocate_by: "item['structure']"
+  constraints:
+    - {constraint_type: uniqueness, property_expression: "item['verb']"}
+  share_tolerance: 0.5
+stopping: {kind: asymptote, window: 3, maximum_gain: 0.0}
+max_rounds: 2
+bootstrap_samples: 200
+pool: items.json
+factors: {structure: "item['structure']", verb: "item['verb']"}
+initial: {kind: bead, responses: initial.jsonl}
+encoding: encoding.json
+fit: fit.yaml
+predictors:
+  run: trained
+  inputs: {words: sentence}
+  tokenizer: {backend: whitespace, language: en, model_name: null}
+  readouts:
+    p_gram: {readout: sentences, measure: log-mass}
+collector: {kind: bead}
+cross_validation:
+  held_out_unit: participant
+  splitter: kfold
+  folds: 3
+  coverage_threshold: 0.0
+  unseen_participant: plug_in

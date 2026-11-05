@@ -1,0 +1,68 @@
+{
+  "system": {
+    "kind": "lm-prover",
+    "data_source": "data/lm-prover/pairs.json",
+    "generations_source": "data/lm-prover/linc.json",
+    "prompt_source": "data/lm-prover/prompt.txt",
+    "model": "recorded-propositional-baseline@1",
+    "pipeline": {"kind": "linc", "samples": 3},
+    "language": {
+      "name": "l1-propositional",
+      "atomic_types": [
+        {"name": "e", "kind": "individual"},
+        {"name": "v", "kind": "event"},
+        {"name": "t", "kind": "proposition"}
+      ],
+      "constructors": [
+        {"name": "->", "kind": ["Ty", "Ty", "Ty"], "notation": {"style": "infix", "spelling": "->", "precedence": 1, "associativity": "right"}}
+      ],
+      "constants": [
+        {"name": "not", "type": "t -> t", "classes": ["sentential", "negation"], "notation": {"kind": "prefix", "ascii": "~", "unicode": "¬", "precedence": 6}},
+        {"name": "and", "type": "t -> t -> t", "classes": ["sentential", "conjunction"], "notation": {"kind": "infix", "ascii": "&", "unicode": "∧", "precedence": 4, "associativity": "left"}},
+        {"name": "or", "type": "t -> t -> t", "classes": ["sentential", "disjunction"], "notation": {"kind": "infix", "ascii": "|", "unicode": "∨", "precedence": 3, "associativity": "left"}},
+        {"name": "if", "type": "t -> t -> t", "classes": ["sentential", "conditional"], "notation": {"kind": "infix", "ascii": "=>", "unicode": "⇒", "precedence": 2, "associativity": "right"}},
+        {"name": "iff", "type": "t -> t -> t", "classes": ["sentential", "biconditional"], "notation": {"kind": "infix", "ascii": "<=>", "unicode": "⇔", "precedence": 1, "associativity": "right"}},
+        {"name": "john", "type": "e", "classes": ["individual"]},
+        {"name": "mary", "type": "e", "classes": ["individual"]},
+        {"name": "sleep", "type": "e -> t", "classes": ["predicate"]},
+        {"name": "see", "type": "e -> e -> t", "classes": ["predicate"]}
+      ],
+      "binders": {"style": "curry"},
+      "logic": {
+        "order": "first",
+        "functions": true,
+        "equality": false,
+        "negation": "not",
+        "prover": {"kind": "truth-table", "timeout": 5.0, "atoms": 12},
+        "labeling": {"budget": {}}
+      },
+      "bounds": {
+        "Ty": {"layout": "complete-tree", "depth": 4, "nodes": null, "order": "df", "free_ranks": 0},
+        "Tm": {"layout": "preorder-arity", "depth": 8, "nodes": 24, "order": "df", "free_ranks": 0},
+        "Cat": {"layout": "complete-tree", "depth": 4, "nodes": null, "order": "df", "free_ranks": 0}
+      }
+    },
+    "budget": {"calls_per_step": 100, "wall_per_step": 30.0, "cpu_seconds": null},
+    "normalization_fuel": 100,
+    "normalization": {"order": "leftmost-outermost", "eta": "contract", "associative_commutative": [], "policy": "eager"},
+    "measure": "normal-form",
+    "alignment": {
+      "kind": "many-to-one",
+      "tie_break": "largest-gold-marginal",
+      "fit_on": "dev",
+      "score_on": "test",
+      "random_floor": {"replicates": 20, "level": 0.95},
+      "stability": {"replicates": 20, "level": 0.95}
+    },
+    "scoring": {
+      "punctuation": "keep",
+      "unary_chains": "keep",
+      "trivial_spans": "keep",
+      "minimum_length": 0,
+      "aggregation": "corpus",
+      "coverage": "zero",
+      "self_arcs": "forbid",
+      "gold_derivation": "canonical"
+    }
+  }
+}

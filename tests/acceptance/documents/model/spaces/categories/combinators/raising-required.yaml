@@ -1,0 +1,7 @@
+# Decode the two rules of the raising-required fixture through one term decoder.
+merge: concatenate
+decoders:
+  "application:/:raise=none": application
+  "application:/:raise=functor": application
+  "application:/:raise=argument": application
+  "application:/:raise=both": application

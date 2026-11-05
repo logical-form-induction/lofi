@@ -1,0 +1,11 @@
+formalism: cfg
+name: cfg-unary
+nonterminals: [S, NP, VP, V]
+productions:
+  - {name: sentence, parent: S, children: [NP, VP]}
+  - {name: verb-phrase, parent: VP, children: [V]}
+lexicon: {kind: inline, entries: [{form: john, category: NP}, {form: mary, category: NP}, {form: sleeps, category: V}, {form: wakes, category: V}]}
+goal: S
+matching: {kind: identity}
+normal_form: {kind: none}
+budget: {unary_rounds: 1, closure_rounds: 2, closure_nodes: 64}

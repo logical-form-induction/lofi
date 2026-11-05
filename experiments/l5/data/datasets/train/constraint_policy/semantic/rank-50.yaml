@@ -1,0 +1,4 @@
+ambiguity: union
+selector: {kind: rank, first: 0.0, last: 0.5}
+coverage: 1.0
+seed: 0

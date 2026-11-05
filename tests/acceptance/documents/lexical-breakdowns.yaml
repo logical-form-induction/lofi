@@ -1,0 +1,29 @@
+# A tiny trained parser reporting supertag accuracy by training evidence.
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: slash
+  - model.spaces.categories.combinators: slash
+evaluators:
+  lexical:
+    kind: lexical-diagnostics
+    interval: {replicates: 20, level: 0.95}
+    readout: category-terms
+    beta: 0.1
+    clustering_beta: 1.0
+    top_k: 2
+    frequency_strata:
+      unseen: {at_least: 0, at_most: 0}
+      rare: {at_least: 1, at_most: 1}
+      frequent: {at_least: 2, at_most: null}
+    ambiguity_strata:
+      unseen: {at_least: 0, at_most: 0}
+      unambiguous: {at_least: 1, at_most: 1}
+      ambiguous: {at_least: 2, at_most: null}
+    word_classes:
+      nouns: [word-0, word-4]
+      predicates: [word-1, word-2, word-3, word-5, word-6, word-7]
+    case_studies:
+      lexical-class:
+        nouns: [word-0, word-4]
+        predicates: [word-1, word-2, word-3, word-5, word-6, word-7]
+    conventions: {punctuation: keep, unary_chains: keep, trivial_spans: keep, minimum_length: 0, aggregation: sentence, coverage: zero, self_arcs: allow, gold_derivation: canonical}

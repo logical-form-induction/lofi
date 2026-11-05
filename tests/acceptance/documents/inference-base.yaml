@@ -1,0 +1,81 @@
+# Shared labeled-inference model, objective, trainer and evaluator.
+# A point document selects its grammar, interpretation and action decoders.
+defaults:
+  - data.datasets.train.dataset: pairs
+  - data.datasets.train.featurizer: pair
+  - model.grounding: nli-baseline
+parse: {retain: forest, reachability: all}
+approximation: {residual_mass: 0.9}
+model:
+  language: {from: data}
+  parser: {kind: inside-outside, width: 4}
+  token_encoder: {kind: learned, width: 4}
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 4, activation: tanh}]}
+  encoders:
+    terms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+    logical-forms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+  decoders:
+    identity: {kind: tree-rnn, width: 4}
+    application: {kind: tree-rnn, width: 4}
+    form-identity:
+      kind: tree-rnn
+      width: 4
+      type_directed: {prefix: type-grammar, mask: known}
+  spaces:
+    categories: {sort: Cat, encoder: terms, identity: identity}
+    semantics: {sort: Tm, encoder: logical-forms, identity: form-identity}
+  readouts:
+    forms:
+      kind: terms
+      space: semantics
+      reads: inside
+      decoding: {strategy: exhaustive, cap: 16}
+loss:
+  terms:
+    - objective:
+        kind: inference
+        signal: likelihood
+        response: {kind: label}
+        auxiliary_weight: 0.0
+data:
+  datasets:
+    train:
+      dataset:
+        source:
+          language:
+            bounds:
+              Ty: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+              Tm: {layout: complete-tree, depth: 5, nodes: null, order: df, free_ranks: 0}
+              Cat: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 1
+  batch_size: 2
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  max_grad_norm: null
+  active_groups:
+    - token_encoder
+    - terms
+    - logical-forms
+    - identity
+    - application
+    - form-identity
+    - controller
+    - parser
+  early_stopping:
+    metric: loss/inference
+    mode: min
+    patience: 2
+    minimum_delta: 0.0
+    keep_best: 1
+  checkpoints: {interval: 1, keep: 1}
+release: {checkpoint: validation-best}
+optimizer: {kind: adamw, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000

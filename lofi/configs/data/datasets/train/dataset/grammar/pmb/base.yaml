@@ -1,0 +1,60 @@
+defaults: [slash-signature]
+formalism: declared
+name: pmb
+signature:
+  name: pmb
+  feature_delimiter: colon
+  primitives: ["','", "'.'", "':'", "';'", conj, lrb, n, np, pp, pr, rrb, s]
+  operators:
+    - {name: "n:num", sort: Cat, erases_to: n}
+    - {name: "np:expl", sort: Cat, erases_to: np}
+    - {name: "np:thr", sort: Cat, erases_to: np}
+    - {name: "s:'X'", sort: Cat, erases_to: s}
+    - {name: "s:adj", sort: Cat, erases_to: s}
+    - {name: "s:b", sort: Cat, erases_to: s}
+    - {name: "s:dcl", sort: Cat, erases_to: s}
+    - {name: "s:em", sort: Cat, erases_to: s}
+    - {name: "s:for", sort: Cat, erases_to: s}
+    - {name: "s:intj", sort: Cat, erases_to: s}
+    - {name: "s:inv", sort: Cat, erases_to: s}
+    - {name: "s:ng", sort: Cat, erases_to: s}
+    - {name: "s:pss", sort: Cat, erases_to: s}
+    - {name: "s:pt", sort: Cat, erases_to: s}
+    - {name: "s:q", sort: Cat, erases_to: s}
+    - {name: "s:qem", sort: Cat, erases_to: s}
+    - {name: "s:to", sort: Cat, erases_to: s}
+    - {name: "s:wq", sort: Cat, erases_to: s}
+rules:
+  name: pmb
+  rules:
+    - rule: absorption
+      name: pmb-punctuation-left
+      premises:
+        - &x {pattern: term, name: X, sort: Cat}
+        - &y {pattern: term, name: Y, sort: Cat}
+      conclusion: *y
+      absorbing: ["','", "'.'", "':'", "';'", lrb, rrb]
+      side: left
+    - rule: absorption
+      name: pmb-punctuation-right
+      premises: [*x, *y]
+      conclusion: *x
+      absorbing: ["','", "'.'", "':'", "';'", lrb, rrb]
+      side: right
+    - rule: combinators
+      application: true
+      composition: [1, 2]
+      crossed_composition: [1, 2]
+      direction: steedman
+lexicon:
+  kind: inline
+  entries:
+    - {form: __pmb_np__, category: np}
+    - {form: __pmb_sentence__, category: "s:dcl"}
+    - {form: __pmb_predicate__, category: "s:b\\np"}
+goal:
+  kind: root
+  categories: ["s:dcl", "s:b\\np", np]
+matching: {kind: feature-erasure}
+normal_form: {kind: none}
+budget: {unary_rounds: 2, closure_rounds: 0, closure_nodes: 4096}

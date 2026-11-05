@@ -1,0 +1,5 @@
+defaults: [arrow-application-k8-depth2]
+kind: synthetic
+grammar:
+  lexicon:
+    seed: 157

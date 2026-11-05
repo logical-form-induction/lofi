@@ -1,0 +1,16 @@
+{
+  "grid": {
+    "corpus-size": [512, 2048, 8192],
+    "length-law": ["uniform", "negative-binomial"],
+    "encoder": ["tree-rnn", "hrr", "transformer"],
+    "capacity": [250000, 500000]
+  },
+  "hypotheses": [
+    {
+      "name": "synthetic-known-grammar-recovery-above-floor",
+      "left": "primitive-one-to-one-accuracy",
+      "right": "primitive-random-relabeling-floor",
+      "family": "synthetic-known-grammar-lexicon-induction"
+    }
+  ]
+}

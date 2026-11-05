@@ -1,0 +1,106 @@
+# The tutorial run over a small English-like grammar declared by its parts.
+defaults:
+  - data.datasets.train.dataset: synthetic
+  - data.datasets.train.featurizer: unlabeled
+parse: {retain: forest, reachability: all}
+approximation: {residual_mass: 0.75}
+model:
+  language: {from: data}
+  parser: {kind: inside-outside, width: 4}
+  token_encoder: {kind: learned, width: 4}
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 4, activation: tanh}]}
+  encoders:
+    terms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+  decoders:
+    identity: {kind: tree-rnn, width: 4}
+    application: {kind: tree-rnn, width: 4}
+  spaces:
+    categories:
+      sort: Cat
+      encoder: terms
+      identity: identity
+      combinators:
+        merge: concatenate
+        decoders:
+          "application:/": application
+          "application:\\": application
+  readouts:
+    types:
+      kind: terms
+      space: categories
+      reads: inside
+      targets: grammar-goal
+      output: sentences
+    category-terms:
+      kind: terms
+      space: categories
+      reads: inside
+      decoding: {strategy: exhaustive, cap: 64}
+loss:
+  terms:
+    - objective: {kind: grammaticality, readout: sentences}
+      weight: 1.0
+    - objective:
+        kind: coherence
+        readout: category-terms
+        space: categories
+        estimator: truncated
+        warmup: null
+      weight: 0.1
+data:
+  datasets:
+    train:
+      dataset:
+        retained: {validation: 0.25}
+        grammar:
+          formalism: declared
+          name: tutorial
+          signature:
+            primitives: [S, NP, N]
+            constructors:
+              - {name: /, kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+              - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+            functors:
+              - {name: /, constructor: /, argument_side: right, opposite: '\'}
+              - {name: '\', constructor: '\', argument_side: left, opposite: /}
+          rules:
+            name: application
+            rules:
+              - {rule: application, view: /}
+              - {rule: application, view: '\'}
+          lexicon:
+            kind: inline
+            entries:
+              - {form: john, category: NP}
+              - {form: mary, category: NP}
+              - {form: the, category: NP/N}
+              - {form: dog, category: N}
+              - {form: cat, category: N}
+              - {form: sleeps, category: 'S\NP'}
+              - {form: sees, category: 'S\NP/NP'}
+              - {form: chases, category: 'S\NP/NP'}
+          goal: {kind: root, categories: [S]}
+          matching: {kind: feature-erasure}
+          budget: {unary_rounds: 1}
+        size: 24
+        seed: 5
+        length: {kind: uniform, min_length: 2, max_length: 5}
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 2
+  batch_size: 2
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  max_grad_norm: null
+  active_groups: [token_encoder, terms, identity, application, controller, parser]
+  early_stopping: {metric: loss/grammaticality, mode: min, patience: 2, minimum_delta: 0.0, keep_best: 1}
+  checkpoints: {interval: 1, keep: 1}
+release: {checkpoint: validation-best}
+optimizer: {kind: adamw, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000

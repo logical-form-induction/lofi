@@ -1,0 +1,9 @@
+# The composition grammar packed by mutual structural subsumption.
+defaults:
+  - composition-point
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          matching: {kind: subsumption}

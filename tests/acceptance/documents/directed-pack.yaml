@@ -1,0 +1,4 @@
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: directed
+  - model.spaces.categories.combinators: ab

@@ -1,0 +1,7 @@
+atomic_types:
+  - {name: e, kind: individual}
+  - {name: t, kind: proposition}
+constructors:
+  - name: "->"
+    kind: [Ty, Ty, Ty]
+    notation: {style: infix, spelling: "->", precedence: 1, associativity: right}

@@ -1,0 +1,10 @@
+# Binary inference labels are owned by the pair dataset and reach the grounding.
+defaults:
+  - inference-point
+  - model.grounding: prover-enumerated
+data:
+  datasets:
+    train:
+      dataset:
+        labeling: rte
+        retained: '${oc.create:{"validation":0.16666666666666666}}'

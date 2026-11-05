@@ -1,0 +1,68 @@
+{
+  "baseline": "expected_embedding",
+  "rungs": [
+    "expected_embedding",
+    "grounded"
+  ],
+  "arms": [
+    {
+      "rung": "expected_embedding",
+      "readouts": "expected_embedding"
+    },
+    {
+      "rung": "grounded",
+      "readouts": "enumerated"
+    },
+    {
+      "rung": "grounded",
+      "readouts": "sampled"
+    }
+  ],
+  "cells": {
+    "chaosnli": {
+      "judgments": "relations",
+      "levels": [
+        "contradicts",
+        "neutral",
+        "entails"
+      ],
+      "labels": {
+        "entails": "entails",
+        "contradicts": "contradicts",
+        "neutral": "neutral"
+      }
+    },
+    "megaveridicality": {
+      "judgments": "ratings",
+      "levels": [
+        "no",
+        "maybe",
+        "yes"
+      ],
+      "labels": {
+        "entails": "yes",
+        "contradicts": "no",
+        "neutral": "maybe"
+      }
+    }
+  },
+  "bounded_cells": {
+    "unli": {
+      "judgments": "bounded",
+      "bounds": [
+        0,
+        1
+      ],
+      "levels": [
+        "contradicts",
+        "neutral",
+        "entails"
+      ],
+      "wire_labels": {
+        "contradicts": "contradiction",
+        "neutral": "neutral",
+        "entails": "entailment"
+      }
+    }
+  }
+}

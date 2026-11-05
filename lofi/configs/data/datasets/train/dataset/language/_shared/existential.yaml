@@ -1,0 +1,6 @@
+constants+:
+  - name: exists
+    type: "(a -> t) -> t"
+    quantifies: [a]
+    classes: [quantifier, existential]
+    notation: {kind: binder, ascii: exists, unicode: "∃", bodies: 1}

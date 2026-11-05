@@ -1,0 +1,21 @@
+defaults: [prover-enumerated]
+scorer:
+  kind: model-checking
+  source:
+    kind: sampled
+    structures: 16
+    carriers: {e: 2, v: 1}
+    density: 0.5
+    full_function_space_cap: 64
+    henkin_pool: 8
+    seed: "${lofi.seed:model-structures}"
+    resample: once
+    atomic_sampling: uniform
+    denotation_streams: independent
+    function_sampling: table
+    truth_sampling: bernoulli
+  unsatisfied_premise: undecided
+  premise_floor: 0.5
+  abstain_band: 0.0
+  truth_threshold: 0.5
+  logic: {tnorm: product, implication: residuum, quantifier: extreme, equality: crisp, margin: 0.0}

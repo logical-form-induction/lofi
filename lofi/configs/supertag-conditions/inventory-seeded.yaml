@@ -1,0 +1,4 @@
+# Seed the represented category inventory before lexical and parser fitting.
+defaults:
+  - induction
+  - inventory-seed

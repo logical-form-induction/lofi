@@ -1,0 +1,4 @@
+# Capacity-matched parser point with certified negative strings.
+defaults:
+  - run/synthetic-certified-negatives
+  - s4-settings-run

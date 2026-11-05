@@ -1,0 +1,4 @@
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: undirected
+  - model.spaces.categories.combinators: undirected-ccg

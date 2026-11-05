@@ -1,0 +1,4 @@
+terms:
+  - objective:
+      kind: vector-anchor
+      readout: types

@@ -1,0 +1,10 @@
+# Synthetic sentences drawn with forward application three times as likely as backward.
+defaults:
+  - slash-point
+data:
+  datasets:
+    train:
+      dataset:
+        sampler:
+          kind: weighted-rules
+          weights: {"application:/": 3.0, "application:\\": 1.0}

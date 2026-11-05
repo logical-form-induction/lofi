@@ -1,0 +1,9 @@
+# Four synthetic sentences of two or three words drawn from the declared grammar.
+kind: synthetic
+retained: {validation: 0.25}
+size: 4
+seed: 5
+length:
+  kind: uniform
+  min_length: 2
+  max_length: 3

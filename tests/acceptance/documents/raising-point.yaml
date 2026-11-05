@@ -1,0 +1,5 @@
+# The raising grammar with its represented category space, trained as a tiny point.
+defaults:
+  - tagged-combinator-point
+  - data.datasets.train.dataset.grammar: raising
+  - model.spaces.categories.combinators: raising

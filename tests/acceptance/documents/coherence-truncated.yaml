@@ -1,0 +1,20 @@
+# The same finite relation stops enumeration at its declared residual bound.
+defaults:
+  - coherence-exact
+parse: {retain: forest, reachability: all}
+approximation: {residual_mass: 0.9}
+model:
+  language: {from: data}
+  readouts:
+    category-terms:
+      decoding: {strategy: exhaustive, residual_mass: 0.95, cap: 16}
+loss:
+  terms:
+    - objective: {kind: grammaticality, readout: sentences}
+    - objective:
+        kind: coherence
+        readout: category-terms
+        space: categories
+        estimator: truncated
+        warmup: null
+      weight: 0.1

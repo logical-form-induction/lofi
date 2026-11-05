@@ -1,0 +1,11 @@
+{
+  "grid": {"label-noise": ["clean", "uniform-0.1", "uniform-0.2", "asymmetric-0.2"]},
+  "hypotheses": [
+    {
+      "name": "noise-recovery-above-floor",
+      "left": "many-to-one-accuracy",
+      "right": "random-relabeling-floor",
+      "family": "logical-form-label-noise"
+    }
+  ]
+}

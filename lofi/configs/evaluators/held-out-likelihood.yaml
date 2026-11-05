@@ -1,0 +1,7 @@
+kind: held-out-likelihood
+interval: {replicates: 1000, level: 0.95}
+readout: types
+output: sentences
+measurements: [string, derivation, description-length]
+symbol_cost: {kind: uniform, cost: 1.0}
+conventions: {punctuation: keep, unary_chains: keep, trivial_spans: keep, minimum_length: 0, aggregation: sentence, coverage: zero, self_arcs: allow, gold_derivation: canonical}

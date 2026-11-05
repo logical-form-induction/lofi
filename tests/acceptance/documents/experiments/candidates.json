@@ -1,0 +1,6 @@
+{
+  "grid": {"data.datasets.train.dataset.grammar": ["slash", "arrow-product"]},
+  "hypotheses": [
+    {"name": "grammar", "left": "arrow-product", "right": "slash", "family": "primary"}
+  ]
+}

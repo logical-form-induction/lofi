@@ -1,0 +1,5 @@
+defaults: [slashes-raised-k8-depth3]
+kind: synthetic
+grammar:
+  lexicon:
+    seed: 149

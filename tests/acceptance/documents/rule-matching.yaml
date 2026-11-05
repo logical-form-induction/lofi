@@ -1,0 +1,14 @@
+# One rule matches its premises exactly while the grammar matches by feature erasure.
+defaults:
+  - slash-point
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          formalism: declared
+          matching: {kind: feature-erasure}
+          rules:
+            rules:
+              - {rule: application, view: /, matching: {kind: identity}}
+              - {rule: application, view: "\\"}

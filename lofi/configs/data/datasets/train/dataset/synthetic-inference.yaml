@@ -1,0 +1,96 @@
+kind: synthetic-inference
+labeling: three-way
+retained: {validation: 0.3333333333333333}
+source:
+  language:
+    name: propositional
+    atomic_types: [{name: e}, {name: v, kind: event}, {name: t, kind: proposition}]
+    constructors: [{name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}]
+    constants:
+      - name: not
+        type: "t -> t"
+        classes: [sentential, negation]
+        notation: {kind: prefix, ascii: "not", unicode: "¬", precedence: 6}
+      - name: and
+        type: "t -> t -> t"
+        classes: [sentential, conjunction]
+        notation: {kind: infix, ascii: "&", unicode: "∧", precedence: 4, associativity: left}
+    binders: {style: curry}
+    logic:
+      equality: false
+      negation: not
+      prover: {kind: truth-table, timeout: 5.0}
+      labeling: {budget: {}}
+  interpretation:
+    countermodels:
+      method: exhaustive
+      carriers: {e: 1, v: 1}
+      structures: 64
+      seed: 0
+      full_function_space_cap: 64
+    erasure:
+      kind: signature-morphism
+      atoms:
+        S: t
+        NP: e
+        conj: e
+    constants:
+      - {name: john, type: e, classes: [individual]}
+      - {name: mary, type: e, classes: [individual]}
+      - {name: sleep, type: 'e -> t', classes: [predicate]}
+      - {name: snore, type: 'e -> t', classes: [predicate]}
+      - {name: love, type: 'e -> e -> t', classes: [predicate]}
+    meanings: {source: {kind: lexical}}
+size: 9
+seed: 7
+candidates: 12
+attempts: 400
+premise:
+  kind: uniform
+  min_length: 2
+  max_length: 2
+hypothesis:
+  kind: uniform
+  min_length: 2
+  max_length: 2
+grammar:
+  formalism: declared
+  name: neo-davidsonian-inference
+  signature:
+    primitives: [S, NP, conj]
+    operators:
+      - {name: 'NP[conj]', sort: Cat, erases_to: NP}
+    constructors:
+      - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+      - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+    functors:
+      - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+      - {name: '\', constructor: '\', argument_side: left, opposite: "/"}
+    conjunctions:
+      markers: [conj]
+      pairs:
+        - unmarked: NP
+          marked: NP[conj]
+  rules:
+    name: neo-davidsonian-inference
+    rules:
+      - rule: application
+        view: /
+      - rule: application
+        view: \
+  lexicon:
+    kind: inline
+    entries:
+      - {form: john, category: NP, meaning: john}
+      - {form: mary, category: NP, meaning: mary}
+      - {form: sleeps, category: S\NP, meaning: '\x. sleep(x)'}
+      - {form: snores, category: S\NP, meaning: '\x. (sleep(x) & snore(x))'}
+      - {form: wakes, category: S\NP, meaning: '\x. not(sleep(x))'}
+      - {form: loves, category: (S\NP)/NP, meaning: '\y. \x. love(x)(y)'}
+  goal:
+    kind: root
+    categories: [S]
+  matching:
+    kind: feature-erasure
+  budget:
+    unary_rounds: 1

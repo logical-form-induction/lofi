@@ -1,0 +1,85 @@
+# Inference pairs whose noun phrases denote generalized quantifiers.
+kind: synthetic-inference
+labeling: three-way
+retained: {validation: 0.3333333333333333}
+source:
+  language:
+    name: higher-order-inference-forms
+    atomic_types: [{name: e}, {name: v, kind: event}, {name: t, kind: proposition}]
+    constructors: [{name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}]
+    constants:
+      - name: not
+        type: "t -> t"
+        classes: [sentential, negation]
+        notation: {kind: prefix, ascii: "not", unicode: "¬", precedence: 6}
+      - name: and
+        type: "t -> t -> t"
+        classes: [sentential, conjunction]
+        notation:
+          kind: infix
+          ascii: "&"
+          unicode: "∧"
+          precedence: 4
+          associativity: left
+    binders: {style: curry}
+    logic:
+      order: higher
+      negation: not
+      prover: {kind: tptp, engine: vampire, dialect: thf, timeout: 5.0, polymorphism: monomorphize}
+      labeling: {budget: {}}
+    bounds:
+      Ty: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+      Tm: {layout: complete-tree, depth: 2, nodes: null, order: df, free_ranks: 0}
+      Cat: {layout: complete-tree, depth: 3, nodes: null, order: df, free_ranks: 0}
+  interpretation:
+    erasure:
+      kind: signature-morphism
+      atoms:
+        S: t
+        NP: "⟨⟨e,t⟩,t⟩"
+        conj: e
+    constants:
+      - {name: john, type: e, classes: [individual]}
+      - {name: mary, type: e, classes: [individual]}
+      - {name: sleep, type: "e -> t", classes: [predicate]}
+      - {name: snore, type: "e -> t", classes: [predicate]}
+      - {name: love, type: "e -> e -> t", classes: [predicate]}
+    meanings: {source: {kind: lexical}}
+size: 9
+seed: 7
+candidates: 12
+attempts: 400
+premise: {kind: uniform, min_length: 2, max_length: 2}
+hypothesis: {kind: uniform, min_length: 2, max_length: 2}
+grammar:
+  formalism: declared
+  name: higher-order-inference-forms
+  signature:
+    primitives: [S, NP, conj]
+    operators: [{name: "NP[conj]", sort: Cat, erases_to: NP}]
+    constructors:
+      - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+      - {name: "\\", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: \\, precedence: 10, associativity: left}}
+    functors:
+      - {name: "/", constructor: "/", argument_side: right, opposite: "\\"}
+      - {name: "\\", constructor: "\\", argument_side: left, opposite: "/"}
+    conjunctions:
+      markers: [conj]
+      pairs: [{unmarked: NP, marked: "NP[conj]"}]
+  rules:
+    name: higher-order-inference-forms
+    rules:
+      - {rule: application, view: "/"}
+      - {rule: application, view: "\\"}
+  lexicon:
+    kind: inline
+    entries:
+      - {form: john, category: NP, meaning: "\\P. P(john)"}
+      - {form: mary, category: NP, meaning: "\\P. P(mary)"}
+      - {form: sleeps, category: "S\\NP", meaning: "\\Q. Q(\\x. sleep(x))"}
+      - {form: snores, category: "S\\NP", meaning: "\\Q. Q(\\x. (sleep(x) & snore(x)))"}
+      - {form: wakes, category: "S\\NP", meaning: "\\Q. Q(\\x. not(sleep(x)))"}
+      - {form: loves, category: "S\\NP/NP", meaning: "\\Y. \\X. Y(\\y. X(\\x. love(x)(y)))"}
+  goal: {kind: root, categories: [S]}
+  matching: {kind: feature-erasure}
+  budget: {unary_rounds: 1}

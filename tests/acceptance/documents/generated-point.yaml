@@ -1,0 +1,27 @@
+# A grammar declared only by its primitives, constructors and combinators; the
+# lexicon is grown from the goal through the inverse of the declared rules.
+defaults:
+  - slash-point
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          formalism: declared
+          signature:
+            primitives: [S, P1, P2]
+          lexicon:
+            kind: generated
+            forms: 6
+            categories: 4
+            category_shares: {kind: uniform}
+            coupling: 0.0
+            ambiguity:
+              spelling: parametric
+              mean: 1.0
+              dispersion: 0.0
+              maximum: 1
+              placement: 0.0
+            rank_law: {kind: uniform}
+            seed: 3
+            max_depth: 2

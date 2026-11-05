@@ -1,0 +1,75 @@
+# Generated-term pretraining over a grammar whose sole rule is unary.
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  encoders:
+    terms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null, inventory: shared-dag}
+  decoders:
+    identity: {kind: tree-rnn, width: 4}
+  spaces:
+    categories:
+      sort: Cat
+      encoder: terms
+      identity: identity
+      combinators:
+        decoders: {}
+data:
+  datasets:
+    train:
+      dataset:
+        kind: synthetic
+        retained: {validation: 0.25}
+        language:
+          name: unary-rule-pairs
+          atomic_types: [{name: e}, {name: t, kind: proposition}]
+          constructors: [{name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}]
+          constants: []
+          binders: {style: curry}
+          bounds:
+            Ty: {layout: complete-tree, depth: 3, nodes: null, order: df, free_ranks: 0}
+            Tm: {layout: complete-tree, depth: 2, nodes: null, order: df, free_ranks: 0}
+            Cat: {layout: complete-tree, depth: 2, nodes: null, order: df, free_ranks: 0}
+        grammar:
+          formalism: declared
+          name: unary-rule-pairs
+          signature:
+            primitives: [NP, N]
+            constructors:
+              - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+              - {name: "\\", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: \\, precedence: 10, associativity: left}}
+            functors:
+              - {name: "/", constructor: "/", argument_side: right, opposite: "\\"}
+              - {name: "\\", constructor: "\\", argument_side: left, opposite: "/"}
+          rules:
+            name: unary-rule-pairs
+            rules:
+              - rule: coercions
+                label: bare-plural
+                entries: ["N => NP"]
+          lexicon:
+            kind: inline
+            entries: [{form: dogs, category: N}]
+          goal: {kind: root, categories: [NP]}
+          matching: {kind: identity}
+          budget: {unary_rounds: 1}
+        size: 2
+        seed: 5
+        length: {kind: uniform, min_length: 1, max_length: 1}
+trainer:
+  kind: terms
+  dataset: train
+  spaces: [categories]
+  steps: 2
+  batch_size: 2
+  generation: {max_depth: 2}
+  checkpoints: {interval: 2, keep: 1}
+release: {checkpoint: resume-latest}
+type_sampler: {kind: recursive, max_size: 3}
+pair_sampler: {kind: rule}
+optimizer: {kind: adamw, learning_rate: 0.03, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000

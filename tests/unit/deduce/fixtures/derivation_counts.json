@@ -1,0 +1,50 @@
+[
+  {
+    "inventory_name": "application-only",
+    "sentence_position": 0,
+    "tokens": ["f", "a"],
+    "normal_form_count": 1,
+    "unconstrained_count": 1,
+    "retention_ratio": 1.0
+  },
+  {
+    "inventory_name": "application-only",
+    "sentence_position": 1,
+    "tokens": ["f", "g", "a"],
+    "normal_form_count": 1,
+    "unconstrained_count": 1,
+    "retention_ratio": 1.0
+  },
+  {
+    "inventory_name": "application-only",
+    "sentence_position": 2,
+    "tokens": ["unknown"],
+    "normal_form_count": 0,
+    "unconstrained_count": 0,
+    "retention_ratio": null
+  },
+  {
+    "inventory_name": "with-composition",
+    "sentence_position": 0,
+    "tokens": ["f", "a"],
+    "normal_form_count": 1,
+    "unconstrained_count": 1,
+    "retention_ratio": 1.0
+  },
+  {
+    "inventory_name": "with-composition",
+    "sentence_position": 1,
+    "tokens": ["f", "g", "a"],
+    "normal_form_count": 1,
+    "unconstrained_count": 2,
+    "retention_ratio": 0.5
+  },
+  {
+    "inventory_name": "with-composition",
+    "sentence_position": 2,
+    "tokens": ["unknown"],
+    "normal_form_count": 0,
+    "unconstrained_count": 0,
+    "retention_ratio": null
+  }
+]

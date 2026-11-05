@@ -1,0 +1,13 @@
+# The higher-order language declared as a higher-order logic.
+defaults:
+  - higher-order-point
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          logic:
+            order: higher
+            negation: not
+            prover: {kind: tptp, engine: vampire, dialect: thf, timeout: 5.0, polymorphism: monomorphize}
+            labeling: {budget: {}}

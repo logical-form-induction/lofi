@@ -1,0 +1,12 @@
+{
+  "control": "trivial_memorization",
+  "rungs": [
+    "trivial_memorization",
+    "unstructured_shallow",
+    "unstructured_deep",
+    "structured_direct",
+    "structured_primitive",
+    "structured_class",
+    "structured_primitive_class"
+  ]
+}

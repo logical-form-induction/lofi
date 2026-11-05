@@ -1,0 +1,9 @@
+defaults: [prover-enumerated]
+control_variate: {kind: moving, decay: 0.9}
+reward:
+  proved: 1.0
+  refuted: 0.0
+  contradiction: negated-hypothesis
+  abstention: exclude
+scorer:
+  countermodels: {method: exhaustive, carriers: {e: 1, v: 1}, structures: 64, seed: 0, full_function_space_cap: 64}

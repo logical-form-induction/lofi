@@ -1,0 +1,6 @@
+kind: expected-embedding
+readout: forms
+vectors: expected-form
+expectation: enumerate
+composition: {rule: marginal}
+hidden: 256

@@ -1,0 +1,1 @@
+{kind: diffusion, width: 256, layers: 3, feedforward_width: 512, noise_steps: 16, first_masking: 0.15}

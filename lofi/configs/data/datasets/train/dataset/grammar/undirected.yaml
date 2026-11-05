@@ -1,0 +1,46 @@
+name: undirected-arrow
+signature:
+  name: undirected
+  primitives: [S, NP, N]
+  constructors:
+    - {name: "arrow", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: ->, precedence: 10, associativity: left}}
+  functors:
+    - {name: "arrow", constructor: "arrow", argument_side: either, opposite: "arrow"}
+  syntax: s-expression
+rules:
+  name: arrow-application
+  rules:
+    - rule: pattern
+      name: application-right
+      premises:
+        - &functor
+          pattern: node
+          operator: {kind: fixed, name: arrow}
+          arguments:
+            - &result {pattern: term, name: X, sort: Cat}
+            - &argument {pattern: term, name: Y, sort: Cat}
+        - *argument
+      conclusion: *result
+    - rule: pattern
+      name: application-left
+      head_policy: non-absorbing
+      premises: [*argument, *functor]
+      conclusion: *result
+lexicon:
+  kind: inline
+  entries:
+    - {form: w0, category: '("#const[Cat]" "NP")'}
+    - {form: w1, category: '("arrow" ("#const[Cat]" "S") ("#const[Cat]" "NP"))'}
+    - {form: w2, category: '("arrow" ("arrow" ("#const[Cat]" "S") ("#const[Cat]" "NP")) ("#const[Cat]" "NP"))'}
+    - {form: w3, category: '("arrow" ("#const[Cat]" "NP") ("#const[Cat]" "N"))'}
+    - {form: w4, category: '("#const[Cat]" "N")'}
+goal:
+  kind: root
+  categories: ['("#const[Cat]" "S")']
+matching:
+  kind: identity
+budget:
+  unary_rounds: 0
+  closure_rounds: 2
+  closure_nodes: 256
+formalism: undirected-ccg

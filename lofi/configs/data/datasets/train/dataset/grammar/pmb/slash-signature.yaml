@@ -1,0 +1,7 @@
+signature:
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: "/"}

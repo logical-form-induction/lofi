@@ -1,0 +1,45 @@
+# A slash pair, a product and a unary modality declared together in one signature.
+name: views
+signature:
+  primitives: [S, NP]
+  syntax: s-expression
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: "back", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: back, precedence: 10, associativity: left}}
+    - {name: "*", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '*', precedence: 10, associativity: left}}
+    - {name: "<>", kind: [Cat, Cat], notation: {style: prefix, spelling: <>}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: "back"}
+    - {name: "back", constructor: "back", argument_side: left, opposite: "/"}
+rules:
+  name: views
+  rules:
+    - {rule: application, view: /}
+    - {rule: application, view: back}
+    - rule: pattern
+      name: diamond-elimination
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: "<>"}
+          arguments: [{pattern: term, name: X}]
+      conclusion: {pattern: term, name: X}
+    - rule: pattern
+      name: first
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: "*"}
+          arguments: [{pattern: term, name: A}, {pattern: term, name: B}]
+      conclusion: {pattern: term, name: A}
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: '("<>" ("#const[Cat]" "NP"))'}
+    - {form: mary, category: '("*" ("#const[Cat]" "NP") ("#const[Cat]" "NP"))'}
+    - {form: sleeps, category: '("back" ("#const[Cat]" "S") ("#const[Cat]" "NP"))'}
+    - {form: sees, category: '("/" ("back" ("#const[Cat]" "S") ("#const[Cat]" "NP")) ("#const[Cat]" "NP"))'}
+goal:
+  kind: root
+  categories: ['("#const[Cat]" "S")']
+budget:
+  unary_rounds: 1
+formalism: declared

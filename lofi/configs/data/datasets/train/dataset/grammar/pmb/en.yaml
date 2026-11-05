@@ -1,0 +1,16 @@
+defaults: [base]
+name: pmb-en
+signature: {name: pmb-en}
+rules:
+  name: pmb-en
+  rules+:
+    - {rule: coercions, label: pmb-lexical, matching: {kind: identity},
+      entries: ["n => np",
+        "np => s:'X'/(s:'X'\\np)",
+        "s:dcl/np => n\\n",
+        "s:ng\\np => n\\n",
+        "s:pss\\np => n\\n",
+        "np => (s:'X'\\np)\\((s:'X'\\np)/np)",
+        "pp => (s:'X'\\np)\\((s:'X'\\np)/pp)",
+        "s:adj\\np => n\\n",
+        "s:pss\\np => s/s"]}

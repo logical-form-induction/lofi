@@ -1,0 +1,18 @@
+# The slash grammar interpreted into a higher-order language with a polymorphic
+# quantifier and an inferred predicate, trained as a tiny point.
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.language: higher-order
+  - data.datasets.train.dataset.interpretation: higher-order
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          lexicon:
+            kind: inline
+            entries:
+              - {form: john, category: NP, meaning: john}
+              - {form: mary, category: NP, meaning: mary}
+              - {form: sleeps, category: "S\\NP", meaning: '\x. sleep(x) && snore(x)'}
+              - {form: sees, category: "S\\NP/NP", meaning: '\y. \x. every z.(see(x)(z), see(z)(y) && sleep(z))'}

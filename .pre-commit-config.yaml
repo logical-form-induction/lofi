@@ -1,0 +1,47 @@
+# The hooks that run on every commit: ruff's formatter and linter, at the ruff
+# version pinned in uv.lock, rustfmt's check of the Rust workspace, plus an
+# advisory docstring check. Nothing here takes more than a few seconds on a
+# change of ordinary size.
+#
+# Deliberately not here: the type checker (ty), clippy, the Python and Rust test
+# suites, the benchmarks and the conformance suites. Each takes long enough that
+# a hook running it would be bypassed with --no-verify. Continuous integration
+# runs the type checker, clippy, the test suites and the conformance suites; the
+# benchmarks run by hand, with `uv run pytest tests/benchmarks --benchmark-only`.
+#
+# Install with `uv run pre-commit install`; run by hand with `uv run pre-commit
+# run` or `uv run pre-commit run --all-files`.
+
+# The interpreter .python-version pins, so a hook parses the syntax the tree uses.
+default_language_version:
+  python: python3.14
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.6
+    hooks:
+      - id: ruff-format
+      - id: ruff-check
+
+  # darglint compares a docstring's Parameters, Returns and Raises sections with
+  # the signature it documents, which no other tool in the toolchain does. It is
+  # unmaintained, so its findings print and never block: --no-exit-code makes it
+  # exit zero whatever it reports, and `verbose` keeps the report visible.
+  - repo: local
+    hooks:
+      - id: darglint
+        name: darglint (advisory)
+        language: python
+        additional_dependencies: ["darglint==1.8.1"]
+        entry: darglint --docstring-style numpy --strictness short --no-exit-code
+        types: [python]
+        files: ^(lofi|scripts)/
+        verbose: true
+
+      # cargo runs the rustfmt of the toolchain rust-toolchain.toml pins
+      - id: cargo-fmt
+        name: cargo fmt
+        language: system
+        entry: cargo fmt --all --check
+        types: [rust]
+        pass_filenames: false

@@ -1,0 +1,10 @@
+kind: pmb-ccg
+sources:
+  - source: ${lofi.path:pmb/ccg/en.ccg}
+    release:
+      source_id: pmb
+      release_id: pmb-5.1.0
+      split: train
+      language: en
+      source_method: gold
+      spdx: NOASSERTION  # to be read from the pmb-5.1.0 release itself

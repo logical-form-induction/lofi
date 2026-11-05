@@ -1,0 +1,21 @@
+dataset: collected-acceptability
+response:
+  ResponseDeclaration_responsespec:
+    family: {family: cumulative}
+    levels: 3
+    objective: {objective: conditional}
+    predictor:
+      - {kind: link, readout: p_gram, linking: {family: linear}}
+    identification: {constraint: fixed_discrimination, value: 1.0}
+    priors: {thresholds: {}}
+inference:
+  inference: map
+  optimizer: {kind: adam, learning_rate: 0.1}
+  steps: 300
+  initial_scale: 0.1
+elicitation: {method: participants, version: "1"}
+calibration: null
+comparison: null
+dynamic_range: null
+ablation: []
+interannotator: null

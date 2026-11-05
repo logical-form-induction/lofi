@@ -1,0 +1,48 @@
+# The slash pair with application and coordination written as pattern rules.
+name: pattern-application
+signature:
+  primitives: [S, NP]
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: "/"}
+rules:
+  name: pattern-application
+  rules:
+    - rule: pattern
+      name: forward
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: /}
+          arguments: [{pattern: term, name: X}, &forward {pattern: term, name: Y}]
+        - *forward
+      conclusion: {pattern: term, name: X}
+    - rule: pattern
+      name: backward
+      premises:
+        - &backward {pattern: term, name: Y}
+        - pattern: node
+          operator: {kind: fixed, name: \}
+          arguments: [{pattern: term, name: X}, *backward]
+      conclusion: {pattern: term, name: X}
+    - rule: pattern
+      name: conjoin
+      premises:
+        - &sentence {pattern: constant, name: S}
+        - *sentence
+      conclusion: *sentence
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: NP, meaning: john}
+    - {form: mary, category: NP, meaning: mary}
+    - {form: sleeps, category: "S\\NP", meaning: '\x. sleep(x) && snore(x)'}
+    - {form: sees, category: "S\\NP/NP", meaning: '\y. \x. every z.(see(x)(z), see(z)(y) && sleep(z))'}
+goal:
+  kind: root
+  categories: [S]
+budget:
+  unary_rounds: 1
+formalism: declared

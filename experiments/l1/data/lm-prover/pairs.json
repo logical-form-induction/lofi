@@ -1,0 +1,58 @@
+{
+  "pairs": [
+    {
+      "item_id": "dev-entails",
+      "split": "dev",
+      "premise_tokens": ["john", "sees", "mary"],
+      "hypothesis_tokens": ["john", "sees", "mary"],
+      "label": "entails",
+      "gold_premise": "see(john)(mary)",
+      "gold_hypothesis": "see(john)(mary)"
+    },
+    {
+      "item_id": "dev-direction",
+      "split": "dev",
+      "premise_tokens": ["john", "sleeps"],
+      "hypothesis_tokens": ["mary", "sleeps"],
+      "label": "neutral",
+      "gold_premise": "sleep(john)",
+      "gold_hypothesis": "sleep(mary)"
+    },
+    {
+      "item_id": "dev-neutral",
+      "split": "dev",
+      "premise_tokens": ["john", "sees", "mary"],
+      "hypothesis_tokens": ["mary", "sees", "john"],
+      "label": "neutral",
+      "gold_premise": "see(john)(mary)",
+      "gold_hypothesis": "see(mary)(john)"
+    },
+    {
+      "item_id": "test-entails",
+      "split": "test",
+      "premise_tokens": ["mary", "sees", "john"],
+      "hypothesis_tokens": ["mary", "sees", "john"],
+      "label": "entails",
+      "gold_premise": "see(mary)(john)",
+      "gold_hypothesis": "see(mary)(john)"
+    },
+    {
+      "item_id": "test-direction",
+      "split": "test",
+      "premise_tokens": ["mary", "sleeps"],
+      "hypothesis_tokens": ["john", "sleeps"],
+      "label": "neutral",
+      "gold_premise": "sleep(mary)",
+      "gold_hypothesis": "sleep(john)"
+    },
+    {
+      "item_id": "test-neutral",
+      "split": "test",
+      "premise_tokens": ["mary", "sees", "john"],
+      "hypothesis_tokens": ["john", "sees", "mary"],
+      "label": "neutral",
+      "gold_premise": "see(mary)(john)",
+      "gold_hypothesis": "see(john)(mary)"
+    }
+  ]
+}

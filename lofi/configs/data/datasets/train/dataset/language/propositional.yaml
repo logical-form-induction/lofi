@@ -1,0 +1,14 @@
+defaults:
+  - _shared/types
+  - _shared/negation-conjunction
+  - _shared/disjunction
+  - _shared/conditional
+  - _shared/biconditional
+name: propositional
+atomic_types: [{name: e}, {name: v, kind: event}, {name: t, kind: proposition}]
+binders: {}
+logic:
+  equality: false
+  negation: not
+  prover: {kind: truth-table, timeout: 30.0}
+  labeling: {budget: {}}

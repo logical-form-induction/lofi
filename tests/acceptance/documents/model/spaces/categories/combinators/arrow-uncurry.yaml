@@ -1,0 +1,4 @@
+# Map each composing action of the arrow-uncurry grammar to its decoder.
+merge: concatenate
+decoders:
+  apply: application

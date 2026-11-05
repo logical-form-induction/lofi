@@ -1,0 +1,6 @@
+# An overlay that sends a run's metrics to an MLflow tracking store.
+# Apply it with `lofi run --extra docs/examples/running/mlflow-sink.yaml`.
+sinks:
+  tracker:
+    kind: mlflow
+    experiment_name: synthetic-parser

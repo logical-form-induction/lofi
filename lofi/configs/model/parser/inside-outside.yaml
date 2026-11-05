@@ -1,0 +1,3 @@
+kind: inside-outside
+width: 256
+attend: {kind: marginal}

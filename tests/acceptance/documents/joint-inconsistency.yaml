@@ -1,0 +1,12 @@
+# A designated negation selects joint-inconsistency checks in a larger role inventory.
+defaults:
+  - prover-in-training
+  - data.datasets.train.dataset.source.language: two-negations
+model:
+  language: {from: data}
+  grounding:
+    reward:
+      proved: 1.0
+      refuted: -0.5
+      contradiction: joint-inconsistency
+      abstention: exclude

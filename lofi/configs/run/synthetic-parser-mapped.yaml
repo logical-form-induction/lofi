@@ -1,0 +1,5 @@
+defaults:
+  - synthetic-parser-consistency
+model: {spaces: {categories: {relation: {via: mapped, mapping: {form: linear}}}}}
+trainer:
+  active_groups+: [categories]

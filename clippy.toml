@@ -1,0 +1,5 @@
+# lint configuration only. Lint levels live in Cargo.toml's [workspace.lints].
+
+# the project's name is a proper noun in prose, not an identifier to backtick.
+# ".." keeps clippy's default list.
+doc-valid-idents = ["LoFI", ".."]

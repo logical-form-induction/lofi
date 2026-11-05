@@ -1,0 +1,6 @@
+kind: pretrained
+checkpoint:
+  kind: hub
+  repository: google/mt5-base
+  revision: 2eb15465c5dd7f72a8f7984306ad05ebc3dd1e1f
+architecture: t5-encoder

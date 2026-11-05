@@ -1,0 +1,5 @@
+# The first-order meanings extended with an auxiliary that composes with verbs.
+defaults:
+  - first-order
+constants+:
+  - {name: possible, type: "t -> t", classes: [predicate]}

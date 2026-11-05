@@ -1,0 +1,37 @@
+# The slash pair with application, harmonic and crossed composition up to order two.
+name: composition
+signature:
+  primitives: [S, NP]
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: "/"}
+rules:
+  name: composition
+  rules:
+    - {rule: application, view: /}
+    - {rule: application, view: "\\"}
+    - {rule: composition, direction: unrestricted, order: 1, view: /}
+    - {rule: composition, direction: unrestricted, order: 2, view: /}
+    - {rule: composition, direction: unrestricted, order: 1, view: "\\", crossed: true}
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: NP, meaning: john}
+    - {form: mary, category: NP, meaning: mary}
+    - {form: sleeps, category: "S\\NP", meaning: '\x. sleep(x)'}
+    - {form: sees, category: "S\\NP/NP", meaning: '\y. \x. see(x)(y)'}
+    - {form: might, category: "(S\\NP)/(S\\NP)", meaning: '\p. \x. possible(p(x))'}
+goal:
+  kind: root
+  categories: [S]
+budget:
+  unary_rounds: 1
+capacity_evidence:
+  rule_family: pure_ccg
+  bounded_degree: true
+  prefix_closed: true
+  application_target_restrictions: false
+formalism: declared

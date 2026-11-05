@@ -1,0 +1,16 @@
+# The synthetic parser trained for three epochs with a checkpoint after each.
+defaults:
+  - ../synthetic-parser
+model:
+  parser: {width: 4}
+  readouts:
+    category-terms:
+      decoding: {residual_mass: null}
+trainer:
+  epochs: 3
+  early_stopping: {patience: 3}
+  checkpoints:
+    interval: 1
+    keep: 2
+release:
+  checkpoint: resume-latest

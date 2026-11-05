@@ -1,0 +1,16 @@
+defaults: [slashes-application-k2-depth1]
+from: inline
+grammar:
+  name: slashes-generalized-composition-k4-depth2
+  signature:
+    name: slashes-generalized-composition-k4-depth2
+    primitives: [S, P1, P2, P3]
+  rules:
+    name: slashes-generalized-composition
+    rules:
+      - {rule: application, view: /}
+      - {rule: application, view: "\\"}
+      - {rule: composition, direction: unrestricted, order: null, view: /}
+      - {rule: composition, direction: unrestricted, order: null, view: "\\"}
+  lexicon:
+    max_depth: 2

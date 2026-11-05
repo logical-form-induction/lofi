@@ -1,0 +1,5 @@
+defaults: [slashes-generalized-composition-k4-depth2]
+kind: synthetic
+grammar:
+  signature:
+    primitives: [P3, P2, P1, S]

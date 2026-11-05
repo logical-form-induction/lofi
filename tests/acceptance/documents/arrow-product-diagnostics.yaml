@@ -1,0 +1,4 @@
+# The A-times grammar with constructor-generic beam and reconstruction reports.
+defaults:
+  - arrow-product-point
+  - evaluators.constructor-diagnostics: arrow-product-constructor-diagnostics

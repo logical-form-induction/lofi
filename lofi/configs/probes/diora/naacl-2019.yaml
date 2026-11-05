@@ -1,0 +1,18 @@
+# The MLP DIORA released with the NAACL 2019 implementation
+# (https://github.com/iesl/diora), fetched from the archive its README links
+# and pinned to that archive's SHA-256 digest. A document selecting this
+# fragment adds its own artifacts cache and stimulus_lengths.
+kind: external
+model:
+  model: diora-naacl-2019
+  checkpoint:
+    kind: url
+    url: https://diora-naacl-2019.s3.amazonaws.com/diora-checkpoints.zip
+    sha256: 6794928e34afa4a3731e0312efdfbbd9e41bedf9cc27dea30c3d21f9c85dcde8
+  sites:
+    - {path: alpha, role: SPLIT_DISTRIBUTION, layer: 0, axes: [item, span, split], dtype_class: log-probability, differentiable: true, access: [OBSERVE]}
+    - {path: inside, role: INSIDE_SCORE, layer: 0, axes: [item, span], dtype_class: real, differentiable: true, access: [OBSERVE]}
+    - {path: outside, role: OUTSIDE_SCORE, layer: 0, axes: [item, span], dtype_class: real, differentiable: true, access: [OBSERVE]}
+backend:
+  kind: released-mlp
+  member: diora-checkpoints/mlp-softmax/model.pt

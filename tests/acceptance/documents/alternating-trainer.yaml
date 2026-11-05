@@ -1,0 +1,30 @@
+# Two objective views trained as separate tasks over one shared parser graph.
+defaults:
+  - slash-point
+trainer:
+  kind: alternating
+  base:
+    kind: parser
+    dataset: train
+    epochs: 1
+    batch_size: 2
+    batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+    max_grad_norm: null
+    active_groups: [token_encoder, terms, identity, application, controller, parser]
+    early_stopping:
+      metric: loss/grammaticality
+      mode: min
+      patience: 2
+      minimum_delta: 0.0
+      keep_best: 1
+    checkpoints: {interval: 1, keep: 1}
+  tasks:
+    - kind: parser
+      name: grammaticality
+      dataset: train
+      objectives: [grammaticality]
+    - kind: parser
+      name: coherence
+      dataset: train
+      objectives: [coherence]
+  mixing: {kind: round-robin}

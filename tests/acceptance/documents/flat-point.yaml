@@ -1,0 +1,61 @@
+# The nonrecursive endpoint control trained to reconstruct each covered span.
+defaults:
+  - data.datasets.train.dataset: sentences
+  - data.datasets.train.dataset.language: propositional
+  - data.datasets.train.dataset.grammar: slash
+  - data.datasets.train.featurizer: unlabeled
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  parser:
+    kind: flat
+    width: 4
+    features: [left, right, bilinear]
+    projection_initialization: identity
+  token_encoder: {kind: learned, width: 4}
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 4, activation: tanh}]}
+  encoders:
+    terms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+  decoders:
+    identity: {kind: tree-rnn, width: 4}
+    application: {kind: tree-rnn, width: 4}
+  spaces:
+    categories:
+      sort: Cat
+      encoder: terms
+      identity: identity
+      combinators:
+        merge: concatenate
+        decoders: {"application:/": application, "application:\\": application}
+  span_decoders:
+    reconstruction: {kind: rnn-span-decoder}
+loss:
+  terms:
+    - objective:
+        kind: span-reconstruction
+        decoder: reconstruction
+        weighting: uniform
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 1
+  batch_size: 2
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  max_grad_norm: null
+  active_groups: [token_encoder, parser, reconstruction]
+  early_stopping:
+    metric: loss/span-reconstruction
+    mode: min
+    patience: 2
+    minimum_delta: 0.0
+    keep_best: 1
+  checkpoints: {interval: 1, keep: 1}
+release: {checkpoint: validation-best}
+optimizer: {kind: adamw, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000

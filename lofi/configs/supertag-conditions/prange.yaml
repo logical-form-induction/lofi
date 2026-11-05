@@ -1,0 +1,6 @@
+# Occurrence supervision with a factored tree-structured category decoder.
+defaults:
+  - fully-supervised
+model:
+  decoders:
+    identity: {kind: linear-rnn, width: 16, choice_heads: factored}

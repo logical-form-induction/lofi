@@ -1,0 +1,145 @@
+# A finite category-to-type relation whose coherence sum is enumerated exactly.
+parse: {retain: forest, reachability: all}
+approximation: {residual_mass: 0.0}
+model:
+  language: {from: data}
+  parser: {kind: inside-outside, width: 4}
+  token_encoder:
+    kind: static
+    vectors: lofi.resource:run/synthetic-parser.vec
+    trainable: true
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 4, activation: tanh}]}
+  encoders:
+    category-encoder: {kind: tree-rnn, width: 4}
+    semantic-types: {kind: tree-rnn, width: 4}
+  decoders:
+    category-identity: {kind: tree-rnn, width: 4}
+    category-application: {kind: tree-rnn, width: 4}
+    type-identity: {kind: tree-rnn, width: 4}
+    type-application: {kind: tree-rnn, width: 4}
+  spaces:
+    categories:
+      sort: Cat
+      encoder: category-encoder
+      identity: category-identity
+      combinators:
+        merge: concatenate
+        decoders: {"application:/": category-application}
+      relation: {space: types, via: consistency}
+    types:
+      sort: Ty
+      encoder: semantic-types
+      identity: type-identity
+      combinators:
+        merge: concatenate
+        decoders: {"application:/": type-application}
+  readouts:
+    sentence-mass:
+      kind: terms
+      space: categories
+      reads: inside
+      targets: grammar-goal
+      output: sentences
+    category-terms:
+      kind: terms
+      space: types
+      reads: inside
+      decoding: {strategy: exhaustive, cap: 16}
+loss:
+  terms:
+    - objective: {kind: grammaticality, readout: sentences}
+    - objective:
+        kind: coherence
+        readout: category-terms
+        space: categories
+        estimator: exact
+        warmup: null
+      weight: 0.1
+data:
+  datasets:
+    train:
+      dataset:
+        kind: synthetic
+        retained: {validation: 0.5}
+        language:
+          name: finite-coherence
+          atomic_types: [{name: e}, {name: t, kind: proposition}]
+          constructors: [{name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}]
+          constants: []
+          binders: {style: curry}
+          logic:
+            equality: false
+            prover: {kind: truth-table, timeout: 5.0}
+            labeling: {budget: {}}
+          bounds:
+            Ty: {layout: complete-tree, depth: 2, nodes: null, order: df, free_ranks: 0}
+            Tm: {layout: complete-tree, depth: 2, nodes: null, order: df, free_ranks: 0}
+            Cat: {layout: complete-tree, depth: 2, nodes: null, order: df, free_ranks: 0}
+        grammar:
+          formalism: declared
+          name: finite-coherence
+          signature:
+            primitives: [S, NP]
+            constructors:
+              - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+              - {name: "\\", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: \\, precedence: 10, associativity: left}}
+            functors:
+              - {name: "/", constructor: "/", argument_side: right, opposite: "\\"}
+              - {name: "\\", constructor: "\\", argument_side: left, opposite: "/"}
+          rules:
+            name: finite-coherence
+            rules: [{rule: application, view: "/"}]
+          lexicon:
+            kind: inline
+            entries:
+              - {form: word-0, category: S/NP, meaning: p}
+              - {form: word-4, category: NP, meaning: a}
+          goal: {kind: root, categories: [S]}
+          matching: {kind: identity}
+          budget: {unary_rounds: 1}
+        interpretation:
+          erasure:
+            kind: signature-morphism
+            atoms: {S: t, NP: e}
+          constants:
+            - {name: a, type: e, classes: [individual]}
+            - {name: p, type: "e -> t", classes: [predicate]}
+          meanings: {source: {kind: lexical}}
+        size: 4
+        seed: 5
+        length: {kind: uniform, min_length: 2, max_length: 2}
+      featurizer: {kind: unlabeled}
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 1
+  batch_size: 2
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  accumulation_steps: 1
+  active_groups:
+    - token_encoder
+    - category-encoder
+    - semantic-types
+    - category-identity
+    - category-application
+    - type-identity
+    - type-application
+    - controller
+    - parser
+  early_stopping:
+    metric: loss/grammaticality
+    mode: min
+    patience: 1
+    minimum_delta: 0.0
+    keep_best: 1
+  checkpoints: {interval: 1, keep: 1}
+release: {checkpoint: validation-best}
+optimizer: {kind: adamw, weight_decay: 0.0}
+scheduler: {kind: cosine}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000

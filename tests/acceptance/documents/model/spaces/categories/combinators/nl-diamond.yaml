@@ -1,0 +1,5 @@
+merge: concatenate
+decoders:
+  '/E_linear': application
+  '\E_linear': application
+  dotI_linear: application

@@ -1,0 +1,64 @@
+# An arrow and a product constructor, with pairing and a curry combinator.
+name: arrow-product
+signature:
+  primitives: [S, NP]
+  constructors:
+    - {name: "arrow", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: ->, precedence: 10, associativity: left}}
+    - {name: "*", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '*', precedence: 10, associativity: left}}
+  functors:
+    - {name: "arrow", constructor: "arrow", argument_side: either, opposite: "arrow"}
+rules:
+  name: arrow-product
+  rules:
+    - rule: pattern
+      name: apply
+      premises:
+        - &functor
+          pattern: node
+          operator: {kind: fixed, name: arrow}
+          arguments:
+            - &result {pattern: term, name: X}
+            - &argument {pattern: term, name: Y}
+        - *argument
+      conclusion: *result
+    - rule: pattern
+      name: pair
+      head_policy: left-conjunct
+      premises:
+        - {pattern: term, name: A}
+        - {pattern: term, name: B}
+      conclusion:
+        pattern: node
+        operator: {kind: fixed, name: "*"}
+        arguments: [{pattern: term, name: A}, {pattern: term, name: B}]
+    - rule: pattern
+      name: curry
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: arrow}
+          arguments:
+            - {pattern: term, name: X}
+            - pattern: node
+              operator: {kind: fixed, name: "*"}
+              arguments: [{pattern: term, name: Y}, {pattern: term, name: Z}]
+      conclusion:
+        pattern: node
+        operator: {kind: fixed, name: arrow}
+        arguments:
+          - pattern: node
+            operator: {kind: fixed, name: arrow}
+            arguments: [{pattern: term, name: X}, {pattern: term, name: Z}]
+          - {pattern: term, name: Y}
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: NP, meaning: john}
+    - {form: mary, category: NP, meaning: mary}
+    - {form: sleeps, category: "S->NP", meaning: '\x. sleep(x)'}
+    - {form: sees, category: "S->(NP*NP)", meaning: '\p. see(p)'}
+goal:
+  kind: root
+  categories: [S]
+budget:
+  unary_rounds: 1
+formalism: declared

@@ -1,0 +1,4 @@
+defaults: [lm-prover-fit]
+system:
+  generations_source: data/lm-prover/logic-lm.json
+  pipeline: {kind: logic-lm, refinements: 1}

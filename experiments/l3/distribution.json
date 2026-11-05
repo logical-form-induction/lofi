@@ -1,0 +1,19 @@
+{
+  "grid": {
+    "premise-length": ["uniform", "negative-binomial"],
+    "hypothesis-length": ["uniform", "negative-binomial"],
+    "semantic-profile": [
+      "i6-du-cn", "i6-du-c0", "i6-du-cp", "i6-dp-cn", "i6-dp-c0", "i6-dp-cp",
+      "i12-du-cn", "i12-du-c0", "i12-du-cp", "i12-dp-cn", "i12-dp-c0", "i12-dp-cp"
+    ],
+    "rank-law": ["uniform", "power-law"]
+  },
+  "hypotheses": [
+    {
+      "name": "distribution-recovery-above-floor",
+      "left": "many-to-one-accuracy",
+      "right": "random-relabeling-floor",
+      "family": "logical-form-distribution"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+defaults:
+  - synthetic-parser
+  - data.datasets.train.constraint_source: gold-derivation
+  - data.datasets.train.constraint_policy.syntactic: per-occurrence
+  - loss: pinning

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://logical-form-induction.github.io/lofi/
+    about: The tutorial, the guides, the concepts and the API reference.
+  - name: Contributing guide
+    url: https://github.com/logical-form-induction/lofi/blob/main/CONTRIBUTING.md
+    about: The development environment and the checks a change has to pass.

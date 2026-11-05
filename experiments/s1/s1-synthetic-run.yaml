@@ -1,0 +1,14 @@
+# Synthetic strings sampled from the packaged CCGbank grammar and lexicon.
+defaults:
+  - s1-common-run
+  - data.datasets.train.dataset: synthetic
+  - data.datasets.train.dataset.grammar: ccgbank
+data:
+  datasets:
+    train:
+      dataset:
+        retained: {validation: 0.1, development: 0.1, test: 0.1}
+        size: 2048
+        seed: derived
+        length: {kind: uniform, min_length: 2, max_length: 8}
+        sampler: {kind: uniform}

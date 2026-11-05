@@ -1,0 +1,11 @@
+{
+  "grid": {},
+  "hypotheses": [
+    {
+      "name": "reduced-published-inducer-dependency-score",
+      "left": "dependencies-all-lengths",
+      "right": "dependencies-length-10",
+      "family": "known-grammar-baselines"
+    }
+  ]
+}

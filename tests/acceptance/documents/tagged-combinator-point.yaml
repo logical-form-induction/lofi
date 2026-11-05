@@ -1,0 +1,10 @@
+# A tiny point whose parser admits unary rules and whose represented space
+# supplies their conclusions symbolically.
+defaults:
+  - base
+model:
+  language: {from: data}
+  parser: {kind: tagged, width: 4, unary_depth: 1}
+loss:
+  terms:
+    - objective: {kind: grammaticality, readout: sentences}

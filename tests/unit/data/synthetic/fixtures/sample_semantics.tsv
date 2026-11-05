@@ -1,0 +1,45 @@
+form	category	logical_class	symbol	arity	count
+the	NP/N	quantifier	exists		1180
+a	NP/N	quantifier	exists		640
+some	NP/N	quantifier	exists		120
+every	NP/N	quantifier	forall		95
+all	NP/N	quantifier	forall		60
+john	NP	constant	john		210
+mary	NP	constant	mary		185
+boston	NP	constant	boston		64
+paris	NP	constant	paris		41
+rome	NP	constant	rome		33
+dogs	NP	predicate	dog	1	26
+birds	NP	predicate	bird	1	14
+dog	N	predicate	dog	1	155
+cat	N	predicate	cat	1	131
+man	N	predicate	man	1	118
+woman	N	predicate	woman	1	104
+book	N	predicate	book	1	92
+tree	N	predicate	tree	1	73
+city	N	predicate	city	1	51
+bird	N	predicate	bird	1	31
+mother	N	predicate	mother_of	2	47
+friend	N	predicate	friend_of	2	29
+paris	N	constant	paris		12
+john	N	constant	john		8
+big	N/N	predicate	big	1	88
+small	N/N	predicate	small	1	71
+red	N/N	predicate	red	1	54
+old	N/N	predicate	old	1	39
+mere	N/N	identity	λx.x		17
+sleeps	S\NP	predicate	sleep	1	96
+runs	S\NP	predicate	run	1	77
+walks	S\NP	predicate	walk	1	49
+sees	(S\NP)/NP	predicate	see	2	112
+loves	(S\NP)/NP	predicate	love	2	87
+reads	(S\NP)/NP	predicate	read	2	63
+eats	(S\NP)/NP	predicate	eat	2	42
+gives	((S\NP)/NP)/NP	predicate	give	3	35
+sends	((S\NP)/NP)/NP	predicate	send	3	18
+really	(S\NP)/(S\NP)	identity	λx.x		44
+quickly	(S\NP)/(S\NP)	predicate	quick	1	22
+and	(S\S)/S	connective	and		130
+or	(S\S)/S	connective	or		58
+if	(S\S)/S	connective	if		36
+not	S/S	connective	not		74

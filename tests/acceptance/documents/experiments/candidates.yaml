@@ -1,0 +1,50 @@
+# Compare two declared candidate grammars on held-out bracketing.
+role: preflight
+freeze_id: freeze/1
+config:
+  kind: run
+  path: ../tagged-combinator-point.yaml
+launch: {kind: serial}
+failure: {numerical: final, out_of_memory: retry}
+sweep:
+  yoked:
+    - - group: data.datasets.train.dataset.grammar
+        values: [slash, arrow-product]
+      - group: model.spaces.categories.combinators
+        values: [slash, arrow-product]
+  seeds: [0]
+  expected_points: 2
+seed_policy:
+  root: 7
+rows:
+  - {evaluator: held-out, metric: unlabeled-bracketing-f1}
+primary: {evaluator: held-out, metric: unlabeled-bracketing-f1}
+preregistration: candidates.json
+compute:
+  kind: unpriced
+contraction:
+  rungs:
+    - kind: fallback
+  factorial: two candidate grammars
+stop_rules:
+  - name: numerical failure
+    when: {kind: points, statuses: [numerical-failure], at_least: 1}
+decision_point:
+  date: "2026-12-01"
+  signal:
+    kind: metric
+    row: {evaluator: held-out, metric: unlabeled-bracketing-f1}
+    statistic: max
+    direction: above
+    threshold: 0.0
+  fallback: Neither candidate grammar is preferred.
+evaluation:
+  alpha: 0.05
+  correction: {kind: benjamini-hochberg}
+  dependence: prds
+  minimum_seeds: 1
+  seed_budget:
+    metric: recovery
+    target: mean
+    precision: 0.05
+    level: 0.95

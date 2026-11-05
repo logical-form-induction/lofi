@@ -1,0 +1,86 @@
+# A site profile with placeholder values only. Copy it, replace every value
+# with the site's own, keep the copy outside the repository, and point
+# LOFI_SITE_PROFILE at it.
+
+# attempts a point receives across launches before infrastructure failure is final
+
+[submission]
+# the command that submits a script, and the prefix a directive line starts with
+command = "placeholder-submit"
+directive_prefix = "#PLACEHOLDER"
+# the array range spelling, formatted with the first and last task indices
+array_syntax = "--array={first}-{last}"
+# the throttle spelling, formatted with the concurrent-task limit and appended
+# to the formatted array syntax
+throttle_syntax = "%{throttle}"
+# the placement directive spellings, formatted with the like-named values in
+# the placement table below
+account_syntax = "--account={account}"
+partition_syntax = "--partition={partition}"
+accelerator_syntax = "--gres={accelerator}:{accelerators_per_node}"
+# the variable the scheduler sets to a task's index inside the array
+task_index_variable = "PLACEHOLDER_ARRAY_TASK_ID"
+# the per-task resource spellings: wall-clock minutes and memory in mebibytes,
+# both read off the experiment's price record, the cores the placement table
+# names, and the log path under the submission directory
+walltime_syntax = "--time={minutes}"
+memory_syntax = "--mem={megabytes}"
+cpus_syntax = "--cpus-per-task={cpus}"
+log_syntax = "--output={directory}/%A_%a.log"
+# the job name spelling, formatted with the name every submission of one
+# experiment under one freeze shares, and the command that cancels every job of
+# that name, each word formatted with it, which the status poller runs once a
+# stop rule fires
+name_syntax = "--job-name={name}"
+job_prefix = "lofi-"
+cancel_command = ["placeholder-cancel", "--name={name}"]
+
+[placement]
+account = "placeholder-account"
+partition = "placeholder-partition"
+accelerator = "placeholder-accelerator"
+accelerators_per_node = 1
+cpus_per_task = 4
+
+[storage]
+scratch_root = "/placeholder/scratch"
+cache_root = "/placeholder/cache"
+
+[storage.quota]
+# argument vector that prints the site's quota report for the scratch root
+command = ["placeholder-quota-report"]
+# regular expression whose group named used matches the amount the report holds
+used_pattern = "used (?P<used>[0-9]+)"
+# bytes one reported unit stands for, and the cap reclamation keeps the root under
+unit_bytes = 1073741824
+limit_bytes = 3000000000000
+
+# reclaimable files of a completed point, removed cheapest to remake first
+[[storage.artifacts]]
+name = "representations"
+pattern = "representations"
+regeneration_hours = 0.5
+
+[[storage.artifacts]]
+name = "checkpoints"
+pattern = "checkpoints"
+regeneration_hours = 4.0
+
+[environment]
+# lines run before the interpreter, such as module loads and exports
+preamble = ["placeholder-module load placeholder-toolkit"]
+
+[interpreter]
+# the argument vector that runs Python at the site, with any container
+# wrapper spelled out in full
+command = ["placeholder-container", "exec", "/placeholder/image.sif", "python"]
+
+[transport]
+host = "placeholder-host"
+# the argument vector that opens a session on the host, before the host name
+command = ["placeholder-shell", "-o", "BatchMode=yes"]
+
+[allocation]
+# accelerator-hours the site grants, and the largest fraction one paper may hold
+accelerator_hours = 10000.0
+share = 0.6

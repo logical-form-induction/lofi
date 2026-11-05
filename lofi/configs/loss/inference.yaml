@@ -1,0 +1,4 @@
+kind: inference
+signal: likelihood
+response: {kind: label}
+auxiliary_weight: 0.0
