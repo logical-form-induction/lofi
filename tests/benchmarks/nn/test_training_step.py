@@ -104,6 +104,19 @@ class Stack(NamedTuple):
     width: int
 
 
+def _accelerator() -> torch.device:
+    """Return the available device whose allocator the benchmark measures."""
+    device = torch.accelerator.current_accelerator()
+
+    if device is None or device.type == "cpu" or not torch.accelerator.is_available():
+        pytest.skip(
+            "the peak activation budget is stated for one accelerator and this "
+            "machine has no accelerator, so nothing here would measure what it asserts"
+        )
+
+    return device
+
+
 @pytest.fixture(scope="module")
 def stack() -> Stack:
     """Return the prepared stack, or skip when the machine has no accelerator.
@@ -113,13 +126,7 @@ def stack() -> Stack:
     Stack
         The reference stack's step at every priced shape, on the resolved device.
     """
-    device = torch.accelerator.current_accelerator()
-
-    if device is None or not torch.accelerator.is_available():
-        pytest.skip(
-            "the peak activation budget is stated for one accelerator and this "
-            "machine has none, so nothing here would measure what it asserts"
-        )
+    device = _accelerator()
 
     stacks = reference_stacks(LengthBatchPricing(lengths=LENGTHS, batches=SIZES))
     parser = next(iter(stacks.values())).model.parser
@@ -353,3 +360,15 @@ def test_one_training_step_allocates_accelerator_memory(stack: Stack) -> None:
     run(step)
 
     assert torch.accelerator.max_memory_allocated(stack.device) > 0
+
+
+def test_accelerator_selection_refuses_a_processor_fallback(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        torch.accelerator, "current_accelerator", lambda: torch.device("cpu")
+    )
+    monkeypatch.setattr(torch.accelerator, "is_available", lambda: True)
+
+    with pytest.raises(pytest.skip.Exception, match="no accelerator"):
+        _accelerator()
