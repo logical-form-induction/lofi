@@ -44,7 +44,7 @@ dependencies = [
 # capability imports directly. two capabilities may share a wheel: quivers
 # requires torch, so `judgments` gets torch too, without `nn` naming quivers.
 [project.optional-dependencies]
-nn = ["numpy>=2", "torch>=2", "transformers[sentencepiece]>=4"]
+nn = ["numpy>=2", "torch>=2", "transformers[sentencepiece]>=5.22.1"]
 corpora = ["lairs[conllu]>=0.9.0"]
 cross-engine = ["quivers>=0.25.2"]
 # quivers[diagnostics] rather than plain quivers: the PSIS-LOO and ELPD comparison
@@ -64,7 +64,7 @@ publish = [
     "lairs>=0.9.0",
     "numpy>=2",
     "torch>=2",
-    "transformers[sentencepiece]>=4",
+    "transformers[sentencepiece]>=5.22.1",
 ]
 tracking = ["wandb", "mlflow", "trackio"]
 # the law suites under lofi.*.laws are exported so a plugin author can check an
