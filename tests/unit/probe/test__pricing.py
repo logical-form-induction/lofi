@@ -1,6 +1,5 @@
 import itertools
 import pickle
-from time import sleep
 from typing import TYPE_CHECKING, Final, Self, cast
 
 import pytest
@@ -9,6 +8,7 @@ import torch
 from lofi import _checks
 from lofi.nn.policy import DevicePolicy
 from lofi.nn.sites import Access, ComponentId, DTypeClass, Role, Site, SiteMap, SiteSpec
+from lofi.probe import _pricing
 from lofi.probe._causal import AlignmentPolicy, CounterfactualPair, Side, TypeAt
 from lofi.probe._das import (
     AlignmentObjective,
@@ -276,17 +276,6 @@ class Counted:
         return self.runs
 
 
-class Uneven:
-    """Sleeps briefly on its first call and five times as long on every later one."""
-
-    def __init__(self) -> None:
-        self.runs = 0
-
-    def __call__(self) -> None:
-        self.runs += 1
-        sleep(0.01 if self.runs == 1 else 0.05)
-
-
 def an_accelerator() -> DevicePolicy:
     device = torch.accelerator.current_accelerator(check_available=True)
 
@@ -365,10 +354,18 @@ def test_a_checked_build_is_refused_before_anything_runs(
     assert body.runs == 0
 
 
-def test_the_fastest_run_is_the_minimum_and_the_mean_is_the_mean() -> None:
-    price = price_unit(ProbeUnit.PRUNING, Uneven(), policy=CPU, warmup=0, repeats=3)
+def test_the_fastest_run_is_the_minimum_and_the_mean_is_the_mean(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    clock = iter((0.0, 3.0, 10.0, 11.0, 20.0, 25.0))
+    monkeypatch.setattr(_pricing, "perf_counter", lambda: next(clock))
+    body = Counted()
 
-    assert price.seconds_fastest < 0.03 < price.seconds_per_run
+    price = price_unit(ProbeUnit.PRUNING, body, policy=CPU, warmup=0, repeats=3)
+
+    assert body.runs == 3
+    assert price.seconds_fastest == 1.0
+    assert price.seconds_per_run == 3.0
 
 
 def test_a_cpu_unit_never_touches_the_accelerator(
