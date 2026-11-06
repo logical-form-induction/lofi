@@ -581,7 +581,7 @@ def test_a_directory_not_filed_under_the_experiments_freeze_is_refused(
     misfiled.parent.mkdir(parents=True)
     layout.directory.rename(misfiled)
 
-    with pytest.raises(ResultsLayoutError, match=r"results/1/headline, not"):
+    with pytest.raises(ResultsLayoutError, match=r"results[/\\]1[/\\]headline, not"):
         layout.ingest(directory=misfiled)
 
 

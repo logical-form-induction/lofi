@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import math
 from hashlib import sha256
+from pathlib import Path
 from typing import TYPE_CHECKING, Final, NamedTuple, override
 
 import pytest
@@ -29,7 +30,6 @@ from lofi.run.corpus_designs import (
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
-    from pathlib import Path
 
     from torch import Tensor
 
@@ -193,7 +193,10 @@ def install(root: Path) -> Path:
                     "unigram_log_probability": "unigram_log_probability",
                     "length": "length",
                 },
-                "artifacts": {"root": "/var/cache/lofi/artifacts", "offline": True},
+                "artifacts": {
+                    "root": str(Path("/var/cache/lofi/artifacts").absolute()),
+                    "offline": True,
+                },
                 "checkpoint": {
                     "kind": "hub",
                     "repository": FIXTURE_CHECKPOINT.repository,

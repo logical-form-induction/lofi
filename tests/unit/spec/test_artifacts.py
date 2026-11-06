@@ -67,12 +67,16 @@ def test_a_source_that_pins_nothing_is_refused(declared: dict[str, str]) -> None
 
 
 def test_a_cache_root_is_absolute_and_online_unless_declared_offline() -> None:
-    declared = ArtifactCacheSpec(root="/data/artifacts")
+    declared = ArtifactCacheSpec(root=str(Path("/data/artifacts").absolute()))
 
     assert declared.settings() == ArtifactCacheSettings(
-        Path("/data/artifacts"), offline=False
+        Path("/data/artifacts").absolute(), offline=False
     )
-    assert ArtifactCacheSpec(root="/data/artifacts", offline=True).settings().offline
+    assert (
+        ArtifactCacheSpec(root=str(Path("/data/artifacts").absolute()), offline=True)
+        .settings()
+        .offline
+    )
 
     with pytest.raises(dx.ValidationError, match="absolute"):
         ArtifactCacheSpec(root="artifacts")

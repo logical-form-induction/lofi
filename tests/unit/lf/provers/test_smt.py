@@ -54,11 +54,15 @@ def _oracle(
     return SmtOracle(
         language,
         engine=engine,
-        executable=executable,
+        executable=sys.executable if executable is not None else None,
         bound=_bound(engine, language),
         logic="ALL",
         options={},
-        prefix=prefix,
+        prefix=(
+            (executable, *(engine.prefix if prefix is None else prefix))
+            if executable is not None
+            else prefix
+        ),
         arguments=(),
         terminate_grace=terminate_grace,
         polymorphism="refuse",
@@ -160,10 +164,12 @@ def _answering(*answer: str) -> str:
 
 
 def test_an_unknown_answer_abstains_as_a_give_up(
-    first_order_language: LanguageAssembly, script: Callable[[str], str]
+    first_order_language: LanguageAssembly, python_program: Callable[[str], str]
 ) -> None:
     language = first_order_language
-    oracle = _oracle(language, Z3, script(_answering('print("unknown", flush=True)')))
+    oracle = _oracle(
+        language, Z3, python_program(_answering('print("unknown", flush=True)'))
+    )
 
     try:
         verdict = oracle.entails(
@@ -178,7 +184,7 @@ def test_an_unknown_answer_abstains_as_a_give_up(
 
 def test_a_late_answer_never_decides_the_next_query(
     first_order_language: LanguageAssembly,
-    script: Callable[[str], str],
+    python_program: Callable[[str], str],
     tmp_path: Path,
 ) -> None:
     language = first_order_language
@@ -194,7 +200,7 @@ def test_a_late_answer_never_decides_the_next_query(
         "    time.sleep(5)",
         'print("unsat" if slow else "sat", flush=True)',
     )
-    oracle = _oracle(language, Z3, script(first_worker_is_slow))
+    oracle = _oracle(language, Z3, python_program(first_worker_is_slow))
     premise = language.read("dog(rex)")
     hypothesis = language.read("mammal(rex)")
 
@@ -210,10 +216,12 @@ def test_a_late_answer_never_decides_the_next_query(
 
 
 def test_a_nonpositive_deadline_is_refused(
-    first_order_language: LanguageAssembly, script: Callable[[str], str]
+    first_order_language: LanguageAssembly, python_program: Callable[[str], str]
 ) -> None:
     language = first_order_language
-    oracle = _oracle(language, Z3, script(_answering('print("sat", flush=True)')))
+    oracle = _oracle(
+        language, Z3, python_program(_answering('print("sat", flush=True)'))
+    )
 
     try:
         with pytest.raises(ValueError, match="positive"):
@@ -225,19 +233,19 @@ def test_a_nonpositive_deadline_is_refused(
 
 
 def test_an_intensional_language_is_refused(
-    intensional_language: LanguageAssembly, script: Callable[[str], str]
+    intensional_language: LanguageAssembly, python_program: Callable[[str], str]
 ) -> None:
     with pytest.raises(ProverUnsupportedError) as refused:
-        _oracle(intensional_language, Z3, script(_answering('print("sat")')))
+        _oracle(intensional_language, Z3, python_program(_answering('print("sat")')))
 
     assert refused.value.field == "world_types"
 
 
 def test_a_requested_smt_model_is_persisted_as_counterevidence(
     first_order_language: LanguageAssembly,
-    script: Callable[[str], str],
+    python_program: Callable[[str], str],
 ) -> None:
-    executable = script(
+    executable = python_program(
         _answering(
             'print("sat", flush=True)',
             'if sys.stdin.readline().rstrip("\\n") == "(get-model)":',
@@ -270,7 +278,7 @@ def test_a_requested_smt_model_is_persisted_as_counterevidence(
 )
 def test_a_declared_prefix_replaces_the_engine_prefix(
     first_order_language: LanguageAssembly,
-    script: Callable[[str], str],
+    python_program: Callable[[str], str],
     prefix: tuple[str, ...] | None,
     expected: list[str],
 ) -> None:
@@ -279,7 +287,7 @@ def test_a_declared_prefix_replaces_the_engine_prefix(
     solver = f"import sys\nexact = sys.argv[1:] == {expected!r}\n" + _answering(
         'print("unsat" if exact else "unknown", flush=True)'
     )
-    oracle = _oracle(language, engine, script(solver), prefix=prefix)
+    oracle = _oracle(language, engine, python_program(solver), prefix=prefix)
 
     try:
         verdict = oracle.entails(
@@ -297,7 +305,7 @@ def test_a_declared_prefix_replaces_the_engine_prefix(
 @pytest.mark.parametrize(("grace", "finished"), [(5.0, True), (0.01, False)])
 def test_a_stopped_worker_has_its_declared_grace_period_to_finish(
     first_order_language: LanguageAssembly,
-    script: Callable[[str], str],
+    python_program: Callable[[str], str],
     tmp_path: Path,
     *,
     grace: float,
@@ -320,7 +328,7 @@ def test_a_stopped_worker_has_its_declared_grace_period_to_finish(
         "time.sleep(0.5)\n"
         f"pathlib.Path({str(marker)!r}).touch()\n"
     )
-    oracle = _oracle(language, Z3, script(solver), terminate_grace=grace)
+    oracle = _oracle(language, Z3, python_program(solver), terminate_grace=grace)
     premise = language.read("dog(rex)")
     hypothesis = language.read("mammal(rex)")
 

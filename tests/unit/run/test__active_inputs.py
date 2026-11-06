@@ -118,7 +118,10 @@ def item_document() -> dict[str, JsonValue]:
                     "repository": "fixture/masked-lm",
                     "revision": "0123456789abcdef0123456789abcdef01234567",
                 },
-                "artifacts": {"root": "/var/cache/lofi/artifacts", "offline": True},
+                "artifacts": {
+                    "root": str(Path("/var/cache/lofi/artifacts").absolute()),
+                    "offline": True,
+                },
                 "mask": "[MASK]",
                 "count": len(PREDICATES),
                 "prompts": ["word-0 [MASK] word-4"],

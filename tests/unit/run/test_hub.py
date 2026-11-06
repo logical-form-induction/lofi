@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import json
-import os
 import re
 import shutil
 import socket
-import stat
 import subprocess
 import sys
 from hashlib import file_digest
@@ -47,6 +45,7 @@ from lofi.run._entrypoint import main
 from lofi.run._ports import ReleaseAuthorization
 from lofi.run.hub import (
     ModelRelease,
+    _sync_directory,
     export_hub_model,
     export_trained_point,
     load_hub_bundle,
@@ -2067,22 +2066,18 @@ def test_a_post_replace_directory_sync_failure_restores_intent_before_rollback(
 ) -> None:
     evidence = tmp_path / "evidence.json"
     client = FakeHub(tmp_path / "remote", evidence=evidence)
-    real_fsync = os.fsync
+    sync_directory = _sync_directory
     directory_syncs = 0
 
-    def injected_fsync(descriptor: int) -> None:
+    def injected_sync(directory: Path) -> None:
         nonlocal directory_syncs
+        directory_syncs += 1
+        if directory_syncs == 3:
+            msg = "injected post-replace directory sync failure"
+            raise OSError(msg)
+        sync_directory(directory)
 
-        if stat.S_ISDIR(os.fstat(descriptor).st_mode):
-            directory_syncs += 1
-
-            if directory_syncs == 3:
-                msg = "injected post-replace directory sync failure"
-                raise OSError(msg)
-
-        real_fsync(descriptor)
-
-    monkeypatch.setattr(os, "fsync", injected_fsync)
+    monkeypatch.setattr(hub_module, "_sync_directory", injected_sync)
 
     with pytest.raises(OSError, match="post-replace directory sync failure"):
         hub_module.publish_release(

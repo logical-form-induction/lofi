@@ -310,7 +310,7 @@ def _replace_table(path: Path, table: pa.Table) -> None:
     staged = Path(name)
     try:
         pq.write_table(table, staged)
-        with staged.open("rb") as stream:
+        with staged.open("rb+") as stream:
             os.fsync(stream.fileno())
         replace_path(staged, path)
         _sync_directory(path.parent)

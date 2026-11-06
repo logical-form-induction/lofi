@@ -202,10 +202,11 @@ def test_the_published_surface_reads_one_items_gold_back_by_id() -> None:
 
 
 def test_a_configured_corpus_path_resolves_through_the_published_root() -> None:
-    root = DataRoot(Path("/srv/corpora"))
+    root = DataRoot(Path("/srv/corpora").absolute())
 
-    assert root.resolve("ccgbank/wsj", key="dataset.path") == Path(
-        "/srv/corpora/ccgbank/wsj"
+    assert (
+        root.resolve("ccgbank/wsj", key="dataset.path")
+        == root.directory / "ccgbank/wsj"
     )
 
     with pytest.raises(PathDeclarationError):

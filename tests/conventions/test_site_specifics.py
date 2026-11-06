@@ -604,7 +604,7 @@ def test_a_checkout_under_a_user_path_is_no_offense(tmp_path: Path) -> None:
         'scratch_root = "/placeholder/scratch"\n', encoding="utf-8", newline="\n"
     )
 
-    absolute = offenses_in_text(str(tracked), tracked.name)
+    absolute = offenses_in_text(tracked.as_posix(), tracked.name)
     relative = offenses_in_text(tracked.relative_to(tmp_path).as_posix(), tracked.name)
 
     assert PLANTED_NAME in {word for found in absolute for word in found.words}

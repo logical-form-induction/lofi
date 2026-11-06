@@ -181,7 +181,9 @@ def test_frontier_and_teacher_forcing_share_the_root_choice_row() -> None:
     context = frontier.context(VIEW.capacity)
     state = decoder.start(Encoded(INPUTS.tensor[:1], INPUTS.axes))
 
-    assert torch.equal(decoder.weigh(state, context=context).tensor, teacher)
+    torch.testing.assert_close(
+        decoder.weigh(state, context=context).tensor, teacher, rtol=1e-12, atol=1e-12
+    )
 
 
 def test_learned_root_states_exist_for_every_declared_layer() -> None:

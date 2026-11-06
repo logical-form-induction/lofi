@@ -1054,7 +1054,9 @@ def train(
     _policy: DevicePolicy,
 ) -> ManifestStatus:
     (directory / "training").write_text(str(point.seed))
-    time.sleep(600)
+    deadline = time.monotonic() + 600
+    while time.monotonic() < deadline:
+        time.sleep(0.05)
 
     return ManifestStatus.COMPLETED
 

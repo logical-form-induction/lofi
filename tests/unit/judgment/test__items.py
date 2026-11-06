@@ -60,6 +60,9 @@ def _generator(declaration: LexiconGeneratorSpec, /) -> MaskedLMLexiconGenerator
 
 def _document(**changes: object) -> dict[str, object]:
     document = json.loads((FIXTURE / "items.json").read_text(encoding="utf-8"))
+    document["generators"][0]["artifacts"]["root"] = str(
+        Path("/var/cache/lofi/artifacts").absolute()
+    )
     document.update(changes)
     return document
 
@@ -123,7 +126,9 @@ def test_generated_lexical_items_record_the_pinned_model_as_their_source() -> No
             "eng",
             {"pos": "VERB"},
             PinnedCheckpoint("fixture/masked-lm", REVISION),
-            ArtifactCacheSettings(Path("/var/cache/lofi/artifacts"), offline=True),
+            ArtifactCacheSettings(
+                Path("/var/cache/lofi/artifacts").absolute(), offline=True
+            ),
             "<mask>",
             2,
             ("Someone <mask> someone.", "People <mask> people."),
@@ -190,7 +195,7 @@ def test_an_item_template_without_elements_is_refused(tmp_path: Path) -> None:
 
 
 def test_the_declaration_is_validated_at_its_boundary() -> None:
-    declaration = decode_item_construction((FIXTURE / "items.json").read_bytes())
+    declaration = decode_item_construction(json.dumps(_document()).encode())
 
     assert isinstance(declaration, ItemConstructionSpec)
     assert tuple(declaration.attributes) == ("structure", "verb")
@@ -382,7 +387,10 @@ def test_a_masked_lm_filling_ranks_lexicon_items_by_bead_beam_search(
             "repository": "fixture/masked-lm",
             "revision": REVISION,
         },
-        "artifacts": {"root": "/var/cache/lofi/artifacts", "offline": True},
+        "artifacts": {
+            "root": str(Path("/var/cache/lofi/artifacts").absolute()),
+            "offline": True,
+        },
         "device": "cpu",
         "beam_size": 1,
         "fill_direction": "left_to_right",

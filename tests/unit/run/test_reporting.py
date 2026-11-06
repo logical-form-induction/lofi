@@ -1,3 +1,5 @@
+import os
+import stat
 from hashlib import sha256
 from typing import TYPE_CHECKING, cast
 
@@ -18,7 +20,7 @@ from lofi.eval import (
     Resampling,
 )
 from lofi.report import REPORT_FIELDS, report_renderer
-from lofi.run import read_experiment
+from lofi.run import read_experiment, reporting
 from lofi.run.reporting import (
     REPORT_SCHEMA,
     DuplicateReportRowError,
@@ -400,3 +402,21 @@ def test_the_sink_accepts_only_the_canonical_report_row(tmp_path: Path) -> None:
 
     with pytest.raises(TypeError, match="not canonical"):
         sink.emit((cast("ReportRow", {"metric": "not-a-row"}),))
+
+
+def test_a_report_is_synchronized_through_a_writable_descriptor(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fsync = os.fsync
+    written: list[int] = []
+
+    def sync(descriptor: int) -> None:
+        if stat.S_ISREG(os.fstat(descriptor).st_mode):
+            written.append(os.write(descriptor, b""))
+        fsync(descriptor)
+
+    monkeypatch.setattr(reporting.os, "fsync", sync)
+    ParquetReportSink(tmp_path / "report.parquet").emit((_row("metric", 1.0),))
+
+    assert written == [0]

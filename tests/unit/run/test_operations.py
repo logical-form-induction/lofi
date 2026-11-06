@@ -629,7 +629,12 @@ def test_the_experiment_executor_logs_each_point_to_its_own_mlflow_run(
         artifacts = database.execute("SELECT artifact_uri FROM runs").fetchall()
 
     assert artifacts
-    assert all(Path(uri).is_relative_to(tmp_path) for (uri,) in artifacts)
+    assert all(
+        (Path.from_uri(uri) if uri.startswith("file:") else Path(uri)).is_relative_to(
+            tmp_path
+        )
+        for (uri,) in artifacts
+    )
     assert len(handles) == 2
     assert sorted(logged) == sorted(point.point_id for point in points)
     assert all(runs.is_completed(point) for point in points)

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import didactic.api as dx
@@ -98,7 +99,10 @@ def test_a_causal_readout_names_the_element_it_scores() -> None:
                 "kind": "causal-lm",
                 "element": "stimulus",
                 "unigrams": "morcela/unigrams.tsv",
-                "artifacts": {"root": "/var/cache/lofi/artifacts", "offline": True},
+                "artifacts": {
+                    "root": str(Path("/var/cache/lofi/artifacts").absolute()),
+                    "offline": True,
+                },
                 "checkpoint": {
                     "kind": "hub",
                     "repository": "org/model",

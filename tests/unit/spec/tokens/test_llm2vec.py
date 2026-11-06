@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import didactic.api as dx
@@ -110,7 +111,7 @@ def test_a_packaged_corpus_resolves_to_an_absolute_path() -> None:
         corpus="lofi.resource:run/synthetic-parser.vec"
     ).settings()
 
-    assert settings.corpus.startswith("/")
+    assert Path(settings.corpus).is_absolute()
     assert settings.corpus.endswith("run/synthetic-parser.vec")
 
 

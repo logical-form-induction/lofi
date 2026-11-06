@@ -360,7 +360,11 @@ class ConstructedBeadDesigns:
     """Expose a declared bead item construction to the fit boundary."""
 
     def __init__(self) -> None:
-        declaration = decode_item_construction((ITEMS / "items.json").read_bytes())
+        document = json.loads((ITEMS / "items.json").read_text(encoding="utf-8"))
+        document["generators"][0]["artifacts"]["root"] = str(
+            Path("/var/cache/lofi/artifacts").absolute()
+        )
+        declaration = decode_item_construction(json.dumps(document).encode())
         items = construct_items(declaration, ITEMS, generator_for=_fixture_generator)
         labels = ("unlikely", "uncertain", "likely")
         records = tuple(

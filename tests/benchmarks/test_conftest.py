@@ -135,7 +135,7 @@ def _tree_session(
     """Run a benchmark module in a fresh interpreter under both conftests."""
     monkeypatch.delenv("LOFI_CHECK", raising=False)
     pytester.makepyprojecttoml(
-        f'[tool.pytest.ini_options]\npythonpath = ["{TREE}"]\n',
+        f'[tool.pytest.ini_options]\npythonpath = ["{TREE.as_posix()}"]\n',
     )
     pytester.makeconftest(ROOT_CONFTEST.read_text(encoding="utf-8"))
     pytester.makepyfile(

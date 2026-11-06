@@ -116,3 +116,16 @@ def script(tmp_path: Path) -> Callable[[str], str]:
         return str(stand_in(tmp_path / f"prover-{next(written)}", program))
 
     return write
+
+
+@pytest.fixture
+def python_program(tmp_path: Path) -> Callable[[str], str]:
+    """Write prover fixture programs for direct execution by the interpreter."""
+    written = count()
+
+    def write(program: str) -> str:
+        source = tmp_path / f"prover-{next(written)}.py"
+        source.write_text(program, encoding="utf-8", newline="\n")
+        return str(source)
+
+    return write

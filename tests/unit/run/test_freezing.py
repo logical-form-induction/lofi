@@ -684,7 +684,7 @@ def test_a_record_that_cannot_be_written_is_never_tagged(
     )
     commit_all(repository, "Block the active list")
 
-    with pytest.raises(IsADirectoryError):
+    with pytest.raises((IsADirectoryError, PermissionError)):
         main(arguments(repository, readiness), stdout=io.StringIO())
 
     assert tags(repository) == []

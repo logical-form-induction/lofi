@@ -9,13 +9,13 @@ from lofi.data.paths import DataRoot, DataRootError, PathDeclarationError
 
 @pytest.fixture
 def root() -> DataRoot:
-    return DataRoot(Path("/srv/lofi-data"))
+    return DataRoot(Path("/srv/lofi-data").absolute())
 
 
 def test_declared_path_resolves_under_the_root(root: DataRoot) -> None:
     resolved = root.resolve("corpora/layers/train.jsonl", key="corpus.train")
 
-    assert resolved == Path("/srv/lofi-data/corpora/layers/train.jsonl")
+    assert resolved == root.directory / "corpora/layers/train.jsonl"
     assert resolved.is_relative_to(root.directory)
 
 
@@ -102,7 +102,7 @@ def test_a_refusal_names_the_offending_key(root: DataRoot) -> None:
     [
         (Path("data"), "relative to a working directory"),
         (Path("./data"), "relative to a working directory"),
-        (Path("/srv/../srv/data"), "spelled with a '..' component"),
+        (Path("/srv/../srv/data").absolute(), "spelled with a '..' component"),
     ],
 )
 def test_unusable_roots_are_refused(directory: Path, reason: str) -> None:
@@ -114,15 +114,15 @@ def test_unusable_roots_are_refused(directory: Path, reason: str) -> None:
 
 
 def test_roots_naming_one_directory_are_one_value() -> None:
-    one = DataRoot(Path("/srv/lofi-data"))
-    same = DataRoot(Path("/srv/lofi-data/"))
-    other = DataRoot(Path("/srv/other-data"))
+    one = DataRoot(Path("/srv/lofi-data").absolute())
+    same = DataRoot(Path("/srv/lofi-data/").absolute())
+    other = DataRoot(Path("/srv/other-data").absolute())
 
     assert one == same
     assert hash(one) == hash(same)
     assert one != other
-    assert one != Path("/srv/lofi-data")
-    assert repr(one) == "DataRoot(PosixPath('/srv/lofi-data'))"
+    assert one != Path("/srv/lofi-data").absolute()
+    assert repr(one) == f"DataRoot({one.directory!r})"
 
 
 @given(declared=st.text(max_size=40))

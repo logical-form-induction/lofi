@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import didactic.api as dx
@@ -40,12 +41,14 @@ def test_an_external_probe_document_requires_an_absolute_checkpoint_root() -> No
 def test_an_external_probe_document_requires_a_stimulus() -> None:
     with pytest.raises(dx.ValidationError, match="at least one"):
         ExternalProbeSpec.model_validate(
-            _document(checkpoint_root="/checkpoints", lengths=[])
+            _document(checkpoint_root=str(Path("/checkpoints").absolute()), lengths=[])
         )
 
 
 def test_an_external_probe_document_declares_its_backend_member() -> None:
-    document = _document(checkpoint_root="/checkpoints", lengths=[3])
+    document = _document(
+        checkpoint_root=str(Path("/checkpoints").absolute()), lengths=[3]
+    )
     settings = ExternalProbeSpec.model_validate(document).settings()
 
     assert repr(settings.factory) == "ReleasedDioraCheckpointFactory('model.pt')"

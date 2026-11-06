@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import TYPE_CHECKING, NamedTuple, cast
 from uuid import UUID
 
@@ -400,7 +401,7 @@ def test_bead_prediction_refuses_an_existing_destination_before_restoring(
     destination.write_text("keep\n", encoding="utf-8", newline="\n")
     restore = Restore(Point())
 
-    with pytest.raises(FileExistsError, match=str(destination)):
+    with pytest.raises(FileExistsError, match=re.escape(str(destination))):
         BeadPredictionOperation(restore)(
             tmp_path / "run",
             tmp_path / "serving.json",

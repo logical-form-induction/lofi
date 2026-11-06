@@ -34,7 +34,7 @@ from lofi.spec import _interpolation as interpolation_module
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
-DATA_ROOT: Final = Path("/srv/lofi-data")
+DATA_ROOT: Final = Path("/srv/lofi-data").absolute()
 
 SEED: Final = 4321
 
