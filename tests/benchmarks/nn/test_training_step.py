@@ -161,6 +161,7 @@ def count_launches(step: ReferenceStep) -> int:
     step : ReferenceStep
         The prepared step.
     """
+    torch.accelerator.empty_cache()
     with profile(activities=[ProfilerActivity.CPU]) as profiled:
         run(step)
 
@@ -196,6 +197,7 @@ def warm(stack: Stack) -> None:
         The prepared stack.
     """
     for step in stack.steps.values():
+        torch.accelerator.empty_cache()
         run(step)
 
 
@@ -207,6 +209,9 @@ def time_once(step: ReferenceStep) -> Timing:
     step : ReferenceStep
         The prepared step, already warm at its shape.
     """
+    # Other grid shapes leave cached allocations that this shape cannot reuse.
+    # Release those outside the timed interval; live tensors remain allocated.
+    torch.accelerator.empty_cache()
     torch.accelerator.reset_peak_memory_stats(step.device)
     start = time.perf_counter()
     run(step)
@@ -235,7 +240,7 @@ def series(stack: Stack) -> tuple[StepCost, ...]:
         for shape in priced:
             timed[shape].append(time_once(stack.steps[shape]))
 
-    return tuple(
+    costs = tuple(
         StepCost(
             sentence_length=shape[0],
             batch_size=shape[1],
@@ -246,6 +251,8 @@ def series(stack: Stack) -> tuple[StepCost, ...]:
         )
         for shape in priced
     )
+    torch.accelerator.empty_cache()
+    return costs
 
 
 def of_batch(costs: tuple[StepCost, ...], batch_size: int) -> tuple[StepCost, ...]:
@@ -272,6 +279,7 @@ def rising(values: tuple[float, ...]) -> bool:
     return all(later > earlier for earlier, later in pairwise(values))
 
 
+@pytest.mark.slow
 def test_the_step_series_holds_the_declared_activation_budget(
     benchmark: BenchmarkFixture, stack: Stack
 ) -> None:
@@ -334,6 +342,7 @@ def test_one_training_step_holds_the_declared_activation_budget(stack: Stack) ->
     assert not declared_budget(stack.device).exceeded_by(peak)
 
 
+@pytest.mark.slow
 def test_the_step_series_covers_every_working_point(stack: Stack) -> None:
     costs = series(stack)
 

@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from tests.benchmarks.conftest import WallClockBudget
 
 
+@pytest.mark.slow
 def test_the_reference_posterior_fit_runs_the_pinned_nuts_plan(
     benchmark: BenchmarkFixture,
     wall_clock_budget: WallClockBudget,

@@ -935,6 +935,7 @@ def test_the_suite_value_depends_on_sentence_length(cpu_harness: Harness) -> Non
 
 
 @pytest.mark.benchmark(group="default-objective-suite")
+@pytest.mark.slow
 @pytest.mark.parametrize(
     "tokens", LENGTHS, ids=("10-tokens", "20-tokens", "30-tokens", "40-tokens")
 )
@@ -978,6 +979,7 @@ def test_the_default_suite_forward_meets_its_budget(
 
 
 @pytest.mark.benchmark(group="default-objective-suite")
+@pytest.mark.slow
 @pytest.mark.parametrize(
     "tokens", LENGTHS, ids=("10-tokens", "20-tokens", "30-tokens", "40-tokens")
 )

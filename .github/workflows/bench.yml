@@ -4,9 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-  # the same weekly run as ci.yml. Only the instruction counts run on it: a
-  # yanked crate or a runner image change can break their build with no commit
-  # to blame, and with no base commit they record rather than compare.
+  # Record the complete timing grid and instruction counts weekly.
   schedule:
     - cron: "0 7 * * 1"
   workflow_dispatch:
@@ -21,9 +19,10 @@ concurrency:
 jobs:
   benchmarks:
     name: Timings (${{ matrix.os }})
-    if: github.event_name != 'schedule'
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 180
+    timeout-minutes: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 360 || 60 }}
+    env:
+      BENCHMARK_SCOPE: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 'full' || 'bounded' }}
     strategy:
       fail-fast: false
       matrix:
@@ -44,7 +43,12 @@ jobs:
       - name: Record timings
         shell: bash
         run: |
+          scope=()
+          if [ "$BENCHMARK_SCOPE" = full ]; then
+            scope+=(--run-slow)
+          fi
           uv run pytest tests/benchmarks --benchmark-only \
+            "${scope[@]}" \
             -o wall_clock_budgets=false \
             --benchmark-json="$RUNNER_TEMP/benchmarks.json"
       - name: Upload timings

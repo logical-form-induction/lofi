@@ -82,10 +82,19 @@ def test_the_benchmark_workflow_has_each_required_trigger() -> None:
     assert '  schedule:\n    - cron: "0 7 * * 1"\n' in trigger_block
 
 
-def test_a_scheduled_run_counts_instructions_and_times_nothing() -> None:
+def test_scheduled_and_manual_runs_enable_the_full_benchmark_grid() -> None:
     assert "if" not in _job("instructions")
     assert _text(_job("relative")["if"]) == "github.event_name != 'schedule'"
-    assert _text(_job("benchmarks")["if"]) == "github.event_name != 'schedule'"
+    assert "if" not in _job("benchmarks")
+    scope = _text(_mapping(_job("benchmarks")["env"])["BENCHMARK_SCOPE"])
+    assert "github.event_name == 'schedule'" in scope
+    assert "github.event_name == 'workflow_dispatch'" in scope
+    assert "'full'" in scope
+    assert "'bounded'" in scope
+    script = _text(_named_step("Record timings")["run"])
+    assert '"$BENCHMARK_SCOPE" = full' in script
+    assert "--run-slow" in script
+    assert '"${scope[@]}"' in script
 
 
 def test_the_workflow_has_one_job_per_measure() -> None:
