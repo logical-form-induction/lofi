@@ -68,12 +68,12 @@ class SortBound(FrozenValue):
 
     @property
     def order(self) -> Literal["df", "bf"]:
-        """Return the complete-tree traversal order."""
+        """Return the complete tree traversal order."""
         return self._order
 
     @property
     def free_ranks(self) -> int:
-        """Return the admitted first-occurrence free-variable ranks."""
+        """Return the admitted first-occurrence free variable ranks."""
         return self._free_ranks
 
 
@@ -314,12 +314,12 @@ class LanguageAssembly(Unpicklable, FrozenValue):
 
     @property
     def type_sort(self) -> str:
-        """Return the semantic-type sort."""
+        """Return the semantic type sort."""
         return self._type_sort
 
     @property
     def term_sort(self) -> str:
-        """Return the logical-form sort."""
+        """Return the logical form sort."""
         return self._term_sort
 
     @property
@@ -329,7 +329,7 @@ class LanguageAssembly(Unpicklable, FrozenValue):
 
     @property
     def function_type(self) -> str:
-        """Return the declared binary function-type constructor."""
+        """Return the declared binary function type constructor."""
         return self._function_type
 
     @property

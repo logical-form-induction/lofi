@@ -30,7 +30,7 @@ release:
 | `trainer.checkpoints.interval` | Positive cadence in the trainer's unit of progress: completed epochs for the `parser`, `alternating` and `staged` trainers, completed optimizer steps for `terms` and `distance`. The final position is always written. |
 | `trainer.checkpoints.keep` | How many of the newest resumable checkpoints the point keeps. An older one is removed once a newer one is written. |
 | `trainer.early_stopping.keep_best` | How many of the newest validation-best checkpoints the point keeps. |
-| `release.checkpoint` | `validation-best` or `resume-latest`: the checkpoint kind that export and post-hoc probing restore. |
+| `release.checkpoint` | `validation-best` or `resume-latest`: the checkpoint kind that export and post hoc probing restore. |
 
 A parser trainer writes two kinds of checkpoint. A `validation-best`
 checkpoint is written when the monitored metric reaches a new best. A

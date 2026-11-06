@@ -219,7 +219,7 @@ class SoftTypingPlan(NamedTuple):
     Attributes
     ----------
     op : OpName
-        Logical-form operator naming the rule.
+        Logical form operator naming the rule.
     binding_count : int
         Number of binding-distribution positions.
     premise_count : int
@@ -268,7 +268,7 @@ class SoftTypingInstance(NamedTuple):
     split : int
         The split point used by the application.
     op : OpName
-        The logical-form operator whose typing rule applies.
+        The logical form operator whose typing rule applies.
     distributions : SoftTypingDistributions
         Node marginals for the rule's bindings, premises, and result.
     constituent_marginal : float
@@ -291,7 +291,7 @@ class SoftTypingTerm(NamedTuple):
     Attributes
     ----------
     op : OpName
-        The logical-form operator naming the rule.
+        The logical form operator naming the rule.
     unweighted : float
         Sum of the rule's local losses before chart weighting.
     weighted : float
@@ -779,7 +779,7 @@ def soft_typing_reference(
     Parameters
     ----------
     rules : Mapping[OpName, TypingRule]
-        Typing rules keyed by logical-form operator.
+        Typing rules keyed by logical form operator.
     instances : Sequence[SoftTypingInstance]
         Split-local rule applications to score.
 

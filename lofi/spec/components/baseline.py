@@ -21,7 +21,7 @@ class BaselineSystemSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "baseline_system"
 
     def metrics(self) -> tuple[str, ...]:

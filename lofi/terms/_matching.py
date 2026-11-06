@@ -116,7 +116,7 @@ class Alpha[T](Identity[T]):
 
 
 class FeatureErasure:
-    """Feature-erasure matching for interned terms."""
+    """Feature erasure matching for interned terms."""
 
     __slots__ = ()
 
@@ -142,7 +142,7 @@ class FeatureErasure:
 
     @property
     def representatives(self) -> RepresentativeKernel:
-        """Compile precomputed feature-erasure representatives."""
+        """Compile precomputed feature erasure representatives."""
         return RepresentativeKernel.core()
 
     def identified_roots(
@@ -159,11 +159,11 @@ class FeatureErasure:
         )
 
     def key(self, t: Term, /) -> Term:
-        """Return the term's precomputed feature-erasure core."""
+        """Return the term's precomputed feature erasure core."""
         return t.core
 
     def equivalent(self, a: Term, b: Term, /) -> bool:
-        """Return whether two terms have the same feature-erasure core."""
+        """Return whether two terms have the same feature erasure core."""
         return a.core is b.core
 
     @override
@@ -257,7 +257,7 @@ class Product[T]:
 
 
 class Subsumption:
-    """Structural matching under mutual free-variable subsumption."""
+    """Structural matching under mutual free variable subsumption."""
 
     __slots__ = ("_representatives",)
 

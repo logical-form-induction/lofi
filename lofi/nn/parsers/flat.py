@@ -39,7 +39,7 @@ _LEAF_AXES: Final[tuple[str, ...]] = ("item", "word", "width")
 """The axes pooled leaves arrive over."""
 
 _CELL_AXES: Final[tuple[str, ...]] = ("item", "span", "width")
-"""The axes of the flat chart-cell representation."""
+"""The axes of the flat chart cell representation."""
 
 _SCORE_AXES: Final[tuple[str, ...]] = ("item", "span")
 """The axes of the control's uniform log inside weights."""
@@ -154,7 +154,7 @@ class FlatSpanEncoder(nn.Module):
 
     @property
     def output_width(self) -> int:
-        """Return the width of each published chart-cell representation."""
+        """Return the width of each published chart cell representation."""
         return self._width
 
     @property

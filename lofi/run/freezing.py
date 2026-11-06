@@ -334,7 +334,7 @@ def _require_priced(
     Raises
     ------
     FreezeError
-        If the experiment is unpriced, is a judgment-fit experiment whose supplied
+        If the experiment is unpriced, is a judgment fit experiment whose supplied
         estimate names the measured cost model, or is a run experiment whose
         price record is not tracked or not readable, names another sweep,
         experiment or freeze, or recomputes another figure or cost-model version

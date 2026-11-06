@@ -53,7 +53,7 @@ class ProverSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="for
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists prover plugins."""
+        """Return the family whose entry point group lists prover plugins."""
         return "prover"
 
     @dx.validates("timeout")
@@ -127,6 +127,6 @@ class ProverSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="for
 
 
 class LabelingProverSpec(dx.Model, extra="forbid"):
-    """Declare proof-service resources spent while producing data labels."""
+    """Declare proof service resources spent while producing data labels."""
 
     budget: ProofBudgetSpec = dx.field(default_factory=ProofBudgetSpec)

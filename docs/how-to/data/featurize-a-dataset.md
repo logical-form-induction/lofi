@@ -42,7 +42,7 @@ these forms ahead of the dataset's own forms. The pair
 featurizer also takes `selection`, which names a `lofi.pair_selection` entry:
 `forced-choice` (the default), `relational`, or `relational-scalar`. The
 packaged `pair` option selects `relational`, which reads a labeled
-premise-hypothesis relation.
+relation between a premise and hypothesis.
 
 Select a featurizer from the `defaults` list, or from the command line with a
 group override. The checked-in parser document declares `unlabeled`; the
@@ -69,7 +69,7 @@ DerivationFeaturizerSpec(kind='derivation', padding='<pad>')
 PairFeaturizerSpec(kind='pair', padding='<pad>', selection='relational')
 ```
 
-The command-line spelling of the same override is:
+The command line spelling of the same override is:
 
 ```bash
 uv run lofi show-config \
@@ -150,7 +150,7 @@ A collected NLI or FraCaS dataset (`snli`, `mnli`, `chaosnli`, `unli`,
 splits a sentence into the matches of `pattern`, so the default splits on
 whitespace. `aggregation` is a `lofi.gold_aggregation` entry. The one
 installed aggregation, `majority`, reduces the repeated responses to each
-premise-hypothesis pair to the unique most frequent relation, and refuses a
+pair of a premise and hypothesis to the unique most frequent relation, and refuses a
 pair whose responses tie. Both are the defaults, so a declaration that omits
 them reads whitespace tokens and majority labels.
 

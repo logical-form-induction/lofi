@@ -122,7 +122,7 @@ class DeductionRequirements:
 
     @property
     def restriction_mode(self) -> RestrictionMode:
-        """Return the rule-instance restriction mode."""
+        """Return the rule instance restriction mode."""
         return self._restriction_mode
 
     @override

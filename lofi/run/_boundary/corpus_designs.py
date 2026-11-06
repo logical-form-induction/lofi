@@ -5,7 +5,7 @@ A fragment design decodes a corpus release through the codec registered under
 its declared name, or reads a Layers export, and lowers what the release
 states of each judged item into an item record: the release's own feature
 names become the record's attributes, and its text the record's one declared
-element. A bead design constructs its items from a judgment-item construction
+element. A bead design constructs its items from a judgment item construction
 document and reads bead annotation records. Either way the design's factors
 are a mapping from factor name to a bead expression over the item records, so
 no corpus column is named outside its codec.
@@ -424,12 +424,12 @@ class ReadoutSourceSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
 
 
 class RootMassSpec(ReadoutSourceSpec):
-    """Declare a published root-mass artifact and the columns its pair fills.
+    """Declare a published root mass artifact and the columns its pair fills.
 
     Parameters
     ----------
     path : str
-        The root-mass artifact, relative to the data root.
+        The root mass artifact, relative to the data root.
     mass : str
         Readout column holding each item's root log mass.
     complement : str
@@ -455,7 +455,7 @@ class RootMassSpec(ReadoutSourceSpec):
 
 
 class LmReadoutsSpec(dx.Model, extra="forbid"):
-    """Declare the readout column each language-model measure fills.
+    """Declare the readout column each language model measure fills.
 
     Parameters
     ----------
@@ -577,7 +577,7 @@ class BeadDesignSpec(DesignSpec):
     Parameters
     ----------
     items : str
-        The judgment-item construction document the items are built from.
+        The judgment item construction document the items are built from.
     judgments : str
         The bead annotation records, one JSON object per line.
     encoding : str

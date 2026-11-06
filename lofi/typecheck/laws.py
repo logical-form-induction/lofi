@@ -51,7 +51,7 @@ class CoherenceItem[C](NamedTuple):
     logical_forms : tuple[Term, ...]
         The meaning each derivation of the item reads, in derivation order.
     tag : str
-        The normal-form tag telling the item apart from others packed on the
+        The normal form tag telling the item apart from others packed on the
         same span and category, or empty when the grammar uses none.
     """
 
@@ -83,7 +83,7 @@ class CoherenceInstance[C](NamedTuple):
         Whether the erased type is a proper instance, so the principal type
         is more general than the category commits to.
     tag : str
-        The normal-form tag of the item the derivation packs on, or empty
+        The normal form tag of the item the derivation packs on, or empty
         when the grammar uses none.
     """
 
@@ -137,7 +137,7 @@ class CoherenceFixture[C, S](NamedTuple):
     signature : S
         The lexical environment the typing system checks under.
     rules : Mapping[OpName, TypingRule]
-        The typing rules keyed by logical-form operator.
+        The typing rules keyed by logical form operator.
     erase : Callable[[C], Term]
         The erasure from categories to semantic types, into the typing
         system's type store.
@@ -211,7 +211,7 @@ def coherence_square[C, S](
 ) -> CoherenceReport[C]:
     """Check that the square commutes on every derivation of every chart item.
 
-    The erased category must instantiate the derivation's principal logical-form
+    The erased category must instantiate the derivation's principal logical form
     type. Only principal-type metavariables may bind; a proper instance is
     reported as strict.
 

@@ -1143,7 +1143,7 @@ class LayersCorpusReader:
         Yields
         ------
         _Candidate
-            Candidates in annotation-layer URI order.
+            Candidates in annotation layer URI order.
         """
         for layer_uri, layer in self._layers.get(uri, ()):
             if layer.kind == "relation" and layer.subkind is None:

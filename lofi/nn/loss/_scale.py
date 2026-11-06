@@ -1,4 +1,4 @@
-"""Chart-cell vector-norm regularization."""
+"""Chart cell vector-norm regularization."""
 
 from typing import TYPE_CHECKING, Final, override
 
@@ -76,7 +76,7 @@ def _live(mask: Tensor | None, tensor: Tensor) -> Tensor | None:
 
 
 class ChartScaleObjective[BatchT]:
-    """Penalizes deviations from a target chart-cell norm.
+    """Penalizes deviations from a target chart cell norm.
 
     Parameters
     ----------
@@ -234,4 +234,4 @@ def _build[BatchT](
 
 
 PLUGIN: Final = ComponentPlugin(spec=ChartScaleLossSpec, build=_build)
-"""The chart-scale regularizer's plugin."""
+"""The chart scale regularizer's plugin."""

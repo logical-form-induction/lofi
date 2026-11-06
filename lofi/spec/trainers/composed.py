@@ -99,7 +99,7 @@ class AlternatingTrainerSpec(TrainerSpec):
 
     @override
     def refuse_epoch(self, occurrences: int, /) -> None:
-        """Delegate epoch-shape validation to the parser-training base."""
+        """Delegate epoch shape validation to the parser-training base."""
         self.base.refuse_epoch(occurrences)
 
     @override
@@ -221,7 +221,7 @@ class StagedTrainerSpec(TrainerSpec):
 
     @override
     def refuse_epoch(self, occurrences: int, /) -> None:
-        """Delegate epoch-shape validation to the parser-training base."""
+        """Delegate epoch shape validation to the parser-training base."""
         self.base.refuse_epoch(occurrences)
 
     @override

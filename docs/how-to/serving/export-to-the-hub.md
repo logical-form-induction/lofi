@@ -123,7 +123,7 @@ bundles/synthetic-parser/
 | File | What it holds |
 | --- | --- |
 | `config.json` | The resolved run document the point trained. |
-| `README.md` | The model card: the release metadata as Hugging Face card data, tagged `lofi`, with the grammar, codec and action-set identities and the corpus revision. |
+| `README.md` | The model card: the release metadata as Hugging Face card data, tagged `lofi`, with the grammar, codec and action set identities and the corpus revision. |
 | `states/<ordinal>.pt` | One state block per model component role, in sorted role order. |
 | `resources/<ordinal>/` | The construction assets of each declared pretrained role, without weight files. Present only when `pretrained_resources` names a role. |
 | `manifest.json` | The format `lofi-hub-model`, the point's seed derivation, the release record, and the SHA-256 digest of every other file, with each component's tag, declaration fingerprint and the shape and dtype of each state value. |
@@ -131,7 +131,7 @@ bundles/synthetic-parser/
 The model card's reproducibility block takes `code_uri`, `command` and
 `environment` from the declaration, the source revision from the point's
 manifest, and the random seed from the point's seed root. The grammar, codec
-and action-set identities and the corpus revision come from the replanned run.
+and action set identities and the corpus revision come from the replanned run.
 
 A pretrained role in `pretrained_resources` must be a component role the run
 declares, and its declaration must pin a checkpoint and a revision. Files with

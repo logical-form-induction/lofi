@@ -1,13 +1,13 @@
 # Construct judgment items
 
-A judgment-item construction document declares a set of
+A judgment item construction document declares a set of
 [bead](https://github.com/FACTSlab/bead) items: the templates filled, the
 lexicons their slots are filled from, the bead strategy each template is filled
 by, the bead item template naming what each item renders and the constraints
 every item satisfies, and the attributes each item records. Every resource is
 written in bead's own serialized shape, so a document holds no LoFI notion of
 what an item is about: a template's slots, a lexical item's features and an
-item's attributes are whatever the document names. The active-learning pool,
+item's attributes are whatever the document names. The active learning pool,
 a [bead design](judgment-corpora.md) and a
 [predicted judgment source](train-on-judgments.md) are all built from such a
 document by `lofi.judgment.construct_items`.
@@ -19,7 +19,7 @@ document by `lofi.judgment.construct_items`.
 | `namespace` | The UUID namespace every constructed identity derives from. |
 | `templates` | Bead templates: `{kind: jsonl, path}`, one template per line; `{kind: collection, path}`, a bead `TemplateCollection` file; or `{kind: inline, template}`. |
 | `lexicons` | Bead lexicons: `{kind: jsonl, path, name}`, one lexical item per line; `{kind: table, path, name, format, language_code, column_mapping, feature_columns, pos}`, a CSV or TSV table read by bead's `from_csv` or `from_tsv`; `{kind: glazing, name, resource, query, language_code, options}` or `{kind: unimorph, name, query, language_code, options}`, fetched through bead's resource adapters; or `{kind: inline, lexicon}`. |
-| `generators` | Generators from the `lofi.lexicon_generator` entry-point group, each proposing one more lexicon. |
+| `generators` | Generators from the `lofi.lexicon_generator` entry point group, each proposing one more lexicon. |
 | `filling` | The bead strategy a template is filled by unless `template_fillings` names it. |
 | `template_fillings` | The strategy each named template is filled by instead. |
 | `item_template` | The bead item template, `{kind: json, path}` or `{kind: inline, item_template}`. |
@@ -93,7 +93,7 @@ through `item`, so `item['verb']` reads the attribute `verb`.
 
 An item's identity is a UUID in `namespace` over, for each template it renders,
 the template's id and the id of the lexical item filling each slot, in
-slot-name order, so bead returns judgments under the same identities on every
+slot name order, so bead returns judgments under the same identities on every
 read.
 
 ## Graph-seeded pairs

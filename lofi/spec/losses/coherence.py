@@ -157,7 +157,7 @@ class CoherenceLossSettings(NamedTuple):
     estimator : CoherenceEstimator
         Whether paired frontier enumeration must be complete or may truncate.
     residual_mass : float | None
-        Explicit residual-mass override for a truncated estimator.
+        Explicit residual mass override for a truncated estimator.
     divergence : CoherenceDivergenceSettings
         The comparison between the parent and composed distributions.
     warmup : int | None
@@ -187,7 +187,7 @@ class CoherenceLossSpec(LossSpec):
     estimator : CoherenceEstimator
         Whether paired frontier enumeration must be complete or may truncate.
     residual_mass : float | None
-        Explicit residual-mass override for a truncated estimator.
+        Explicit residual mass override for a truncated estimator.
     divergence : CoherenceDivergenceSpec
         Comparison between the parent and composed distributions.
     warmup : int | None

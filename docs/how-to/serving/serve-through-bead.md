@@ -109,7 +109,7 @@ Each line of `--out` is one prediction record:
 On success the command prints the number of rows written and the `--out`
 path. A refused run, input or row is reported on standard error as
 `lofi bead-predict: <reason>` and exits with status `2`, as the
-[command-line reference](../../reference/cli.md) lists.
+[command line reference](../../reference/cli.md) lists.
 
 ## Serve a bundle through bead
 

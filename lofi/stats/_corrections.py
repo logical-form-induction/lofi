@@ -257,7 +257,7 @@ class Holm:
 
 
 class BenjaminiHochberg:
-    """The step-up false-discovery-rate correction."""
+    """The step-up false discovery rate correction."""
 
     __slots__ = ()
 

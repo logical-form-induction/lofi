@@ -1,7 +1,7 @@
 # Charts and approximation
 
 This page explains how LoFI parses over spans, what the choice of semiring
-decides, what pruning and A* widening give up, and what the residual-mass
+decides, what pruning and A* widening give up, and what the residual mass
 budget bounds. It separates the approximations that are measured and checked
 from those that are only flagged, since the two license different conclusions.
 
@@ -14,7 +14,7 @@ $i<k<j$.
 [`SpanIndex`](../reference/deduce.md) assigns each span a dense identifier,
 grouped by width and then by start, so that the $n(n+1)/2$ nonempty spans of a sentence
 can be stored in flat tensors. Its `decompositions(region, arity)` enumerates
-every way of cutting a span into `arity` contiguous non-empty parts, left to
+every way of cutting a span into `arity` contiguous nonempty parts, left to
 right, so the sweep obtains the premises for any rule arity the grammar uses,
 not only binary splits.
 
@@ -23,9 +23,9 @@ Cocke–Kasami–Younger parsing \citep{younger1967,goodman1999}. It proceeds fr
 spans to wide ones, in which every span is visited after all the spans it
 decomposes into. Within one width, cells are independent, and the native kernel
 may fill up to the budget's `threads` of them concurrently. Every parse inside a
-run takes this count: the counterfactual and synthetic-corpus parses, the A\*
-decoding parse of held-out evaluation, and the derivation-count census. A grammar with a
-unary rule runs unary-closure rounds in each cell, bounded by the budget's
+run takes this count: the counterfactual and synthetic corpus parses, the A\*
+decoding parse of held-out evaluation, and the derivation count census. A grammar with a
+unary rule runs unary closure rounds in each cell, bounded by the budget's
 `unary_rounds`. Spans are contiguous with fan-out one; the `RegionIndex`
 protocol in [`lofi.formalism`](../reference/formalism.md) admits other fan-outs,
 and a consumer that serves only fan-out one refuses a grammar that needs more
@@ -74,7 +74,7 @@ bound; only `log-inside` weights sum over derivations, so only they yield
 posterior marginals and summed goal weight through these interfaces. `counting`, `boolean`, `k-best`,
 `expectation` and `forest` weights are neither. A component that needs a
 capability the declared semiring lacks, such as the `top-k` pruner, A*
-decoding, a minimum-Bayes-risk decode or the Bisk--Hockenmaier baseline, is
+decoding, a minimum Bayes risk decode or the Bisk--Hockenmaier baseline, is
 refused when the run is composed, with an error naming the capability. The
 neural losses do not read the symbolic parse, so its semiring does not
 constrain them.
@@ -88,7 +88,7 @@ laws say so: outside marginals and pruned goal mass require a semiring that
 declares `log_probability`, the API capability for log weights summed by
 log-sum-exp (among the built-in semirings, only `log-inside`), and
 refuse any other; a normal form other than `none` makes a category's
-weight a sum over its normal-form derivations only, so `counting` counts
+weight a sum over its normal form derivations only, so `counting` counts
 those.
 
 A log weight is not automatically a log probability. Write
@@ -105,7 +105,7 @@ $$
 This defines a conditional PMF over derivations. The scalar $z(w)$ is a
 partition function; it is a string probability only under an additional
 normalized generative model. Viterbi computes $\max_d s(d)$, whereas
-log-inside computes $\log z(w)$. Their values answer different questions.
+the log inside algorithm computes $\log z(w)$. Their values answer different questions.
 When $z(w)=0$, no accepted positive-weight derivation exists and the
 conditional PMF is undefined; the outside API reports zero marginals.
 
@@ -158,7 +158,7 @@ $$
 
 These are occurrence probabilities for the acyclic, contiguous-span forest
 where an item or edge occurs at most once in a derivation. For a selected
-cover with fragment-root groups $\mathcal R_1,\ldots,\mathcal R_m$, the goal
+cover with fragment root groups $\mathcal R_1,\ldots,\mathcal R_m$, the goal
 partition is instead the product of group sums:
 
 $$
@@ -181,8 +181,9 @@ posteriors under a single PMF, despite the API's marginal terminology.
 
 The neural chart parsers in [`lofi.nn.parsers`](../reference/nn.md) use the
 same span index and gather tables but compute over tensors, with the algebra
-chosen by a log-weight reduction rather than a semiring object. Under
-log-sum-exp reduction, log marginals are log-inside plus log-outside minus
+chosen by a log weight reduction rather than a semiring object. Under
+log-sum-exp reduction, log marginals are the sum of the inside and outside
+log weights minus
 $\log z(w)$. If $s_e$ is an independently varied additive edge potential,
 then $\partial\log z(w)/\partial s_e=\mathbb{E}[N_e(D)\mid w]$, where
 $N_e(D)$ counts edge occurrences \citep{li-eisner2009}. A derivative through
@@ -263,9 +264,9 @@ result records the attempts and widenings. The decoder stops at the first
 threshold that parses; it does not check that the parse found equals the one an
 unrestricted lexical beam would yield.
 
-## The residual-mass budget
+## The residual mass budget
 
-The residual-mass budget concerns term decoding, not the chart. Where a
+The residual mass budget concerns term decoding, not the chart. Where a
 component enumerates complete terms from a decoder’s weighted frontier, as an
 exhaustive term readout or the truncated coherence estimator does, it stops
 when the probability mass of the candidates still open falls to a declared

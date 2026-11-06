@@ -399,10 +399,10 @@ class DatasetSentencesDeclaration[D: LoweredDataset](Protocol):
 
 
 class DatasetPairsDeclaration[D: LoweredDataset](Protocol):
-    """Declare the inference-pair training one lowered dataset supplies."""
+    """Declare the inference pair training one lowered dataset supplies."""
 
     def __call__(self, dataset: D, /) -> PairTraining:
-        """Return the dataset's inference-pair training."""
+        """Return the dataset's inference pair training."""
         ...
 
 

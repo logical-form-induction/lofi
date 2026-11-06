@@ -4,7 +4,7 @@ A training dataset's `constraint_source` declares where a learner's partial
 supervision comes from, and its `constraint_policy` declares which part of the
 corpus that source labels. Each selected constraint clamps a span: either to a
 set of permitted categories or logical forms (the *target* route), or out of
-the parser's chart altogether (the *negative-bracket* route). A loss term,
+the parser's chart altogether (the *negative bracket* route). A loss term,
 `pinning` or `vector-anchor`, turns the clamps into a training signal, and the
 parser trainer checks that the source and its consumers agree on the route
 before anything is built.
@@ -68,7 +68,7 @@ uv run lofi run \
 
 ## Choose a constraint source
 
-The `lofi.constraint_source` entry-point group registers four sources. Each
+The `lofi.constraint_source` entry point group registers four sources. Each
 declares the label domain it serves in `policy`, `syntactic` for categories or
 `semantic` for logical forms, and the run selects its constraints under the
 policy declared for that domain.
@@ -147,12 +147,12 @@ Six selectors are registered:
 | `count` | An inclusive band of absolute corpus counts. | `at_least` (default `1`), `at_most` (default `null`). |
 | `quantile` | The most frequent forms covering a share of a population. | `share`, `over` (default `types`). |
 | `category-class` | Forms observed under at least one named category. | `categories`. |
-| `category-role` | Forms under the categories at the closed or open end of the class-size order. | `role`, `share`. |
+| `category-role` | Forms under the categories at the closed or open end of the class size order. | `role`, `share`. |
 
 Every selector but `count` is read off the corpus as a share, so one
 declaration selects the same part of the distribution whatever size of corpus
-a grammar yields. The syntactic-anchoring campaign in `experiments/s5/` crosses
-rank, token-mass quantile and closed- or open-class policies at three budgets,
+a grammar yields. The syntactic anchoring campaign in `experiments/s5/` crosses
+rank, token mass quantile and closed- or open-class policies at three budgets,
 for instance `rank-50.yaml`:
 
 ```yaml
@@ -191,7 +191,7 @@ and stop the run on a clamp no analysis satisfies:
 | `scope` | `constituent` | Whether the clamp constrains the span as a `constituent` or each `token` in it. |
 | `matching` | `null` | The relation under which a label satisfies a target, or `null` for the grammar's own matching. |
 | `meaning_matching` | `{kind: identity}` | The same, for logical forms. |
-| `require_constituent` | `true` | `true` selects the target route; `false` selects the negative-bracket route. |
+| `require_constituent` | `true` | `true` selects the target route; `false` selects the negative bracket route. |
 | `negate` | `false` | Require the span *not* to carry a permitted label. |
 | `on_unsatisfiable` | `{kind: error}` | `error`, `drop_clamp` or `skip_item`, from the `lofi.unsatisfiable_policy` group. |
 
@@ -226,9 +226,9 @@ pins categories with `{kind: pinning, readout: types}`.
 
 The trainer refuses a constraint objective whose readout represents a
 different sort from the one the source's domain labels, and a semantic target
-source with no objective naming a logical-form readout.
+source with no objective naming a logical form readout.
 
-## Choose the negative-bracket route
+## Choose the negative bracket route
 
 With `require_constituent: false`, each selected span becomes a negative
 bracket: the parser is asked not to build it at all. Bracket supervision reads
@@ -261,7 +261,7 @@ loss:
     - objective: {kind: pinning}
 ```
 
-The source and the objective both report the negative-bracket route, the
+The source and the objective both report the negative bracket route, the
 objective declares no readout dependency, and the parser trainer's plan
 accepts the pair:
 
@@ -284,7 +284,7 @@ declared negative-bracket None negative-bracket
 ```
 
 The plan returns the sampler streams the trainer consumes. Mixing routes is
-refused there. The packaged constituent-pinning document with its clamp
+refused there. The packaged constituent pinning document with its clamp
 switched to brackets still carries a `pinning` term that reads `types`:
 
 ```python
@@ -304,11 +304,11 @@ except ValueError as refused:
 constraint source 'gold-derivation' serves the 'negative-bracket' route, but its consumers request ['target']
 ```
 
-A `gold-derivation` source is refused on the negative-bracket route even when
+A `gold-derivation` source is refused on the negative bracket route even when
 its consumers ask for that route. It selects every constituent of each item's
 gold derivation, the whole sentence's span among them, and a negative bracket
 on a span every derivation builds leaves no derivation. The bracket document
-with its declared source replaced by a gold-derivation one is refused when it
+with its declared source replaced by a gold derivation one is refused when it
 is planned, before any model is built:
 
 ```python
@@ -331,7 +331,7 @@ constraint source 'gold-derivation' cannot serve the 'negative-bracket' route: a
 ```
 
 `vector-anchor` serves only the target route, and a token-warm-up step cannot
-consume negative brackets either. A negative-bracket clamp is hard and is not
+consume negative brackets either. A negative bracket clamp is hard and is not
 negated; both combinations are refused at composition:
 
 ```python
@@ -408,7 +408,7 @@ False drop_clamp 0
 share of the corpus the selected constraints cover) and a per-category
 breakdown; analyses of the anchoring campaigns read `mass_share` rather than
 the nominal budget. `loss/pinning/satisfied` is the mean probability that a
-constraint instance is satisfied, and `gradient_scale` is the soft-clamp
+constraint instance is satisfied, and `gradient_scale` is the soft clamp
 penalty, or `1.0` for a hard clamp.
 
 [Induction objectives](../../explanation/induction-objectives.md) explains

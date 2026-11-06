@@ -89,7 +89,7 @@ ownership and to its own declarations.
 ## Observe and patch one pass
 
 `ExternalModel` wraps the module and the lowered map. Its `run()` method takes
-a nonempty mapping from forward-argument names to tensors. Open an
+a nonempty mapping from forward argument names to tensors. Open an
 observation region over the site:
 
 ```python
@@ -171,7 +171,7 @@ tensor([[2., 2.]])
 ```
 
 `GradientSites` refuses a site that is not published, does not permit both
-observation and patching, or is declared non-differentiable, so any number of
+observation and patching, or is declared nondifferentiable, so any number of
 regions can then be opened over the checked set without checking it again. A
 pass that never reaches a declared site is refused, and `gradients` is taken
 once, of a scalar computed through the sites. EAP-IG edge attribution,
@@ -209,12 +209,12 @@ with Torch forward hooks.
 
 ## Probe a released model from a run document
 
-The `external` probe kind runs split-posterior diagnostics over a released
+The `external` probe kind runs split posterior diagnostics over a released
 DIORA checkpoint. Its declaration holds:
 
 | Field | What it declares |
 | --- | --- |
-| `model` | An `ExternalModelSpec` whose `checkpoint` names where the pinned artifact is fetched from: `{kind: url, url, sha256}`, an absolute HTTP or HTTPS URL pinned to its lowercase SHA-256 digest, or `{kind: hub, repository, revision}`, a model-hub repository pinned to a full commit hash. |
+| `model` | An `ExternalModelSpec` whose `checkpoint` names where the pinned artifact is fetched from: `{kind: url, url, sha256}`, an absolute HTTP or HTTPS URL pinned to its lowercase SHA-256 digest, or `{kind: hub, repository, revision}`, a model hub repository pinned to a full commit hash. |
 | `backend` | The architecture the artifact stores. The packaged kind, `released-mlp`, builds the released MLP DIORA from the state file at `member`, a path inside the fetched zip archive or hub snapshot. |
 | `artifacts` | The cache the artifact is fetched into: `root`, an absolute directory, and `offline`, whether an artifact absent from the cache is refused rather than fetched (false by default). It is the same declaration a run's `artifacts` section makes for pretrained token encoders. |
 | `stimulus_lengths` | The sentence lengths of the deterministic all-zero stimuli, one pass each. |

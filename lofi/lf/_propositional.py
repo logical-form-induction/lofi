@@ -321,7 +321,7 @@ class TruthTableOracle:
         theory : tuple[Term, ...]
             The additional formulas assumed.
         clock : float
-            The maximum wall-clock duration in seconds.
+            The maximum wall clock duration in seconds.
         """
         assumptions = (*self._profile.theory, *theory, premise)
         found: dict[Term, None] = {}
@@ -368,7 +368,7 @@ class TruthTableOracle:
         atoms : tuple[Term, ...]
             The atoms to assign.
         clock : float
-            The maximum wall-clock duration in seconds.
+            The maximum wall clock duration in seconds.
         """
         started = monotonic()
         checked = 0

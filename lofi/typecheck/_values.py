@@ -1,4 +1,4 @@
-"""Values used by logical-form type checking."""
+"""Values used by logical form type checking."""
 
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Literal, final, override
@@ -38,7 +38,7 @@ def _path(path: Sequence[int]) -> Path:
 
 @final
 class TypingRule(FrozenValue):
-    """Type pattern for one logical-form operator."""
+    """Type pattern for one logical form operator."""
 
     _noun = "typing value"
 
@@ -105,7 +105,7 @@ class TypingRule(FrozenValue):
 
     @property
     def op(self) -> OpName:
-        """Return the logical-form operator name."""
+        """Return the logical form operator name."""
         return self._op
 
     @property
@@ -366,7 +366,7 @@ class TypingResult(FrozenValue):
 
     @property
     def assignment(self) -> Mapping[Path, Term]:
-        """Return inferred types keyed by logical-form node path."""
+        """Return inferred types keyed by logical form node path."""
         return self._assignment
 
     @property

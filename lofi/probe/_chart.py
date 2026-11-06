@@ -363,7 +363,7 @@ def _span_support(
 
 
 class CutpointEntropy:
-    """Measures normalized entropy over non-forced, non-root split choices."""
+    """Measures normalized entropy over non-forced, nonroot split choices."""
 
     __slots__ = ()
 

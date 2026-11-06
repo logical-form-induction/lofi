@@ -164,7 +164,7 @@ class RandomDesignSpec(SweepDesignSpec):
 
 
 class LatinHypercubeDesignSpec(SweepDesignSpec):
-    """Declare a seeded discrete Latin-hypercube sample."""
+    """Declare a seeded discrete Latin hypercube sample."""
 
     kind: Literal["latin-hypercube"] = "latin-hypercube"
     points: int
@@ -284,7 +284,7 @@ class Axis(dx.Model, extra="forbid"):
     An axis declares exactly one of ``path`` and ``group``, each a dotted
     path. An axis with a ``path`` assigns one leaf of the resolved document,
     so its values are the scalars, lists or mappings that leaf takes; a
-    mapping point sets a whole variant of a tagged-union leaf and is
+    mapping point sets a whole variant of a tagged union leaf and is
     validated against the schema as a group fragment is. An axis with a
     ``group`` selects the fragment that fills a configuration slot, so its
     values are fragment names, or None to leave the slot unfilled. A group may

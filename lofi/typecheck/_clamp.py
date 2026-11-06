@@ -1,4 +1,4 @@
-"""Clamp enforcement over packed-forest goals."""
+"""Clamp enforcement over packed forest goals."""
 
 from typing import TYPE_CHECKING, Never, Self, final, override
 
@@ -173,7 +173,7 @@ class ClampedGoal[T, R]:
     base : Goal[R]
         The goal that decides roots and edges before clamping.
     clamps : Iterable[Clamp[T]]
-        The clamps to enforce, each over a non-empty span and naming a category
+        The clamps to enforce, each over a nonempty span and naming a category
         set, a meaning, or both.
     projection : ClampProjection[T, R]
         How a category and a meaning are read off a chart item's reading.

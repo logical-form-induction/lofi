@@ -1,7 +1,7 @@
 """Codec tag declaration against the shared codec registry.
 
 A codec declares the tag it answers to in its own file, and the declaration puts
-it in the registry ``lairs`` ships, under the ``lairs.codecs`` entry-point group.
+it in the registry ``lairs`` ships, under the ``lairs.codecs`` entry point group.
 A distribution that is neither ``lairs`` nor ``lofi`` adds a corpus by declaring
 a tag the same way and listing its class in that group, so nothing here or in
 ``lairs`` is edited when a corpus arrives.

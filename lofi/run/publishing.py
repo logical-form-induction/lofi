@@ -1,9 +1,9 @@
 """The publish surface: results projected onto the forms external targets validate.
 
 A publish lens renders one in-memory result as the artifact its target takes,
-and ``LayersPredictionLens``, installed in the ``lofi.publisher`` entry-point
+and ``LayersPredictionLens``, installed in the ``lofi.publisher`` entry point
 group as ``layers-records``, renders a ``PredictedAnalysis`` as a Layers
-annotation-layer record. The record models come from ``lairs``, which the
+annotation layer record. The record models come from ``lairs``, which the
 ``publish`` extra installs, so importing ``lofi.run`` does not import this
 module, and this module is the only importer of the evaluation package's
 publish implementation.

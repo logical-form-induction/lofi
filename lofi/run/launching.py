@@ -24,7 +24,7 @@ and ``launch.chunk_size=8`` select and shape the launcher. The overrides are
 part of the task program a scheduler task runs, so a task reads the document a
 launch read.
 
-A launcher is an installed plugin of the ``lofi.launcher`` entry-point group.
+A launcher is an installed plugin of the ``lofi.launcher`` entry point group.
 It builds its backend from one launch context, which offers the experiment's
 store, the in-process executor its configuration kind builds, the stop rules,
 the resolved site profile, the task program, the price record and the command

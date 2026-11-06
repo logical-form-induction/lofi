@@ -2,7 +2,7 @@
 
 A run document declares its probes under ``probes``, each keyed by the role its
 rows are reported under. A probe's kind names a plugin in the ``lofi.probe``
-entry-point group, which builds the probe from the declaration's settings. The
+entry point group, which builds the probe from the declaration's settings. The
 probe is admitted against the sites the trained point's components publish
 before any fitting, so a probe that names something no component publishes is
 refused while the run is composed. After training it is executed against the
@@ -115,7 +115,7 @@ class ProbeValue(NamedTuple):
     rejected : bool | None
         The corresponding FDR decision, or None for an ordinary scalar.
     family : str | None
-        The declared multiple-comparison family, or None for an ordinary scalar.
+        The declared multiple comparison family, or None for an ordinary scalar.
     dependence : Dependence | None
         The dependence regime under which correction ran, or None for an
         ordinary scalar.
@@ -159,7 +159,7 @@ class ProbeRow(NamedTuple):
     rejected : bool | None
         The FDR decision, or None for an ordinary row.
     family : str | None
-        The declared multiple-comparison family, or None for an ordinary row.
+        The declared multiple comparison family, or None for an ordinary row.
     dependence : Dependence | None
         The declared dependence regime, or None for an ordinary row.
     """

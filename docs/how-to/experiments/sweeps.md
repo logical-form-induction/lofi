@@ -1,6 +1,6 @@
 # Run and price a sweep
 
-An experiment document's `sweep` block expands one run or judgment-fit
+An experiment document's `sweep` block expands one run or judgment fit
 document into deterministic `SweepPoint` values, each holding a fully resolved
 configuration, its leaf provenance, a seed, and the stable identifier derived
 from the configuration and seed. This guide declares the points, prices the
@@ -78,7 +78,7 @@ the expansion is refused naming the leaf and both sources, since that source
 outranks the fragment the axis selected. A leaf axis varies the value the run
 document gives its path, so that value is not a conflict; but a profile, an
 overlay or an override at the path would be discarded unseen, and a
-run-document leaf under a mapping value would survive into it, so both are
+run document leaf under a mapping value would survive into it, so both are
 refused in the same way. A point count other than `expected_points` is
 refused with `UnexpectedPointCountError`.
 
@@ -210,11 +210,11 @@ epochs times the batches one epoch holds, or a distance trainer's steps. A
 parser trainer that stops early does so at the latest after its declared
 epochs, so it is priced at those epochs. A trainer that declares neither
 epochs nor steps is refused before anything is built. Only an experiment over
-run documents is priced; a judgment-fit experiment is refused.
+run documents is priced; a judgment fit experiment is refused.
 
 For each stack the command reports the mean seconds per step and the peak
 allocated bytes. The experiment's total is the sum over its stacks of points
-times declared steps times the mean step. The P50 and P90 accelerator-hours are
+times declared steps times the mean step. The P50 and P90 accelerator hours are
 quantiles of that total under a bootstrap in which each replicate resamples
 every stack's timed seconds with replacement. The bootstrap draws from one
 generator seeded by the experiment's root seed, and the `pricing` block's
@@ -231,7 +231,7 @@ model and a hardware descriptor (device name, driver, CUDA runtime, torch
 version and host processor), so the figures can be recomputed from the record.
 
 The `pricing` block names the cost model, an installed plugin in the
-`lofi.pricing` entry-point group, and every cost model declares `resamples`,
+`lofi.pricing` entry point group, and every cost model declares `resamples`,
 the bootstrap replicates its quantiles are read off, `10000` unless declared.
 Without a `pricing` block every stack is priced off its own timed steps, the
 `stack-bootstrap` model. A document declaring
@@ -274,7 +274,7 @@ Declare the printed figures in the experiment's `compute` block. A freeze
 admits only an experiment that declares an estimate, and for a run experiment
 its `price.json` must be tracked, must name the experiment's sweep, the
 experiment and its freeze, and must recompute to the declared figures at the
-six decimals the command prints. A judgment-fit experiment's estimate has no
+six decimals the command prints. A judgment fit experiment's estimate has no
 record to recompute it from, so the freeze records it with the source
 `supplied` and refuses one that names the measured cost model.
 
@@ -394,7 +394,7 @@ score the same evaluators and write `unfrozen` in each row's `freeze_id`, so
 development rows are visible in the run directory's `rows.json` and ingestion
 against any freeze refuses them.
 
-A judgment-fit point is fitted by NUTS under the declared sampling plan, its
+A judgment fit point is fitted by NUTS under the declared sampling plan, its
 seed derived from the point's run seed, and records one row per posterior
 diagnostic. A fit that declares `calibration` also simulates that many
 replicates from the response model's priors over the dataset's design, fits
@@ -421,8 +421,8 @@ Every outcome is recorded with the point's seed derivation in the point's
 attempt whose process is killed outright still counts.
 
 - A completed point records the rows it emitted.
-- A numerical failure, such as a non-finite loss or a posterior sampler that
-  reports a non-finite position, draw or diagnostic, follows
+- A numerical failure, such as a nonfinite loss or a posterior sampler that
+  reports a nonfinite position, draw or diagnostic, follows
   `failure.numerical`. Under `final` it is recorded at once with its
   diagnostic and the point is never executed again. Under `reseed` the point
   is attempted again under the next deterministic attempt seed, within the
@@ -431,11 +431,11 @@ attempt whose process is killed outright still counts.
   `preparation-failed` and is final.
 - An infrastructure failure is one the machine signals explicitly: an
   exhausted allocation, an interrupted call, a lost connection or broken pipe,
-  a stall, or an operating-system error whose errno reports a failing device
-  (`EIO`), a stale shared-filesystem handle (`ESTALE`), a timeout
+  a stall, or an operating system error whose errno reports a failing device
+  (`EIO`), a stale shared filesystem handle (`ESTALE`), a timeout
   (`ETIMEDOUT`), a lost network (`ENETDOWN`, `ENETUNREACH`) or a reset
   connection (`ECONNRESET`). A run point resumes from its latest checkpoint;
-  a judgment-fit point is refitted at the same seed. Exhausted memory follows
+  a judgment fit point is refitted at the same seed. Exhausted memory follows
   `failure.out_of_memory`: `retry` attempts again unchanged, and
   `halve-batch` halves the training batch first and records the failure once
   the batch cannot be halved.
@@ -470,8 +470,8 @@ experiment of `freeze/1` writes `results/1/headline/`.
   identity, the budget and residual of the approximation it was scored under,
   and the `point_id` that leads back to its manifest. A held-out row states
   `budget_kind` as `enumeration` with its depth, beam and mass bounds. A
-  judgment-fit row states `budget_kind` as `none` with null bounds and
-  residuals, and ingestion refuses a judgment-fit row that claims an
+  judgment fit row states `budget_kind` as `none` with null bounds and
+  residuals, and ingestion refuses a judgment fit row that claims an
   enumeration budget.
 - `measured.parquet` holds one row per submitted point whose run directory
   records a `metrics.json`: its `point_id`, `config_hash` and status, and
@@ -487,7 +487,7 @@ experiment of `freeze/1` writes `results/1/headline/`.
 
 A point's status is `completed`; `running` for a manifest still open;
 `killed` for a run that stopped without an outcome and awaits resubmission;
-`awaiting-responses` for an active-learning run whose batch awaits its
+`awaiting-responses` for an active learning run whose batch awaits its
 responses, which a later launch resumes; `numerical-failure`, `preparation-failed` or `infra-failed`, which are final
 and never offered again; `submitted` for a point bound to this freeze that has
 not started; or `not-submitted`. The launch record counts points as this store

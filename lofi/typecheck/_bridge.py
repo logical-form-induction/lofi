@@ -19,7 +19,7 @@ class _BridgeLanguage(Protocol):
 
     @property
     def checker(self) -> TypingSystem[LexicalSignature]:
-        """Return the logical-form type checker."""
+        """Return the logical form type checker."""
         ...
 
     @property
@@ -29,7 +29,7 @@ class _BridgeLanguage(Protocol):
 
     @property
     def rules(self) -> Mapping[OpName, TypingRule]:
-        """Return the structural logical-form typing rules."""
+        """Return the structural logical form typing rules."""
         ...
 
     def print_type(self, term: Term, /) -> str:
@@ -67,7 +67,7 @@ def check_logical_form_category(
     category: Term,
     /,
 ) -> Term:
-    """Return the category after checking its erased logical-form type."""
+    """Return the category after checking its erased logical form type."""
     category_type = erasure(category)
     inferred = language.checker.check(
         logical_form,

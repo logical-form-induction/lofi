@@ -62,7 +62,7 @@ class Normalization(FrozenValue):
     Parameters
     ----------
     fuel : int
-        Positive beta-reduction step budget.
+        Positive beta reduction step budget.
     order : NormalizationOrder
         Beta-redex traversal.
     eta : EtaPolicy
@@ -117,7 +117,7 @@ class Normalization(FrozenValue):
 
     @property
     def fuel(self) -> int:
-        """Return the beta-reduction step budget."""
+        """Return the beta reduction step budget."""
         return self._fuel
 
     @property

@@ -46,7 +46,7 @@ $\lambda:V\to\{0,\ldots,18\}$ numbers layers from bottom to top. The stated
 order requires $\lambda(v)<\lambda(u)$ for an edge between distinct
 packages; same-layer siblings in this contract have no edges between them.
 Narrower contracts remove additional edges from this permitted set. This
-constraint makes the package-level import graph acyclic, but establishes no
+constraint makes the package level import graph acyclic, but establishes no
 claim about the statistical independence of two components' outputs.
 
 ## Narrower contracts
@@ -64,13 +64,13 @@ every formalism under comparison. Readings and rendering in `lofi.interpret`
 likewise import no grammar pack; a derivation style reads a rule's name and an
 injected symbol table rather than dispatching on a combinator's identity.
 
-**The induction half does not import the logical-form half.** The layer order
+**The induction half does not import the logical form half.** The layer order
 would permit an import of `lofi.typecheck` by `lofi.formalism`; a narrower contract forbids
 terms, rules, the lexicon, the engine, formalisms, grammar packs and
 interpretation from importing `lofi.typecheck` or `lofi.lf`. The one exception
 is the meaning reading, `lofi.interpret._meaning`, which a separate contract
 keeps above the rest of interpretation so that nothing else in that layer
-imports it. Interpretation, typing and the logical-form language are mutually
+imports it. Interpretation, typing and the logical form language are mutually
 independent apart from that edge, so a grammar can be compared with typing
 switched off.
 
@@ -87,7 +87,7 @@ listed set.
 [Boundaries](boundaries.md) explains why.
 
 **Application libraries stay in the run layer.** Telemetry, progress and
-command-line libraries are imported only by `lofi.run`, so importing the
+command line libraries are imported only by `lofi.run`, so importing the
 library never starts a client or a user interface. The Hugging Face Hub client
 is imported only by the optional Hub module.
 

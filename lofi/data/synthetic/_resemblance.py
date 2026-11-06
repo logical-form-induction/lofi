@@ -9,7 +9,7 @@ subsampled below the source's or extrapolated above it, and the fitted
 exponent is what spreads a class's token share over the ranks it then has.
 
 A source that carries logical forms is read the same way one level down. Its
-items are read as a joint of logical-form class and token mass over the
+items are read as a joint of logical form class and token mass over the
 logical constants they are built on, beside the arities its predicates take
 and the classes the items of each category bear. Resizing holds a closed
 class at the constants the source uses, since a sixth connective cannot be
@@ -333,7 +333,7 @@ class SemanticLexiconEstimate:
         The digest of the source the joint was read from, which two
         estimates of the same joint from different sources differ on.
     rows : tuple[tuple[LogicalClass, int, float], ...]
-        The logical-form class, how many of the source's logical constants
+        The logical form class, how many of the source's logical constants
         belong to it, and the fraction of the source's token mass its items
         carry.
     arities : tuple[tuple[int, int], ...]

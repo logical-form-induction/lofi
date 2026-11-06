@@ -92,7 +92,7 @@ class TaggedParserSpec(ParserSpec):
     @dx.validates("unary_depth")
     @classmethod
     def _depth_is_non_negative(cls, value: int) -> int:
-        """Return a valid number of unary-closure rounds."""
+        """Return a valid number of unary closure rounds."""
         return ensure_non_negative("a tagged chart's unary depth", value)
 
     @dx.validates("k_best")
@@ -138,7 +138,7 @@ class TaggedParserSpec(ParserSpec):
 
     @override
     def publications(self) -> frozenset[str]:
-        """Return the chart-cell combination represented spaces may read."""
+        """Return the chart cell combination represented spaces may read."""
         return frozenset({"combine"})
 
     def chart_outputs(self) -> frozenset[str]:
@@ -194,5 +194,5 @@ class TaggedParserSpec(ParserSpec):
     @dx.validates("width")
     @classmethod
     def _width_is_positive(cls, value: int) -> int:
-        """Return a valid chart-cell width."""
+        """Return a valid chart cell width."""
         return ensure_positive("a tagged chart's node width", value)

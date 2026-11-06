@@ -1,4 +1,4 @@
-"""Declared category-to-logical-form coherence-square evaluation."""
+"""Declared evaluation of coherence between categories and logical forms."""
 
 from typing import TYPE_CHECKING, Literal, NamedTuple, cast, override
 
@@ -89,7 +89,7 @@ class CoherenceSquareSpec(EvaluatorSpec):
 
     @override
     def dependencies(self) -> tuple[Dependency, ...]:
-        """Return the complete-term readout that supplies lexical categories."""
+        """Return the complete term readout that supplies lexical categories."""
         return (Dependency(self.readout, "terms-readout"),)
 
     @override

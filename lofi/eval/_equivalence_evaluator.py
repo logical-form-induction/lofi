@@ -41,7 +41,7 @@ type _EquivalenceRow = EquivalenceMetric | EquivalenceAccountingMetric
 class EquivalenceEvaluator:
     """Score the most probable decoded form of each held-out item by proof.
 
-    The evaluator reads a complete-term readout at an item's root cell, selects
+    The evaluator reads a complete term readout at an item's root cell, selects
     the form with greatest decoder weight, writes it in the run language's
     surface syntax, and decides its equivalence with the item's gold form
     through the interpretation's shared proof service. Every row reads one

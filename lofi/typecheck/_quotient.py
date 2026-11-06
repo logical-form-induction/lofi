@@ -1,4 +1,4 @@
-"""The logical-form chart, keyed by span and normal-form meaning."""
+"""The logical form chart, keyed by span and normal form meaning."""
 
 from math import fsum, isclose, isfinite
 from types import MappingProxyType
@@ -325,7 +325,7 @@ def _row(alpha: SplitProbabilities, span: Cell) -> Mapping[int, float]:
 
 @final
 class LogicalFormChart:
-    """A logical-form chart quotiented by declared normal meaning.
+    """A logical form chart quotiented by declared normal meaning.
 
     Alpha variants and forms with one declared normal form share a meaning. Each split's
     posterior mass is divided either among distinct meanings or among derivational

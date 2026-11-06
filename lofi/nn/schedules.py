@@ -1,4 +1,4 @@
-"""Learning-rate schedules over a derived training horizon."""
+"""Learning rate schedules over a derived training horizon."""
 
 from typing import TYPE_CHECKING, Final
 

@@ -429,7 +429,7 @@ class ProofRewardBindings(Protocol):
 
     @property
     def language(self) -> LanguageAssembly:
-        """Return the logical-form language whose forms are scored."""
+        """Return the logical form language whose forms are scored."""
 
     @property
     def service(self) -> ProofService:
@@ -459,11 +459,11 @@ class _ObservedFormTyping(Protocol):
 
 @runtime_checkable
 class FormTypingItems(SurfaceItems, Protocol):
-    """A surface batch with logical-form typing targets aligned by item."""
+    """A surface batch with logical form typing targets aligned by item."""
 
     @property
     def form_typing(self) -> Sequence[Sequence[_ObservedFormTyping]]:
-        """Return the logical-form typing targets aligned to surface items."""
+        """Return the logical form typing targets aligned to surface items."""
 
 
 @runtime_checkable
@@ -480,7 +480,7 @@ class TermProbabilityReadout(Protocol):
     """Scores supplied complete terms from aligned represented vectors."""
 
     def score_terms(self, inputs: Encoded, terms: Sequence[Term], /) -> LogDistribution:
-        """Return one complete-term log probability per input vector."""
+        """Return one complete term log probability per input vector."""
 
 
 @runtime_checkable

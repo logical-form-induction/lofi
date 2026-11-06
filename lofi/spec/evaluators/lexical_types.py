@@ -1,4 +1,4 @@
-"""Held-out lexical-type evaluator declaration."""
+"""Held-out lexical type evaluator declaration."""
 
 from typing import Literal, NamedTuple, cast, override
 
@@ -18,7 +18,7 @@ __all__ = ["LexicalTypeEvaluatorSettings", "LexicalTypeEvaluatorSpec"]
 
 
 class LexicalTypeEvaluatorSettings(NamedTuple):
-    """The settings a lexical-type evaluator is built from.
+    """The settings a lexical type evaluator is built from.
 
     Attributes
     ----------
@@ -37,7 +37,7 @@ class LexicalTypeEvaluatorSettings(NamedTuple):
 
 
 class LexicalTypeEvaluatorSpec(EvaluatorSpec):
-    """Declare lexical-type F1 over the held-out split.
+    """Declare lexical type F1 over the held-out split.
 
     Parameters
     ----------

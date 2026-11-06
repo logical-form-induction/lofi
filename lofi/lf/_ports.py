@@ -1,4 +1,4 @@
-"""Logical-form layer protocols."""
+"""Logical form layer protocols."""
 
 from typing import TYPE_CHECKING, Protocol, runtime_checkable
 

@@ -330,7 +330,7 @@ class _TrainingBlueprint(Protocol):
         ...
 
     def pair_training(self, role: str, dataset: LoweredDataset, /) -> PairTraining:
-        """Return the inference-pair training one lowered dataset's plugin supplies."""
+        """Return the inference pair training one lowered dataset's plugin supplies."""
         ...
 
     @property
@@ -398,7 +398,7 @@ def _parser_uses_category_transitions(parser: ParserSpec | None, /) -> bool:
 
 
 def _approximation(run_spec: RunSpec, /) -> ApproximationBound | None:
-    """Return the run-level residual budget as a runtime checker."""
+    """Return the run level residual budget as a runtime checker."""
     declared = run_spec.approximation
     return None if declared is None else ApproximationBound(declared.residual_mass)
 
@@ -486,7 +486,7 @@ def _state_mapping(name: str, state: StateTree) -> dict[str, StateTree]:
     Parameters
     ----------
     name : str
-        The role or run-state part the block belongs to.
+        The role or run state part the block belongs to.
     state : StateTree
         The loaded state block.
 
@@ -545,7 +545,7 @@ def _resume_optimization_state(
     Raises
     ------
     ValueError
-        If the manifest names no optimizer or the run-state blocks do not cover
+        If the manifest names no optimizer or the run state blocks do not cover
         exactly its declared topology.
     """
     manifest = checkpoint.manifest
@@ -652,7 +652,7 @@ def resume_from_checkpoint(
     FingerprintMismatchError
         If the checkpoint manifest is incompatible with the live run.
     ValueError
-        If component, run-state or random-stream coverage is incomplete.
+        If component, run state or random-stream coverage is incomplete.
     """
     reasons = disagreements(expected, checkpoint.manifest)
 
@@ -739,7 +739,7 @@ def resolve_loss_section[BatchT](
     span_decoders : Mapping[str, SpanTokenDecoder]
         Built span decoders keyed by span-decoder role.
     proof_reward : ProofRewardContext | None
-        Logical-form language and shared proof service for proof-shaped credit,
+        Logical form language and shared proof service for proof-shaped credit,
         or None when the selected data declares no interpretation.
 
     Returns
@@ -1989,7 +1989,7 @@ def _pretrained_loader(run_spec: RunSpec, /) -> PretrainedLoader | None:
 def _scheduler(
     declaration: SchedulerSpec | None, context: ScheduleContext, /
 ) -> LRScheduler | None:
-    """Return the declared learning-rate schedule, or None where none is declared.
+    """Return the declared learning rate schedule, or None where none is declared.
 
     Parameters
     ----------
@@ -3146,7 +3146,7 @@ def _terms_step(
     codec : TermCodec
         The codec of the space's sort.
     generation : TermGenerationSpec
-        The declared term and rule-instance distribution.
+        The declared term and rule instance distribution.
     optimization : AutocastPolicy
         What runs the backward pass and the optimizer.
     name : str
@@ -3415,7 +3415,7 @@ def _position_pair_draw(inputs: PairDraws, step: int, /) -> PairDraws:
 
 
 def _position_utterances(inputs: Utterances, step: int, /) -> Utterances:
-    """Return one lexical warm-up request at its global optimizer position."""
+    """Return one lexical warmup request at its global optimizer position."""
     return Utterances(inputs.items, inputs.candidates, step)
 
 
@@ -3653,7 +3653,7 @@ class _AlternatingStepContext(StepBuildContext):
 
     @override
     def token_warmup(self, declaration: TokenWarmupStepSpec, /) -> FittingTask:
-        """Build lexical token warm-up over selected occurrence constraints."""
+        """Build lexical token warmup over selected occurrence constraints."""
         space, _ = self._space(declaration.space, declaration.dataset)
         _, sentences = _sentences(self._blueprint, declaration.dataset)
         encoder = self._encoder(space.encoder)
@@ -3843,7 +3843,7 @@ class _AlternatingStepContext(StepBuildContext):
         InventoriedTypeSampler,
         PairSampler[Term, Action],
     ]:
-        """Return one represented space and its declared rule-instance sampler."""
+        """Return one represented space and its declared rule instance sampler."""
         space, dataset = self._space(declaration.space, declaration.dataset)
         sampler = self._type_sampler(space.sort)
         pair_declaration = self._run_spec.pair_sampler

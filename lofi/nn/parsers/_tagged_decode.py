@@ -1,4 +1,4 @@
-"""Best-derivation and minimum-Bayes-risk decoding over the tag-refined chart."""
+"""Best-derivation and minimum Bayes risk decoding over the tag-refined chart."""
 
 from math import inf
 from typing import TYPE_CHECKING, Final
@@ -480,7 +480,7 @@ class TaggedDecoder[T]:
         goals: Sequence[T] | None = None,
         lengths: Tensor | None = None,
     ) -> tuple[tuple[TaggedTree, ...], ...]:
-        """Return each item's best few normal-form derivations, heaviest first.
+        """Return each item's best few normal form derivations, heaviest first.
 
         Parameters
         ----------

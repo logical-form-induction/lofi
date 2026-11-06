@@ -30,12 +30,12 @@ _SITE = ProofSite("evaluation.inference")
 
 
 def open_inference_proof_step(service: ProofService, /) -> None:
-    """Open the inference evaluator's next proof-service budget window."""
+    """Open the inference evaluator's next proof service budget window."""
     service.open_step(_SITE)
 
 
 class InferenceProof(NamedTuple):
-    """Reference and ranked candidate cells beside proof-service telemetry."""
+    """Reference and ranked candidate cells beside proof service telemetry."""
 
     reference: InferenceCell | None
     candidates: tuple[InferenceCell | None, ...]
@@ -48,7 +48,7 @@ class InferenceProof(NamedTuple):
 
 
 class InferenceProofBatch(NamedTuple):
-    """Ordered four-cell decisions beside proof-service telemetry."""
+    """Ordered four-cell decisions beside proof service telemetry."""
 
     cells: tuple[InferenceCell | None, ...]
     calls: int

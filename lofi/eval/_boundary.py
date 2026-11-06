@@ -199,7 +199,7 @@ class RowsDocument(dx.Model, extra="ignore"):
 
 
 class RootMassItemDocument(dx.Model, extra="forbid"):
-    """Decode one item's published root log-mass pair."""
+    """Decode one item's published root log mass pair."""
 
     item_id: str
     log_mass: float
@@ -286,10 +286,10 @@ def decode_rows(document: str, /) -> RowsDocument:
 
 
 def decode_root_mass(document: bytes, /) -> RootMassDocument:
-    """Validate one published root-mass artifact."""
+    """Validate one published root mass artifact."""
     return RootMassDocument.model_validate_json(document)
 
 
 def encode_root_mass(document: RootMassDocument, /) -> bytes:
-    """Return one published root-mass artifact as canonical JSON bytes."""
+    """Return one published root mass artifact as canonical JSON bytes."""
     return document.model_dump_json().encode("utf-8")

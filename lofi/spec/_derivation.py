@@ -2,7 +2,7 @@
 
 Every point of an experiment takes the run seed ``derive_seed(root, "point:<id>")``
 under the experiment's root seed. A run
-manifest and a judgment-fit manifest both record that derivation, so a reader can
+manifest and a judgment fit manifest both record that derivation, so a reader can
 recompute the run seed from the root and the point and refuse a record whose seed
 the two do not derive.
 

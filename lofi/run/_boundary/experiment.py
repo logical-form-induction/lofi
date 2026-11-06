@@ -99,7 +99,7 @@ __all__ = [
 
 
 def decode_judgment_fit(document: Mapping[str, JsonValue], /) -> JudgmentFitSpec:
-    """Validate one resolved judgment-fit declaration at its run boundary."""
+    """Validate one resolved judgment fit declaration at its run boundary."""
     schema = cast(
         "type[JudgmentFitSpec]",
         import_module("lofi.judgment").JudgmentFitSpec,
@@ -112,7 +112,7 @@ UNPRICED_COMPUTE: Final = "unpriced"
 
 
 class CorrectionSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
-    """Declare one installed multiple-comparison correction."""
+    """Declare one installed multiple comparison correction."""
 
     def procedure(self) -> Correction:
         """Resolve the correction selected by this declaration."""
@@ -132,13 +132,13 @@ class HolmSpec(CorrectionSpec):
 
 
 class BenjaminiHochbergSpec(CorrectionSpec):
-    """Declare Benjamini--Hochberg false-discovery-rate control."""
+    """Declare Benjamini--Hochberg false discovery rate control."""
 
     kind: Literal["benjamini-hochberg"] = "benjamini-hochberg"
 
 
 class BenjaminiYekutieliSpec(CorrectionSpec):
-    """Declare Benjamini--Yekutieli false-discovery-rate control."""
+    """Declare Benjamini--Yekutieli false discovery rate control."""
 
     kind: Literal["benjamini-yekutieli"] = "benjamini-yekutieli"
 
@@ -161,7 +161,7 @@ class RunExperimentConfig(ExperimentConfigSpec):
 
 
 class JudgmentFitExperimentConfig(ExperimentConfigSpec):
-    """Declare a judgment-model fit document."""
+    """Declare a judgment model fit document."""
 
     kind: Literal["judgment-fit"] = "judgment-fit"
 
@@ -173,7 +173,7 @@ class BaselineFitExperimentConfig(ExperimentConfigSpec):
 
 
 class ActiveLearningExperimentConfig(ExperimentConfigSpec):
-    """Declare an active-learning document, each sweep point one run of it."""
+    """Declare an active learning document, each sweep point one run of it."""
 
     kind: Literal["active-learning"] = "active-learning"
 
@@ -316,7 +316,7 @@ class ExperimentCompute(ComputeSpec):
 class PricingSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
     """Declares the cost model an experiment's training steps are priced under.
 
-    The cost model is the installed plugin of the ``lofi.pricing`` entry-point
+    The cost model is the installed plugin of the ``lofi.pricing`` entry point
     group the declaration's tag names.
 
     Attributes

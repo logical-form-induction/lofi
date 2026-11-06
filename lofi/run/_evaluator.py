@@ -70,7 +70,7 @@ class Evaluator[G, P]:
     seed : int
         Run seed.
     normal_form : str | None
-        Normal-form name, if applicable.
+        Normal form name, if applicable.
     sink : ReportSink | None
         Report destination, or ``None`` to discard output.
     interval : IntervalSettings | None

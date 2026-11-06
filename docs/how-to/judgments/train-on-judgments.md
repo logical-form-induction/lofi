@@ -40,7 +40,7 @@ data:
 | Line | What it says |
 | --- | --- |
 | `response: {kind: judgment, probabilities: …}` | One row per inference label, each a probability distribution over the same number of levels (here three). The labels must be inference labels, and at training time they must be exactly the labels the grounding produces. |
-| `signal: likelihood` | The loss is the negative log probability of each observed level; `reward` pays that probability as a policy-gradient reward instead. |
+| `signal: likelihood` | The loss is the negative log probability of each observed level; `reward` pays that probability as a policy gradient reward instead. |
 | `judgments: [2, 1, 0, 2, 1, 0]` | One zero-based response level per pair of the synthetic inference dataset, in pair order. |
 | `approximation: {residual_mass: 0.95}` | Under the judgment response the L1 run's term decoding measures more unexplored mass than the run's declared `0.9` bound and is refused, so the overlay raises the bound. A judgment response asks the grounding both entailment questions of each pair, where a label response may ask only the observed one. |
 
@@ -145,7 +145,7 @@ inference pairs together with their judgments.
 
 ## Judgments predicted by a trained point
 
-The `lofi.judgment_source` entry-point group registers one source,
+The `lofi.judgment_source` entry point group registers one source,
 `predicted`, which turns a trained inference point's predictions over
 constructed bead items into a judgment dataset. Its document,
 [`PredictedJudgmentSourceSpec`](../../reference/configuration/training.md),
@@ -155,7 +155,7 @@ names the producer, the items and the response space:
 | --- | --- |
 | `kind` | `predicted`. |
 | `producer_run`, `producer_point` | The run and point whose predictions are read. |
-| `item_set` | The [judgment-item construction](construct-judgment-items.md) document the items are built from, relative to this document. |
+| `item_set` | The [judgment item construction](construct-judgment-items.md) document the items are built from, relative to this document. |
 | `inputs` | The rendered element each input role the point publishes reads; an inference point publishes `premise` and `hypothesis`. |
 | `factors` | The bead expression each factor every row records is read by over the item's attributes. |
 | `question` | The question the judgments answer. |

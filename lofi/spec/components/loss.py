@@ -24,7 +24,7 @@ class LossSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="forbi
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "loss"
 
     def grounding_signal(self) -> str | None:

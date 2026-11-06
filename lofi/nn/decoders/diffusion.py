@@ -456,7 +456,7 @@ class DiffusionTermDecoder(nn.Module):
 
     The forward process masks choices under the schedule; the denoiser reads the
     choices already filled, mask, positions, step, and encoded term. Frontier and
-    teacher-forced decoding use the same canonical-order reveals.
+    teacher-forced decoding use the same canonical order reveals.
 
     Parameters
     ----------
@@ -1067,7 +1067,7 @@ class DiffusionTermDecoder(nn.Module):
         )
 
     def rows(self, inputs: Encoded, /, *, terms: BatchEncoding) -> LogDistribution:
-        """Return canonical-order teacher rows without exposing the next choice."""
+        """Return canonical order teacher rows without exposing the next choice."""
         vectors, input_mask = self._placed(inputs)
         placed = self._beside(vectors, terms)
         codes = torch.tensor(

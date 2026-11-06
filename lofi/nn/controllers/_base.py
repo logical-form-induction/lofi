@@ -50,7 +50,7 @@ class ControllerHead(Protocol):
 
 
 class PairFeatures(nn.Module):
-    """Construct a declared sequence of ordered child-pair features."""
+    """Construct a declared sequence of ordered child pair features."""
 
     def __init__(self, features: tuple[ControllerFeature, ...], *, width: int) -> None:
         super().__init__()
@@ -194,7 +194,7 @@ class _Controller(nn.Module):
 
     @override
     def get_extra_state(self) -> str:
-        """Return the action-set digest recorded with a checkpoint."""
+        """Return the action set digest recorded with a checkpoint."""
         return self._actions.digest
 
     @override

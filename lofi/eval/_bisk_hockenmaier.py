@@ -3,7 +3,7 @@
 The induction core grows a POS-conditioned lexicon only from categories in
 complete parses, recomputes bounded top-k derivations at each EM iteration, and
 obtains the smoothing distribution directly from packed inside/outside edge
-marginals.  Thus the full-forest term is exact without materializing the
+marginals.  Thus the full forest term is exact without materializing the
 forest's complete derivation set.
 """
 
@@ -494,7 +494,7 @@ class BiskItem(FrozenValue):
 
     @property
     def raising_targets(self) -> Mapping[tuple[str, Term], Term]:
-        """Return each type-raising output's required attested result."""
+        """Return each type raising output's required attested result."""
         return self._raising_targets
 
     @property
@@ -1222,7 +1222,7 @@ class BiskHockenmaierInducer(FrozenValue):
         return result.key() == argument.key()
 
     def _arguments(self, category: Term) -> tuple[Term, ...]:
-        """Return the functor-spine arguments from outermost inward."""
+        """Return the functor spine arguments from outermost inward."""
         arguments: list[Term] = []
         current = category
         while self._functors.is_functor(current):

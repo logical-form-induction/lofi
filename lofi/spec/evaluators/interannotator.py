@@ -28,7 +28,7 @@ class InterannotatorSpec(dx.Model, extra="forbid"):
     """Declare an interannotator correlation ceiling over participant pairs.
 
     Participants who responded to exactly the same items form the pairs, and
-    each pair's correlation is one unit of a participant-pair bootstrap.
+    each pair's correlation is one unit of a participant pair bootstrap.
 
     Parameters
     ----------

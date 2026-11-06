@@ -10,8 +10,8 @@ reports a draw records.
 ## Declare the draw
 
 The packaged option `data.datasets.train.dataset: synthetic-inference` is a
-complete declaration over a six-word grammar and a truth-table logic. Its
-pair-drawing fields are:
+complete declaration over a six-word grammar and a truth table logic. Its
+pair drawing fields are:
 
 ```yaml
 kind: synthetic-inference
@@ -39,7 +39,7 @@ hypothesis: {kind: uniform, min_length: 2, max_length: 2}
 | `relations` | The share of trivial pairs and the least complexity of an entailing pair. |
 
 Three labelings are installed. `three-way` keeps entailment, contradiction
-and neutral apart. `rte` merges contradiction and neutral into non-entailment.
+and neutral apart. `rte` merges contradiction and neutral into nonentailment.
 `graded` uses the same two labels as an entailment degree on the RTE
 probability scale.
 
@@ -72,7 +72,7 @@ for the four relation cells and the distinction between proof, refutation,
 and abstention.
 
 The RTE map $g$ sends entailment to entailment and both remaining relations
-to non-entailment. A PMF over the coarse labels is consequently
+to nonentailment. A PMF over the coarse labels is consequently
 $p_{g(Y)}(z)=\sum_{y:g(y)=z}p_Y(y)$. The graded vocabulary uses the same
 entailment/non-entailment scale; the label vocabulary alone does not make a
 Boolean prover return graded evidence.
@@ -164,9 +164,9 @@ pair draw on its labels; it is not an estimate of their prevalence under
 independent sampling.
 
 Let $S(t)$ be the set of subterms of logical form $t$. The nontrivial
-entailment control uses the symmetric-difference count
-$|S(\varphi)\mathbin{\triangle}S(\psi)|$, rather than a tree-edit distance.
-The trivial-pair predicate is term identity $\varphi=\psi$ in the store,
+entailment control uses the symmetric difference count
+$|S(\varphi)\mathbin{\triangle}S(\psi)|$, rather than a tree edit distance.
+The trivial pair predicate is term identity $\varphi=\psi$ in the store,
 which already identifies alphabetic variants of bound variables.
 
 ## Declare label noise
@@ -264,7 +264,7 @@ data.datasets.train.dataset.proportion was refused: a label proportion sums to 1
 The declaration is also refused for:
 
 - a `labeling` that names no installed `lofi.inference_labeling` entry;
-- a non-positive `candidates` or `attempts`, or a negative `size`;
+- a nonpositive `candidates` or `attempts`, or a negative `size`;
 - a noise rate or a confusion row that names a relation twice, a rate outside
   zero to one, or a confusion row whose shares sum to neither one nor zero;
 - a positive `relations.trivial` share together with a positive

@@ -1,4 +1,4 @@
-"""Interchange-intervention pairs generated from a declared grammar and lexicon.
+"""Interchange intervention pairs generated from a declared grammar and lexicon.
 
 A pair holds one token string and two of its derivations under the same rule set.
 The two agree on every cell, every split and every combinator, and disagree on the
@@ -608,7 +608,7 @@ def _differing(left: tuple[str, ...], right: tuple[str, ...]) -> tuple[int, ...]
 
 
 class GeneratedPair:
-    """One interchange-intervention record, with the provenance that identifies it.
+    """One interchange intervention record, with the provenance that identifies it.
 
     A record is a claim, not a certificate. ``confirm_pair`` is what reads it back
     and decides whether the two assignments really differ at the one variable the
@@ -1840,7 +1840,7 @@ def _alignment_refusal_reason(
 
 
 class CounterfactualGenerator[T, W]:
-    """Generates interchange-intervention pairs from a grammar and a lexicon.
+    """Generates interchange intervention pairs from a grammar and a lexicon.
 
     Parameters
     ----------
@@ -1855,7 +1855,7 @@ class CounterfactualGenerator[T, W]:
     grammar : str
         The fingerprint of the declared grammar, recorded on every pair.
     parse_policy : ParsePolicy[Literal[Retain.FOREST]]
-        The run's declared packed-forest reachability policy.
+        The run's declared packed forest reachability policy.
     readings : int
         How many derivations of one string the generator reads before it stops.
     threads : int

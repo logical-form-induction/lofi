@@ -91,7 +91,7 @@ DATA_ROOT_VARIABLE: Final = "LOFI_DATA_ROOT"
 """The sole environment variable locating corpus releases and declarations."""
 
 DESIGNS_DIRECTORY: Final = "designs"
-"""The data-root directory containing one JSON declaration per design."""
+"""The data root directory containing one JSON declaration per design."""
 
 _UNIGRAM_HEADER: Final = "token\tcount"
 
@@ -263,7 +263,7 @@ class DeclaredDesign:
     tag : str
         The dataset identifier, naming the document ``designs/<tag>.json``.
     loader : Callable[[ArtifactCacheSettings], CausalLoader]
-        Returns the loader of the causal model a declared language-model readout
+        Returns the loader of the causal model a declared language model readout
         pins, fetching through the cache the readout declares.
     """
 

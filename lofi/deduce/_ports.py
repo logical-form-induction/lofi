@@ -68,11 +68,11 @@ class CategoryMeasure[T](Protocol):
         """Return the category's exact node count."""
 
     def arity(self, term: T, /) -> int:
-        """Return the category's functor-spine arity."""
+        """Return the category's functor spine arity."""
 
 
 class Chart[T, W](Protocol):
-    """Specifies packed-forest operations."""
+    """Specifies packed forest operations."""
 
     @property
     def index(self) -> SpanIndex:

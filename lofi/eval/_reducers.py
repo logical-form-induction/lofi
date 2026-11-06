@@ -198,7 +198,7 @@ class ReductionContext(FrozenValue):
 
     @property
     def correction(self) -> Correction:
-        """Return the declared multiple-comparison correction."""
+        """Return the declared multiple comparison correction."""
         if self._correction is None:
             msg = "a source-comparison reducer has no correction"
             raise RuntimeError(msg)
@@ -309,7 +309,7 @@ def _factor(row: Mapping[str, JsonValue], column: str, /) -> FactorLevel:
 
 @final
 class _VarianceReducer:
-    """Method-of-moments reducer over declared row factors."""
+    """Method of moments reducer over declared row factors."""
 
     __slots__ = ("_context", "_settings")
 
@@ -482,7 +482,7 @@ def _rescoring(
 def _source_comparison(
     settings: SourceComparisonReducerSettings, context: ReductionContext, /
 ) -> ExperimentReducer:
-    """Build a declared source-comparison reducer."""
+    """Build a declared source comparison reducer."""
     return SourceComparisonReducer(settings, context)
 
 

@@ -93,7 +93,7 @@ class RetainedPairSideDerivationsSpec(RetainedDatasetSpec, Protocol):
 
 @runtime_checkable
 class InferenceLabeledDatasetSpec(Protocol):
-    """A pair dataset that owns an ordered inference-label vocabulary."""
+    """A pair dataset that owns an ordered inference label vocabulary."""
 
     def inference_labels(self) -> tuple[str, ...]:
         """Return output labels in the model-column order declared by the data."""
@@ -114,7 +114,7 @@ class DatasetSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="fo
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists dataset plugins."""
+        """Return the family whose entry point group lists dataset plugins."""
         return "dataset"
 
     def observed_occurrences(self) -> int | None:
@@ -158,7 +158,7 @@ class FeaturizerSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "featurizer"
 
 
@@ -169,7 +169,7 @@ class TokenizerSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists tokenizers."""
+        """Return the family whose entry point group lists tokenizers."""
         return "tokenizer"
 
 
@@ -180,7 +180,7 @@ class GoldAggregationSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists gold aggregators."""
+        """Return the family whose entry point group lists gold aggregators."""
         return "gold_aggregation"
 
 
@@ -197,7 +197,7 @@ class ConstraintSourceSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "constraint_source"
 
 
@@ -278,7 +278,7 @@ class DataSection(dx.Model, extra="forbid"):
         }
 
     def inference_labels(self) -> tuple[str, ...]:
-        """Return the one inference-label inventory the run's datasets own.
+        """Return the one inference label inventory the run's datasets own.
 
         Returns
         -------

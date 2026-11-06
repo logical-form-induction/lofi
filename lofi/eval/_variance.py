@@ -977,7 +977,7 @@ class FactorVarianceComponent(FrozenValue):
 
 @final
 class FactorVarianceDecomposition(FrozenValue):
-    """A declared-factor method-of-moments decomposition."""
+    """A declared-factor method of moments decomposition."""
 
     _noun = "factor variance decomposition"
     __slots__ = ("_components", "_factors", "_methods", "_resampling", "_scores")

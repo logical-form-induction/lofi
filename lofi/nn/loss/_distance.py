@@ -18,14 +18,14 @@ __all__ = ["TypeDistanceObjective"]
 
 
 def inverse_distance_weights(distances: torch.Tensor, power: float, /) -> torch.Tensor:
-    """Return normalized inverse-distance weights for one nonempty pair batch.
+    """Return normalized inverse distance weights for one nonempty pair batch.
 
     Parameters
     ----------
     distances : torch.Tensor
         Nonnegative edit distances, one per pair.
     power : float
-        Finite nonnegative inverse-distance exponent.
+        Finite nonnegative inverse distance exponent.
 
     Raises
     ------
@@ -50,7 +50,7 @@ def inverse_distance_weights(distances: torch.Tensor, power: float, /) -> torch.
 class TypeDistanceObjective:
     """Scores how far the distance between two encodings sits from their edit distance.
 
-    The objective regresses squared embedding distance onto squared tree-edit
+    The objective regresses squared embedding distance onto squared tree edit
     distance and averages over complete pairs. Edit distances are cached only within
     the current step.
 
@@ -59,7 +59,7 @@ class TypeDistanceObjective:
     encoder : TermEncoder
         What encodes each type to a vector.
     inverse_distance_power : float
-        Finite nonnegative exponent for normalized inverse-distance weights.
+        Finite nonnegative exponent for normalized inverse distance weights.
     embedding_penalty : float
         Finite nonnegative coefficient on each pair's mean squared embedding norm.
     relabel : RelabelCost

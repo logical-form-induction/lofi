@@ -1,4 +1,4 @@
-"""Declarations of neural chart-cell composition families."""
+"""Declarations of neural chart cell composition families."""
 
 from typing import Final, Literal, NamedTuple, Protocol, cast
 

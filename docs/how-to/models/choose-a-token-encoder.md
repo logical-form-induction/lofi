@@ -46,7 +46,7 @@ averaging unrelated rows.
 
 ## The four encoders
 
-Each encoder registers under the `lofi.token_encoder` entry-point group, and
+Each encoder registers under the `lofi.token_encoder` entry point group, and
 the packaged library holds one or more fragments for it under
 `lofi/configs/model/token_encoder/`:
 
@@ -287,7 +287,7 @@ one:
 | --- | --- |
 | `first` | The row of its first subword. |
 | `mean` | The mean of its subword rows. |
-| `attention` | The sum of its rows under the softmax of learned scores. `scorer` lists feed-forward layers that score each row, and `context`, when declared, first reads the word's rows with a recurrence (`cell` from the `lofi.recurrent_cell` group, `gru` by default, `lstm`, `elman-tanh` or `elman-relu`, the same cells the recurrent term encoders and decoders run; `layers`, `width`, `bidirectional`). |
+| `attention` | The sum of its rows under the softmax of learned scores. `scorer` lists feedforward layers that score each row, and `context`, when declared, first reads the word's rows with a recurrence (`cell` from the `lofi.recurrent_cell` group, `gru` by default, `lstm`, `elman-tanh` or `elman-relu`, the same cells the recurrent term encoders and decoders run; `layers`, `width`, `bidirectional`). |
 
 The packaged `attention` fragment declares `context: {}`, which takes a
 one-layer bidirectional GRU.

@@ -58,7 +58,7 @@ if TYPE_CHECKING:
     )
 
     class _ClausalAdjunctDeclaration(Protocol):
-        """Fields needed to build clausal-adjunct coercion."""
+        """Fields needed to build clausal adjunct coercion."""
 
         @property
         def name(self) -> str:
@@ -458,7 +458,7 @@ class _Absorption(Unpicklable, FrozenValue):
 
 @final
 class _ClausalAdjunct(Unpicklable, FrozenValue):
-    """Feature-bearing clausal-adjunct coercion."""
+    """Feature-bearing clausal adjunct coercion."""
 
     _noun = "CCG assembly value"
     _because = "retains live term identities"
@@ -557,7 +557,7 @@ class _ClausalAdjunct(Unpicklable, FrozenValue):
 
     @property
     def proof_schemata(self) -> tuple[SchematicSequent, ...]:
-        """Return the feature-erased clausal-adjunct schema."""
+        """Return the feature-erased clausal adjunct schema."""
         variable = MVar("X", self._source_core.op.sort)
         premise = Node(
             self._source_slash,
@@ -582,7 +582,7 @@ class _ClausalAdjunct(Unpicklable, FrozenValue):
 
     @property
     def normal_form_role(self) -> NormalFormRole:
-        """Return the clausal-adjunct rule's intrinsic structural role."""
+        """Return the clausal adjunct rule's intrinsic structural role."""
         return NormalFormRole()
 
     @property
@@ -621,7 +621,7 @@ class _ClausalAdjunct(Unpicklable, FrozenValue):
         output: Term,
         /,
     ) -> bool:
-        """Decide the clausal-adjunct coercion relation."""
+        """Decide the clausal adjunct coercion relation."""
         return (
             len(inputs) == self.arity
             and self._valid_source(inputs[0])

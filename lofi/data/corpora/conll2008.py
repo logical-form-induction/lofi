@@ -56,7 +56,7 @@ class Conll2008Sentence(FrozenValue):
     tree : AttachmentTree
         Validated single-rooted dependency tree.
     pos : Sequence[str]
-        Gold part-of-speech tags in token order.
+        Gold part of speech tags in token order.
     labels : Sequence[str]
         Gold dependency labels in token order.
     """
@@ -118,7 +118,7 @@ class Conll2008Sentence(FrozenValue):
 
     @property
     def pos(self) -> tuple[str, ...]:
-        """Return gold part-of-speech tags in token order."""
+        """Return gold part of speech tags in token order."""
         return self._pos
 
     @property
@@ -206,7 +206,7 @@ class CcgbankSentenceIdentity(FrozenValue):
 
     @property
     def pos(self) -> tuple[str, ...]:
-        """Return CCGbank gold part-of-speech tags in token order."""
+        """Return CCGbank gold part of speech tags in token order."""
         return self._pos
 
     def _fields(self) -> tuple[ItemId, tuple[str, ...], tuple[str, ...]]:

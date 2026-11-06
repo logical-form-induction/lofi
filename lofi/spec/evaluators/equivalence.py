@@ -1,4 +1,4 @@
-"""Held-out logical-form equivalence evaluator declaration."""
+"""Held-out logical form equivalence evaluator declaration."""
 
 from typing import TYPE_CHECKING, Final, Literal, NamedTuple, override
 
@@ -51,9 +51,9 @@ class EquivalenceEvaluatorSpec(EvaluatorSpec):
     Parameters
     ----------
     readout : str
-        Complete-term readout role that decodes logical forms.
+        Complete term readout role that decodes logical forms.
     budget : ProofBudgetSpec
-        The call, wall-clock and CPU limits of the evaluation use site.
+        The call, wall clock and CPU limits of the evaluation use site.
     conventions : ConventionSpec
         Conventions the resulting rows are reported under.
     """
@@ -66,12 +66,12 @@ class EquivalenceEvaluatorSpec(EvaluatorSpec):
     @dx.validates("readout")
     @classmethod
     def _readout_is_named(cls, value: str) -> str:
-        """Return a nonempty complete-term readout role."""
+        """Return a nonempty complete term readout role."""
         return ensure_name("an equivalence term-readout role", value)
 
     @override
     def dependencies(self) -> tuple[Dependency, ...]:
-        """Return the declared complete-term readout dependency."""
+        """Return the declared complete term readout dependency."""
         return (Dependency(self.readout, "terms-readout"),)
 
     @override

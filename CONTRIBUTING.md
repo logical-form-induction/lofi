@@ -97,7 +97,7 @@ lines a pull request changes.
 
 Integration tests are opt-in and must skip cleanly when their prerequisites are
 absent. Benchmarks time operations and compare budgets. Ordinary tests assert
-behavior outside timed benchmark bodies. An absolute wall-clock budget is
+behavior outside timed benchmark bodies. An absolute wall clock budget is
 asserted only under `wall_clock_budget.enforced`, for measurements on the local
 reference machine. GitHub-hosted runners record timings and compare each commit
 with its parent on the same runner. See [Testing](docs/development/testing.md).
@@ -143,7 +143,7 @@ These rules are part of the implementation contract:
 Compiled code is Rust, in the `crates/` workspace, linked into the one
 `lofi._native` module. The `lofi-chart` crate is the pure core: it has no Python
 dependency and forbids unsafe code. The `lofi-native` crate is the binding: it
-converts values and maps errors, contains no algorithm, and has no hand-written
+converts values and maps errors, contains no algorithm, and has no handwritten
 unsafe code. Native term storage owns structural identity, hashing, lineage, and
 substitution in `lofi-chart`; `lofi-native` converts validated Python boundary
 values and maps typed refusals.

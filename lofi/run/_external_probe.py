@@ -80,7 +80,7 @@ class _ExternalPoint:
 
 
 class ExternalProbe:
-    """Run the split-posterior diagnostic over a released external point."""
+    """Run the split posterior diagnostic over a released external point."""
 
     __slots__ = ("_diagnostics", "_point")
 
@@ -97,7 +97,7 @@ class ExternalProbe:
         self._diagnostics.admit(published_sites(self._point.components))
 
     def run(self, point: TrainedPoint, /) -> tuple[ProbeValue, ...]:
-        """Return split-posterior KL rows over the declared stimulus lengths."""
+        """Return split posterior KL rows over the declared stimulus lengths."""
         del point
 
         return self._diagnostics.run(self._point)

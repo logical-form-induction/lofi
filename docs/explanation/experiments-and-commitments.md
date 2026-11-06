@@ -2,7 +2,7 @@
 
 This page explains what an experiment commits to before its results exist and
 how LoFI holds it to those commitments: the preregistration, the freeze, stop
-rules and decision points, multiple-comparison corrections, and the contraction
+rules and decision points, multiple comparison corrections, and the contraction
 ladder that is the only declared way to shrink an experiment once it is frozen.
 
 ## Why commitments are records
@@ -25,7 +25,7 @@ against gold in the `primary` family.
 
 Reading a preregistration refuses a duplicated level, a factor with no levels,
 a duplicated hypothesis name, two hypotheses over the same unordered pair of
-arms, a hypothesis comparing an arm with itself, a non-positive margin, and a
+arms, a hypothesis comparing an arm with itself, a nonpositive margin, and a
 document with no hypotheses. An experiment document must bind every
 preregistered factor to a sweep axis, with every level mapped to a value the
 axis takes (see [Source and learner declarations](synthetic-designs.md)). At
@@ -76,8 +76,8 @@ requires a test whose assumptions cover the actual sampling and stopping rule.
 
 ## Paired tests and equivalence
 
-For $n$ matched observations, let $d_i$ be the left-arm score minus the
-right-arm score and let $t_{\mathrm{obs}}=n^{-1}\sum_i d_i$. A paired sign
+For $n$ matched observations, let $d_i$ be the left arm score minus the
+right arm score and let $t_{\mathrm{obs}}=n^{-1}\sum_i d_i$. A paired sign
 randomization assigns a sign $\varepsilon_j\in\{-1,1\}$ to each exchangeable
 unit $j$. With $g(i)$ the unit containing observation $i$, its statistic is
 
@@ -94,7 +94,7 @@ $(b+1)/(m+1)$ for a sampled reference. The lower tail is analogous, and the
 two-sided value is the smaller of one and twice the smaller one-sided value.
 The Monte Carlo correction prevents a finite sampled reference from reporting
 zero \citep{phipson-smyth2010}. Validity requires the relevant exchangeability
-or sign-symmetry assumption under the null; matching observations does not
+or sign symmetry assumption under the null; matching observations does not
 establish that assumption.
 
 An equivalence margin $\delta>0$ specifies the alternative
@@ -104,21 +104,21 @@ $\mathbb{E}[D]\leq-\delta$ and $\mathbb{E}[D]\geq\delta$
 \citep{schuirmann1987}. LoFI applies its paired randomization test to differences
 shifted by these boundaries and uses the larger of the two one-sided values.
 Its calibration depends on the randomization assumptions at each boundary.
-Failure to reject a zero-difference null is not evidence of equivalence.
+Failure to reject a zero difference null is not evidence of equivalence.
 
 ## Corrections
 
 An experiment's evaluation section declares a significance level, a dependence
 assumption among its tests (`independent`, `prds` or `arbitrary`) and a
-multiple-comparison correction: `bonferroni`, `holm` \citep{holm1979},
+multiple comparison correction: `bonferroni`, `holm` \citep{holm1979},
 `benjamini-hochberg` \citep{benjamini-hochberg1995} or `benjamini-yekutieli`
 \citep{benjamini-yekutieli2001}. The pairing is checked: Benjamini–Hochberg
-has the stated false-discovery-rate guarantee under independence or positive
+has the stated false discovery rate guarantee under independence or positive
 regression dependence on the true nulls, so the configuration refuses it under
 `arbitrary` dependence,
 while the other three are valid under every declared regime. The declared
 correction is applied per preregistered family over the comparisons ingested.
-The source-comparison reducer applies the same declared correction, under the
+The source comparison reducer applies the same declared correction, under the
 same dependence assumption, within each of its own comparison groups, and
 records both on every test row.
 
@@ -170,7 +170,7 @@ axis, and any rung other than `fallback` that changes no point. Each
 application records the rung, what it dropped, the previous and new sweep
 identifiers, the remaining point count and the date in the experiment's
 amendment ledger, and the ledger must chain. When the experiment is read again,
-every recorded rung is re-applied and must drop exactly what it recorded.
+every recorded rung is reapplied and must drop exactly what it recorded.
 
 What a contracted experiment licenses is the claim its remaining design
 supports. Dropping a corpus scale removes the evidence at that scale; falling

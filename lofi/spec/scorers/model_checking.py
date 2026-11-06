@@ -22,7 +22,7 @@ class _SourceDeclaration(Protocol):
 
 
 class ModelCheckingScorerSettings(NamedTuple):
-    """Resolved model-checking policy and structure-source declaration."""
+    """Resolved model checking policy and structure-source declaration."""
 
     source_kind: str
     source: object
@@ -47,7 +47,7 @@ class ModelCheckingScorerSpec(PairScorerSpec):
     @dx.validates("truth_threshold", "abstain_band", "premise_floor")
     @classmethod
     def _probability(cls, value: float) -> float:
-        """Return a finite unit-interval policy value."""
+        """Return a finite unit interval policy value."""
         held = ensure_finite("a model-checking threshold", value)
 
         if not 0.0 <= held <= 1.0:

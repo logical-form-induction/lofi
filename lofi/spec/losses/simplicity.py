@@ -95,7 +95,7 @@ class SimplicityLossSettings(NamedTuple):
     scope : SimplicityScope
         Which chart cells are priced.
     symbol_cost : SymbolCostSpec
-        Declared constructor-cost policy.
+        Declared constructor cost policy.
     """
 
     readout: str
@@ -115,7 +115,7 @@ class SimplicityLossSpec(LossSpec):
     scope : SimplicityScope
         Which chart cells are priced.
     symbol_cost : SymbolCostSpec
-        Constructor-cost policy resolved through ``lofi.description_cost``.
+        Constructor cost policy resolved through ``lofi.description_cost``.
     """
 
     kind: Literal["simplicity"] = "simplicity"

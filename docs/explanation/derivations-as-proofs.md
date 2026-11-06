@@ -29,7 +29,7 @@ consumer reads. The pieces correspond to the parts of a deductive system:
 | Matching | When two categories count as the same premise. |
 | Normal form | Which derivation steps are admitted; preservation and uniqueness require separate justification. |
 | Goal | Which conclusions over which input regions count as a proof of the sentence. |
-| Budget | How far an approximate consumer may go: term depth, beam, mass target, unary rounds, beta-reduction fuel. |
+| Budget | How far an approximate consumer may go: term depth, beam, mass target, unary rounds, beta reduction fuel. |
 
 [Categories, semantic types, and logical forms](logical-forms-as-types.md)
 distinguishes categories, semantic types, and proof terms. A common deduction
@@ -110,7 +110,7 @@ type-logical calculus.
 
 A rule is declared by its family (`application`, `composition`,
 `substitution`, `type-raising`, `coordination`, `pattern` and others, each
-registered in the `lofi.rule` entry-point group) and compiled to a value that
+registered in the `lofi.rule` entry point group) and compiled to a value that
 implements the [`Rule`](../reference/judge.md) protocol. The deduction engine
 in `lofi.deduce` depends only on that protocol. It imports no formalism and no
 grammar pack, and an import contract enforces this (see [The layer
@@ -128,7 +128,7 @@ $$
 $$
 
 The boundaries satisfy $i_0<\cdots<i_k$ for this nonempty contiguous-span
-schema. The runtime also retains rule and normal-form state; the notation
+schema. The runtime also retains rule and normal form state; the notation
 suppresses that state to display the grammatical relation.
 
 The matching relation decides when a category fills a premise slot. Identity
@@ -145,7 +145,7 @@ under a different matching from the rule set's, compared by identity.
 Compilation derives three reports from the grammar's components:
 
 - **Ranks and unary closure.** `deduction_requirements` collects the arity of
-  every rule. A rule set containing a unary rule requires unary-closure rounds
+  every rule. A rule set containing a unary rule requires unary closure rounds
   in each chart cell, and a declaration whose budget allows zero such rounds is
   refused.
 - **The reachable category set.** A closure report classifies the categories
@@ -159,7 +159,7 @@ Compilation derives three reports from the grammar's components:
   prefix-closed VW-CCG with target restrictions on application is
   TAG-equivalent \citep{kuhlmann-etal2015}. When the evidence is
   absent or a hypothesis fails (an unbounded composition degree, an inventory
-  that is not exclusively generalized composition, a lexical-anchor
+  that is not exclusively generalized composition, a lexical anchor
   restriction), the report is `not_characterized` and names the unmet
   hypothesis. An applicable theorem with no citation is refused. The report
   characterizes the rule family, not one concrete grammar.
@@ -170,7 +170,7 @@ $G$ under its grammatical start condition. The pure-CCG result ranges over
 finite lexica and bounded but arbitrary composition degree, with application
 as degree zero; it does not say that every degree bound exceeds context-free
 power \citep{kuhlmann-etal2010}. The VW-CCG results concern a specified
-generalized-composition fragment \citep{vijay-shanker-weir1994,kuhlmann-etal2015}.
+generalized composition fragment \citep{vijay-shanker-weir1994,kuhlmann-etal2015}.
 Type raising, substitution, or coordination cannot be added while retaining
 the theorem merely by retaining its name. Moreover, the TAG-to-CCG
 construction in \citealt{kuhlmann-etal2015} permits empty-string lexical
@@ -179,7 +179,7 @@ establish that a particular terminal-anchored consumer realizes that full
 family. Computational bounds and a fragment-covering goal are additional
 choices, not hypotheses that can be omitted from a comparison.
 
-The rule arities, unary closure, category-set class, fan-out and
+The rule arities, unary closure, category set class, fan-out and
 lexicalization together form the [`DeductionProfile`](../reference/formalism.md).
 A consumer that serves only some profiles, such as a neural chart parser built
 for binary rules, declares a `ProfileBound`. `Formalism.compile` checks each
@@ -194,7 +194,7 @@ Composition and type raising may give a CCG several derivations with the
 same interpretation, a form of spurious ambiguity \citep{eisner1996}.
 For a fixed lexical leaf sequence over $w$, let $\mathcal D_G(w)$ be its
 derivations, and let $d\sim d'$ mean equivalence of their semantic recipes
-in the normal-form result. This excludes accidental equality of denotations
+in the normal form result. This excludes accidental equality of denotations
 in a particular model and ambiguity between different lexical assignments.
 A filter selects $\mathcal D_G^{\mathrm{NF}}(w)\subseteq\mathcal D_G(w)$.
 Two distinct properties matter:
@@ -213,7 +213,7 @@ $$
 Together they give exactly one representative per equivalence class.
 \citet{eisner1996} calls the second property *completeness* and proves both
 for the paper's pure-CCG setting. Removing rules can destroy safety: the
-normal-form representative may require a rule that the restricted grammar
+normal form representative may require a rule that the restricted grammar
 does not admit. Thus a filter's name is not a guarantee for an arbitrary
 configured inventory.
 
@@ -222,7 +222,7 @@ and `all-of`, which conjoins filters. \citet{hockenmaier-bisk2010} addresses
 bounded composition and grammatical type raising, but explicitly leaves a
 general proof of exhaustive ambiguity coverage open. The paper supplies
 local arguments and empirical evaluation; it also identifies cases in which
-its normal forms require unbounded type-raising degree.
+its normal forms require unbounded type raising degree.
 LoFI's compiler does not prove safety or uniqueness for each filter–inventory
 pairing. The normal form is nevertheless part of the rule set and grammar
 fingerprint, because changing the admitted derivations changes counting

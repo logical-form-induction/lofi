@@ -1,7 +1,7 @@
 # Combine losses
 
 A run's `loss` section declares the training objective as a list of weighted
-terms. Each term pairs one objective from the `lofi.loss` entry-point group
+terms. Each term pairs one objective from the `lofi.loss` entry point group
 with a nonnegative weight, an optional name, and an optional ramp of that
 weight over the first optimizer steps. The trainer minimizes the weighted sum
 of the terms and logs each one under its own name.
@@ -65,7 +65,7 @@ Each term has four fields:
 | `name` | The key the term is logged under, or `null` to use the objective's `kind`. A name is one nonempty segment and contains no slash. |
 | `schedule` | `{start, steps}`: the weight moves linearly from `start` to `weight` over the first `steps` optimizer steps and keeps `weight` afterwards. `null` keeps `weight` throughout. |
 
-## Add a term with a warm-up
+## Add a term with a warmup { #add-a-term-with-a-warm-up }
 
 Append a term from the command line with `loss.terms+=[...]` rather than
 restating the list. This override adds a simplicity regularizer whose weight ramps
@@ -95,8 +95,8 @@ command line the same override is
 `--set 'loss.terms+=[{"objective": ...}]'`; the
 [configuration guide](../setup/configuration.md) describes list extension.
 
-The term-level `schedule` ramps a term's weight. Two objectives also carry
-their own warm-up, which is a different thing: a coherence term's `warmup`
+The term level `schedule` ramps a term's weight. Two objectives also carry
+their own warmup, which is a different thing: a coherence term's `warmup`
 counts the steps over which marginal weighting is introduced inside the
 objective (`null` or `0` turns it off, and the default is `1000`), and a
 token-warm-up training step is declared on the trainer rather than in the loss
@@ -123,7 +123,7 @@ must exist under `model.readouts`, `model.spaces` or `model.decoders`.
 | `derivation-entropy` | The entropy of the parser's tree distribution. | `direction`: `minimize` or `maximize` | none |
 | `span-reconstruction` | Reconstruction of each span's words from its inside cell. | `decoder` | `weighting`: `uniform` (default) or `marginal`; `max_span_length` (default `null`, every length); `normalization`: `span` (default) or `token`. |
 | `outside-reconstruction` | Reconstruction of each word from its outside vector, the context outside its own leaf span. | `decoder` | none |
-| `form-typing` | Binary typing supervision over one complete-term readout. | `readout` | none |
+| `form-typing` | Binary typing supervision over one complete term readout. | `readout` | none |
 | `form-supervision` | The negative log likelihood of each retained gold logical form. | `readout` | Requires a dataset that supplies gold forms. |
 | `inference` | A loss over the model's grounded inference distribution. | `signal`: `likelihood` or `reward`; `response` | `auxiliary_weight` (default `0.0`). Reads the grounding declared under `model.grounding`. |
 | `shaped-proof` | Proof-shaped credit over decoded forms against their gold forms. | `readout`, `shaping`, `budget` | `shaping` pays `ill_formed`, `well_formed`, `type_checks` and `proved`, with a `length` cost. |

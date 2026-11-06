@@ -51,7 +51,7 @@ class PrunedMass(NamedTuple):
 class ItemKey[T]:
     """Identifies a chart item.
 
-    An item is one exact conclusion over one span under one normal-form tag.
+    An item is one exact conclusion over one span under one normal form tag.
     Two conclusions that a rule set's matching identifies, such as two feature
     variants of one category, are two items: the matching decides which rules
     apply, never which conclusions the chart tells apart.
@@ -63,7 +63,7 @@ class ItemKey[T]:
     reading : T
         The exact conclusion.
     nf_tag : str
-        Normal-form tag, or an empty string when unused.
+        Normal form tag, or an empty string when unused.
     """
 
     __slots__ = ("_nf_tag", "_reading", "_span")
@@ -85,7 +85,7 @@ class ItemKey[T]:
 
     @property
     def nf_tag(self) -> str:
-        """Return the normal-form tag, or an empty string if no normal form ran."""
+        """Return the normal form tag, or an empty string if no normal form ran."""
         return self._nf_tag
 
     @override
@@ -121,7 +121,7 @@ class ItemKey[T]:
 
 
 class Edge[T, W]:
-    """One packed-forest hyperedge.
+    """One packed forest hyperedge.
 
     Parameters
     ----------
@@ -238,7 +238,7 @@ class Edge[T, W]:
 
 
 class EdgeProduct[T, W]:
-    """One exact Cartesian product of packed-forest hyperedges.
+    """One exact Cartesian product of packed forest hyperedges.
 
     Every axis contains the alternative items for one premise. The other
     fields are shared by every edge in the Cartesian product.

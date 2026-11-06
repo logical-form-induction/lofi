@@ -207,7 +207,7 @@ class ChildGathers:
 
 
 class InsideKernel:
-    """Compute inside values under a selected log-weight reduction.
+    """Compute inside values under a selected log weight reduction.
 
     Parameters
     ----------

@@ -70,7 +70,7 @@ class GoldForm:
     item_id : ItemId
         The item the form belongs to.
     text : str
-        The form written in the logical-form surface syntax, which reads back
+        The form written in the logical form surface syntax, which reads back
         into the interpretation's store as the same interned term.
 
     Raises
@@ -92,7 +92,7 @@ class GoldForm:
 
     @property
     def text(self) -> str:
-        """Return the form in the logical-form surface syntax."""
+        """Return the form in the logical form surface syntax."""
         return self._text
 
     @override

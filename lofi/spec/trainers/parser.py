@@ -84,13 +84,13 @@ class ParserTrainerSpec(TrainerSpec):
     @dx.validates("dataset")
     @classmethod
     def _dataset_is_named(cls, value: str) -> str:
-        """Validate the training-dataset role."""
+        """Validate the training dataset role."""
         return ensure_name("a parser-training dataset", value)
 
     @dx.validates("max_grad_norm")
     @classmethod
     def _clipping_is_positive(cls, value: float | None) -> float | None:
-        """Validate the optional gradient-clipping norm."""
+        """Validate the optional gradient clipping norm."""
         if value is None:
             return None
 

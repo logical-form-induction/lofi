@@ -9,8 +9,8 @@ rows ``measured.parquet``: one row per submitted point whose directory records a
 metrics record, with the point's measured parameter counts and every value its
 record holds outside a sequence. A manifest is the one the experiment's
 configuration kind writes: an experiment manifest for a run document, a
-judgment-fit manifest for a judgment-fit document, a baseline-fit manifest for a
-baseline-fit document, and an active-learning manifest for an active-learning
+judgment fit manifest for a judgment fit document, a baseline fit manifest for a
+baseline fit document, and an active learning manifest for an active learning
 document, whose rows are its rounds.
 
 Ingestion is anchored to the freeze's ``FREEZE.json``. The experiment's sweep is
@@ -28,7 +28,7 @@ The directory is written from the run store the experiment executed under, read
 through the experiment's store. Every point of the expanded sweep has one status
 entry: completed, running, killed and awaiting resubmission, a recorded
 numerical or infrastructure failure with its diagnostic, submitted and not yet
-started, an active-learning run awaiting the responses to a batch it fielded,
+started, an active learning run awaiting the responses to a batch it fielded,
 or not submitted. Submission is read from the binding each point's
 directory records when it is submitted, so a point bound to another freeze is
 not submitted for this one. Every submitted point whose directory records a
@@ -1214,7 +1214,7 @@ def _approximation(where: str, row: Mapping[str, JsonValue]) -> Approximation:
     The budget kind selects an enumeration budget, rebuilt from its bounds, or
     the declaration that no enumeration budget applies. The columns are passed
     to the budget, residual and approximation value types unchecked, so those
-    types refuse a missing bound, a wrong type, a negative or non-finite
+    types refuse a missing bound, a wrong type, a negative or nonfinite
     residual, or a residual where no budget applies, and the rebuilt columns
     must equal the row's, so a measured flag that disagrees with the residuals,
     or a bound stated where no budget applies, is refused.

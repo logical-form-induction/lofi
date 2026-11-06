@@ -43,7 +43,7 @@ numeric class listed here, and `ensure_publishes` holds a map to both.
 | `WORD_VECTOR` | `item`, `word`, `width` | real |
 | `TERM_ENCODING` | `term`, `width` | real |
 | `NODE_ENCODING` | `term`, `slot`, `width` | real |
-| `SYMBOL_DISTRIBUTION` | `term`, `slot`, `symbol` | log-probability |
+| `SYMBOL_DISTRIBUTION` | `term`, `slot`, `symbol` | log probability |
 | `DECODER_RECURRENT_STATE` | `term`, `slot`, `width` | real |
 | `UNBOUND_VECTOR` | `term`, `slot`, `width` | real |
 | `DECODER_RESIDUAL_STREAM` | `term`, `slot`, `width` | real |
@@ -55,11 +55,11 @@ numeric class listed here, and `ensure_publishes` holds a map to both.
 | `RECEIVER_EDGE` | `item`, `edge`, `width` | real |
 | `INSIDE_SCORE` | `item`, `span` | real |
 | `OUTSIDE_SCORE` | `item`, `span` | real |
-| `SPLIT_DISTRIBUTION` | `item`, `span`, `split` | log-probability |
+| `SPLIT_DISTRIBUTION` | `item`, `span`, `split` | log probability |
 | `CONSTITUENT_MARGINAL` | `item`, `span` | probability |
 | `LOG_PARTITION` | `item` | real |
 | `IDENTITY_SCORE` | `item`, `span`, `split` | real |
-| `COMBINATOR_LOGITS` | `cell`, `action` | log-probability |
+| `COMBINATOR_LOGITS` | `cell`, `action` | log probability |
 
 `PARAMETER` has no fixed axes or numeric class. Its site specification describes the
 component-specific parameter shape. `RECURRENT_HIDDEN`, `RECURRENT_CELL`, `GATE`,

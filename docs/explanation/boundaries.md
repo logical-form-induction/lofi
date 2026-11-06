@@ -25,7 +25,7 @@ executions and can expose a violation.
 ## Where declared values enter
 
 [`lofi.spec`](../reference/spec.md) holds the run specification, component
-wiring and their codecs. Each swappable component family has one tagged-union
+wiring and their codecs. Each swappable component family has one tagged union
 root, and a document's slots are typed by those roots, while each variant's
 declaration class lives with its implementation's package and registers
 through an entry point (see [Swappable grammatical
@@ -45,7 +45,7 @@ order](layering.md)).
 ## Two kinds of check
 
 **Field validation is unconditional.** Reported numbers are checked for
-finiteness, counts and indices for non-negativity, and identifiers for valid
+finiteness, counts and indices for nonnegativity, and identifiers for valid
 names, whenever a value is constructed. An invalid type raises `TypeError` and
 an invalid value raises `ValueError`. A layer defines a more specific error
 when callers need more information about the failure, as

@@ -1,6 +1,6 @@
 # Declaring logical forms
 
-This chapter gives chapter 3's grammar a semantics: it selects a logical-form
+This chapter gives chapter 3's grammar a semantics: it selects a logical form
 language, attaches a meaning to every lexical entry, declares how categories
 erase to semantic types, draws the corpus again, and reads the typed logical
 form each derivation now yields. As in chapter 2, nothing is trained; chapter
@@ -54,10 +54,10 @@ Reading the new parts line by line:
 
 | Line | What it says |
 |---|---|
-| `language: propositional` | The packaged logical-form language: the types `e`, `v` and `t`, the function-type constructor `->`, and the connectives `not`, `and`, `or`, `if` and `iff`, decided by a truth-table prover. |
+| `language: propositional` | The packaged logical form language: the types `e`, `v` and `t`, the function type constructor `->`, and the connectives `not`, `and`, `or`, `if` and `iff`, decided by a truth table prover. |
 | `meaning` | Each lexical entry's logical form, written in the language's surface syntax. `\x.` binds a variable, and application is curried, so `see(x)(y)` applies `see` to the subject and then the object. |
-| `erasure` | The semantic type of each primitive category. `S` erases to a truth value, `NP` to an individual and `N` to a property, written in angle-bracket type syntax. The image of a slash category follows from its functor: $\mathrm{S}\backslash\mathrm{NP}$ erases to $e\to t$. |
-| `constants` | The non-logical constants the meanings are built from, each with a type and a role class. |
+| `erasure` | The semantic type of each primitive category. `S` erases to a truth value, `NP` to an individual and `N` to a property, written in angle bracket type syntax. The image of a slash category follows from its functor: $\mathrm{S}\backslash\mathrm{NP}$ erases to $e\to t$. |
+| `constants` | The nonlogical constants the meanings are built from, each with a type and a role class. |
 | `meanings: {source: {kind: lexical}}` | Read the meanings from the lexical entries themselves, rather than generating them from a semantic structure. |
 
 No semantic action is declared for the application rule. When a rule's action

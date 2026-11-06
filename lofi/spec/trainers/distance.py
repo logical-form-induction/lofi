@@ -64,7 +64,7 @@ class DistanceTrainerSpec(TrainerSpec):
     depth_curriculum : DepthCurriculumSpec | None
         Optional linear depth curriculum.
     inverse_distance_power : float
-        Finite nonnegative exponent for inverse-distance pair weights.
+        Finite nonnegative exponent for inverse distance pair weights.
     embedding_penalty : float
         Finite nonnegative coefficient on each pair's embedding norm.
     child_depth : ChildDepthSpec
@@ -161,7 +161,7 @@ class DistanceTrainerSpec(TrainerSpec):
     @dx.validates("max_grad_norm")
     @classmethod
     def _clipping_is_positive(cls, value: float | None) -> float | None:
-        """Validate the optional gradient-clipping norm."""
+        """Validate the optional gradient clipping norm."""
         if value is None:
             return None
 

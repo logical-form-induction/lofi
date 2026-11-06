@@ -1,4 +1,4 @@
-"""Logical-form match metrics of increasing leniency."""
+"""Logical form match metrics of increasing leniency."""
 
 from random import Random
 from statistics import fmean
@@ -556,7 +556,7 @@ def logical_form_scores(
     Exact match compares the canonical prefix renderings of the two named
     forms, so a renamed bound variable is a mismatch. Alpha match converts
     both forms to the store's locally nameless terms, where bound variables
-    are de Bruijn indices, and compares the interned terms. Normal-form match
+    are de Bruijn indices, and compares the interned terms. Normal form match
     compares those terms under the declared normalization treatment.
     The Smatch score flattens the normalized terms, and the normalized tree
     edit distance is taken between the locally nameless terms.
@@ -614,7 +614,7 @@ def logical_form_scores(
 
 @final
 class LogicalFormMetric:
-    """Mean of one logical-form measure over scored items.
+    """Mean of one logical form measure over scored items.
 
     Parameters
     ----------

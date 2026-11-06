@@ -162,7 +162,7 @@ nav:
           - Choose combinatory rules: how-to/grammars/choose-combinatory-rules.md
           - Choose a normal form, matching and goal: how-to/grammars/choose-normal-form-matching-goal.md
           - Declare a lexicon: how-to/grammars/declare-a-lexicon.md
-          - Declare a logical-form language: how-to/grammars/declare-a-logical-form-language.md
+          - Declare a logical form language: how-to/grammars/declare-a-logical-form-language.md
           - Declare an interpretation: how-to/grammars/declare-an-interpretation.md
           - Map between signatures: how-to/grammars/map-between-signatures.md
       - Synthetic data:
@@ -170,7 +170,7 @@ nav:
           - Corrupt strings and declare negative evidence: how-to/data/corrupt-strings.md
           - Generate ill-typed logical forms: how-to/data/generate-ill-typed-forms.md
           - Generate inference pairs: how-to/data/generate-inference-pairs.md
-          - Control logical-form distributions: how-to/data/control-semantic-distributions.md
+          - Control logical form distributions: how-to/data/control-semantic-distributions.md
       - Corpora and features:
           - Read a corpus: how-to/data/read-a-corpus.md
           - Featurize a dataset: how-to/data/featurize-a-dataset.md
@@ -224,7 +224,7 @@ nav:
           - Categories, semantic types, and logical forms: explanation/logical-forms-as-types.md
           - Grammars as deductive systems: explanation/derivations-as-proofs.md
           - Charts and approximation: explanation/charts-and-approximation.md
-          - Term-layout capabilities: explanation/term-layout-capabilities.md
+          - Term layout capabilities: explanation/term-layout-capabilities.md
       - Induction:
           - Induction objectives: explanation/induction-objectives.md
           - Inference as evidence for logical forms: explanation/inference-as-evidence.md
@@ -241,12 +241,12 @@ nav:
   - Reference:
       - reference/index.md
       - Command line: reference/cli.md
-      - Entry-point groups: reference/entry-points.md
+      - Entry point groups: reference/entry-points.md
       - Configuration documents:
           - reference/configuration/index.md
           - Component roots: reference/configuration/components.md
           - Grammar: reference/configuration/grammar.md
-          - Logical-form language: reference/configuration/language.md
+          - Logical form language: reference/configuration/language.md
           - Datasets and features: reference/configuration/datasets.md
           - Model: reference/configuration/model.md
           - Training: reference/configuration/training.md

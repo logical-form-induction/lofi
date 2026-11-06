@@ -35,7 +35,7 @@ class LmProverPair(dx.Model, extra="forbid"):
     @dx.validates("item_id", "gold_premise", "gold_hypothesis")
     @classmethod
     def _text_is_nonempty(cls, value: str) -> str:
-        """Return a nonempty identifier or logical-form text."""
+        """Return a nonempty identifier or logical form text."""
         return ensure_name("an LM-plus-prover pair field", value)
 
     @dx.validates("label")
@@ -89,7 +89,7 @@ class GeneratedFormalization(dx.Model, extra="forbid"):
     @dx.validates("premise", "hypothesis")
     @classmethod
     def _form_text_is_nonempty(cls, value: str) -> str:
-        """Return nonempty generated logical-form text."""
+        """Return nonempty generated logical form text."""
         return ensure_name("a generated logical form", value)
 
     @dx.validates("feedback")

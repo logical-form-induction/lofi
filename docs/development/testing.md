@@ -56,14 +56,14 @@ in four configurations.
 3. With `LOFI_CHECK=0`, which checks that tests do not require debug checks.
    See [The debug checks](../how-to/extending/checks.md).
 4. In an interpreter without torch, numpy, quivers, lairs, or hypothesis,
-   importing every symbolic-core module.
+   importing every symbolic core module.
 
 ## Benchmarks
 
 Measure timing with
 [pytest-benchmark](https://pytest-benchmark.readthedocs.io/). Benchmarks are
 excluded from the default run because coverage instrumentation changes timing.
-Coverage is a minimum threshold in the unit-test job, not a substitute for
+Coverage is a minimum threshold in the unit test job, not a substitute for
 behavioral assertions.
 
 A benchmark that holds an operation to an absolute number of seconds asserts it
@@ -91,11 +91,11 @@ Continuous integration splits the benchmarks by what they measure.
 
 1. On GitHub-hosted Linux, macOS and Windows runners, bounded benchmarks on
    pushes and pull requests, with results saved as workflow artifacts. The
-   objective grid, posterior fit, training-step grid, and longer normalization
+   objective grid, posterior fit, training step grid, and longer normalization
    cases carry the `slow` mark; weekly and manual runs include them with
    `--run-slow`. The shortest normalization cases run on pushes. Their workloads,
    timing rounds, and assertions are the same in local and hosted runs.
-   Absolute wall-clock budgets are
+   Absolute wall clock budgets are
    disabled because shared runners vary in speed. Committed local measurements
    are not used as thresholds for different machines.
 2. On hosted Linux, macOS and Windows runners, the commit against its parent.

@@ -218,14 +218,14 @@ def infer_declaration(
     lower: Callable[[LanguageDecl], LanguageAssembly],
     /,
 ) -> LanguageDecl:
-    """Resolve every ``type: infer`` constant from typed logical-form uses.
+    """Resolve every ``type: infer`` constant from typed logical form uses.
 
     Parameters
     ----------
     source : LanguageDecl
         The declaration whose inferred constants are resolved.
     uses : Sequence[tuple[str, str]]
-        Logical-form texts, each paired with the semantic type it must have.
+        Logical form texts, each paired with the semantic type it must have.
     lower : Callable[[LanguageDecl], LanguageAssembly]
         Lowers a declaration with every constant typed.
 

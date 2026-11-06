@@ -99,7 +99,7 @@ _DEFAULT_MAX_HYPOTHESES: Final = 0
 
 
 class NormalFormSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
-    """A derivation normal-form declaration."""
+    """A derivation normal form declaration."""
 
     def build(self) -> NormalForm[Term]:
         """Build the selected installed normal form."""
@@ -108,7 +108,7 @@ class NormalFormSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
 
 
 class NormalFormPlugin[Declaration](FrozenValue):
-    """Pair one open normal-form declaration with its runtime builder."""
+    """Pair one open normal form declaration with its runtime builder."""
 
     __slots__ = ("_build", "_spec")
 
@@ -136,7 +136,7 @@ class NormalFormPlugin[Declaration](FrozenValue):
 def normal_form_plugin(
     declaration: NormalFormSpec, /
 ) -> NormalFormPlugin[NormalFormSpec]:
-    """Return the installed plugin selected by a normal-form declaration."""
+    """Return the installed plugin selected by a normal form declaration."""
     plugin = resolve_plugin(
         "normal_form",
         cast("str", declaration.kind),
@@ -503,7 +503,7 @@ _DEFAULT_MATCHING: Final = dx.field(default_factory=IdentityMatchingSpec)
 """The one default grammar matching declaration."""
 
 _DEFAULT_NORMAL_FORM: Final = dx.field(default_factory=NoNormalFormSpec)
-"""The one default grammar normal-form declaration."""
+"""The one default grammar normal form declaration."""
 
 _DEFAULT_BUDGET: Final = dx.field(default_factory=BudgetSpec)
 """The one default grammar approximation budget."""
@@ -719,7 +719,7 @@ class GrammarDecl(GrammarSpec, extra="forbid"):
         Raises
         ------
         ValueError
-            If a composition, substitution, type-raising or clausal-adjunct
+            If a composition, substitution, type raising or clausal adjunct
             rule names a constructor the signature gives no functor roles.
         """
         functors = self.signature.functor_names

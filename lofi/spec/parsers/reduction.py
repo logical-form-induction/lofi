@@ -1,4 +1,4 @@
-"""Declarations of tensor log-weight reductions."""
+"""Declarations of tensor log weight reductions."""
 
 from typing import Final, Literal, NamedTuple, Protocol
 
@@ -45,7 +45,7 @@ class MaximumReductionSettings(NamedTuple):
 
 
 type ReductionSettings = LogSumExpReductionSettings | MaximumReductionSettings
-"""Resolved settings of one tensor log-weight reduction."""
+"""Resolved settings of one tensor log weight reduction."""
 
 
 class ReductionDeclaration(Protocol):

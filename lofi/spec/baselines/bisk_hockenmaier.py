@@ -327,7 +327,7 @@ class BiskHockenmaierBaselineSpec(BaselineSystemSpec):
     @dx.validates("threads")
     @classmethod
     def _threads_are_positive(cls, threads: int) -> int:
-        """Return a positive count of concurrent chart-cell workers."""
+        """Return a positive count of concurrent chart cell workers."""
         return ensure_positive("a baseline parse's threads", threads)
 
     @dx.validates("probability_floor")

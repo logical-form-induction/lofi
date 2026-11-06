@@ -78,7 +78,7 @@ def _parameters(
 
 
 def _free_payloads(store: TermStore, term: Term) -> frozenset[int]:
-    """Return the free-variable atom payloads in a term."""
+    """Return the free variable atom payloads in a term."""
     found: set[int] = set()
 
     def visit(node: Term) -> None:
@@ -131,7 +131,7 @@ class Erasure:
         category_sort: str,
         function_type: OpName,
     ) -> None:
-        """Validate and retain a signature-morphism declaration."""
+        """Validate and retain a signature morphism declaration."""
         function_name = ensure_name("target function type", function_type)
         held_category_sort = ensure_name("category sort", category_sort)
         target_function = store.signature.by_name(function_name)
@@ -241,7 +241,7 @@ class Erasure:
 
     @property
     def function_type(self) -> OpName:
-        """Return the target function-type constructor name."""
+        """Return the target function type constructor name."""
         return self._function_type
 
     @property

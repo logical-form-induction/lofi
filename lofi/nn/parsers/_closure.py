@@ -1,4 +1,4 @@
-"""Bounded unary closure over category and normal-form states."""
+"""Bounded unary closure over category and normal form states."""
 
 from typing import TYPE_CHECKING, Never, final, override
 
@@ -20,7 +20,7 @@ __all__ = ["UnaryClosure", "UnaryTransition"]
 
 @final
 class UnaryTransition:
-    """One unary rule's category and normal-form state transition."""
+    """One unary rule's category and normal form state transition."""
 
     __slots__ = ("_admitted", "_output", "_rule", "_source")
 
@@ -130,9 +130,9 @@ def _compile_unary[T](
     categories : tuple[T, ...]
         The categories in tensor-axis order.
     tags : tuple[str, ...]
-        The normal-form tags in tensor-axis order.
+        The normal form tags in tensor-axis order.
     tag_indices : Mapping[str, int]
-        The column of each normal-form tag.
+        The column of each normal form tag.
 
     Raises
     ------
@@ -180,7 +180,7 @@ def _source_state(transition: UnaryTransition, tags: int, /) -> int:
     transition : UnaryTransition
         The unary transition.
     tags : int
-        The normal-form tags in tensor-axis order.
+        The normal form tags in tensor-axis order.
     """
     return transition.source_category * tags + transition.source_tag
 
@@ -193,7 +193,7 @@ def _output_state(transition: UnaryTransition, tags: int, /) -> int:
     transition : UnaryTransition
         The unary transition.
     tags : int
-        The normal-form tags in tensor-axis order.
+        The normal form tags in tensor-axis order.
     """
     return transition.output_category * tags + transition.output_tag
 
@@ -370,7 +370,7 @@ class UnaryClosure[T]:
         category : int
             The category column.
         tag : int
-            The normal-form tag column.
+            The normal form tag column.
         """
         return category * len(self._tags) + tag
 
@@ -471,7 +471,7 @@ def _acyclic(
     states : int
         The number of states.
     tags : int
-        The normal-form tags in tensor-axis order.
+        The normal form tags in tensor-axis order.
     """
     graph: dict[int, set[int]] = {state: set() for state in range(states)}
     kept: list[UnaryTransition] = []
@@ -509,7 +509,7 @@ def _levels(
     order : tuple[int, ...]
         The state order.
     tags : int
-        The normal-form tags in tensor-axis order.
+        The normal form tags in tensor-axis order.
     """
     level: dict[int, int] = {}
 
@@ -539,7 +539,7 @@ def _bounded(
     states : int
         The number of states.
     tags : int
-        The normal-form tags in tensor-axis order.
+        The normal form tags in tensor-axis order.
     depth : int
         The maximum number of rule applications.
     """

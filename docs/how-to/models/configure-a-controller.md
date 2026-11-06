@@ -6,7 +6,7 @@ scores every action of the grammar's rule inventory and normalizes the scores
 into a distribution. This guide selects the `mlp`, `bilinear` or `transformer`
 controller, sets the options they share, and shows how each is refused.
 
-The controller registers under the `lofi.controller` entry-point group. The
+The controller registers under the `lofi.controller` entry point group. The
 packaged library holds one fragment, `lofi/configs/model/controller/mlp.yaml`,
 which declares `kind: mlp` and leaves every other field at its default. The
 chart parser receives the whole controller as its policy, so its parameters
@@ -64,7 +64,7 @@ $$
 
 with learned query, key, and value projections and key width $d_k$
 \citep{vaswani-etal2017}. The configured residual, normalization, and
-feed-forward blocks surround this operation.
+feedforward blocks surround this operation.
 
 Softmax defines $p(j\mid\mathbf{u},\mathbf{v})=\exp(s_j)/\sum_{i=1}^{a}\exp(s_i)$.
 For $\alpha>1$, entmax instead solves
@@ -103,7 +103,7 @@ Every controller declares the same four shared fields:
 | `input` | Which chart representation each child contributes: `inside` (the default) or `span`. A `span` input is twice the term encoder's width. |
 | `features` | The ordered features built from a left and a right child, each installed in the `lofi.pair_feature` group: `left`, `right`, `difference` (left minus right) and `product` (elementwise). The default is `[left, right]`. The list must be nonempty and must not repeat a feature. |
 | `normalizer` | How scores become a distribution: `softmax` (the default) or `entmax` with an `alpha` of at least one, whose normalizing threshold is searched for in `bisections` halvings (default `50`). |
-| `raise` | Whether the controller differentiably chooses type-raising targets: `none` (the default) or `soft`. Soft raising requires `input: inside`. |
+| `raise` | Whether the controller differentiably chooses type raising targets: `none` (the default) or `soft`. Soft raising requires `input: inside`. |
 
 Soft raising uses each rule's declared `targets`, including compound categories.
 When `targets` is null, it uses the represented primitive categories. Its
@@ -118,9 +118,9 @@ The three kinds differ only in how they turn the pair into scores:
 
 | `kind` | Scores | Own fields |
 | --- | --- | --- |
-| `mlp` | A feed-forward network over the concatenated features. | `hidden`: a list of layers, each with `width`, `activation` (from the `lofi.activation` group: `tanh`, `relu`, `gelu`, `silu`) and `dropout`. The default is one layer of width 64 under `tanh`. |
+| `mlp` | A feedforward network over the concatenated features. | `hidden`: a list of layers, each with `width`, `activation` (from the `lofi.activation` group: `tanh`, `relu`, `gelu`, `silu`) and `dropout`. The default is one layer of width 64 under `tanh`. |
 | `bilinear` | A bilinear form of the left and right children, added to an affine map of the features. | None. |
-| `transformer` | Self-attention over the two children. | `layers`, `heads`, `feedforward_width`, `activation` (default `gelu`), `dropout` in `[0, 1)` and `norm_placement` (`pre` or `post`, the default). Layers, heads and feed-forward width are positive. |
+| `transformer` | Self-attention over the two children. | `layers`, `heads`, `feedforward_width`, `activation` (default `gelu`), `dropout` in `[0, 1)` and `norm_placement` (`pre` or `post`, the default). Layers, heads and feedforward width are positive. |
 
 Replace the document's controller with a bilinear one that also reads the
 elementwise product:

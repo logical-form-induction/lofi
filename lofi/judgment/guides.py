@@ -227,7 +227,7 @@ def _initial(model: CrossedModel, /, *, loadings: bool) -> CrossedState:
 def _sweep(
     model: CrossedModel, state: CrossedState, /, *, loadings: bool
 ) -> CrossedState:
-    """Return the state after one coordinate-ascent sweep.
+    """Return the state after one coordinate ascent sweep.
 
     Each grouping factor's effects are set to their optimum given the other
     factors and the coefficients, in factor order, and the coefficients are
@@ -466,7 +466,7 @@ class MeanFieldGuide:
         return _initial(model, loadings=False)
 
     def update(self, model: CrossedModel, state: CrossedState, /) -> CrossedState:
-        """Return the state after one coordinate-ascent sweep.
+        """Return the state after one coordinate ascent sweep.
 
         Parameters
         ----------
@@ -548,7 +548,7 @@ class PartiallyFactorizedGuide:
         return _initial(model, loadings=True)
 
     def update(self, model: CrossedModel, state: CrossedState, /) -> CrossedState:
-        """Return the state after one coordinate-ascent sweep.
+        """Return the state after one coordinate ascent sweep.
 
         Parameters
         ----------
@@ -607,7 +607,7 @@ PARTIALLY_FACTORIZED_GUIDE: Final = PartiallyFactorizedGuide()
 def resolve_guide(method: InferenceMethod, /) -> VariationalGuide[CrossedState]:
     """Return the installed guide a fit under one inference method runs.
 
-    Guides are listed in the ``lofi.guide`` entry-point group, each under the
+    Guides are listed in the ``lofi.guide`` entry point group, each under the
     inference method a fit under it is recorded as.
 
     Parameters

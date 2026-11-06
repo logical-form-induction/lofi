@@ -253,7 +253,7 @@ def _constant(symbol: str) -> Meaning:
 
 @final
 class LogicalClassContext(FrozenValue):
-    """Language-owned resources supplied to one logical-form class plugin."""
+    """Language-owned resources supplied to one logical form class plugin."""
 
     _noun = "logical-form class context"
     __slots__ = ("_arities", "_connectives", "_language", "_quantifiers")
@@ -294,7 +294,7 @@ class LogicalClassContext(FrozenValue):
 
 
 class LogicalClassPlugin(FrozenValue):
-    """One named logical-form inventory builder under ``lofi.lf_class``."""
+    """One named logical form inventory builder under ``lofi.lf_class``."""
 
     _noun = "logical-form class plugin"
     __slots__ = ("_build", "_name", "_order")
@@ -345,7 +345,7 @@ class LogicalClassPlugin(FrozenValue):
 
 
 def _class_plugins() -> tuple[LogicalClassPlugin, ...]:
-    """Return installed logical-form class plugins in declared report order."""
+    """Return installed logical form class plugins in declared report order."""
     found: list[LogicalClassPlugin] = []
 
     for tag, member in Registry[object]("lf_class").members():
@@ -361,12 +361,12 @@ def _class_plugins() -> tuple[LogicalClassPlugin, ...]:
 
 
 def logical_classes() -> tuple[LogicalClass, ...]:
-    """Return installed logical-form class names in semantic-report order."""
+    """Return installed logical form class names in semantic-report order."""
     return tuple(plugin.name for plugin in _class_plugins())
 
 
 def _class_plugin(logical_class: LogicalClass, /) -> LogicalClassPlugin:
-    """Return the unique installed plugin for one logical-form class."""
+    """Return the unique installed plugin for one logical form class."""
     matches = tuple(
         plugin for plugin in _class_plugins() if plugin.name == logical_class
     )
@@ -875,7 +875,7 @@ def _entropy(counts: Iterable[int], total: int) -> float:
 
 @final
 class SemanticReport:
-    """The joint of logical-form class and token frequency measured over a corpus.
+    """The joint of logical form class and token frequency measured over a corpus.
 
     Parameters
     ----------

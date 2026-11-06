@@ -1,4 +1,4 @@
-"""Category-side recovery for logical-form induction runs."""
+"""Category side recovery for logical form induction runs."""
 
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Final, NamedTuple, Protocol, cast, final, override
@@ -51,7 +51,7 @@ __all__ = [
 
 
 class CategorySidePrediction(NamedTuple):
-    """Supertag, derivational, and lexical-type views of one category readout."""
+    """Supertag, derivational, and lexical type views of one category readout."""
 
     supertags: LexicalDiagnosticPrediction
     structure: StructuralPrediction
@@ -79,7 +79,7 @@ class _CategoryBuildContext(Protocol):
 
 
 class _InnerMetric[Prediction, Gold](Protocol):
-    """A score family consumed through one category-side projection."""
+    """A score family consumed through one category side projection."""
 
     @property
     def name(self) -> str:
@@ -103,7 +103,7 @@ class _InnerMetric[Prediction, Gold](Protocol):
 
 
 class _ProjectedMetric[Prediction, Gold]:
-    """Expose an existing metric under the shared category-side conventions."""
+    """Expose an existing metric under the shared category side conventions."""
 
     __slots__ = ("_conventions", "_inner")
 
@@ -122,7 +122,7 @@ class _ProjectedMetric[Prediction, Gold]:
 
     @property
     def conventions(self) -> ConventionVector:
-        """Return the complete category-side convention vector."""
+        """Return the complete category side convention vector."""
         return self._conventions
 
     @property
@@ -147,7 +147,7 @@ class _ProjectedMetric[Prediction, Gold]:
 class _SupertagMetric(
     _ProjectedMetric[LexicalDiagnosticPrediction, LexicalDiagnosticGold]
 ):
-    """Project a category-side item into supertagging evaluation."""
+    """Project a category side item into supertagging evaluation."""
 
     def update(
         self,
@@ -162,7 +162,7 @@ class _SupertagMetric(
 
 @final
 class _DependencyMetric(_ProjectedMetric[StructuralPrediction, StructuralGold]):
-    """Project a category-side item into labeled-dependency evaluation."""
+    """Project a category side item into labeled-dependency evaluation."""
 
     def update(
         self,
@@ -177,7 +177,7 @@ class _DependencyMetric(_ProjectedMetric[StructuralPrediction, StructuralGold]):
 
 @final
 class _LexicalTypeMetric(_ProjectedMetric[tuple[Term, ...], LexicalAnalysis]):
-    """Project a category-side item into aligned lexical-type evaluation."""
+    """Project a category side item into aligned lexical type evaluation."""
 
     def update(
         self,
@@ -295,7 +295,7 @@ class CategorySideEvaluator:
 
     @property
     def conventions(self) -> ConventionVector:
-        """Return the complete conventions shared by every category-side row."""
+        """Return the complete conventions shared by every category side row."""
         return self._conventions
 
     @property
@@ -408,7 +408,7 @@ def _build(
     context: _CategoryBuildContext,
     /,
 ) -> CategorySideEvaluator:
-    """Build the one declared category-side evaluator."""
+    """Build the one declared category side evaluator."""
     return CategorySideEvaluator(context, settings)
 
 

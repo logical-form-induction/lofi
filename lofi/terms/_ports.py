@@ -498,7 +498,7 @@ class Interner(Protocol):
         *args : Term
             Arguments in operator order.
         payload : int | None
-            Optional constant, index, or free-variable payload.
+            Optional constant, index, or free variable payload.
 
         Returns
         -------

@@ -32,7 +32,7 @@ __all__ = ["AutocastPolicy", "GradScaling", "OptimizationState", "StepOptions"]
 
 @final
 class GradScaling:
-    """Dynamic gradient-scaling parameters.
+    """Dynamic gradient scaling parameters.
 
     Parameters
     ----------
@@ -41,7 +41,7 @@ class GradScaling:
     growth_factor : float
         What the scale is multiplied by after a run of finite steps.
     backoff_factor : float
-        What the scale is multiplied by on a step with non-finite gradients.
+        What the scale is multiplied by on a step with nonfinite gradients.
     growth_interval : int
         How many consecutive finite steps precede a growth.
     """
@@ -234,7 +234,7 @@ class OptimizationState:
     scaler : dict[str, StateTree] | None
         The gradient scaler's state, or None for a policy that scales nothing.
     scheduler : dict[str, StateTree] | None
-        The learning-rate scheduler's state, or None for a policy without one.
+        The learning rate scheduler's state, or None for a policy without one.
     """
 
     __slots__ = ("_optimizer", "_scaler", "_scheduler")
@@ -532,7 +532,7 @@ class AutocastPolicy:
     options : StepOptions
         Accumulation, clipping and scaling.
     scheduler : LRScheduler | None
-        The learning-rate scheduler advanced once per optimizer step, or None.
+        The learning rate scheduler advanced once per optimizer step, or None.
 
     Raises
     ------
@@ -667,7 +667,7 @@ class AutocastPolicy:
         -------
         OptimizationResult
             Whether the loss was finite, whether the window closed with an optimizer
-            step, and the scale that step's gradients were scaled by. A non-finite
+            step, and the scale that step's gradients were scaled by. A nonfinite
             loss ends the window without a step, and the next unit starts a fresh
             one.
 

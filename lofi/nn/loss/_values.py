@@ -487,7 +487,7 @@ class ObjectiveOutputs[BatchT]:
     mbr : Encoded | None
         The MBR tree as a constituent indicator per span, or None where unavailable.
     derivations : DerivationScoreChart[Hashable] | None
-        Gold-derivation scoring against the parser's normal-form-refined chart.
+        Gold derivation scoring against the parser's normal-form-refined chart.
     truncated : tuple[tuple[int, ...], ...]
         The positions of the words the token encoder omitted from each item, one
         entry per item, or empty where no token encoding was published.
@@ -682,7 +682,7 @@ class ObjectiveOutputs[BatchT]:
 
     @property
     def derivations(self) -> DerivationScoreChart[Hashable] | None:
-        """Return gold-derivation scoring if published."""
+        """Return gold derivation scoring if published."""
         return self._derivations
 
     @property
@@ -890,7 +890,7 @@ class RecordingOutputs[BatchT]:
 
     @property
     def derivations(self) -> DerivationScoreChart[Hashable] | None:
-        """Return gold-derivation scoring if published."""
+        """Return gold derivation scoring if published."""
         self._admit("derivations")
 
         return self._outputs.derivations

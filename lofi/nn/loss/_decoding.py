@@ -38,7 +38,7 @@ class DecodingStrategy(Protocol):
 
     @property
     def enumerates(self) -> bool:
-        """Return whether decoding enumerates terms under a residual-mass bound."""
+        """Return whether decoding enumerates terms under a residual mass bound."""
         ...
 
     def frontier(self, settings: DecodingSettings, /) -> int:
@@ -334,7 +334,7 @@ BEAM: Final[DecodingStrategy] = _Beam()
 """Bounded beam decoding."""
 
 EXHAUSTIVE: Final[DecodingStrategy] = _Exhaustive()
-"""Enumeration under a residual-mass bound and a term cap."""
+"""Enumeration under a residual mass bound and a term cap."""
 
 SAMPLE: Final[DecodingStrategy] = _Sample()
 """Repeated restricted sampling checked against teacher-forced rescoring."""

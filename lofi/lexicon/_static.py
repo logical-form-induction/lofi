@@ -39,7 +39,7 @@ def _log_total(masses: Iterable[float]) -> float:
     Parameters
     ----------
     masses : Iterable[float]
-        Nonempty log-mass sequence.
+        Nonempty log mass sequence.
 
     Returns
     -------

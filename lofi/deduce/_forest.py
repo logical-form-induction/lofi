@@ -140,7 +140,7 @@ class PackedForest[T, W]:
         """Return the name of the normal form whose steps the forest holds.
 
         Under any normal form but ``"none"`` an item's inside weight sums over
-        its normal-form derivations only, so ``Counting`` counts those.
+        its normal form derivations only, so ``Counting`` counts those.
         """
         return self._normal_form
 

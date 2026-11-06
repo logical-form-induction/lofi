@@ -137,7 +137,7 @@ class CategoryRoleSettings(NamedTuple):
     Attributes
     ----------
     role : ClassRole
-        The end of the class-size order the class is taken from.
+        The end of the class size order the class is taken from.
     share : float
         The share of the observed categories the class spans.
     """

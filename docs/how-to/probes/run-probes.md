@@ -1,7 +1,7 @@
 # Probe a trained point
 
 A run document's `probes` section declares named probes, each built by the
-plugin its `kind` names in the `lofi.probe` entry-point group and each reaching
+plugin its `kind` names in the `lofi.probe` entry point group and each reaching
 the model only through the sites its components publish. This guide declares a
 probe in a run, reads the rows it writes, probes a completed run again with
 `lofi probe`, and lists what each probe kind declares and requires. The
@@ -178,9 +178,9 @@ intervene on it.
 | `intervention` | `interventions`: at least one `{site, intervention}`, no site twice; `outcome`: the role compared. The packaged interventions in the `lofi.intervention` group are `zero`, `mean`, `noise` (`sigma`, `seed`), `shuffle` (`seed`) and `resample` (`seed`). | Patchable intervention sites and observable outcome points. |
 | `classifier` | `role` (default `CHART_CELL`), `labels`, `held_out_fraction`, `split_seed`, `hidden`, `epochs`, `learning_rate`, `seed`, `control_seed`, `block_fractions`. Reports selectivity against a control task, online codelength, and accuracy after LEACE erasure. | One vector per span at the role's points, and labeled spans in at least two held-out items. |
 | `circuit` | `acdc_trials` (required), `attribution_steps`, `acdc_threshold`, `null_replicates`, `seed`, `completeness_draws`, `bootstrap_replicates`, `bootstrap_level`, `sensitivity_threshold`, `include_zero`, `fdr_alpha`, `dependence`. Attributes edges with EAP-IG, prunes them with budgeted ACDC, and scores faithfulness against matched random circuits. | A computation graph and the clean and counterfactual endpoints to interrogate it. |
-| `causal` | `sites` (`{layer, position, site}`), `searches` (search arms of distinct kinds, below), `joint_search` (the kind of the arm the joint condition and controls fit, default `fixed-rank`), `objective`, `budget_hours` (required), and the annealing, schedule, bracketing, bucketing, null and correction settings. Runs each declared DAS search arm with interchange-intervention accuracy. | A causal population: aligned clean and counterfactual inputs. |
+| `causal` | `sites` (`{layer, position, site}`), `searches` (search arms of distinct kinds, below), `joint_search` (the kind of the arm the joint condition and controls fit, default `fixed-rank`), `objective`, `budget_hours` (required), and the annealing, schedule, bracketing, bucketing, null and correction settings. Runs each declared DAS search arm with interchange intervention accuracy. | A causal population: aligned clean and counterfactual inputs. |
 | `sae` | `site`, `width`, `sparsity_penalty`, `epochs`, `learning_rate`, `seed`. Fits a sparse autoencoder to one real-valued site. | A causal population. |
-| `external` | `model` (an `ExternalModelSpec` with a `checkpoint` source), `backend`, `artifacts` (the cache `root` and `offline` flag), `stimulus_lengths`. Runs split-posterior diagnostics over a released DIORA checkpoint; the packaged fragment `probes/diora/naacl-2019` declares the NAACL 2019 release. | Supplies its own passes. |
+| `external` | `model` (an `ExternalModelSpec` with a `checkpoint` source), `backend`, `artifacts` (the cache `root` and `offline` flag), `stimulus_lengths`. Runs split posterior diagnostics over a released DIORA checkpoint; the packaged fragment `probes/diora/naacl-2019` declares the NAACL 2019 release. | Supplies its own passes. |
 
 A causal probe's `searches` name their kinds and default to both arms below. A `fixed-rank` arm declares `rank` (default `1`), the number of
 leading rotated coordinates it swaps. A `boundless` arm declares the initial
@@ -192,7 +192,7 @@ before its logit is taken, default `1.0e-6`). Both kinds are listed in the
 under the shared schedule, null, objective and annealing, and adding an entry
 there.
 
-A causal probe may also declare an `arm`: the node-vocabulary representation
+A causal probe may also declare an `arm`: the node vocabulary representation
 the probed point is (`representation`, one of `derivation-variables`,
 `trained-transformer-sae-latents`, `dense-linear-probe` and
 `random-transformer-sae-control`) and the declared search arm whose sweep it
@@ -217,7 +217,7 @@ lofi probe: probe 'circuit' requires a computation graph, but held-out pass 0 pu
 ```
 
 Those three kinds are reached from Python, through the functions they are
-built on: `receiver_circuit` draws a chart's receiver-edge circuit
+built on: `receiver_circuit` draws a chart's receiver edge circuit
 (`ReceiverCircuit`), `attribute_edges` attributes each edge by EAP-IG at a set
 of `GradientSites`, and `acdc` prunes under a `PruningBudget`; `lofi.probe`
 exports all of them. [Instrument an external Torch model](external-model-site-maps.md)
@@ -226,7 +226,7 @@ covers sites declared over a third-party model.
 ## Declare a counterfactual population
 
 A probe document's `counterfactuals` section declares the population of
-interchange-intervention pairs a causal measurement reads. The pairs are derived
+interchange intervention pairs a causal measurement reads. The pairs are derived
 under the run's own grammar, so the section declares no rules, lexicon or goal,
 only what the substitution adds, and every field but `filter` is required:
 
@@ -371,7 +371,7 @@ uv run python -m scripts.probe.acdc_calibration \
 
 The `threshold` names its kind. A `relative` threshold prunes an edge whose
 divergence increment is strictly below `fraction` times the cell's
-full-corruption divergence, the divergence of the counterfactual output from
+full corruption divergence, the divergence of the counterfactual output from
 the clean one, so one fraction prunes alike in cells whose divergences differ in
 scale; `0.01` prunes an increment below 1% of it. An `absolute` threshold prunes
 an increment strictly below a fixed `bound`, in the units of the divergence.

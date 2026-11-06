@@ -36,7 +36,7 @@ class CorruptionOperator(Protocol):
 
     @property
     def name(self) -> str:
-        """Return the entry-point name used in reports."""
+        """Return the entry point name used in reports."""
         ...
 
     def apply(

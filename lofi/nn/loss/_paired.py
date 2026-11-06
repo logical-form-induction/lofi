@@ -1,4 +1,4 @@
-"""Divergences between decoded complete-term distributions."""
+"""Divergences between decoded complete term distributions."""
 
 from typing import TYPE_CHECKING
 

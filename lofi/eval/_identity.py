@@ -207,7 +207,7 @@ class ReportIdentity:
         The grammar the predictions were produced under.
     conventions : ConventionVector | None
         The parsing conventions the scores depend on, or ``None`` for rows,
-        such as judgment-model scores, that no parsing convention affects.
+        such as judgment model scores, that no parsing convention affects.
     freeze_id : str
         The freeze the row is reported against, ``freeze/<n>``, or
         ``UNFROZEN`` for a row scored outside any freeze.

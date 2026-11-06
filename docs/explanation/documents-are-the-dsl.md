@@ -8,7 +8,7 @@ identified by its resolved document rather than by the files that spelled it.
 ## The document is the program
 
 Everything a LoFI point does is declared in one run document: the grammar that
-generates or reads the data, the logical-form language, the model components,
+generates or reads the data, the logical form language, the model components,
 the loss terms, the trainer, the evaluators and the sinks. An experiment
 document adds a sweep, a preregistration and the reports to produce. There is
 no other place a choice can be made. A capability that cannot be reached from a

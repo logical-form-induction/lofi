@@ -482,7 +482,7 @@ class RuleSet[T]:
 
     @property
     def normal_form(self) -> NormalForm[T]:
-        """Return the normal-form filter."""
+        """Return the normal form filter."""
         return self._normal_form
 
     @property
@@ -499,7 +499,7 @@ class RuleSet[T]:
         """Return this inventory under another derivation-step filter.
 
         The rules, matching, restrictions, finite category declarations, and
-        optional rule index retain their exact identities. Only the normal-form
+        optional rule index retain their exact identities. Only the normal form
         automaton changes.
 
         Parameters
@@ -648,7 +648,7 @@ class RuleSet[T]:
         category_measure : _CategoryMeasure[T] | None
             Owner-declared structural measures, required by either category bound.
         max_category_arity : int | None
-            Greatest admitted functor-spine arity, or no arity bound.
+            Greatest admitted functor spine arity, or no arity bound.
         max_category_size : int | None
             Greatest admitted exact category node count, or no size bound.
 

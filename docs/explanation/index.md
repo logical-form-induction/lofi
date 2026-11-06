@@ -4,7 +4,7 @@ These pages explain why LoFI is built the way it is: what each grammatical and
 modeling family assumes, what a comparison between two declarations licenses,
 and how the implementation keeps those assumptions separate. They are organized
 in four groups. Each page stands alone, but the foundations are assumed by the
-rest, and the experimental-design pages read best after the induction pages.
+rest, and the experimental design pages read best after the induction pages.
 
 ## Foundations
 
@@ -14,7 +14,7 @@ rest, and the experimental-design pages read best after the induction pages.
    a rule inventory, a normal form and a goal compile into one deductive system.
 3. [Charts and approximation](charts-and-approximation.md). Chart parsing over
    spans, semiring choice, pruning, and which approximations are measured.
-4. [Term-layout capabilities](term-layout-capabilities.md). Why a term layout's
+4. [Term layout capabilities](term-layout-capabilities.md). Why a term layout's
    capability is not an arity ceiling, and where a rank limit applies.
 
 ## Induction

@@ -126,7 +126,7 @@ class ConfiguredSpec[V](Protocol):
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         ...
 
     @property

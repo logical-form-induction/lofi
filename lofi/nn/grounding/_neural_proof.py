@@ -141,7 +141,7 @@ class NeuralProofScorer(nn.Module):
 
     @property
     def positive_questions_only(self) -> bool:
-        """Return true because RTE non-entailment is the positive complement."""
+        """Return true because RTE nonentailment is the positive complement."""
         return True
 
     def validate_labels(self, labels: tuple[InferenceLabel, ...], /) -> None:
@@ -696,4 +696,4 @@ def _build(
 
 
 PLUGIN: Final = ComponentPlugin(spec=NeuralProofScorerSpec, build=_build)
-"""The differentiable proof-search pair-scorer plugin."""
+"""The differentiable proof search pair-scorer plugin."""

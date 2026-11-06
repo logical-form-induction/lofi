@@ -1,10 +1,10 @@
-"""Active-learning runs driven from their declared documents.
+"""Active learning runs driven from their declared documents.
 
-An active-learning document is checked once at its run boundary: its
-judgment-fit document is composed and must declare MAP inference and an ordinal
+An active learning document is checked once at its run boundary: its
+judgment fit document is composed and must declare MAP inference and an ordinal
 response model reading exactly the predictor columns the trained point fills;
-it may declare no held-out comparison, dynamic-range gate or table ablation,
-which an active-learning run would not perform. The candidate pool is built
+it may declare no held-out comparison, dynamic range gate or table ablation,
+which an active learning run would not perform. The candidate pool is built
 there too, and every attribute expression the document declares, its
 acquisition's allocation and uniqueness constraints and its start's
 stratification, and the expression of every factor it declares, is checked
@@ -14,7 +14,7 @@ runs. A declared response encoding
 is read there once and must have the response's levels; every bead reader of
 the run, its start and its collector alike, reads through it. The run's
 performance is
-measured by the cross-validation the active-learning document declares, under
+measured by the cross-validation the active learning document declares, under
 the splitter installed under its tag. A checked run then restores the trained
 point and publishes its readouts over the element of every pool item the
 document maps to the point's input role,
@@ -235,7 +235,7 @@ class ActiveLearningInputs:
 
 
 class ActiveLearningOutcome(NamedTuple):
-    """What one run of an active-learning document produced and read."""
+    """What one run of an active learning document produced and read."""
 
     result: ActiveLearningResult
     initial_judgments: int
@@ -260,7 +260,7 @@ def _file(root: Path, declared: str, role: str, /) -> Path:
 
 @final
 class ActiveLearning:
-    """One checked active-learning document, ready to run.
+    """One checked active learning document, ready to run.
 
     Parameters
     ----------
@@ -275,7 +275,7 @@ class ActiveLearning:
     ------
     ValueError
         If a declared file is absent, the judgment fit is not one an
-        active-learning run can refit, the pool cannot be constructed, or a
+        active learning run can refit, the pool cannot be constructed, or a
         declared expression or factor names an attribute a pool item does not
         carry.
     UnknownTagError
@@ -531,7 +531,7 @@ def _read_encoding(path: Path, levels: int, /) -> BeadResponseEncoding:
 def _check_fit(
     fit: JudgmentFitSpec, settings: ActiveLearningSettings, /
 ) -> MapInference:
-    """Return the MAP inference of a fit an active-learning run can refit.
+    """Return the MAP inference of a fit an active learning run can refit.
 
     Raises
     ------
@@ -680,7 +680,7 @@ def _manifest(
 
 @final
 class ActiveLearningExecutor:
-    """Execute the active-learning points of one launch through an experiment store.
+    """Execute the active learning points of one launch through an experiment store.
 
     A point awaiting the responses to a batch is recorded as awaiting them, and
     executing it again resumes it.
@@ -725,7 +725,7 @@ class ActiveLearningExecutor:
         return self._store
 
     def check(self, point: SweepPoint, /) -> ActiveLearning:
-        """Validate one point as an active-learning run once per executor.
+        """Validate one point as an active learning run once per executor.
 
         Raises
         ------
@@ -828,7 +828,7 @@ def active_learn(
     *,
     inputs: ActiveLearningInputs,
 ) -> ActiveLearningManifest:
-    """Run one active-learning document outside any experiment.
+    """Run one active learning document outside any experiment.
 
     The rounds are kept under ``out``, which records the run's manifest and its
     round rows, reported against no freeze. Running the document again with
@@ -872,7 +872,7 @@ def active_learn(
 
 @final
 class ActiveLearningCommand:
-    """Run one active-learning document from the command line.
+    """Run one active learning document from the command line.
 
     Parameters
     ----------
@@ -895,4 +895,4 @@ class ActiveLearningCommand:
 
 
 ACTIVE_LEARNING_COMMAND: Final = ActiveLearningCommand(ActiveLearningInputs())
-"""The command-line run of a document through the installed generators."""
+"""The command line run of a document through the installed generators."""

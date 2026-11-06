@@ -233,7 +233,7 @@ def _build_meaning(
     head_selections: Mapping[str, HeadSelection],
     /,
 ) -> InterpretationDeclaration:
-    """Build a named logical-form interpretation declaration."""
+    """Build a named logical form interpretation declaration."""
     del prepared, head_selections
     return MeaningInterpretation(name)
 

@@ -933,7 +933,7 @@ class LogicalFormConstraint[ScopeT: Hashable](FrozenValue):
 
     @override
     def __eq__(self, other: object) -> bool:
-        """Return whether another logical-form constraint has the same fields."""
+        """Return whether another logical form constraint has the same fields."""
         if type(other) is not LogicalFormConstraint:
             return NotImplemented
 

@@ -1,6 +1,6 @@
 """Pinned pretrained artifacts and the one fetcher that materializes them.
 
-A pretrained artifact is named either by a model-hub repository pinned to one
+A pretrained artifact is named either by a model hub repository pinned to one
 commit or by an absolute HTTP(S) URL pinned to the SHA-256 digest of its bytes.
 Both variants are immutable identities, and one fetcher resolves either to a
 verified local path under a cache root: a hub revision to a snapshot directory,

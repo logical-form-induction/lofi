@@ -47,7 +47,7 @@ _SEGMENTATION_NSID: Final = "pub.layers.segmentation.segmentation"
 """The segmentation-record collection."""
 
 _ANNOTATION_NSID: Final = "pub.layers.annotation.annotationLayer"
-"""The annotation-layer collection."""
+"""The annotation layer collection."""
 
 _ONTOLOGY: Final = f"{_SCHEME}/pub.layers.ontology.typeDef/pmb-ccg"
 """The type definition prefix for PMB categories."""

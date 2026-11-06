@@ -1,4 +1,4 @@
-"""Category-side evaluation for logical-form induction runs."""
+"""Category side evaluation for logical form induction runs."""
 
 from typing import TYPE_CHECKING, Literal, NamedTuple, cast, override
 
@@ -33,7 +33,7 @@ type LabeledDependencyMode = Literal["labeled-directed", "labeled-undirected"]
 
 
 class CategorySideEvaluatorSettings(NamedTuple):
-    """Resolved category-side evaluator settings."""
+    """Resolved category side evaluator settings."""
 
     readout: str
     supertag_beta: float
@@ -47,7 +47,7 @@ class CategorySideEvaluatorSettings(NamedTuple):
 
 
 class CategorySideEvaluatorSpec(EvaluatorSpec):
-    """Declare category recovery beside logical-form and inference evaluation.
+    """Declare category recovery beside logical form and inference evaluation.
 
     One decoded category readout supplies token beams, the lexical source for
     symbolic A* dependency decoding, and complete lexical types. Label
@@ -83,7 +83,7 @@ class CategorySideEvaluatorSpec(EvaluatorSpec):
 
     @dx.model_validator()
     def _checked_rules_have_a_proposer(self) -> CategorySideEvaluatorSpec:
-        """Refuse category-side parsing without an explicit A* proposer."""
+        """Refuse category side parsing without an explicit A* proposer."""
         if self.astar.proposer is None:
             msg = "category-side evaluation requires an explicit A* proposer"
             raise ValueError(msg)
@@ -118,7 +118,7 @@ class CategorySideEvaluatorSpec(EvaluatorSpec):
 
     @override
     def metrics(self, labels: tuple[str, ...] = (), /) -> tuple[str, ...]:
-        """Return supertagging, dependency, and aligned lexical-type rows."""
+        """Return supertagging, dependency, and aligned lexical type rows."""
         del labels
         aggregation = "micro" if self.conventions.aggregation == "corpus" else "macro"
         alignment = cast("AlignmentDeclaration", self.alignment).settings().kind

@@ -89,7 +89,7 @@ PRODUCT: Final[PairFeature] = _Product()
 
 
 def pair_feature(name: str, /) -> PairFeature:
-    """Return the child-pair feature installed under one name.
+    """Return the child pair feature installed under one name.
 
     Raises
     ------

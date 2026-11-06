@@ -531,7 +531,7 @@ class _Table:
         term : Term
             The conclusion term.
         tag : str
-            The conclusion's normal-form tag.
+            The conclusion's normal form tag.
         """
         matching = self._matching
         state = (matching.key(term) if matching.has_key else term, tag)
@@ -1570,7 +1570,7 @@ class SyntheticGenerator:
         The interpretation every drawn string is read under, or nothing to
         draw strings without logical forms.
     policy : ParsePolicy[Literal[Retain.FOREST]]
-        The run-owned packed-forest parsing policy.
+        The run-owned packed forest parsing policy.
     """
 
     __slots__ = (
@@ -1899,7 +1899,7 @@ class SyntheticGenerator:
         relations: PairRelations,
         pairing: PairingStrategy = INDEPENDENT_PAIRING,
     ) -> SyntheticInference:
-        """Draw premise-hypothesis pairs under complexity controls and label them.
+        """Draw and label premises and hypotheses under complexity controls.
 
         Each side is drawn as its own sample, so the two lengths are
         controlled apart, and a pair is a premise drawn from the first beside

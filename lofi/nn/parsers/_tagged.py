@@ -56,7 +56,7 @@ _TRANSITION_AXES: Final = ("item", "span", "split", "transition")
 
 @final
 class TagTransition:
-    """One category and normal-form state transition."""
+    """One category and normal form state transition."""
 
     __slots__ = ("_admitted", "_output", "_premises", "_rule")
 
@@ -392,7 +392,7 @@ def _filled(scores: Tensor, counts: Tensor | None, /) -> Tensor:
 
 
 class TaggedRuleScores:
-    """Stores rule scores expanded over normal-form transitions."""
+    """Stores rule scores expanded over normal form transitions."""
 
     __slots__ = ("_log_scores", "_mask")
 
@@ -450,13 +450,13 @@ def _tag_transitions[T](
     Parameters
     ----------
     normal_form : NormalForm[T]
-        The normal-form automaton.
+        The normal form automaton.
     application : _IndexedApplication[T]
         The indexed application transition.
     tags : tuple[str, ...]
-        The normal-form tags in tensor-axis order.
+        The normal form tags in tensor-axis order.
     tag_indices : dict[str, int]
-        The column of each normal-form tag.
+        The column of each normal form tag.
     """
     rule, inputs, output, positions = application
     rule_index, input_categories, output_category = positions
@@ -504,9 +504,9 @@ def _compile_transitions[T](
     rules : tuple[Rule[T], ...]
         The rules in tensor-axis order.
     tags : tuple[str, ...]
-        The normal-form tags in tensor-axis order.
+        The normal form tags in tensor-axis order.
     tag_indices : dict[str, int]
-        The column of each normal-form tag.
+        The column of each normal form tag.
     """
     compiled = []
 
@@ -710,7 +710,7 @@ class NormalFormTransitions[T]:
 
     @property
     def tags(self) -> tuple[str, ...]:
-        """Return normal-form tags in tensor-axis order."""
+        """Return normal form tags in tensor-axis order."""
         return self._tags
 
     @property
@@ -954,7 +954,7 @@ class NormalFormTransitions[T]:
 
 
 class TaggedInsideChart[T]:
-    """Stores inside scores over categories and normal-form tags."""
+    """Stores inside scores over categories and normal form tags."""
 
     __slots__ = ("_index", "_inside", "_transitions")
 
@@ -1119,7 +1119,7 @@ class _Gathers:
 
 
 class TaggedInsideKernel[T]:
-    """Compute inside values over category and normal-form states.
+    """Compute inside values over category and normal form states.
 
     Parameters
     ----------

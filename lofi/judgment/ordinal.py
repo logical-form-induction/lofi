@@ -1,4 +1,4 @@
-"""The cumulative-link head over ordered response levels."""
+"""The cumulative link head over ordered response levels."""
 
 import math
 from itertools import pairwise
@@ -133,7 +133,7 @@ def _ensure_float(field: str, value: Tensor, rank: int) -> None:
 
 @final
 class CumulativeParameters:
-    """Stores the unconstrained parameters of a cumulative-link head.
+    """Stores the unconstrained parameters of a cumulative link head.
 
     Every field is unconstrained. The head applies softplus to the spans and to
     the discrimination, so no field needs a positivity constraint.
@@ -367,7 +367,7 @@ class RowEffects:
 
 @final
 class CumulativeLinkHead:
-    """A cumulative-link head whose latent score comes from a declared predictor.
+    """A cumulative link head whose latent score comes from a declared predictor.
 
     Parameters
     ----------

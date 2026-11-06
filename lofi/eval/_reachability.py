@@ -1,4 +1,4 @@
-"""Gold-derivation reachability rows per rule inventory, corpus and language.
+"""Gold derivation reachability rows per rule inventory, corpus and language.
 
 A row reads one :class:`~lofi.data.ReachabilityReport`, the result of checking a
 corpus's decoded gold derivations against one declared inventory, and reports
@@ -629,7 +629,7 @@ class ReachabilityMetric:
 
 
 class ReachabilityEvaluator:
-    """Report gold-derivation reachability under the run grammar's inventory.
+    """Report gold derivation reachability under the run grammar's inventory.
 
     The rows read only the held-out gold derivations, so the parser's
     predictions do not change them.

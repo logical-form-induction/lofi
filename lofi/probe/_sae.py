@@ -1,4 +1,4 @@
-"""Sparse-autoencoder probing over declared causal variables.
+"""Sparse autoencoder probing over declared causal variables.
 
 The arm fits one sparse autoencoder to the activations at a published site.  Its
 training population is the fitting share of the same model-ready causal pairs

@@ -56,6 +56,12 @@ title and one sentence per page, as in the Quivers semantics index.
 
 ## Code and prose
 
+- Do not hyphenate ordinary noun phrases used as modifiers: write "logical
+  form packages", "entry point groups", and "active learning runs". Retain
+  conventional hyphens in established terms such as "first-order logic",
+  "context-free grammar", and "well-typed terms". Rephrase long compounds
+  when a short phrase states the relationship more clearly. Preserve literal
+  identifiers, filenames, URLs, and published titles.
 - Introduce each block with one sentence ending in a colon that says what the
   block does: "Create finite sets:". Follow it with at most a paragraph that
   says what the output shows or what changed.
@@ -79,7 +85,7 @@ title and one sentence per page, as in the Quivers semantics index.
   or a value of the wrong type is refused before any model or data loader is
   constructed."
 - Prefer a refusal with its reason to a vague guarantee: "Each transpiler
-  either emits the reachable computation graph or reports which indexed-core
+  either emits the reachable computation graph or reports which indexed core
   capability it cannot represent."
 - Never transcribe a measured number. Show the command that measures it.
 - Mark unverified laws and approximations as such ("for idempotent
@@ -126,7 +132,7 @@ Never use an admonition for emphasis or a summary.
 | Tutorials (`tutorials/`) | One continuous path in numbered chapters. Each chapter changes one part of a run document, runs it, and reads the result. | Option catalogs, alternatives, design rationale. |
 | How-to guides (`how-to/`) | One task per page: the declaration or command, its fields, the variants worth knowing and how each is refused. | Teaching from zero and history. |
 | Explanation (`explanation/`) | Why the design is so, the assumptions behind each family, and what a comparison does and does not license. | Step-by-step instructions and field lists. |
-| Reference (`reference/`) | mkdocstrings pages for public packages, the configuration-document classes, the command line and the entry-point groups. Only what exists. | Prose beyond a one-paragraph lede and its sections. |
+| Reference (`reference/`) | mkdocstrings pages for public packages, the configuration document classes, the command line and the entry point groups. Only what exists. | Prose beyond a one-paragraph lede and its sections. |
 
 ## Mathematical notation and definitions
 
@@ -144,12 +150,12 @@ not coin a replacement for an existing term or abbreviation.
 - Retain standard notation for nonnumeric objects: category metavariables
   $A,B$, contexts $\Gamma,\Delta$, signatures $\Sigma$, structures
   $\mathcal{M}$, and typing and consequence judgments. Uppercase category
-  and random-variable symbols do not denote numeric scalars or matrices.
+  and random variable symbols do not denote numeric scalars or matrices.
 - State the slash convention. CCG's $A\backslash B$ takes a $B$ on the left
   and returns $A$; Lambek's corresponding left residual is $B\backslash A$.
 - Define every symbol before use. Distinguish sorts from semantic types,
   scores from probabilities, probabilities from log probabilities, and
-  omitted-mass bounds from error bounds on objectives.
+  bounds on omitted mass from error bounds on objectives.
 - Give mathematical components their domains, codomains, equations or rules,
   assumptions, and configuration/API correspondences. State objective
   denominators, masks, empty cases, and gradient detachment. Include worked

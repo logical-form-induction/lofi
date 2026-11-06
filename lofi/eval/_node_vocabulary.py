@@ -1,4 +1,4 @@
-"""The node-vocabulary comparison over four persisted causal-probe sweeps."""
+"""The node vocabulary comparison over four persisted causal probe sweeps."""
 
 from typing import TYPE_CHECKING, Final, final
 
@@ -92,7 +92,7 @@ def _build(
     context: ReductionContext,
     /,
 ) -> _NodeVocabularyReducer:
-    """Build the declared node-vocabulary comparison."""
+    """Build the declared node vocabulary comparison."""
     return _NodeVocabularyReducer(settings, context)
 
 

@@ -89,7 +89,7 @@ DERIVED_COLUMNS: Final = (NAN_RATE,)
 """Columns a report computes from the stored rows rather than reads from them."""
 
 REPORT_FORMAT_FAMILY: Final = "report_format"
-"""The family whose entry-point group lists the installed table renderers."""
+"""The family whose entry point group lists the installed table renderers."""
 
 
 @runtime_checkable
@@ -183,7 +183,7 @@ def report_renderer(name: str, /) -> ReportRenderer:
     Parameters
     ----------
     name : str
-        The format's entry-point name in the ``lofi.report_format`` group.
+        The format's entry point name in the ``lofi.report_format`` group.
 
     Raises
     ------

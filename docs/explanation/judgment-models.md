@@ -9,7 +9,7 @@ say about the grammar supplying its readouts.
 ## A judgment is a noisy reading of a latent scale
 
 For response row $i$, participant $j(i)$, and item $k(i)$, a typical
-crossed-effects predictor has the form
+crossed effects predictor has the form
 
 $$
 \eta_i=\mathbf{x}_i^{\mathsf T}\boldsymbol{\beta}
@@ -17,7 +17,7 @@ $$
 +\mathbf{u}_i^{\mathsf T}\mathbf{c}_{k(i)}+\sum_r g_r(m_{i,r}).
 $$
 
-Here $\mathbf{x}_i$ contains fixed-effect covariates,
+Here $\mathbf{x}_i$ contains fixed effect covariates,
 $\mathbf{z}_i$ and $\mathbf{u}_i$ select random effects, and $g_r$ is the
 link for readout $m_{i,r}$. A declaration need not include every term in
 this schematic predictor. Gaussian blocks use
@@ -27,7 +27,7 @@ separately. The covariance assumptions are part of the model.
 
 For ordered response $Y_i\in\{1,\ldots,m\}$, discrimination $a_i>0$,
 cutpoints $\kappa_{i,1}<\cdots<\kappa_{i,m-1}$, and
-$\sigma(x)=(1+\exp(-x))^{-1}$, the cumulative-logit model is
+$\sigma(x)=(1+\exp(-x))^{-1}$, the cumulative logit model is
 \citep{mccullagh1980,liddell-kruschke2018}
 
 $$
@@ -94,7 +94,7 @@ break a likelihood invariance but then influence the parameter scale.
 | --- | --- |
 | `fixed_discrimination` | Holds discrimination at a declared positive value. |
 | `fixed_cutpoint_variance` | Holds cutpoint variance at a declared value. |
-| `identity_link_on_logit` | Holds link slopes at one, placing the readout's log-odds directly on the latent scale. |
+| `identity_link_on_logit` | Holds link slopes at one, placing the readout's log odds directly on the latent scale. |
 
 Location can still be shared between cutpoint bases and intercepts. A
 posterior shift in one can be compensated by a shift in the other without
@@ -111,12 +111,12 @@ $$
 p_{Y_i}(k)=\frac{\exp(a_i\eta_{i,k})}{\sum_{j=1}^{m}\exp(a_i\eta_{i,j})}.
 $$
 
-The tied binary-choice family applies a three-level cumulative model to the
+The tied binary choice family applies a three-level cumulative model to the
 difference of two scores, with the middle interval representing a tie.
 It is not a three-alternative multinomial choice model.
 
 For a continuous response rescaled to $y\in[0,1]$, the bounded family uses
-location $\mu=\sigma(\eta)$ and scale $s>0$. With standard-normal PDF
+location $\mu=\sigma(\eta)$ and scale $s>0$. With standard normal PDF
 $f_0$ and CDF $F_0$, its PDF with respect to Lebesgue measure is
 
 $$
@@ -150,13 +150,13 @@ The `truncated_marginal` objective is offered for MAP with cumulative ordered
 responses and participant as the sole local grouping factor. It integrates
 that participant's complete local block numerically.
 
-The truncated evaluator integrates standard-normal local coordinates over
+The truncated evaluator integrates standard normal local coordinates over
 $\|\mathbf{z}\|_2\leq r$. Its scalar route uses adaptive ODE integration;
 its multivariate route uses positive quadrature weights. It does not divide
 by the Gaussian probability of this ball. This approximates an unnormalized
-truncated integral, rather than fitting a renormalized truncated-normal prior.
+truncated integral, rather than fitting a renormalized truncated normal prior.
 
-For a new participant, population-mean plug-in prediction
+For a new participant, population mean plug-in prediction
 $p(y\mid\mathbf{b}=\mathbf{0})$ generally differs from
 $\int p(y\mid\mathbf{b})f(\mathbf{b})\,d\mathbf{b}$. A known participant
 can instead be predicted using their fitted effects. The declared `plug_in`
@@ -180,18 +180,18 @@ $$
 
 NUTS targets the posterior by Hamiltonian Monte Carlo
 \citep{hoffman-gelman2014}. Gradient-based automatic variational inference
-\citep{kucukelbir-etal2017} and the structured mixed-model guides
+\citep{kucukelbir-etal2017} and the structured mixed model guides
 \citep{goplerud-etal2025} use different approximations. Theoretical guarantees
 for a particular Gaussian or binomial mixed model do not automatically extend
 to every ordinal program that LoFI can compile. Compiled ordinal programs
 use Quivers AutoNormal or AutoStructured guides with Adam-based stochastic
-variational inference. The separate Gaussian crossed-model guide module
-implements the coordinate-ascent family associated with
+variational inference. The separate Gaussian crossed model guide module
+implements the coordinate ascent family associated with
 \citealt{goplerud-etal2025}.
 
 A posterior can remain predictive when individual parameters are weakly
 identified. Simulation-based calibration checks inference under repeated
-prior-predictive simulation \citep{talts-etal2018}. Draw
+prior predictive simulation \citep{talts-etal2018}. Draw
 $\boldsymbol{\Theta}\sim f$, then $Y\sim p(\cdot\mid\boldsymbol{\Theta})$,
 and obtain $s$ independent exact posterior draws
 $\boldsymbol{\Theta}^{(1)},\ldots,\boldsymbol{\Theta}^{(s)}$.

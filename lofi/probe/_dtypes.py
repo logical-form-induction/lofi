@@ -25,7 +25,7 @@ __all__ = [
 ]
 
 LOG_ZERO: Final[float] = -inf
-"""The number an invalid position of a log-probability reading holds."""
+"""The number an invalid position of a log probability reading holds."""
 
 _SLACK: Final[float] = 1e-6
 """Numeric slack for range checks."""
@@ -397,7 +397,7 @@ def _ensure_class(
 def as_log_probabilities(
     observation: Observation, declared: DTypeClass
 ) -> LogProbabilities:
-    """Take one reading into the log-probability domain.
+    """Take one reading into the log probability domain.
 
     Parameters
     ----------
@@ -409,7 +409,7 @@ def as_log_probabilities(
     Returns
     -------
     LogProbabilities
-        The reading, in the log-probability domain.
+        The reading, in the log probability domain.
 
     Raises
     ------
@@ -472,7 +472,7 @@ def exponentiate(values: LogProbabilities) -> Probabilities:
     Raises
     ------
     TypeError
-        If the value is not a log-probability reading.
+        If the value is not a log probability reading.
     """
     if not isinstance(values, LogProbabilities):
         msg = f"this raises log probabilities, not {values!r}"
@@ -501,7 +501,7 @@ def logarithm(values: Probabilities) -> LogProbabilities:
     Returns
     -------
     LogProbabilities
-        The same distribution in the log-probability domain, at the same point and over
+        The same distribution in the log probability domain, at the same point and over
         the same axes. An invalid position holds the log of zero, and a live position is
         held to the unit interval before its logarithm is taken, so none is above zero.
 

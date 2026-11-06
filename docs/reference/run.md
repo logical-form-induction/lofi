@@ -12,7 +12,7 @@ This page renders `lofi.run`, `lofi.run.launching`, `lofi.run.results`, `lofi.ru
 
 ::: lofi.run.results
 
-## Judgment-fit points
+## Judgment fit points
 
 ::: lofi.run.fits
 

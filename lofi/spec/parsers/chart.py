@@ -116,7 +116,7 @@ class InsideOutsideParserSettings(NamedTuple):
 class InsideOutsideParserSpec(ParserSpec):
     """Declares a chart scored by an inside and an outside sweep.
 
-    The declared width owns the chart-cell representation. Pooled leaves enter
+    The declared width owns the chart cell representation. Pooled leaves enter
     through the selected composition's leaf function, and the controller wired to
     ``rules`` must consume that same width.
 
@@ -182,7 +182,7 @@ class InsideOutsideParserSpec(ParserSpec):
 
     @override
     def publications(self) -> frozenset[str]:
-        """Return the chart-cell combination represented spaces may read."""
+        """Return the chart cell combination represented spaces may read."""
         return frozenset({"combine"})
 
     def chart_outputs(self) -> frozenset[str]:
@@ -237,7 +237,7 @@ class InsideOutsideParserSpec(ParserSpec):
     @dx.validates("width")
     @classmethod
     def _width_is_positive(cls, value: int) -> int:
-        """Return a valid chart-cell width."""
+        """Return a valid chart cell width."""
         return ensure_positive("a chart's node width", value)
 
     @dx.validates("depth")

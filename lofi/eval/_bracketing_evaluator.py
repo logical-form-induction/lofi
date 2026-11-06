@@ -29,7 +29,7 @@ __all__ = ["PLUGIN", "BracketingEvaluator"]
 
 
 class BracketingEvaluator:
-    """Scores the minimum-risk bracketing of each held-out item.
+    """Scores the minimum risk bracketing of each held-out item.
 
     The predicted bracketing of an item is the binary tree whose spans hold the
     most constituent marginal mass, read off the chart's published marginals,
@@ -134,7 +134,7 @@ class BracketingEvaluator:
     def predict[BatchT: HeldOutItems](
         self, outputs: ObjectiveOutputs[BatchT], /
     ) -> Mapping[ItemId, Bracketing | None]:
-        """Return the minimum-risk bracketing of every item of a batch.
+        """Return the minimum risk bracketing of every item of a batch.
 
         Parameters
         ----------

@@ -12,7 +12,7 @@ __all__ = ["GivenStructureSourceSpec"]
 
 
 class _KnowledgeBaseDeclaration(Protocol):
-    """Resolve any registered knowledge-base declaration."""
+    """Resolve any registered knowledge base declaration."""
 
     @property
     def kind(self) -> str: ...

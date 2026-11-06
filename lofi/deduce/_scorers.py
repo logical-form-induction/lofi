@@ -282,7 +282,7 @@ class SplitLogWeights:
 
     @property
     def rows(self) -> Mapping[Cell, Mapping[int, float]]:
-        """Return the normalized log-weight rows by span."""
+        """Return the normalized log weight rows by span."""
         return self._rows
 
     @property
@@ -310,7 +310,7 @@ class SplitLogWeights:
 
     @override
     def __reduce__(self) -> _SplitReduction[SplitLogWeights]:
-        """Return the log-weight reconstruction call."""
+        """Return the log weight reconstruction call."""
         return (_restore_log_weights, (self._fields, self._tolerance))
 
     @override

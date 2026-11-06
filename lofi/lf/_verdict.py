@@ -37,7 +37,7 @@ ABSTENTION_CAUSES: Final[tuple[str, ...]] = (
 
 
 class CrispStructure(Protocol):
-    """A finite crisp structure that can check logical-form evidence."""
+    """A finite crisp structure that can check logical form evidence."""
 
     @property
     def identity(self) -> str:

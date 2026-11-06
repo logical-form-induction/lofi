@@ -100,7 +100,7 @@ class DifferentialReport:
 
     @property
     def agreement(self) -> TypeAgreement:
-        """Return the declared semantic-type agreement relation."""
+        """Return the declared semantic type agreement relation."""
         return self._agreement
 
     @property
@@ -257,7 +257,7 @@ def differential_report[S](
     signature : S
         Symbol environment used by the checker.
     rules : Mapping[OpName, TypingRule]
-        Typing rules keyed by logical-form operator.
+        Typing rules keyed by logical form operator.
     agreement : TypeAgreement
         Relation used to compare decoded and inferred types.
     theory_version : str

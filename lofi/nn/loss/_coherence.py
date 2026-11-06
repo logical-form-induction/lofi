@@ -1,4 +1,4 @@
-"""Complete-term coherence over declared represented spaces."""
+"""Complete term coherence over declared represented spaces."""
 
 from math import log
 from typing import TYPE_CHECKING, Final, assert_never, cast, override
@@ -434,7 +434,7 @@ class CoherenceObjective[BatchT: ScheduledBatch]:
 
     @property
     def readout(self) -> TermsReadout:
-        """Return the complete-term strategy used for paired decoding."""
+        """Return the complete term strategy used for paired decoding."""
         return self._readout
 
     @property
@@ -472,7 +472,7 @@ class CoherenceObjective[BatchT: ScheduledBatch]:
         return relation.target
 
     def _pairing(self) -> PairedTermDivergence:
-        """Return the complete-term comparison implied by the relation."""
+        """Return the complete term comparison implied by the relation."""
         relation = self._relation
 
         if relation is None or relation.kind is not RelationKind.ERASE_THEN_DECODE:
@@ -1072,7 +1072,7 @@ def _divergence(settings: CoherenceDivergenceSettings, /) -> Divergence:
 def _build(
     settings: CoherenceLossSettings, context: LossComponentBindings, /
 ) -> CoherenceObjective[ScheduledBatch]:
-    """Build complete-term coherence from declared model roles."""
+    """Build complete term coherence from declared model roles."""
     source = context.space(settings.space)
     target = context.readout_space(settings.readout)
     relation = None
@@ -1110,4 +1110,4 @@ def _build(
 
 
 PLUGIN: Final = ComponentPlugin(spec=CoherenceLossSpec, build=_build)
-"""The complete-term coherence objective plugin."""
+"""The complete term coherence objective plugin."""

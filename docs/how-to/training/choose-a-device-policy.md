@@ -2,8 +2,8 @@
 
 A run document's `device_policy` section declares where a point trains and in
 what precision: the device, the floating-point type it computes in, whether
-torch's deterministic algorithms are enforced, the float32 matrix-multiplication
-precision, and the activation-memory budget of one training step. This guide
+torch's deterministic algorithms are enforced, the float32 matrix multiplication
+precision, and the activation memory budget of one training step. This guide
 selects a packaged policy, overrides its fields, and lists how a policy is
 refused.
 
@@ -20,7 +20,7 @@ Three policies ship under `lofi/configs/device_policy/`:
 Each also declares `activation_memory_bytes`. A document selects one in its
 `defaults` list, as
 [`docs/examples/synthetic-parser.yaml`](https://github.com/logical-form-induction/lofi/blob/main/docs/examples/synthetic-parser.yaml)
-does with `- device_policy: cpu`. On the command line, a root-level group
+does with `- device_policy: cpu`. On the command line, a root level group
 override selects another, as in `--set /device_policy=mps`; from Python it is
 one more override to the codec:
 

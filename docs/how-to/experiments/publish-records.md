@@ -1,9 +1,9 @@
 # Publish records
 
 A publish lens renders one in-memory result as the artifact an external target
-validates. Lenses are listed in the `lofi.publisher` entry-point group, and one
+validates. Lenses are listed in the `lofi.publisher` entry point group, and one
 is installed: `layers-records`, which renders a predicted constituency analysis
-as a Layers annotation-layer record. `lofi publish` renders a trained point's
+as a Layers annotation layer record. `lofi publish` renders a trained point's
 predictions through it, and the companion group `lofi.prediction_format` lists
 readers for released prediction sets, of which one is installed, `lofi-json`.
 This guide publishes a trained point's records, renders a record by hand, reads

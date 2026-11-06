@@ -105,7 +105,7 @@ class StepBuildContext(Protocol):
         """Build one nested alternating task."""
 
     def token_warmup(self, declaration: TokenWarmupStepSpec, /) -> FittingTask:
-        """Build lexical token warm-up over utterance batches."""
+        """Build lexical token warmup over utterance batches."""
 
     def terms(self, declaration: TermsStepSpec, /) -> FittingTask:
         """Build generated-term autoencoding and combinator decoding."""

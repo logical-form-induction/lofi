@@ -27,7 +27,7 @@ __all__ = ["ACTIVE_LEARNING_PLUGIN", "JUDGMENT_FIT_PLUGIN"]
 
 
 class _JudgmentFit(Protocol):
-    """The judgment-fit implementation loaded when an experiment declares it."""
+    """The judgment fit implementation loaded when an experiment declares it."""
 
     JudgmentFitConfiguration: type[
         lofi.run._judgment_fit_configuration.JudgmentFitConfiguration
@@ -35,7 +35,7 @@ class _JudgmentFit(Protocol):
 
 
 class _ActiveLearning(Protocol):
-    """The active-learning implementation loaded when an experiment declares it."""
+    """The active learning implementation loaded when an experiment declares it."""
 
     ActiveLearningConfiguration: type[
         lofi.run._active_learning_configuration.ActiveLearningConfiguration
@@ -45,7 +45,7 @@ class _ActiveLearning(Protocol):
 def _judgment_fit(
     declaration: JudgmentFitExperimentConfig, path: Path, /
 ) -> ExperimentConfiguration:
-    """Build the judgment-fit configuration of one experiment."""
+    """Build the judgment fit configuration of one experiment."""
     module = cast("_JudgmentFit", import_module("lofi.run._judgment_fit_configuration"))
     return module.JudgmentFitConfiguration(declaration.kind, path)
 
@@ -53,7 +53,7 @@ def _judgment_fit(
 def _active_learning(
     declaration: ActiveLearningExperimentConfig, path: Path, /
 ) -> ExperimentConfiguration:
-    """Build the active-learning configuration of one experiment."""
+    """Build the active learning configuration of one experiment."""
     module = cast(
         "_ActiveLearning", import_module("lofi.run._active_learning_configuration")
     )
@@ -63,9 +63,9 @@ def _active_learning(
 JUDGMENT_FIT_PLUGIN: Final = ExperimentConfigPlugin(
     spec=JudgmentFitExperimentConfig, build=_judgment_fit
 )
-"""The installed judgment-fit experiment kind."""
+"""The installed judgment fit experiment kind."""
 
 ACTIVE_LEARNING_PLUGIN: Final = ExperimentConfigPlugin(
     spec=ActiveLearningExperimentConfig, build=_active_learning
 )
-"""The installed active-learning experiment kind."""
+"""The installed active learning experiment kind."""

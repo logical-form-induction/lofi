@@ -1,4 +1,4 @@
-"""Logical-form parsing and printing generated from a declared signature."""
+"""Logical form parsing and printing generated from a declared signature."""
 
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Final, Literal, NamedTuple, Never, final, override
@@ -172,7 +172,7 @@ class _TypeOperands:
 
 
 def _located(error: TextParseError) -> LogicalFormParseError:
-    """Restate a cursor refusal as a logical-form refusal at the same offset."""
+    """Restate a cursor refusal as a logical form refusal at the same offset."""
     return LogicalFormParseError(error.offset, error.reason)
 
 
@@ -445,7 +445,7 @@ class SurfaceSyntax(FrozenValue):
             raise _located(error) from error
 
     def parse_type_cursor(self, cursor: TextCursor) -> TypeExpression:
-        """Parse a type annotation from a logical-form reader's cursor."""
+        """Parse a type annotation from a logical form reader's cursor."""
         return NotationReader(
             cursor, self._type_notations, self._type_operands
         ).expression()

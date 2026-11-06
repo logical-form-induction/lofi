@@ -1,4 +1,4 @@
-"""Logical-form type checking."""
+"""Logical form type checking."""
 
 from lofi.typecheck._accessors import (
     FixedSpan,

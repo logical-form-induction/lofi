@@ -27,7 +27,7 @@ bead item template and ``elements`` maps each element name to its declared
 element, so template and element metadata are readable too. No slot name is
 reserved. An item's identity is a UUID derived from the declared namespace and,
 for every template it renders, the template's identity and the identity of the
-lexical item filling each slot, in slot-name order.
+lexical item filling each slot, in slot name order.
 """
 
 import json

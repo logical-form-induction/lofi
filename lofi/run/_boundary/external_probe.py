@@ -110,7 +110,7 @@ class ExternalProbeSettings(FrozenValue):
 
 
 class ExternalProbeSpec(ProbeSpec):
-    """Declare split-posterior diagnostics over a released DIORA checkpoint.
+    """Declare split posterior diagnostics over a released DIORA checkpoint.
 
     The stimulus lengths describe deterministic all-zero input vectors. Their
     feature width is derived from the released model rather than repeated in the

@@ -1,4 +1,4 @@
-r"""MORCELA linking from language-model scores to a latent scale.
+r"""MORCELA linking from language model scores to a latent scale.
 
 The score is $a(\ell-\beta u+\gamma)/n^\delta$. Here $\ell$ and $u$
 are sentence and unigram log probabilities, $n$ is token count, and $a$ is
@@ -82,7 +82,7 @@ _PRIORS: Final[Mapping[str, Prior]] = MappingProxyType(
 """The prior each fitted parameter is drawn from in a program."""
 
 _LOG_PROBABILITY: Final = Interval(-1000.0, 0.0)
-"""The interval a sentence's log-probability under a model is declared over."""
+"""The interval a sentence's log probability under a model is declared over."""
 
 _TOKENS: Final = Interval(1.0, 500.0)
 """The interval a sentence's length in tokens is declared over."""

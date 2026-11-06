@@ -1,7 +1,7 @@
 """Configuration composition with per-leaf provenance.
 
 :class:`SpecLoader` applies defaults, group fragments, a profile, in-process
-settings, and command-line overrides in ascending precedence, then validates
+settings, and command line overrides in ascending precedence, then validates
 the result. It records the source of each leaf and translates engine errors
 into LoFI configuration errors.
 
@@ -142,7 +142,7 @@ class SpecLoader:
         profile : str | None
             Named profile to apply.
         overrides : tuple[str, ...]
-            Command-line override expressions.
+            Command line override expressions.
         extra : Mapping[str, JsonValue] | None
             In-process settings applied before overrides, keyed by dotted
             path.
@@ -295,7 +295,7 @@ class RunSpecCodec:
         profile : str | None
             Named profile to apply.
         overrides : tuple[str, ...]
-            Command-line override expressions.
+            Command line override expressions.
         extra : Mapping[str, JsonValue] | None
             In-process settings applied before overrides, keyed by dotted
             path.

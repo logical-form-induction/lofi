@@ -39,12 +39,12 @@ is required.
 | `action_set` | Digest of the controller action set, in column order. |
 | `components` | Component metadata keyed by structural role. |
 | `rng` | Encoded state of each advancing random stream. |
-| `precision` | Compute dtype, autocast device type, and gradient-scaling state. |
-| `grounding` | Optional grounding variant, scorer and source identities, symbolic-label agreement, gradient path, proof budget, and step telemetry. |
-| `stage` | Optional staged-protocol name, active groups, and position. |
-| `fitting` | Optional configured-fitting progress and checkpoint role. |
+| `precision` | Compute dtype, autocast device type, and gradient scaling state. |
+| `grounding` | Optional grounding variant, scorer and source identities, symbolic label agreement, gradient path, proof budget, and step telemetry. |
+| `stage` | Optional staged protocol name, active groups, and position. |
+| `fitting` | Optional configured fitting progress and checkpoint role. |
 | `optimizer` | Optional optimizer state reference. |
-| `scaler` | Optional gradient-scaler state reference. |
+| `scaler` | Optional gradient scaler state reference. |
 | `scheduler` | Optional scheduler state reference. |
 
 Each entry in `components` contains:
@@ -56,7 +56,7 @@ Each entry in `components` contains:
 | `signature_fingerprint` | Fingerprint of the symbol signature used to build it. |
 | `codec_identity` | Identity of the codec indexing saved tensors. |
 | `state` | Block key and recorded digest. |
-| `labels` | Optional output-label to column mapping. |
+| `labels` | Optional output label to column mapping. |
 | `pinned` | Optional pinned pretrained checkpoint, `repository@revision`, a frozen role's parameters are loaded from. |
 
 The checkpoint RNG payload contains the advancing Python and torch CPU streams,
@@ -88,7 +88,7 @@ the saved position and payload after compatibility has established which live
 objects may receive it. Integrity and restore preflight check those values
 separately.
 
-`blocks.json` must name exactly the manifest's component roles and run-state
+`blocks.json` must name exactly the manifest's component roles and run state
 keys. Every block's bytes must match the digest in that index, and every block
 is loaded on CPU with weights-only deserialization. Component state, optimizer
 state, scaler state, scheduler state, and random state are all validated before
@@ -119,7 +119,7 @@ release:
   checkpoint: validation-best
 ```
 
-Export and post-hoc probing restore the newest checkpoint of that declared
+Export and post hoc probing restore the newest checkpoint of that declared
 kind. Parser runs may release either `validation-best` or `resume-latest`;
 training recovery always uses `resume-latest`. A trainer that writes no
 validation-best checkpoint, such as distance pretraining, must release
@@ -144,12 +144,12 @@ declared frozen stays frozen even where `trainer.active_groups` names it.
 The first finite validation observation establishes the best. Later observations
 reset patience only on a strict absolute improvement greater than
 `minimum_delta` in the configured `min` or `max` direction. Equality at the
-boundary is non-improving. Fitting stops after exactly `patience` consecutive
-non-improving validations.
+boundary is nonimproving. Fitting stops after exactly `patience` consecutive
+nonimproving validations.
 
 Production resume scans checkpoint handles from newest to oldest and selects
 the first `resume-latest` manifest. It never resumes from `validation-best`.
-The saved completed-epoch count must imply the saved optimizer step and
+The saved completed epoch count must imply the saved optimizer step and
 `data_position` under the current configured epoch shape.
 
 `lofi resume` requires the point's run directory to exist. A completed run is

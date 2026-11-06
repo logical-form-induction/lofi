@@ -195,7 +195,7 @@ class CodeBlock:
         If an endpoint is not an integer or the cost is not a number.
     ValueError
         If the start is negative, the block holds no label, or the cost is not
-        finite and non-negative.
+        finite and nonnegative.
     """
 
     __slots__ = ("_bits", "_end", "_start")
@@ -414,7 +414,7 @@ def _bits_under(probe: _Probe, inventory: SpanInventory) -> float:
     Returns
     -------
     float
-        The summed negative log-probability of the labels, in bits.
+        The summed negative log probability of the labels, in bits.
     """
     with torch.no_grad():
         nats = cross_entropy(
@@ -465,7 +465,7 @@ def online_codelength(
     count. None of that is charged. The labels are then sent block by block.
     The first block is charged under the uniform code over the classes, since
     the receiver has seen no label yet. Every later block is charged the
-    negative log-probability, in bits, that a probe fitted on exactly the labels
+    negative log probability, in bits, that a probe fitted on exactly the labels
     already transmitted gives its labels.
 
     The probe's weights are therefore never transmitted. The receiver reruns

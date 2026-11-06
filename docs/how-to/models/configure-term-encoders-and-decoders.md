@@ -13,7 +13,7 @@ The examples compose two checked-in documents: the
 [`docs/examples/synthetic-parser.yaml`](https://github.com/logical-form-induction/lofi/blob/main/docs/examples/synthetic-parser.yaml),
 which declares one category space, and
 [`lofi/configs/run/synthetic-parser-consistency.yaml`](https://github.com/logical-form-induction/lofi/blob/main/lofi/configs/run/synthetic-parser-consistency.yaml),
-which adds a semantic-type space and relates the two. The setup they share:
+which adds a semantic type space and relates the two. The setup they share:
 
 ```python
 from pathlib import Path
@@ -31,7 +31,7 @@ For a sort $S$, let $\mathcal{T}_S$ be the well-formed terms admitted by the
 selected [layout](../../explanation/term-layout-capabilities.md). An encoder
 is a learned map $e_{\boldsymbol{\theta}}:\mathcal{T}_S\to\mathbb{R}^{d}$.
 A decoder assigns locally normalized choice probabilities and an induced
-complete-term weight $w_{\boldsymbol{\phi}}(t\mid\mathbf{h})$. Calling a decoder `identity` names its
+complete term weight $w_{\boldsymbol{\phi}}(t\mid\mathbf{h})$. Calling a decoder `identity` names its
 reconstruction role; it does not assert
 $w_{\boldsymbol{\phi}}(t\mid e_{\boldsymbol{\theta}}(t))=1$.
 A binary action decoder conditions on a declared merge
@@ -59,9 +59,9 @@ additional independence assumption about terms.
 Tree decoders pass a parent state to child slots; linear decoders pass the
 prefix state; transformers attend to the slots allowed by `structure`.
 Thus the conditioning information differs even when these decoders share a
-codec. The masked diffusion decoder also exposes canonical-order frontier
+codec. The masked diffusion decoder also exposes canonical order frontier
 and teacher-forced probabilities. Its separately sampled denoising bound is
-not interchangeable with that complete-term weight.
+not interchangeable with that complete term weight.
 
 A tree encoder recursively computes
 $\mathbf{h}_v=f_{\boldsymbol{\theta}}(\mathbf{e}_{c_v},
@@ -136,7 +136,7 @@ grammar that adds forward composition also adds its action, for instance
 
 ## Choose an encoder
 
-Term encoders register under the `lofi.term_encoder` entry-point group. The
+Term encoders register under the `lofi.term_encoder` entry point group. The
 packaged fragments under `lofi/configs/model/encoders/terms/` are `rnn`,
 `linear`, `hrr` and `transformer`, all at width 256:
 
@@ -166,7 +166,7 @@ each one as a gate site keyed by layer and name:
 | `elman-relu` | `candidate` | No |
 
 A one-layer `tree-rnn` whose cell carries no memory apart from its hidden
-state is the only encoder that publishes the synthetic-tree continuation that
+state is the only encoder that publishes the synthetic tree continuation that
 soft controller raising needs
 ([Configure a controller](configure-a-controller.md)). An installed package
 adds a cell by registering a `RecurrentCellPlugin` under `lofi.recurrent_cell`;
@@ -191,7 +191,7 @@ selecting a tree encoder here does not assert architectural identity with
 that paper's Tree-LSTM. The transformer uses attention
 \citep{vaswani-etal2017} with the selected structural restrictions.
 The HRR equations and their distinction from the original circular binding
-are given in [Term-layout capabilities](../../explanation/term-layout-capabilities.md).
+are given in [Term layout capabilities](../../explanation/term-layout-capabilities.md).
 
 Select the packaged transformer for the synthetic parser's `terms` role. The
 document's own width of 4 still applies, and the fragment's eight heads do not
@@ -208,7 +208,7 @@ except ConfigValueError as refused:
 model.encoders.terms was refused: the heads divide the width they split between them
 ```
 
-Lower the heads and the feed-forward width with it:
+Lower the heads and the feedforward width with it:
 
 ```python
 run = codec(
@@ -232,7 +232,7 @@ its selected fragments.
 
 ## Choose decoders
 
-Term decoders register under the `lofi.term_decoder` entry-point group, and
+Term decoders register under the `lofi.term_decoder` entry point group, and
 the packaged library holds the same five fragments under both
 `lofi/configs/model/decoders/identity/` and
 `lofi/configs/model/decoders/application/`:
@@ -251,8 +251,8 @@ mask $\mathbf{M}$ satisfies
 $\mathbb{P}(M_i=1\mid T=t)=\beta_t$ independently across slots.
 The denoiser conditions on the revealed choices, mask, step, position, and
 encoded term. This uses the absorbing-mask idea from discrete diffusion
-\citep{austin-etal2021}; LoFI's canonical-order complete-term decoding and
-its time-sampled denoising-bound API are distinct scoring operations.
+\citep{austin-etal2021}; LoFI's decoding of complete terms in canonical order and
+its time-sampled denoising bound API are distinct scoring operations.
 
 Every decoder declares `choice_heads`: `flat` (the default) reads each slot as
 one categorical over the language's choices, and `factored` as a choice of

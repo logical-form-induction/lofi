@@ -18,14 +18,14 @@ class PinningLossSettings(NamedTuple):
     ----------
     readout : str | None
         The term-readout role whose target sets the objective pins spans to, or None
-        for negative-bracket supervision directly from parser marginals.
+        for negative bracket supervision directly from parser marginals.
     """
 
     readout: str | None
 
 
 class PinningLossSpec(LossSpec):
-    """Declare target pinning or negative-bracket supervision."""
+    """Declare target pinning or negative bracket supervision."""
 
     kind: Literal["pinning"] = "pinning"
     readout: str | None = None

@@ -123,7 +123,7 @@ class ProbeSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="forb
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "probe"
 
 
@@ -132,7 +132,7 @@ class SinkSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="forbi
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "sink"
 
 
@@ -216,7 +216,7 @@ class EvaluatorSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "evaluator"
 
     def evaluation_data(self) -> EvaluationData:
@@ -237,7 +237,7 @@ class EvaluatorSpec(
         Parameters
         ----------
         labels : tuple[str, ...]
-            The inference-label inventory the run's data owns, read by an
+            The inference label inventory the run's data owns, read by an
             evaluator of inference pairs; empty for every other evaluator.
 
         Returns
@@ -301,7 +301,7 @@ class ChartStoreSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
 
 
 class NativeChartStoreSpec(ChartStoreSpec, extra="forbid"):
-    """The native packed-forest and inside-table storage."""
+    """The native packed forest and inside table storage."""
 
     kind: Literal["native"] = "native"
 
@@ -365,7 +365,7 @@ class TopKPrunerSpec(CellPrunerSpec, extra="forbid"):
 
     @property
     def semiring_requirements(self) -> frozenset[SemiringCapability]:
-        """Return that the beam ranks float log-probability weights."""
+        """Return that the beam ranks float log probability weights."""
         return frozenset({"log-probability"})
 
 
@@ -379,7 +379,7 @@ class SymbolicSemiringSpec(dx.TaggedUnion, discriminator="kind", extra="forbid")
 
 
 class LogInsideSemiringSpec(SymbolicSemiringSpec, extra="forbid"):
-    """Log-space sum-product inside weights."""
+    """Log space sum-product inside weights."""
 
     kind: Literal["log-inside"] = "log-inside"
 
@@ -534,7 +534,7 @@ def _top_k(declaration: TopKPrunerSpec, /) -> CellPruner[object, float]:
 
 
 def _log_inside(declaration: LogInsideSemiringSpec, /) -> Semiring[float]:
-    """Build log-space sum-product weights."""
+    """Build log space sum-product weights."""
     del declaration
     return LogInside()
 
@@ -625,13 +625,13 @@ class ParseSpec(dx.Model, extra="forbid"):
     Bisk--Hockenmaier baseline, which runs outside any run, declares its own
     parse with this schema. Two parses keep a fixed semiring because the
     semiring is part of what they compute: synthetic corpus sampling draws
-    derivations from log-space inside weights, and the counterfactual probe
+    derivations from log space inside weights, and the counterfactual probe
     reads reachability from Boolean charts.
 
     Any registered semiring may be declared. Each declares the capabilities
     its weights have, and a consumer that needs one the semiring lacks is
     refused with a ``SemiringCapabilityError``: the top-k pruner and A*
-    need float log-probability weights, and a minimum-Bayes-risk decode or a
+    need float log probability weights, and a minimum Bayes risk decode or a
     pruned-mass measurement needs posterior marginals.
 
     Parameters
@@ -957,17 +957,17 @@ class RunSpec(dx.Model, extra="forbid"):
     parse : ParseSpec
         Symbolic chart retention and reachability policy.
     approximation : ApproximationSpec | None
-        Run-level residual-mass budget inherited by truncating components.
+        Run level residual mass budget inherited by truncating components.
     type_sampler : TypeSamplerSpec | None
         Optional finite type sampler.
     pair_sampler : PairSamplerSpec | None
-        Optional labeled rule-instance sampler.
+        Optional labeled rule instance sampler.
     optimizer : OptimizerSpec
         Optimizer component.
     device_policy : DevicePolicySpec
         Device and precision settings.
     scheduler : SchedulerSpec | None
-        Optional learning-rate scheduler.
+        Optional learning rate scheduler.
     sinks : dict[str, SinkSpec]
         Metric sinks keyed by role.
     probes : dict[str, ProbeSpec]

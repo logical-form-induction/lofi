@@ -32,7 +32,7 @@ defaults:
 ```
 
 Its one evaluator, `held-out`, scores each point's held-out string
-log-likelihood per sentence and its description length.
+log likelihood per sentence and its description length.
 
 The experiment varies three groups together in a `yoked` sweep, so the
 values at one position form one point:
@@ -175,7 +175,7 @@ are for looking at a design before it is frozen.
 ## Reading the rows
 
 Every point reports the rows the experiment declares, and the document
-declares one table over the primary row, the held-out string log-likelihood
+declares one table over the primary row, the held-out string log likelihood
 per sentence:
 
 ```yaml
@@ -201,7 +201,7 @@ pilot/results/reduced-freeze/held-out-fit.md
 The table, with each configuration digest shortened here to its first
 sixteen characters:
 
-| Freeze | Configuration | Split | Sentences | Log-likelihood per sentence |
+| Freeze | Configuration | Split | Sentences | Log likelihood per sentence |
 | --- | --- | --- | --- | --- |
 | unfrozen | 958799c221c8a9b8 | validation | 2 | -0.647 |
 | unfrozen | 282fd06417fdedcd | validation | 2 | -0.612 |

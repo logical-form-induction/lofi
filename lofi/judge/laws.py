@@ -1,4 +1,4 @@
-"""Rule, proof-search, and normal-form law checks."""
+"""Rule, proof search, and normal form law checks."""
 
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Final, NamedTuple, cast
@@ -348,7 +348,7 @@ def hypotheses_are_stable_and_injective(
 def variable_channels_are_canonical(
     fixture: ProofCalculusFixture,
 ) -> None:
-    """Check the named free-variable and indexed bound-variable channels.
+    """Check the named free variable and indexed bound-variable channels.
 
     Raises
     ------
@@ -539,7 +539,7 @@ class RuleLawCases(NamedTuple):
     Attributes
     ----------
     provider : str
-        Entry-point name.
+        Entry point name.
     ordinary : tuple[RuleLawCase, ...]
         Cases that run all rule laws.
     totality : tuple[RuleTotalityCase, ...]
@@ -1272,7 +1272,7 @@ def check_registered_rule_laws(
 
 
 class NormalFormFixture[T](NamedTuple):
-    """Inputs for normal-form law checks.
+    """Inputs for normal form law checks.
 
     Attributes
     ----------
@@ -1304,7 +1304,7 @@ def _tags[T](fixture: NormalFormFixture[T], *, law: str) -> tuple[str, ...]:
     Parameters
     ----------
     fixture : NormalFormFixture[T]
-        Normal-form fixture.
+        Normal form fixture.
     law : str
         Current law name.
 
@@ -1339,7 +1339,7 @@ def _steps[T](
     Parameters
     ----------
     fixture : NormalFormFixture[T]
-        Normal-form fixture.
+        Normal form fixture.
     tags : tuple[str, ...]
         Available child tags.
 
@@ -1515,21 +1515,21 @@ NORMAL_FORM_LAWS: Final = (
     tagging_is_pure,
     filtering_preserves_goal_terms,
 )
-"""Normal-form laws in conformance order."""
+"""Normal form laws in conformance order."""
 
 
 def check_normal_form_laws[T](fixture: NormalFormFixture[T]) -> None:
-    """Run every normal-form law against one filter.
+    """Run every normal form law against one filter.
 
     Parameters
     ----------
     fixture : NormalFormFixture[T]
-        Normal-form fixture.
+        Normal form fixture.
 
     Raises
     ------
     LawViolationError
-        If any normal-form law fails.
+        If any normal form law fails.
     """
     for law in NORMAL_FORM_LAWS:
         law(fixture)

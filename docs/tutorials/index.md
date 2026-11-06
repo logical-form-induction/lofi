@@ -16,7 +16,7 @@ it, so the effect of each change can be traced to the lines that made it.
 3. [Inducing a lexicon](03-induce-a-lexicon.md). Hold out development and test
    sentences, train a chart parser on the strings alone, and score how well it
    recovers the brackets and the lexical categories.
-4. [Declaring logical forms](04-declare-logical-forms.md). Add a logical-form
+4. [Declaring logical forms](04-declare-logical-forms.md). Add a logical form
    language and an interpretation, so that each drawn derivation carries a
    typed logical form.
 5. [Inducing logical forms](05-induce-logical-forms.md). Learn lexical logical
@@ -27,7 +27,7 @@ it, so the effect of each change can be traced to the lines that made it.
    its rows to a verdict.
 7. [Under the hood: charts and semirings](07-charts-and-semirings.md). Build
    the span sweep the chart parsers of chapters 3 to 6 run, and evaluate it
-   under a counting and a log-inside semiring.
+   under a counting and a log inside semiring.
 
 Chapters 1 to 6 need the `nn` extra, which installs PyTorch; every run in them
 is sized to finish in under a few minutes on a laptop CPU. Chapter 7 needs only

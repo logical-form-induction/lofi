@@ -123,7 +123,7 @@ class LastLayerReadoutSpec(LayerReadoutSpec):
 
 
 class FixedLayerReadoutSettings(NamedTuple):
-    """Select one hidden-state tuple position."""
+    """Select one hidden state tuple position."""
 
     layer: int
 
@@ -137,7 +137,7 @@ class FixedLayerReadoutSpec(LayerReadoutSpec):
     @dx.validates("layer")
     @classmethod
     def _layer_is_nonnegative(cls, value: int) -> int:
-        """Validate a hidden-state tuple position."""
+        """Validate a hidden state tuple position."""
         if value < 0:
             msg = "a fixed pretrained layer is nonnegative"
             raise ValueError(msg)
@@ -145,7 +145,7 @@ class FixedLayerReadoutSpec(LayerReadoutSpec):
         return value
 
     def settings(self) -> FixedLayerReadoutSettings:
-        """Return the selected hidden-state tuple position."""
+        """Return the selected hidden state tuple position."""
         return FixedLayerReadoutSettings(self.layer)
 
 

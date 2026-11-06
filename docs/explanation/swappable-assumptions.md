@@ -13,7 +13,7 @@ a declaration, and each declaration is one variant of a family. The formalism,
 each combinatory rule, the matching relation, the normal form, the goal, the
 semiring, the cell pruner, the token and term encoders, the chart parser, each
 loss term, the prover, the fuzzy logic, the sweep design and the
-multiple-comparison correction are all families of this kind.
+multiple comparison correction are all families of this kind.
 
 A family's root is a tagged union. A variant is selected by its discriminator,
 usually `kind` (`formalism` for grammars), and validated against that
@@ -73,7 +73,7 @@ experiment's sweep expresses the choice as an axis, and every other section is
 shared by construction.
 
 A controlled comparison also requires stating the estimand and the sources
-of variation. LoFI’s source-comparison workflow imposes four further policies;
+of variation. LoFI’s source comparison workflow imposes four further policies;
 capacity matching and complexity charging are policies of that workflow,
 not universal requirements for every scientific comparison.
 
@@ -82,17 +82,17 @@ not universal requirements for every scientific comparison.
    refused when the grammar is compiled (see [Grammars as deductive
    systems](derivations-as-proofs.md)). A neural family that allocates
    parameters by operator rank declares an `ArityBound`, and a grammar that
-   reaches an undeclared rank is refused (see [Term-layout
+   reaches an undeclared rank is refused (see [Term layout
    capabilities](term-layout-capabilities.md)). A comparison never silently
    runs one arm under a degraded consumer.
 2. **Capacity is matched.** Two learner grammars with different category
-   inventories can induce models of different size. The source-comparison
+   inventories can induce models of different size. The source comparison
    reducer refuses candidates whose measured `parameter_count` differs within
    a comparison group, and it compares the source against capacity-matched
    twins. Capacity is measured from the built model and recorded in the
    point's metrics, not declared.
 3. **The approximation is shared.** A cell beam on one arm and an exhaustive
-   chart on the other, or two different residual-mass bounds for term
+   chart on the other, or two different residual mass bounds for term
    decoding, compare different approximations as well as different choices.
    A grammar's budget is part of its declaration, so two grammars with
    different budgets differ in their approximation too. [Charts and
@@ -100,9 +100,9 @@ not universal requirements for every scientific comparison.
    approximation costs.
 4. **The selection criterion charges for complexity.** Language inclusion
    does not guarantee better held-out fit. Even nested statistical models
-   imply a training-optimum inequality only for a common objective and global
-   optimization. The source-comparison reducer scores each candidate by held-out fit
-   minus a description-length charge, so that recovering the source grammar is
+   imply an inequality between training optima only for a common objective and global
+   optimization. The source comparison reducer scores each candidate by held-out fit
+   minus a description length charge, so that recovering the source grammar is
    not decided by inclusion alone. [Source and learner
    declarations](synthetic-designs.md) describes that comparison.
 
@@ -119,7 +119,7 @@ or held-out likelihood. Equal parameter counts likewise do not establish
 equal effective capacity. With seed $j$ shared across arms $a$ and $b$,
 the paired difference is $d_j=s_{a,j}-s_{b,j}$ and its mean is
 $\overline d=m^{-1}\sum_{j=1}^{m}d_j$. Pairing makes the comparison unit
-explicit; seeds from different data-generation procedures are not necessarily
+explicit; seeds from different data generation procedures are not necessarily
 matched observations.
 
 What a comparison licenses is a statement about the declared alternatives

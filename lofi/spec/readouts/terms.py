@@ -48,7 +48,7 @@ class DecodedMeaningSettings(NamedTuple):
 
 
 class ProofTermMeaningSettings(NamedTuple):
-    """Resolved proof-term meaning induction."""
+    """Resolved proof term meaning induction."""
 
     kind: Literal["proof-term"]
     weighting: str
@@ -93,7 +93,7 @@ class ProofTermMeaningSpec(MeaningInductionSpec):
     ``residual_mass`` bounds the truncation residual of each derived phrase cell.
     A derived cell keeps only the mass its children's frontiers retain, so its
     residual compounds the omissions of every word beneath it; word decoding
-    keeps the readout's own residual-mass bound.
+    keeps the readout's own residual mass bound.
     """
 
     kind: Literal["proof-term"] = "proof-term"
@@ -109,12 +109,12 @@ class ProofTermMeaningSpec(MeaningInductionSpec):
     @dx.validates("residual_mass")
     @classmethod
     def _residual_mass_is_a_bound(cls, value: float) -> float:
-        """Return the derived-cell residual-mass bound."""
+        """Return the derived-cell residual mass bound."""
         return residual_mass_bound(value)
 
     @override
     def settings(self) -> ProofTermMeaningSettings:
-        """Return the proof-term induction settings."""
+        """Return the proof term induction settings."""
         return ProofTermMeaningSettings(self.kind, self.weighting, self.residual_mass)
 
 
@@ -171,7 +171,7 @@ class TermsReadoutSpec(ReadoutSpec):
     @dx.validates("output")
     @classmethod
     def _output_is_named(cls, value: str | None) -> str | None:
-        """Return a nonempty optional target-mass output name."""
+        """Return a nonempty optional target mass output name."""
         return None if value is None else ensure_name("a term readout output", value)
 
     @dx.model_validator()
@@ -212,7 +212,7 @@ class TermsReadoutSpec(ReadoutSpec):
 
     @override
     def published_masses(self) -> frozenset[str]:
-        """Return the ids of the target-mass pairs this readout publishes.
+        """Return the ids of the target mass pairs this readout publishes.
 
         The readout publishes the mass of every target source the grammar
         supplies under the source's name, except its own declared target

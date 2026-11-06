@@ -24,7 +24,7 @@ using `docs/references/references.bib` and the checked-in CSL style. The
 pinned `pypandoc-binary` dependency supplies Pandoc locally and in CI.
 Only citations pass through Pandoc; MkDocs renders the rest of each page.
 
-Use these BibTeX-key commands to generate the four citation forms:
+Use these BibTeX key commands to generate the four citation forms:
 
 | Context | Source | Result |
 |---|---|---|

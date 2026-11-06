@@ -370,7 +370,7 @@ class SpinePatternSpec(PatternSpec, extra="forbid"):
 
 
 class RuleRestrictionSpec(dx.Model, extra="forbid"):
-    """A serializable rule-instance restriction the chart enforces.
+    """A serializable rule instance restriction the chart enforces.
 
     A restricted rule fires only when the target of its primary premise, the
     category reached by following functor results down to an atom, is one of
@@ -503,7 +503,7 @@ class ApplicationSpec(RuleSpec, extra="forbid"):
 
 
 class CompositionSpec(RuleSpec, extra="forbid"):
-    """A generalized-composition declaration."""
+    """A generalized composition declaration."""
 
     rule: Literal["composition"] = "composition"
     direction: CompositionRestriction
@@ -548,7 +548,7 @@ class SubstitutionSpec(RuleSpec, extra="forbid"):
 
 
 class TypeRaisingSpec(RuleSpec, extra="forbid"):
-    r"""A type-raising declaration.
+    r"""A type raising declaration.
 
     ``targets`` are the categories $T$ a premise raises to, and
     ``arguments`` the categories $X$ that may raise to $T/(T\backslash X)$ or
@@ -584,7 +584,7 @@ class TypeRaisingSpec(RuleSpec, extra="forbid"):
 
 
 class ClausalAdjunctSpec(RuleSpec, extra="forbid"):
-    """A feature-bearing clausal-adjunct coercion declaration."""
+    """A feature-bearing clausal adjunct coercion declaration."""
 
     rule: Literal["clausal-adjunct"] = "clausal-adjunct"
     name: str
@@ -772,7 +772,7 @@ class CombinatorSetSpec(RuleSpec, extra="forbid"):
     """A concise inventory expanded over the published functor view.
 
     Every expanded rule matches its premises under the set's ``matching``, or
-    under the grammar's congruence when the set declares none. Its type-raising
+    under the grammar's congruence when the set declares none. Its type raising
     rules raise ``raising_arguments`` to ``raising_targets``, as a
     :class:`TypeRaisingSpec` raises its ``arguments`` to its ``targets``.
     """

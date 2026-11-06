@@ -1,11 +1,11 @@
 # Stats
 
-This page renders `lofi.stats`: p-values, null models, dependence regimes and multiple-comparison corrections.
+This page renders `lofi.stats`: p-values, null models, dependence regimes and multiple comparison corrections.
 
 The [experimental commitments](../explanation/experiments-and-commitments.md)
 page defines paired randomization, equivalence hypotheses, adjusted test
 values, familywise error, and false discovery rate. Each guarantee is
-conditional on its stated sampling, null-model, and dependence assumptions.
+conditional on its stated sampling, null model, and dependence assumptions.
 
 ## Bootstrap intervals
 
@@ -21,7 +21,7 @@ and let $Q^*$ be their linearly interpolated empirical quantile function.
 A percentile interval of nominal coverage $1-\alpha$ is
 $[Q^*(\alpha/2),Q^*(1-\alpha/2)]$. The bias-corrected and accelerated (BCa)
 interval adjusts these quantile levels \citep{efron1987}. Write $\Phi$ for
-the standard-normal CDF and $\widehat\theta_{(-i)}$ for the delete-one
+the standard normal CDF and $\widehat\theta_{(-i)}$ for the delete-one
 jackknife estimate. LoFI computes
 
 $$

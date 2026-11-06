@@ -174,7 +174,7 @@ class LinearErasure(FrozenValue):
     mean : Tensor
         The fitted representation mean.
     projection : Tensor
-        The column-vector projector, applied transposed to row-shaped activations.
+        The column vector projector, applied transposed to row-shaped activations.
 
     Raises
     ------
@@ -241,7 +241,7 @@ class LinearErasure(FrozenValue):
 
     @property
     def projection(self) -> Tensor:
-        """Return an independent copy of the fitted column-vector projector."""
+        """Return an independent copy of the fitted column vector projector."""
         return self._projection.clone()
 
     @property

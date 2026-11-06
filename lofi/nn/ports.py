@@ -904,7 +904,7 @@ class ChartScorer(Protocol):
 
 
 class ReceiverEdge(NamedTuple):
-    """Names one chart-cell activation at the receiver that consumes it.
+    """Names one chart cell activation at the receiver that consumes it.
 
     Attributes
     ----------
@@ -934,11 +934,11 @@ class ReceiverEdge(NamedTuple):
 
 @runtime_checkable
 class ReceiverLocalChartScorer(ChartScorer, Protocol):
-    """Publishes the chart-cell activation consumed at each receiver edge."""
+    """Publishes the chart cell activation consumed at each receiver edge."""
 
     @property
     def receiver_site(self) -> Site:
-        """Return the observe-and-patch site holding receiver-edge activations."""
+        """Return the observe-and-patch site holding receiver edge activations."""
 
     def receiver_edges(self, index: SpanIndex, /) -> tuple[ReceiverEdge, ...]:
         """Return the edge-axis metadata for one chart index in axis order."""

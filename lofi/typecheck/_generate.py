@@ -154,14 +154,14 @@ def _injected(
 
 
 def _pattern_atoms(pattern: Pattern, free: frozenset[OpName]) -> int:
-    """Return fixed free-variable atoms named by a type pattern.
+    """Return fixed free variable atoms named by a type pattern.
 
     Parameters
     ----------
     pattern : Pattern
         The type pattern.
     free : frozenset[OpName]
-        The names of the type signature's free-variable operators.
+        The names of the type signature's free variable operators.
     """
     if isinstance(pattern, MVar):
         return 0

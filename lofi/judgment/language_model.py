@@ -40,7 +40,7 @@ __all__ = [
 
 @final
 class LmReadoutColumns(FrozenValue):
-    """The readout column each language-model measure of a sentence fills.
+    """The readout column each language model measure of a sentence fills.
 
     Parameters
     ----------
@@ -69,7 +69,7 @@ class LmReadoutColumns(FrozenValue):
 
     @property
     def columns(self) -> tuple[str, str, str]:
-        """Return the log-probability, unigram and length columns, in that order."""
+        """Return the log probability, unigram and length columns, in that order."""
         log_probability, unigram, length = self._columns
         return log_probability, unigram, length
 
@@ -304,7 +304,7 @@ def lm_readout_design(
     scorer: LmScore,
     readouts: LmReadoutColumns,
 ) -> JudgmentDesign:
-    """Return a source's design with each row's language-model readouts.
+    """Return a source's design with each row's language model readouts.
 
     Each rated item's sentence is scored once, and every row of the item
     carries the sentence's log probability, unigram log probability and

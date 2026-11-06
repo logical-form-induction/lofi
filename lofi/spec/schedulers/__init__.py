@@ -1,1 +1,1 @@
-"""Learning-rate scheduler declarations."""
+"""Learning rate scheduler declarations."""

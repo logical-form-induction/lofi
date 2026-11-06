@@ -215,7 +215,7 @@ def _pair_correlations(
 
 
 def _bootstrap(bootstrap: Bootstrap) -> None:
-    """Validate the participant-pair bootstrap declaration."""
+    """Validate the participant pair bootstrap declaration."""
     if not isinstance(bootstrap, Bootstrap):
         msg = f"an interannotator bootstrap is not one: {bootstrap!r}"
         raise TypeError(msg)
@@ -279,7 +279,7 @@ def interannotator_ceiling(
     coefficients : Sequence[InterannotatorCoefficient]
         The coefficients to report, one row each in this order.
     bootstrap : Bootstrap
-        The participant-pair bootstrap the intervals are drawn under.
+        The participant pair bootstrap the intervals are drawn under.
 
     Raises
     ------

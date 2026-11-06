@@ -1,4 +1,4 @@
-"""Prior-predictive calibration of a compiled response program.
+"""Prior predictive calibration of a compiled response program.
 
 A replicate draws one parameter vector from the priors the program declares,
 samples one response per row of the design at it, and fits the sampled design
@@ -223,7 +223,7 @@ class QuiversGuideFitter(FrozenValue):
         """Return draws from the guide fitted to a bound response program.
 
         A numerical condition met while the guide is fitted or drawn from is a
-        fitting failure: a distribution refusing a non-finite parameter, which
+        fitting failure: a distribution refusing a nonfinite parameter, which
         PyTorch reports as a ``ValueError``, or a covariance that is not
         positive definite, which it reports as a ``LinAlgError``. An exhausted
         accelerator is reported as a ``MemoryError``. Any other error,
@@ -295,7 +295,7 @@ class QuiversGuideFitter(FrozenValue):
 
 @final
 class CalibrationSeeds(FrozenValue):
-    """The streams every seed of a prior-predictive calibration descends from.
+    """The streams every seed of a prior predictive calibration descends from.
 
     A replicate's simulation seed fixes its parameter draw and its sampled
     responses, and each inference method takes its own seed for each
@@ -533,7 +533,7 @@ class NutsDiagnostics(FrozenValue):
 
 @final
 class ReplicateRecord(FrozenValue):
-    """What fitting one prior-predictive replicate by every method produced.
+    """What fitting one prior predictive replicate by every method produced.
 
     Each method either fitted the replicate, leaving NUTS's diagnostics or a
     guide's evidence lower bound, or met a numerical condition, leaving its
@@ -651,7 +651,7 @@ class ReplicateRecord(FrozenValue):
 
 @final
 class CalibrationCampaign(FrozenValue):
-    """Every replicate of a prior-predictive calibration and their reduction.
+    """Every replicate of a prior predictive calibration and their reduction.
 
     Parameters
     ----------
@@ -795,7 +795,7 @@ def prior_predictive_calibration(
     plan: NutsPlan,
     seeds: CalibrationSeeds,
 ) -> CalibrationCampaign:
-    """Return the calibration of a response program over prior-predictive replicates.
+    """Return the calibration of a response program over prior predictive replicates.
 
     Each replicate is simulated over the design's rows from the program's
     priors, then fitted by NUTS under the plan's warmup, retained draws and
@@ -816,7 +816,7 @@ def prior_predictive_calibration(
     design : JudgmentDesign
         Design whose rows every replicate is simulated over.
     replicates : int
-        Prior-predictive replicates.
+        Prior predictive replicates.
     guide_iterations : int
         Optimization steps each guide is fitted for.
     guide_learning_rate : float

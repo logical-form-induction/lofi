@@ -3,7 +3,7 @@
 A run document declares its held-out evaluators under ``evaluators``, each
 keyed by the role its rows are reported under. After training, every declared
 evaluator is built by the plugin its kind names in the ``lofi.evaluator``
-entry-point group, from its declaration's settings and the trained grammar, the
+entry point group, from its declaration's settings and the trained grammar, the
 trained forward pass is published once over the held-out batches, and each
 evaluator's metric rows are emitted through the result sink with full identity,
 each value beside the bootstrap interval its declaration asks for, drawn over
@@ -668,7 +668,7 @@ class _HeldOut:
         return _partition(self._retained, split)
 
     def pair_batches(self, split: str, /) -> Sequence[InferenceItems]:
-        """Return the retained inference-pair batches of a partition.
+        """Return the retained inference pair batches of a partition.
 
         Raises
         ------

@@ -194,7 +194,7 @@ class CausalOutput(Protocol):
 
 
 class CausalModel(Protocol):
-    """Causal language-model operations a sentence scorer uses."""
+    """Causal language model operations a sentence scorer uses."""
 
     def eval(self) -> object:
         """Put the model in evaluation mode."""
@@ -1341,7 +1341,7 @@ class _LastLayerReadout(nn.Module):
 
 
 class _FixedLayerReadout(nn.Module):
-    """Read one declared position of the stack's hidden-state tuple."""
+    """Read one declared position of the stack's hidden state tuple."""
 
     def __init__(self, layer: int, *, count: int) -> None:
         super().__init__()
@@ -1358,7 +1358,7 @@ class _FixedLayerReadout(nn.Module):
         return True
 
     def rows(self, output: _EncoderOutput, /) -> Tensor:
-        """Return the declared hidden-state tuple position."""
+        """Return the declared hidden state tuple position."""
         hidden = output.hidden_states
 
         if hidden is None:
@@ -1444,7 +1444,7 @@ class PretrainedTokenEncoder(nn.Module):
     window : ContextWindow
         The token-row limit and overflow policy.
     readout : LayerReadoutSettings
-        Which hidden-state layers the encoder publishes.
+        Which hidden state layers the encoder publishes.
     join : str
         The string the words are joined by before tokenization.
 
@@ -1884,7 +1884,7 @@ def load_pretrained(
     window : ContextWindowSettings
         The token-row limit and overflow policy.
     readout : LayerReadoutSettings
-        Which hidden-state layers the encoder publishes.
+        Which hidden state layers the encoder publishes.
     join : str
         The string the words are joined by before tokenization.
     loader : PretrainedLoader

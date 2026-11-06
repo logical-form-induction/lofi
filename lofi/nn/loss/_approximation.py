@@ -1,4 +1,4 @@
-"""Runtime checks for one resolved residual-mass bound."""
+"""Runtime checks for one resolved residual mass bound."""
 
 from math import sqrt
 from typing import final

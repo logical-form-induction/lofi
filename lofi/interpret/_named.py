@@ -125,7 +125,7 @@ class DependencyInterpretation(_NamedInterpretation):
 
 @final
 class MeaningInterpretation(_NamedInterpretation):
-    """A named logical-form homomorphism."""
+    """A named logical form homomorphism."""
 
     __slots__ = ()
 
@@ -135,5 +135,5 @@ class MeaningInterpretation(_NamedInterpretation):
         return MappingProxyType({"name": self.name, "kind": "meaning"})
 
     def bind(self, meaning: MeaningReading[Term], /) -> BoundInterpretation:
-        """Return the compiled logical-form reading."""
+        """Return the compiled logical form reading."""
         return meaning

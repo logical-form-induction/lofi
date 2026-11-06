@@ -1,4 +1,4 @@
-# Declare a logical-form language
+# Declare a logical form language
 
 A [`LanguageDecl`](../../reference/configuration/language.md) declares the
 higher-order signature logical forms are written in: its atomic semantic
@@ -48,7 +48,7 @@ first True truth-table
 sentential connectives, polymorphic equality and the two quantifiers.
 `propositional` is the same language without equality and the quantifiers.
 `eq`, `forall` and `exists` quantify over the type variable `a`. The
-CCGbank, PMB and collected-corpus datasets accept a registered name in place
+CCGbank, PMB and collected corpus datasets accept a registered name in place
 of a declaration, as in `language: neo-davidsonian`.
 
 ## Compose a packaged language
@@ -178,7 +178,7 @@ $$
 
 These definitions do not provide an arbitrary variable-indexed assignment
 store. The packaged finite domains each have two members; their sizes are
-model-search resources, not a claim about all possible discourse states.
+model search resources, not a claim about all possible discourse states.
 
 ### Plural individuals
 
@@ -198,8 +198,8 @@ x\leq y\;\Longleftrightarrow\;x\oplus y=y,\qquad
 \forall y\,[y\leq x\Rightarrow y=x].
 $$
 
-The atomicity definition uses minimal elements of the nonempty-individual
-domain; it does not add a null individual beneath every atom. This algebraic
+The atomicity definition uses minimal elements of the domain of nonempty plural
+individuals; it does not add a null individual beneath every atom. This algebraic
 approach to plurality follows \citet{link1983}. The finite runtime realizes this as $\mathcal{P}(A)\setminus\{\varnothing\}$
 for an atomic set $A$, with union as join, inclusion as parthood, and singleton
 sets as atoms. Thus its domain size is $2^{|A|}-1$; the packaged size of
@@ -218,7 +218,7 @@ The registered `neo-davidsonian` language has an event sort $v$ in addition
 to $e$ and $t$. An event analysis can represent a sentence with a formula such
 as $\exists v\,[\operatorname{sleep}(v)\land\operatorname{agent}(v,a)]$,
 provided its lexical declaration supplies those typed predicates
-\citep{parsons1990}. The sort alone supplies neither thematic-role axioms
+\citep{parsons1990}. The sort alone supplies neither thematic role axioms
 nor tense or aspect. The similarly named packaged YAML fragment currently
 inherits only the shared individual and truth sorts; inspect the resolved
 declaration rather than inferring its inventory from the name.
@@ -304,12 +304,12 @@ The parts of the declaration:
 | `atomic_types` | Each atomic type's `name` and resource `kind`, `individual` by default. The registered neo-Davidsonian language declares `v` with kind `event`; its packaged shared YAML declares `e` and `t`, with `t` of kind `proposition`. |
 | `constructors` | Type constructors over the type sort, read in their declared notation by the same reader as category text. A token ending in a letter, digit or underscore matches only as a whole word, so a type named `toe` is not read as the token `to`. The one named by `function_type` (`->` by default) must be binary and infix. |
 | `constants` | Each constant's `name`, `type` (or `infer`, to infer it from its uses), the type variables it `quantifies`, its `classes`, a surface `notation` (`prefix`, `infix` or `binder`, each with an ASCII and a Unicode token), and either a `definition` as a closed term or a postulated `semantics` plugin. |
-| `leaf_lexicon` | A source of further non-logical constants, read once when the language is compiled. |
+| `leaf_lexicon` | A source of further nonlogical constants, read once when the language is compiled. |
 | `binders` | The binder `style`, `curry` (unannotated) or `church` (annotated lambdas). |
 | `logic` | The logic's `order`, whether it has `functions` and `equality`, finite `domains` per type, meaning `postulates`, the variable inventory, the designated `negation`, the `label_map`, and the `prover` and `labeling` resources. |
 | `bounds` | One finite representation bound per sort (`Ty`, `Tm` and `Cat`), used by the neural term encoders. |
 
-The [theorem-prover guide](../training/reward-with-a-theorem-prover.md)
+The [theorem prover guide](../training/reward-with-a-theorem-prover.md)
 covers the `prover` declarations.
 
 ## Read constants from a leaf lexicon
@@ -374,9 +374,9 @@ that do not cover exactly the language's three sorts.
 A plugin adds a logical role by registering a `LogicalRole` under
 `lofi.logical_role`, and a constant semantics by registering a
 `LogicalConstantSemantics` under `lofi.logical_constant`; in both cases the
-member's `name` must equal its entry-point name. A whole language is
+member's `name` must equal its entry point name. A whole language is
 registered under `lofi.lf_language` as a function that returns its
-`LanguageDecl`. The [entry-point reference](../../reference/entry-points.md)
+`LanguageDecl`. The [entry point reference](../../reference/entry-points.md)
 lists the groups.
 
 ## Related

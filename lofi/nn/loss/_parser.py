@@ -387,7 +387,7 @@ class SpanMarginals:
         A binary derivation contains every lexical span and its root with probability
         one. Proper internal spans take their parser marginal. Padded spans remain
         outside the returned mask. This is the one definition used by both target
-        readouts and negative-bracket supervision.
+        readouts and negative bracket supervision.
         """
         probabilities = self._constituent.tensor
         device = probabilities.device

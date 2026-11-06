@@ -1,4 +1,4 @@
-"""Training-step inputs, outputs, and reports."""
+"""Training step inputs, outputs, and reports."""
 
 from math import isfinite
 from types import MappingProxyType
@@ -95,7 +95,7 @@ def _ordered(metrics: Mapping[str, float]) -> tuple[tuple[str, float], ...]:
 
 
 class TrainResult:
-    """Records a training-step result.
+    """Records a training step result.
 
     Parameters
     ----------

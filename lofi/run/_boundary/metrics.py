@@ -201,27 +201,27 @@ class LexiconRecord(dx.Model, extra="forbid"):
 
 
 class SemanticRecord(dx.Model, extra="forbid"):
-    """Records the achieved logical-form inventory and token-frequency joint.
+    """Records the achieved logical form inventory and token-frequency joint.
 
     Attributes
     ----------
     joint : LexiconRecord
-        Logical-form classes in place of syntactic categories, with their
+        Logical form classes in place of syntactic categories, with their
         inventory sizes, token counts, shares, and frequency coupling.
     arities : HistogramRecord
         Over predicate meanings: how many arguments each takes.
     per_form_meanings : HistogramRecord
         Over surface forms: how many distinct lexical meanings each bears.
     items : dict[str, int]
-        How many lexical items bear each logical-form class.
+        How many lexical items bear each logical form class.
     item_shares : dict[str, float]
-        Each class's share of the logical-form inventory.
+        Each class's share of the logical form inventory.
     symbols_used : dict[str, int]
         How many inventory symbols of each class occur in either pair side.
     cells : dict[str, dict[str, int]]
         For each category, how many lexical items bear each class.
     concordance : float | None
-        Normalized mutual information between category and logical-form class.
+        Normalized mutual information between category and logical form class.
     """
 
     joint: LexiconRecord
@@ -242,7 +242,7 @@ class InventoryRecord(dx.Model, extra="forbid"):
     categories : dict[str, int]
         The depth of each category, by its rendered text.
     argument_counts : dict[str, int]
-        The functor-spine argument count of each rendered category.
+        The functor spine argument count of each rendered category.
     composition_orders : dict[str, int]
         The order of each rendered category under declared functor roles.
     max_arguments : int | None
@@ -442,7 +442,7 @@ class CorpusRecord(dx.Model, extra="forbid"):
 
 
 class ComplexityRecord(dx.Model, extra="forbid"):
-    """Records the logical-form complexity an inference dataset achieved.
+    """Records the logical form complexity an inference dataset achieved.
 
     Attributes
     ----------
@@ -532,13 +532,13 @@ class InferenceDataRecord(dx.Model, extra="forbid"):
     hypothesis : CorpusRecord
         The reports of the hypothesis corpus.
     complexity : ComplexityRecord
-        The logical-form complexity of the pairs.
+        The logical form complexity of the pairs.
     inference : InferenceLabelRecord
         The inference labels of the pairs.
     confusion : ConfusionRecord | None
         The label noise, or None for a dataset declared without any.
     semantic : SemanticRecord | None
-        The joint achieved logical-form inventory across both pair sides, or
+        The joint achieved logical form inventory across both pair sides, or
         None for a fixed lexical interpretation.
     """
 
@@ -639,7 +639,7 @@ class SelectionRecord(dx.Model, extra="forbid"):
 
 
 class FormTypingSplitRecord(dx.Model, extra="forbid"):
-    """Records the logical-form typing labels available in one data split.
+    """Records the logical form typing labels available in one data split.
 
     Attributes
     ----------
@@ -675,7 +675,7 @@ class OccupancyRecord(dx.Model, extra="forbid"):
     rate : float
         The live positions as a share of the allocated ones.
     form_typing : FormTypingSplitRecord | None
-        Logical-form typing examples in this split, or none for an
+        Logical form typing examples in this split, or none for an
         uninterpreted corpus.
     """
 
@@ -1110,7 +1110,7 @@ def _complexity(report: ComplexityReport, /) -> ComplexityRecord:
 
 
 def _inference_labels(report: InferenceReport, /) -> InferenceLabelRecord:
-    """Return the record of an inference-label report."""
+    """Return the record of an inference label report."""
     return InferenceLabelRecord(
         labels=_sorted(report.labels),
         proportions=_sorted(report.proportions()),

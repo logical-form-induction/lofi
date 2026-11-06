@@ -565,9 +565,9 @@ class PatternRule(FrozenValue):
     matching : TermMatching
         The premise congruence.
     normal_form_role : NormalFormRole | None
-        The role normal-form filters read, if declared.
+        The role normal form filters read, if declared.
     restriction : RuleRestriction | None
-        The rule-instance restriction, if declared.
+        The rule instance restriction, if declared.
     probe : RuleProbe | None
         Premise-head constraints, inferred from the premises unless given.
     targets : Sequence[Term] | None
@@ -763,7 +763,7 @@ class PatternRule(FrozenValue):
 
     @property
     def normal_form_role(self) -> NormalFormRole:
-        """Return the role declared for normal-form filters."""
+        """Return the role declared for normal form filters."""
         return self._normal_form_role
 
     @property
@@ -828,7 +828,7 @@ class PatternRule(FrozenValue):
 
     @property
     def restriction(self) -> RuleRestriction | None:
-        """Return the rule-instance restriction, if declared."""
+        """Return the rule instance restriction, if declared."""
         return self._restriction
 
     @property

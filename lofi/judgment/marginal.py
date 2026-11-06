@@ -39,7 +39,7 @@ class ApproximateMarginalLikelihood:
     Parameters
     ----------
     program : BoundProgram
-        A compiled truncated-marginal response program bound to the complete
+        A compiled truncated marginal response program bound to the complete
         response design.
     active_groups : Sequence[int]
         Distinct group indices whose complete response rows the program contains.

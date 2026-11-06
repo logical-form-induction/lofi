@@ -84,8 +84,8 @@ class ChoiceIndex(FrozenValue):
         The declared maximum depth of each sort. A bound-variable operator has
         one choice per index below its sort's bound.
     free_ranks : Mapping[Sort, int] | None
-        The declared number of first-occurrence free-variable ranks of each
-        ranked sort. Omitted sorts admit no free-variable choice.
+        The declared number of first-occurrence free variable ranks of each
+        ranked sort. Omitted sorts admit no free variable choice.
     """
 
     PAD: Final = Signature.PAD
@@ -188,7 +188,7 @@ class ChoiceIndex(FrozenValue):
 
     @property
     def free_ranks(self) -> Mapping[Sort, int]:
-        """Return the declared free-variable rank count of each sort."""
+        """Return the declared free variable rank count of each sort."""
         return self._free_ranks
 
     @property
@@ -772,7 +772,7 @@ def heap_order(
     branching : int
         The number of child positions under each node.
     depth : int
-        The number of complete-tree levels.
+        The number of complete tree levels.
     order : Literal["df", "bf"]
         The requested depth-first or breadth-first order.
     """
@@ -794,7 +794,7 @@ def heap_order(
 
 @final
 class CompleteTree:
-    """A padded complete-tree term layout.
+    """A padded complete tree term layout.
 
     Parameters
     ----------
@@ -805,7 +805,7 @@ class CompleteTree:
     order : Literal["df", "bf"]
         The depth-first or breadth-first slot order.
     depth : int
-        The number of complete-tree levels.
+        The number of complete tree levels.
 
     Raises
     ------
@@ -924,7 +924,7 @@ class CompleteTree:
 
     @property
     def depth(self) -> int:
-        """Return the number of complete-tree levels."""
+        """Return the number of complete tree levels."""
         return self._depth
 
     @property
@@ -944,7 +944,7 @@ class CompleteTree:
 
     @property
     def skeleton(self) -> Encoding:
-        """Return the fixed complete-tree slot structure."""
+        """Return the fixed complete tree slot structure."""
         return self._skeleton
 
     def static_symbols(self, index: OperatorIndex, /) -> tuple[tuple[bool, ...], ...]:
@@ -973,7 +973,7 @@ class CompleteTree:
         return tuple(rows)
 
     def encode(self, t: Term, index: OperatorIndex, /) -> Encoding:
-        """Return the term in fixed complete-tree slots.
+        """Return the term in fixed complete tree slots.
 
         Parameters
         ----------
@@ -1023,7 +1023,7 @@ class CompleteTree:
         )
 
     def decode(self, enc: Encoding, store: Interner, index: OperatorIndex, /) -> Term:
-        """Return the term held in fixed complete-tree slots.
+        """Return the term held in fixed complete tree slots.
 
         Parameters
         ----------

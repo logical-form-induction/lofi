@@ -146,7 +146,7 @@ class _GrammaticalityMetric:
 
 
 class GrammaticalityEvaluator:
-    """Score every labeled held-out item from a published root-mass readout."""
+    """Score every labeled held-out item from a published root mass readout."""
 
     __slots__ = ("_conventions", "_metrics", "_readout", "_root_mass")
 

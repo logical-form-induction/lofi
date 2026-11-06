@@ -115,7 +115,7 @@ class DeductionProfile:
     TypeError
         If a field has the wrong type.
     ValueError
-        If a numeric field is invalid, the category-set label is unknown, or
+        If a numeric field is invalid, the category set label is unknown, or
         unary closure is requested without unary rules.
     """
 
@@ -235,7 +235,7 @@ class DeductionProfile:
 
     @property
     def unary_closure(self) -> bool:
-        """Return whether the engine must run unary-closure rounds in each cell."""
+        """Return whether the engine must run unary closure rounds in each cell."""
         return self._unary_closure
 
     @property

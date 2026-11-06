@@ -88,7 +88,7 @@ class ExpectedEmbeddingSpec(GroundingSpec):
 
     @override
     def validate_readouts(self, readouts: Mapping[str, ReadoutSpec], /) -> None:
-        """Require a complete-term readout only for expected-form grounding."""
+        """Require a complete term readout only for expected-form grounding."""
         if self.vectors == "sentence":
             return
 

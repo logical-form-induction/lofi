@@ -123,7 +123,7 @@ def _merged(merge: DirectionMerge | None, forward: Tensor, backward: Tensor) -> 
 
 
 def _sites(component: ComponentId, layers: int, direction: _Direction) -> SiteMap:
-    """Return the encoder's declared output and recurrent-state sites."""
+    """Return the encoder's declared output and recurrent state sites."""
     published = {
         Site(component, Role.TERM_ENCODING): SiteSpec(
             _TERM_AXES, DTypeClass.REAL, differentiable=True, access=Access.OBSERVE

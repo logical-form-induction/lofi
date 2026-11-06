@@ -1,4 +1,4 @@
-"""Open constructor-cost policies for simplicity objectives."""
+"""Open constructor cost policies for simplicity objectives."""
 
 from math import log
 from types import MappingProxyType
@@ -114,7 +114,7 @@ def _nonnegative(name: str, value: float, /) -> float:
 
 
 class DescriptionCostPlugin[S: SymbolCostSpec](FrozenValue):
-    """Pair one symbol-cost declaration with its immutable policy builder."""
+    """Pair one symbol cost declaration with its immutable policy builder."""
 
     _noun = "description-cost plugin"
     __slots__ = ("_build", "_spec")
@@ -134,7 +134,7 @@ class DescriptionCostPlugin[S: SymbolCostSpec](FrozenValue):
 
 
 def description_cost(declaration: SymbolCostSpec, /) -> DescriptionCost:
-    """Build a constructor-cost policy through its unique installed plugin."""
+    """Build a constructor cost policy through its unique installed plugin."""
     plugin = cast(
         "DescriptionCostPlugin[SymbolCostSpec]",
         resolve_plugin(
@@ -149,18 +149,18 @@ def description_cost(declaration: SymbolCostSpec, /) -> DescriptionCost:
 
 
 def _uniform(declaration: UniformSymbolCostSpec, /) -> DescriptionCost:
-    """Build a uniform constructor-cost policy."""
+    """Build a uniform constructor cost policy."""
     return UniformDescriptionCost(declaration.cost)
 
 
 def _log_alphabet(declaration: LogAlphabetSymbolCostSpec, /) -> DescriptionCost:
-    """Build a uniform-code-length constructor-cost policy."""
+    """Build a uniform-code-length constructor cost policy."""
     del declaration
     return LogAlphabetDescriptionCost()
 
 
 def _per_constructor(declaration: PerConstructorSymbolCostSpec, /) -> DescriptionCost:
-    """Build an explicitly keyed constructor-cost policy."""
+    """Build an explicitly keyed constructor cost policy."""
     return PerConstructorDescriptionCost(declaration.costs)
 
 

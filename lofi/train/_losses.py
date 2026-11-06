@@ -76,7 +76,7 @@ class ProofRewardContext(FrozenValue, Unpicklable):
 
     @property
     def language(self) -> LanguageAssembly:
-        """Return the logical-form language whose forms are scored."""
+        """Return the logical form language whose forms are scored."""
         return self._language
 
     @property
@@ -262,7 +262,7 @@ class LossBindingContext(FrozenValue):
         Raises
         ------
         ValueError
-            If the objective's dataset declares no logical-form interpretation.
+            If the objective's dataset declares no logical form interpretation.
         """
         binding = self._proof_reward
 

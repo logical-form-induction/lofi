@@ -30,7 +30,7 @@ _TERM_AXES: Final = ("term", "width")
 
 @final
 class FormSupervisionObjective:
-    """Maximize each retained gold form's complete-term probability."""
+    """Maximize each retained gold form's complete term probability."""
 
     __slots__ = ("_name", "_readout")
 

@@ -1176,7 +1176,7 @@ class ResponseCompiler:
     def installed(cls) -> ResponseCompiler:
         """Return the compiler of every linking family installed in the environment.
 
-        Each family is listed in the ``lofi.linking`` entry-point group under the
+        Each family is listed in the ``lofi.linking`` entry point group under the
         family name a link term declares, naming the program form it compiles to.
 
         Returns
@@ -1759,7 +1759,7 @@ class ResponseCompiler:
     def _bounded(
         self, spec: BoundedResponseSpec, family: Bounded, /
     ) -> ResponseProgram:
-        """Compile a bounded truncated-normal specification to a program.
+        """Compile a bounded truncated normal specification to a program.
 
         Parameters
         ----------

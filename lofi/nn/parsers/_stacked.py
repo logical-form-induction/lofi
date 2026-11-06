@@ -235,7 +235,7 @@ class StackedInsideOutside(nn.Module):
 
     @property
     def output_width(self) -> int:
-        """Return the chart-cell width of the last layer."""
+        """Return the chart cell width of the last layer."""
         return self.layers[-1].output_width
 
     @property
@@ -260,11 +260,11 @@ class StackedInsideOutside(nn.Module):
 
     @property
     def receiver_site(self) -> Site:
-        """Return the receiver-edge site of the last layer."""
+        """Return the receiver edge site of the last layer."""
         return self.layers[-1].receiver_site
 
     def receiver_edges(self, index: SpanIndex, /) -> tuple[ReceiverEdge, ...]:
-        """Return receiver-edge metadata in the last layer's public order."""
+        """Return receiver edge metadata in the last layer's public order."""
         return self.layers[-1].receiver_edges(index)
 
     def readouts(self, leaves: Encoded, /) -> ChartReadouts:

@@ -134,7 +134,7 @@ class HeldOutEvaluationContext(FrozenValue):
     interpretation : InterpretationFunction | None
         The declared interpretation, or ``None`` when the dataset has none.
     forms : Mapping[ItemId, str]
-        Gold logical-form texts keyed by item identifier.
+        Gold logical form texts keyed by item identifier.
     lexical_training : Mapping[str, LexicalTrainingEvidence]
         Training token frequency and observed gold ambiguity by token form.
     parse : ParseSettings[object]
@@ -208,7 +208,7 @@ class HeldOutEvaluationContext(FrozenValue):
 
     @property
     def forms(self) -> Mapping[ItemId, str]:
-        """Return gold logical-form texts keyed by item identifier."""
+        """Return gold logical form texts keyed by item identifier."""
         return self._forms
 
     @property
@@ -234,7 +234,7 @@ class HeldOutEvaluationContext(FrozenValue):
 
 @final
 class InferenceEvaluationContext(FrozenValue):
-    """Resources an inference-label evaluator reads from a lowered pair dataset."""
+    """Resources an inference label evaluator reads from a lowered pair dataset."""
 
     _noun = "inference evaluation context"
     __slots__ = (

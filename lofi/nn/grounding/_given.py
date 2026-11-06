@@ -23,7 +23,7 @@ __all__ = ["GIVEN"]
 
 @final
 class _GivenFactory(FrozenValue):
-    """Build a given source through its declared knowledge-base reader."""
+    """Build a given source through its declared knowledge base reader."""
 
     _noun = "structure-source factory"
     __slots__ = ()

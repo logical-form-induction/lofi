@@ -102,7 +102,7 @@ TERMS_READOUT_AXES: Final[tuple[str, ...]] = (*SPAN_AXES, *DISTRIBUTION_AXES[1:]
 """Per-cell type distribution axes."""
 
 MASS_AXES: Final[tuple[str, ...]] = (*SPAN_AXES, "outcome")
-"""Per-cell target-mass axes, the outcome axis holding one log probability pair."""
+"""Per-cell target mass axes, the outcome axis holding one log probability pair."""
 
 #: The axes a decoder reads one vector per term over.
 _TERM_AXES: Final[tuple[str, ...]] = ("term", "width")
@@ -485,7 +485,7 @@ class TermsReadout:
     Parameters
     ----------
     decoder : object
-        The decoder providing marginal rows or a complete-term frontier.
+        The decoder providing marginal rows or a complete term frontier.
     codec : NeuralCodecView
         The fixed term layout whose symbols the readout publishes.
     index : ChoiceIndex
@@ -494,7 +494,7 @@ class TermsReadout:
         Whether the decoder consumes each chart cell's inside vector or its
         concatenated inside-and-outside span representation.
     decoding : DecodingSettings | None
-        The complete-term strategy, or None to publish marginal choice rows.
+        The complete term strategy, or None to publish marginal choice rows.
     key : ReadoutId
         The identifier the type distribution is published under.
     targets : Mapping[ReadoutId, LinearizedTargets]
@@ -512,14 +512,14 @@ class TermsReadout:
         Whether every span is decoded directly or only lexical spans are decoded and
         internal spans are constructed through semantic proof actions.
     proof_terms : ProofTermPushforward | None
-        The semantic pushforward for proof-term induction, or None for direct
+        The semantic pushforward for proof term induction, or None for direct
         decoding.
     approximation : ApproximationBound | None
         Effective residual budget for this readout's exhaustive enumeration. On the
-        proof-term route it bounds word decoding, and the pushforward checks derived
+        proof term route it bounds word decoding, and the pushforward checks derived
         phrase cells against the route's own bound.
     run_approximation : ApproximationBound | None
-        Run-level residual budget before this readout's explicit override.
+        Run level residual budget before this readout's explicit override.
 
     Raises
     ------
@@ -691,7 +691,7 @@ class TermsReadout:
 
     @property
     def decoding(self) -> DecodingSettings | None:
-        """Return the complete-term strategy, or None for a mode readout."""
+        """Return the complete term strategy, or None for a mode readout."""
         return self._decoding
 
     @property
@@ -706,7 +706,7 @@ class TermsReadout:
 
     @property
     def run_approximation(self) -> ApproximationBound | None:
-        """Return the run-level residual budget before component overrides."""
+        """Return the run level residual budget before component overrides."""
         return self._run_approximation
 
     @property
@@ -1384,13 +1384,13 @@ def _build(settings: TermsReadoutSettings, context: BuildContext, /) -> TermsRea
     """Bind a term readout to its decoder and to the run's target sets.
 
     The component handle names the distribution the readout publishes. The
-    declared output key names the target-mass pair of the declared target source,
+    declared output key names the target mass pair of the declared target source,
     and every other target set of the context is published under its own name.
 
     Parameters
     ----------
     settings : TermsReadoutSettings
-        The represented space, output key, target source, optional complete-term
+        The represented space, output key, target source, optional complete term
         strategy and mass strategy.
     context : BuildContext
         The decoders by role, the shared codec and the target sets by source.

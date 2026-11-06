@@ -53,7 +53,7 @@ def _coverage(level: float) -> float:
     Returns
     -------
     float
-        Standard-normal deviate.
+        Standard normal deviate.
 
     Raises
     ------

@@ -219,7 +219,7 @@ def _optional_seconds(field: str, value: float | None, /) -> float | None:
 
 @final
 class ProofBudget(FrozenValue):
-    """The only resource budget governing a proof-service use site."""
+    """The only resource budget governing a proof service use site."""
 
     _noun = "proof budget"
     __slots__ = ("_calls", "_cpu", "_wall")
@@ -503,7 +503,7 @@ class ProofService:
 
     @property
     def timeout(self) -> float:
-        """Return the wall-clock limit of one proof call."""
+        """Return the wall clock limit of one proof call."""
         return self._timeout
 
     @property

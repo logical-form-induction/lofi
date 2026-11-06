@@ -474,7 +474,7 @@ class ParserFittingRecord(FittingRecord):
         Best finite observed value through this epoch, or None before the
         validation-owning stage.
     failures : int
-        Consecutive non-improving validations through this epoch.
+        Consecutive nonimproving validations through this epoch.
     best_checkpoint : str | None
         Current global-best checkpoint handle, or None before validation and
         on the best checkpoint itself because a manifest cannot name its own
@@ -709,7 +709,7 @@ class CheckpointManifest(dx.Model, extra="forbid"):
 
     @property
     def references(self) -> Mapping[str, StateReference]:
-        """Return the run-state references, keyed by the name each was written under.
+        """Return the run state references, keyed by the name each was written under.
 
         Returns
         -------
@@ -726,7 +726,7 @@ class CheckpointManifest(dx.Model, extra="forbid"):
 
     @dx.model_validator()
     def _the_references_are_keyed_apart(self) -> CheckpointManifest:
-        """Validate the run-state reference keys.
+        """Validate the run state reference keys.
 
         Returns
         -------
@@ -888,7 +888,7 @@ def disagreements(
 
 
 def _run_state_topology(manifest: CheckpointManifest) -> tuple[tuple[str, str], ...]:
-    """Return the present run-state parts and the keys holding them.
+    """Return the present run state parts and the keys holding them.
 
     Parameters
     ----------

@@ -299,7 +299,7 @@ class GrammaticalityObjective:
 def _build(
     settings: GrammaticalityLossSettings, context: LossComponentBindings, /
 ) -> GrammaticalityObjective:
-    """Build grammaticality scoring against the declared root-mass publication.
+    """Build grammaticality scoring against the declared root mass publication.
 
     Parameters
     ----------

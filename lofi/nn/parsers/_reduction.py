@@ -17,7 +17,7 @@ def _masked(weights: Tensor, mask: Tensor, /) -> Tensor:
 
 
 class LogSumExpReduction(FrozenValue):
-    """Sum alternative probabilities while retaining log-space tensors."""
+    """Sum alternative probabilities while retaining log space tensors."""
 
     __slots__ = ()
 

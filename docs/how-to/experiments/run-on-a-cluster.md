@@ -15,7 +15,7 @@ no launcher: `lofi run` trains it in place.
 
 ## Declare the launcher
 
-The `launch` block is a tagged union over the `lofi.launcher` entry-point
+The `launch` block is a tagged union over the `lofi.launcher` entry point
 group. The checked-in
 [`docs/examples/experiments/synthetic.yaml`](../../examples/experiments/synthetic.yaml)
 trains in the launching process:
@@ -39,7 +39,7 @@ launch: {kind: array, chunk_size: 1, throttle: 32}
 
 A `chunk_size` or `throttle` below one is refused when the experiment document
 is read. An experiment whose configuration kind executes its points only in the
-launching process, such as a judgment fit, a baseline fit or an active-learning
+launching process, such as a judgment fit, a baseline fit or an active learning
 run, is refused with `UnlaunchableExperimentError` on a launcher that submits
 to a site, before anything is expanded.
 
@@ -83,7 +83,7 @@ The profile has seven tables:
 | `environment` | `preamble` | Shell lines, such as module loads and exports, run before the interpreter. May be empty. |
 | `interpreter` | `command` | The argument vector that runs Python, with any container wrapper spelled out. |
 | `transport` | `host`, `command` | The host the remote launcher reaches and the argument vector that opens a session, to which the host and then the remote command are appended. |
-| `allocation` | `accelerator_hours`, `share` | The accelerator-hours the site grants and the largest fraction, in $(0, 1]$, one paper's admitted experiments may hold. |
+| `allocation` | `accelerator_hours`, `share` | The accelerator hours the site grants and the largest fraction, in $(0, 1]$, one paper's admitted experiments may hold. |
 
 Each `*_syntax` field is a Python format template over a fixed set of names,
 and a template that leaves one out or names another is refused:
@@ -238,14 +238,14 @@ order:
 
 - `#!/bin/sh`;
 - one line per directive, each starting with `directive_prefix`: the account,
-  partition and accelerator directives, then the wall-clock, memory, core and
+  partition and accelerator directives, then the wall clock, memory, core and
   log directives, then the job name directive and the array directive;
 - `set -eu` and the `environment.preamble` lines;
 - one `exec` line that runs `interpreter.command` on
   `-m lofi.run task --root <scratch_root> --experiment <document>`, each of
   the launch's overrides as `--set KEY=VALUE`, then the points file, the
   scheduler's
-  task-index variable and the chunk size.
+  task index variable and the chunk size.
 
 Each task is granted the ninetieth percentile of the slowest pending point's
 bootstrapped training seconds times the chunk size, rounded up to whole

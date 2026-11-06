@@ -148,7 +148,7 @@ class Budget(FrozenValue):
 
     @property
     def mass(self) -> float:
-        """Return the probability-mass target."""
+        """Return the probability mass target."""
         return self._mass
 
     @property
@@ -158,22 +158,22 @@ class Budget(FrozenValue):
 
     @property
     def unary_rounds(self) -> int:
-        """Return the unary-closure round bound."""
+        """Return the unary closure round bound."""
         return self._unary_rounds
 
     @property
     def threads(self) -> int:
-        """Return the chart-cell worker count."""
+        """Return the chart cell worker count."""
         return self._threads
 
     @property
     def beta_fuel(self) -> int:
-        """Return the beta-reduction step bound."""
+        """Return the beta reduction step bound."""
         return self._beta_fuel
 
     @property
     def max_category_arity(self) -> int | None:
-        """Return the functor-spine arity bound, or no bound."""
+        """Return the functor spine arity bound, or no bound."""
         return self._max_category_arity
 
     @property

@@ -1,4 +1,4 @@
-"""Binary logical-form typing supervision."""
+"""Binary logical form typing supervision."""
 
 from typing import TYPE_CHECKING, Final, final
 
@@ -153,4 +153,4 @@ def _build(
 
 
 PLUGIN: Final = ComponentPlugin(spec=FormTypingLossSpec, build=_build)
-"""The logical-form typing objective plugin."""
+"""The logical form typing objective plugin."""

@@ -45,7 +45,7 @@ type _Orientation = tuple[int, int]
 
 @final
 class GeneralizedComposition:
-    """Generalized-composition rule.
+    """Generalized composition rule.
 
     The rule is adopted from one compiled application or composition recipe,
     which fixes its order, direction restriction and crossing; every
@@ -62,7 +62,7 @@ class GeneralizedComposition:
     matching : TermMatching
         The premise congruence.
     restriction : RuleRestriction | None
-        The rule-instance restriction, if declared.
+        The rule instance restriction, if declared.
     """
 
     __slots__ = (
@@ -192,7 +192,7 @@ class GeneralizedComposition:
 
     @property
     def restriction(self) -> RuleRestriction | None:
-        """Return the rule-instance restriction, if declared."""
+        """Return the rule instance restriction, if declared."""
         return self._restriction
 
     @property
@@ -207,7 +207,7 @@ class GeneralizedComposition:
 
     @property
     def normal_form_role(self) -> NormalFormRole:
-        """Return the composition metadata used by normal-form filters."""
+        """Return the composition metadata used by normal form filters."""
         if len(self._orientations) == 1:
             principal, _ = self._orientations[0]
             direction = "forward" if principal == 0 else "backward"

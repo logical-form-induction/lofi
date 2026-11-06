@@ -43,7 +43,7 @@ class GeneralizedSubstitution:
     matching : TermMatching
         The premise congruence.
     restriction : RuleRestriction | None
-        The rule-instance restriction, if declared.
+        The rule instance restriction, if declared.
     """
 
     __slots__ = (
@@ -174,7 +174,7 @@ class GeneralizedSubstitution:
 
     @property
     def restriction(self) -> RuleRestriction | None:
-        """Return the rule-instance restriction, if declared."""
+        """Return the rule instance restriction, if declared."""
         return self._restriction
 
     @property

@@ -77,18 +77,18 @@ type SpanFunctionSettings = (
     | HrrSpanFunctionSettings
     | TransformerSpanFunctionSettings
 )
-"""Resolved settings of one span-function variant."""
+"""Resolved settings of one span function variant."""
 
 
 class SpanFunctionDeclaration(NamedTuple):
-    """One registered span-function tag and its immutable settings."""
+    """One registered span function tag and its immutable settings."""
 
     kind: str
     settings: SpanFunctionSettings
 
 
 class DeclaredSpanFunction(Protocol):
-    """A span-function declaration that lowers at the chart boundary."""
+    """A span function declaration that lowers at the chart boundary."""
 
     def declaration(self) -> SpanFunctionDeclaration:
         """Return the registered tag and immutable interior settings."""
@@ -217,7 +217,7 @@ class TransformerSpanFunctionSpec(SpanFunctionSpec):
     @dx.validates("feedforward_width")
     @classmethod
     def _feedforward_width_is_positive(cls, value: int) -> int:
-        """Return a positive feed-forward width."""
+        """Return a positive feedforward width."""
         return ensure_positive(
             "a transformer span function's feed-forward width", value
         )

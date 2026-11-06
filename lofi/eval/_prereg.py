@@ -44,7 +44,7 @@ class DeclaredHypothesis:
     right : str
         The right comparison arm.
     family : str
-        The multiple-comparison family.
+        The multiple comparison family.
     margin : float | None
         The optional equivalence margin.
     pair : tuple[str, str]
@@ -59,7 +59,7 @@ class DeclaredHypothesis:
     right : str
         The right comparison arm.
     family : str
-        The multiple-comparison family.
+        The multiple comparison family.
     margin : float | None
         The optional equivalence margin.
 
@@ -120,7 +120,7 @@ class DeclaredHypothesis:
 
     @property
     def family(self) -> str:
-        """Return the multiple-comparison family the hypothesis is corrected within."""
+        """Return the multiple comparison family the hypothesis is corrected within."""
         return self._family
 
     @property
@@ -189,7 +189,7 @@ class Preregistration:
     declared : int
         The number of declared hypotheses.
     families : frozenset[str]
-        The declared multiple-comparison families.
+        The declared multiple comparison families.
 
     Parameters
     ----------
@@ -276,7 +276,7 @@ class Preregistration:
 
     @property
     def families(self) -> frozenset[str]:
-        """Return the multiple-comparison families the plan declares."""
+        """Return the multiple comparison families the plan declares."""
         return frozenset(entry.family for entry in self._hypotheses)
 
     def hypothesis(self, left: str, right: str) -> DeclaredHypothesis:

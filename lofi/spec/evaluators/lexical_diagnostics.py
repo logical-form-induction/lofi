@@ -127,7 +127,7 @@ class LexicalDiagnosticsSpec(EvaluatorSpec):
     @dx.validates("readout")
     @classmethod
     def _readout_is_named(cls, value: str) -> str:
-        """Return a named complete-term readout role."""
+        """Return a named complete term readout role."""
         return ensure_name("a lexical diagnostic readout", value)
 
     @dx.validates("beta")
@@ -250,7 +250,7 @@ class LexicalDiagnosticsSpec(EvaluatorSpec):
 
     @override
     def dependencies(self) -> tuple[Dependency, ...]:
-        """Return the complete-term readout dependency."""
+        """Return the complete term readout dependency."""
         return (Dependency(self.readout, "terms-readout"),)
 
     @override

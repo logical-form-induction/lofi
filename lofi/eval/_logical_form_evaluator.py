@@ -1,4 +1,4 @@
-"""Held-out logical-form matching over a complete-term readout."""
+"""Held-out logical form matching over a complete term readout."""
 
 from collections import Counter
 from itertools import permutations
@@ -110,7 +110,7 @@ class FittedLogicalFormAlignment(FrozenValue):
 
 
 def _symbol(node: Nominal, calculus: Calculus) -> str | None:
-    """Return the relabelable symbol named by a logical-form node."""
+    """Return the relabelable symbol named by a logical form node."""
     if node.op.is_constant:
         return node.payload
     if (
@@ -296,7 +296,7 @@ def _alignment_covers(
 
 @final
 class AlignedLogicalFormMetric:
-    """Apply one frozen symbol mapping before logical-form scoring."""
+    """Apply one frozen symbol mapping before logical form scoring."""
 
     __slots__ = ("_calculus", "_fitted", "_metric", "_signature")
 
@@ -439,7 +439,7 @@ class LogicalFormAlignmentScore(FrozenValue):
 
 
 def _symbol_arities(context: HeldOutEvaluationContext) -> Mapping[str, int]:
-    """Return the interpretation's non-logical symbols and curried arities."""
+    """Return the interpretation's nonlogical symbols and curried arities."""
     interpretation = context.interpretation
     if interpretation is None:
         msg = "logical-form evaluation requires a declared interpretation"
@@ -454,7 +454,7 @@ def _gold_vocabulary(
     context: HeldOutEvaluationContext,
     symbols: frozenset[str],
 ) -> LogicalVocabulary:
-    """Return the observed part of the declared non-logical vocabulary."""
+    """Return the observed part of the declared nonlogical vocabulary."""
     interpretation = context.interpretation
     if interpretation is None:
         msg = "logical-form evaluation requires a declared interpretation"
@@ -648,7 +648,7 @@ def _fiber_policy(settings: AlignmentSettings) -> ManyToOne | OneToOne:
 class LogicalFormEvaluator:
     """Score the most probable decoded form of each held-out sentence.
 
-    The evaluator reads a complete-term readout at an item's root cell and
+    The evaluator reads a complete term readout at an item's root cell and
     selects the form with greatest decoder weight. Gold forms come from the
     corpus's declared interpretation, through the held-out evaluation context.
     """
@@ -737,7 +737,7 @@ class LogicalFormEvaluator:
     def metrics(
         self,
     ) -> tuple[AlignedLogicalFormMetric, ...]:
-        """Return the declared logical-form metric in report order."""
+        """Return the declared logical form metric in report order."""
         if not self._metrics:
             msg = "logical-form evaluation requires alignment fitted on development"
             raise ValueError(msg)
@@ -983,7 +983,7 @@ def _build(
     context: HeldOutEvaluationContext,
     /,
 ) -> LogicalFormEvaluator:
-    """Build the declared logical-form evaluator in its held-out context."""
+    """Build the declared logical form evaluator in its held-out context."""
     return LogicalFormEvaluator(
         context,
         readout=settings.readout,

@@ -2,7 +2,7 @@
 
 A rung of an experiment's contraction ladder is a declaration variant of the
 ``RungSpec`` union and an installed plugin of the ``lofi.contraction_rung``
-entry-point group, which lowers the declaration to the sweep transformation it
+entry point group, which lowers the declaration to the sweep transformation it
 states. The plugin reads what it needs of the experiment from one rung
 context, and refuses a declaration the experiment cannot contract by, so a
 new rung is a new declaration variant and plugin with no edit to the loader.

@@ -1,4 +1,4 @@
-"""Derivation extraction and packed-forest statistics."""
+"""Derivation extraction and packed forest statistics."""
 
 from heapq import heappop, heappush
 from itertools import islice, product
@@ -518,7 +518,7 @@ def derivation_entropy[T](chart: Chart[T, float], key: ItemKey[T], /) -> float:
     Parameters
     ----------
     chart : Chart[T, float]
-        Packed forest with log-probability weights.
+        Packed forest with log probability weights.
     key : ItemKey[T]
         Item whose derivation entropy to compute.
 
@@ -826,7 +826,7 @@ class _Entropy[T]:
     Parameters
     ----------
     chart : Chart[T, float]
-        Packed forest with log-probability weights.
+        Packed forest with log probability weights.
     """
 
     __slots__ = ("_chart", "_folding", "_table")

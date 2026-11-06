@@ -13,7 +13,7 @@ _FAMILIES: Final = "families"
 """The family whose entries name every configurable component family's root."""
 
 FAMILY_GROUP: Final = entry_point_group(_FAMILIES)
-"""Entry-point group whose names declare configurable component families."""
+"""Entry point group whose names declare configurable component families."""
 
 _DECLARATION_FAMILIES: Final = (
     "rule",
@@ -84,7 +84,7 @@ def _component_families() -> tuple[str, ...]:
 
 
 def component_groups() -> tuple[str, ...]:
-    """Return the entry-point group of every family whose entries are plugins.
+    """Return the entry point group of every family whose entries are plugins.
 
     Returns
     -------
@@ -110,7 +110,7 @@ def _load(families: Iterable[str]) -> tuple[str, ...]:
     Returns
     -------
     tuple[str, ...]
-        Entry-point names in load order.
+        Entry point names in load order.
     """
     names: list[str] = []
 
@@ -132,7 +132,7 @@ def load_plugins() -> tuple[str, ...]:
     Returns
     -------
     tuple[str, ...]
-        Entry-point names in load order.
+        Entry point names in load order.
 
     Raises
     ------

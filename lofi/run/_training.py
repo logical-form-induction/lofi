@@ -213,7 +213,7 @@ def _validate_assignment_inventory(
 
 
 def _validate_category_side_data(run_spec: RunSpec, /) -> None:
-    """Refuse category-side scoring without retained pair-side derivations."""
+    """Refuse category side scoring without retained pair-side derivations."""
     evaluators = tuple(
         (role, evaluator)
         for role, evaluator in run_spec.evaluators.items()
@@ -477,7 +477,7 @@ class TrainingBlueprint(FrozenValue):
 
     @property
     def action_set_fingerprint(self) -> str:
-        """Return the allocation-free controller action-set identity."""
+        """Return the allocation-free controller action set identity."""
         return self._actions.digest
 
     @property

@@ -29,7 +29,7 @@ REFERENCE_NUTS_PLAN: Final = NutsPlan(
 """The preregistered posterior-fit benchmark plan."""
 
 NONFINITE_START: Final = "initial_position must contain only finite values"
-"""The words Quivers' ``ValueError`` uses for a chain's non-finite starting point.
+"""The words Quivers' ``ValueError`` uses for a chain's nonfinite starting point.
 
 Quivers exposes no typed signal for this refusal, so it is recognized by these
 words, which both its driver and its kernel use.
@@ -85,11 +85,11 @@ class QuiversNutsFitter(FrozenValue):
         makes repeated fits independent of adaptation state while Quivers
         derives independent chain streams from the plan's root seed.
 
-        Quivers absorbs a non-finite density along a trajectory as a divergent
-        transition and refuses a non-finite initial position with a
+        Quivers absorbs a nonfinite density along a trajectory as a divergent
+        transition and refuses a nonfinite initial position with a
         ``ValueError`` whose message holds ``NONFINITE_START``. Those
         numerical conditions, a chain whose
-        every retained transition diverged, and a non-finite draw, density or
+        every retained transition diverged, and a nonfinite draw, density or
         convergence diagnostic are reported as a ``PosteriorFittingError``.
         An exhausted accelerator is reported as a ``MemoryError``. Any other
         error is a defect and propagates.

@@ -61,7 +61,7 @@ def teacher_contexts(index: ChoiceIndex, row: Encoding, /) -> tuple[HoleContext,
     """Return the frontier context frontier decoding reaches at every slot.
 
     Occupied slots are visited in the shallowest-leftmost hole order frontier
-    decoding fills, so each slot's free-variable count and remaining budget are
+    decoding fills, so each slot's free variable count and remaining budget are
     those of the skeleton decoded before it. An unoccupied slot is never scored
     and takes the root context, which keeps the rows rectangular.
     """

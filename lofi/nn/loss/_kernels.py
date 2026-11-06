@@ -264,7 +264,7 @@ def _guarded(
     model: LogDistribution,
     nodes: Tensor | None,
 ) -> tuple[Tensor, Tensor]:
-    """Return the two log-score tensors with every masked node made inert.
+    """Return the two log score tensors with every masked node made inert.
 
     Parameters
     ----------

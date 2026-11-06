@@ -2,7 +2,7 @@
 
 A run document declares its probes under ``probes``, each keyed by the role its
 rows are reported under, and each built by the plugin its kind names in the
-``lofi.probe`` entry-point group. The probes are composed against the prepared
+``lofi.probe`` entry point group. The probes are composed against the prepared
 model before it is fitted: every component that publishes sites and admits an
 instrumented region is offered to them, the held-out batches are run once to
 find which published points they reach, and a probe naming a role or a site no

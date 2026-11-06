@@ -61,7 +61,7 @@ type _PinMode = Literal["independent_sigmoid", "normalized_softmax"]
 def _drawn(
     shape: tuple[int, ...], generator: torch.Generator, *, scale: float
 ) -> Tensor:
-    """Return a scaled standard-normal draw at a shape.
+    """Return a scaled standard normal draw at a shape.
 
     Parameters
     ----------

@@ -709,7 +709,7 @@ def _restructured[C: Hashable](
 ) -> DecoratedCategory[C]:
     """Decorate a functor category for a source that is not a functor.
 
-    A type-raising category is built by :func:`_type_raised`. Otherwise the
+    A type raising category is built by :func:`_type_raised`. Otherwise the
     category is decorated afresh with the source's heads and no governors. If
     the source is a governed argument and one of the new result-spine
     arguments is equivalent to it, that argument takes the source's heads and

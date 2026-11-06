@@ -1,4 +1,4 @@
-"""Type-raising rules and their controller action product."""
+"""Type raising rules and their controller action product."""
 
 from __future__ import annotations
 
@@ -107,9 +107,9 @@ def _term_spec(term: Term) -> JsonValue:
 
 @final
 class TypeRaising:
-    """Type-raising rule with optional finite targets and arguments.
+    """Type raising rule with optional finite targets and arguments.
 
-    The rule is adopted from one compiled type-raising recipe. A rule with
+    The rule is adopted from one compiled type raising recipe. A rule with
     finite targets enumerates its conclusions forward; one without checks and
     residuates every raised shape but enumerates nothing. A rule with finite
     arguments raises only a premise its matching identifies with one of them.
@@ -117,7 +117,7 @@ class TypeRaising:
     Parameters
     ----------
     compiled : _CompiledRule
-        The compiled type-raising recipe.
+        The compiled type raising recipe.
     functors : Functors[Term]
         The functor view the recipe names.
     slash : OpName
@@ -129,7 +129,7 @@ class TypeRaising:
     arguments : Sequence[Term] | None
         The categories that may raise, or ``None`` for every category.
     restriction : RuleRestriction | None
-        The rule-instance restriction, if declared.
+        The rule instance restriction, if declared.
     """
 
     __slots__ = (
@@ -246,7 +246,7 @@ class TypeRaising:
 
     @property
     def restriction(self) -> RuleRestriction | None:
-        """Return the rule-instance restriction, if declared."""
+        """Return the rule instance restriction, if declared."""
         return self._restriction
 
     @property
@@ -261,7 +261,7 @@ class TypeRaising:
 
     @property
     def normal_form_role(self) -> NormalFormRole:
-        """Return the raising direction used by normal-form filters."""
+        """Return the raising direction used by normal form filters."""
         forward = self._slash == self._functors.forward_slash
         backward = self._slash == self._functors.backward_slash
         direction = (
@@ -295,7 +295,7 @@ class TypeRaising:
 
     @property
     def proof_schemata(self) -> tuple[SchematicSequent, ...]:
-        """Return the type-raising schemata."""
+        """Return the type raising schemata."""
         sort = self._functors.category_sort
         inputs = (
             (MVar("X", sort),)

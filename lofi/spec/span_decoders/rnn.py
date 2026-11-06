@@ -44,7 +44,7 @@ class RnnSpanDecoderSettings(NamedTuple):
 class RnnSpanDecoderSpec(SpanDecoderSpec):
     """Declares a recurrent decoder of the words a chart span covers.
 
-    The decoder reads span vectors at the chart-cell width and scores the run's
+    The decoder reads span vectors at the chart cell width and scores the run's
     vocabulary, so the declaration names neither.
 
     Attributes

@@ -174,7 +174,7 @@ the draw divides by $n$ to obtain this PMF before assigning ranks to forms.
 For parametric ambiguity, let $K\in\{1,\ldots,m\}$ count a form's
 categories, with requested mean $\mu$ and dispersion $\delta$. Write
 $a=\lfloor\mu\rfloor$ and $b=\lceil\mu\rceil$. When $a<b$, the
-minimum-variance PMF has $q(a)=b-\mu$ and $q(b)=\mu-a$; when $a=b$, it
+minimum variance PMF has $q(a)=b-\mu$ and $q(b)=\mu-a$; when $a=b$, it
 places all mass at $a$. For $m>1$, the endpoint PMF has
 $r(1)=(m-\mu)/(m-1)$ and $r(m)=(\mu-1)/(m-1)$. All unlisted probabilities
 are zero. The declared law is
@@ -186,7 +186,7 @@ $$
 
 When $m=1$, both component PMFs put all mass at one. The implementation
 apportions finitely many forms to these probabilities and adjusts the total
-category-slot count toward $\operatorname{round}(n\mu)$; rounding and the
+category slot count toward $\operatorname{round}(n\mu)$; rounding and the
 available support can prevent exact realization of the target mean.
 `placement` controls the assignment of frequency ranks to those realized
 ambiguity counts, rather than changing $p_K$.
@@ -201,7 +201,7 @@ $$
 
 The support is selected subject to each realized ambiguity $k_w$, and cell
 masses are fitted on that support. These equations state fitting targets;
-the finite alternating-scaling procedure need not satisfy both marginals
+the finite alternating scaling procedure need not satisfy both marginals
 exactly after its last update. Inspect the compiled and sampled reports
 rather than treating requested marginals as measured ones.
 
@@ -244,7 +244,7 @@ w4 0.167 [('S/N', 1.0)]
 w5 0.167 [('N', 1.0)]
 ```
 
-With category shares $p(A)$ held fixed, generated-lexicon coupling
+With category shares $p(A)$ held fixed, generated lexicon coupling
 $\kappa\ne1$ targets class sizes proportional to
 $p(A)^{1/(1-\kappa)}$. These targets are apportioned to integers, bounded by
 one and the number of forms, and constrained by available form masses. At
@@ -259,7 +259,7 @@ The generation is bounded by these fields:
 | Field | Default | Bounds |
 |---|---|---|
 | `max_depth` | 3 | How deeply constructors nest in a lexical category; `(S/NP)/NP` has depth two. |
-| `max_arguments` | none | A category's functor-spine argument count, as `{value: n}`. |
+| `max_arguments` | none | A category's functor spine argument count, as `{value: n}`. |
 | `max_order` | none | A category's order under the signature's functor views, as `{value: n}`. |
 | `derivation_depth` | 4 | Steps from the root of a generating derivation to a leaf. |
 | `expansion` | 0.5 | The chance a node between the root and the depth bound is expanded rather than left a leaf. |
@@ -268,7 +268,7 @@ The generation is bounded by these fields:
 The premises generation draws from are the signature's primitives less those
 it reserves for its rules, such as the conjunction markers, so changing the
 signature's `primitives` changes what the inventory is built from. The
-[synthetic-generated example](https://github.com/logical-form-induction/lofi/blob/main/docs/examples/synthetic-generated.yaml)
+[synthetic generation example](https://github.com/logical-form-induction/lofi/blob/main/docs/examples/synthetic-generated.yaml)
 declares a generated lexicon over primitives `S`, `P1`, `P2` and `P3`.
 
 ## Seed a drawn lexicon

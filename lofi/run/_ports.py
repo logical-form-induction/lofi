@@ -48,7 +48,7 @@ __all__ = [
 
 
 class ActiveLearningRun(Protocol):
-    """Runs one active-learning document outside any experiment."""
+    """Runs one active learning document outside any experiment."""
 
     def __call__(
         self, document: Path, seed: int, out: Path, /
@@ -58,7 +58,7 @@ class ActiveLearningRun(Protocol):
         Parameters
         ----------
         document : Path
-            The active-learning document.
+            The active learning document.
         seed : int
             The run seed every stream derives from.
         out : Path

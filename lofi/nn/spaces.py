@@ -43,7 +43,7 @@ __all__ = [
 
 @runtime_checkable
 class CellComposer(Protocol):
-    """Compose paired chart-cell tensors in the chart's represented space."""
+    """Compose paired chart cell tensors in the chart's represented space."""
 
     def compose(self, left: Tensor, right: Tensor) -> Tensor:
         """Return one parent representation per paired child cell."""
@@ -255,7 +255,7 @@ class ChartCombine:
 
     @property
     def output_width(self) -> int:
-        """Return the chart-cell width."""
+        """Return the chart cell width."""
         return self._width
 
     def merge(self, left: Encoded, right: Encoded, /) -> Encoded:

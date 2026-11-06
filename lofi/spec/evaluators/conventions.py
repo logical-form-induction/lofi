@@ -80,7 +80,7 @@ class ConventionSpec(dx.Model, extra="forbid"):
     @dx.validates("minimum_length")
     @classmethod
     def _length_is_non_negative(cls, value: int) -> int:
-        """Return a non-negative minimum sentence length."""
+        """Return a nonnegative minimum sentence length."""
         return ensure_non_negative("a minimum sentence length", value)
 
     def settings(self) -> ConventionSettings:

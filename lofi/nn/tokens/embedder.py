@@ -595,7 +595,7 @@ class StaticTokenEmbedder(nn.Module):
 
 
 def _rows(lines: Iterator[str]) -> Iterator[tuple[str, tuple[float, ...]]]:
-    """Yield the token and the vector of each non-empty line.
+    """Yield the token and the vector of each nonempty line.
 
     Parameters
     ----------

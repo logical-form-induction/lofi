@@ -1,4 +1,4 @@
-"""Declared resource bounds for one proof-service use site."""
+"""Declared resource bounds for one proof service use site."""
 
 from typing import Self
 
@@ -11,14 +11,14 @@ __all__ = ["ProofBudgetSpec"]
 
 
 class ProofBudgetSpec(dx.Model, extra="forbid"):
-    """The call, wall-clock, and CPU limits for one proof-service use site.
+    """The call, wall clock, and CPU limits for one proof service use site.
 
     Attributes
     ----------
     calls_per_step : int | None
         The most uncached calls dispatched during one step, or no limit.
     wall_per_step : float | None
-        The wall-clock limit of one step, in seconds, or no limit.
+        The wall clock limit of one step, in seconds, or no limit.
     cpu_seconds : float | None
         The cumulative CPU-time limit of this use site, or no limit.
     """

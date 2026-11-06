@@ -447,7 +447,7 @@ def majority_class_bound(
     scored: JudgmentSource,
     /,
 ) -> OrdinalBoundResult:
-    """Return the fit-only global majority-class comparison bound.
+    """Return the fit-only global majority class comparison bound.
 
     The empirical response distribution is estimated from fitting rows alone
     and applied unchanged to every scored row. Its first modal level is the

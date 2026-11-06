@@ -2,7 +2,7 @@
 
 A readout under `model.readouts` declares which terms a run reads off the
 chart: at every span it observes one representation space through that space's
-decoders, and publishes either the decoder's symbol-marginal rows, the mass of a
+decoders, and publishes either the decoder's symbol marginal rows, the mass of a
 declared target set, or weighted complete terms under a decoding strategy.
 Losses and evaluators then name a readout, or the output it publishes, as
 their input. This guide declares each of the three routes, chooses a decoding
@@ -67,7 +67,7 @@ types categories inside grammar-goal sentences None
 ```
 
 The one packaged readout kind is `terms`, registered under the
-`lofi.readout` entry-point group. Its fields:
+`lofi.readout` entry point group. Its fields:
 
 | Field | What it says |
 | --- | --- |
@@ -76,7 +76,7 @@ The one packaged readout kind is `terms`, registered under the
 | `targets`, `output` | A target set supplied by the grammar and the name its mass is published under. `grammar-goal` is the grammar's goal categories. |
 | `mass` | How a target's mass is computed: `factorized` (the default) multiplies the symbol probabilities at the slots the target fills, and `coupled` takes the decoder's weight for the whole target, each slot conditioned on the target's symbols above it. |
 | `decoding` | A strategy for decoding complete terms, or `null` for none. |
-| `meanings` | How complete logical forms are obtained at internal spans: `decoded` (the default) decodes one at each span, and `proof-term` pushes lexical forms through the parser's semantic proof actions, under a `weighting` from the `lofi.meaning_weighting` group (`distinct` or `multiplicity`) and a required `residual_mass` that bounds each derived phrase cell ([Bound proof-term phrase cells](#bound-proof-term-phrase-cells)). |
+| `meanings` | How complete logical forms are obtained at internal spans: `decoded` (the default) decodes one at each span, and `proof-term` pushes lexical forms through the parser's semantic proof actions, under a `weighting` from the `lofi.meaning_weighting` group (`distinct` or `multiplicity`) and a required `residual_mass` that bounds each derived phrase cell ([Bound proof term phrase cells](#bound-proof-term-phrase-cells)). |
 
 `required_chart_outputs` is what the chart must publish for the readout to
 run. The `types` readout's target mass needs the split posteriors `alpha` and
@@ -149,7 +149,7 @@ named `forms`:
 | --- | --- | --- |
 | `greedy` | The stepwise argmax. | `clamp`. |
 | `beam` | A bounded beam. | `width`, `clamp`. |
-| `exhaustive` | Every term, up to `cap` terms and under a residual-mass bound. | `cap`, `residual_mass`, `clamp`, `exact_residual` (default `1e-6`: an untruncated enumeration whose residual falls at or under it is reported exact). |
+| `exhaustive` | Every term, up to `cap` terms and under a residual mass bound. | `cap`, `residual_mass`, `clamp`, `exact_residual` (default `1e-6`: an untruncated enumeration whose residual falls at or under it is reported exact). |
 | `sample` | Repeated draws, rescored. | `draws` (default 1), `rescore_tolerance`, `restriction`, `clamp`. |
 
 `clamp` is a term in the language's surface syntax that fixes the decoder's
@@ -161,7 +161,7 @@ draw runs the restriction installed under its kind in the
 
 The readout runs the strategy installed under its name in the
 `lofi.decoding_strategy` group. A strategy states whether it enumerates terms
-under a residual-mass bound, which `exhaustive` does and which paired
+under a residual mass bound, which `exhaustive` does and which paired
 coherence requires, and whether it rescores its terms under teacher forcing,
 which `sample` does and which refuses a decoder without teacher-forced rows.
 
@@ -210,8 +210,8 @@ estimate, or the grounding is refused
 
 Exhaustive decoding is the one strategy that truncates, so it is the one that
 draws on the run's [approximation bound](configure-a-chart-parser.md#bound-the-approximation).
-A `residual_mass` on the decoding overrides the run-level
-`approximation.residual_mass`, and a decoding without one takes the run-level
+A `residual_mass` on the decoding overrides the run level
+`approximation.residual_mass`, and a decoding without one takes the run level
 bound. The packaged `types` fragment declares an override of `0.01` on
 `category-terms`; the document sets that override to `null`, so the composed
 `category-terms` takes the document's `approximation.residual_mass: 0.75`. A
@@ -234,11 +234,11 @@ except ConfigValueError as refused:
 model.readouts.category-terms.decoding.residual_mass was refused: an exhaustive residual mass lies in [0, 1), not at 1.0
 ```
 
-## Bound proof-term phrase cells
+## Bound proof term phrase cells
 
 On the `proof-term` meaning route only the words of a sentence are decoded.
 Each word's frontier is checked against the readout's own bound, the decoding's
-`residual_mass` or else the run-level `approximation.residual_mass`, as above.
+`residual_mass` or else the run level `approximation.residual_mass`, as above.
 A phrase cell is instead derived from its children's frontiers, and it keeps
 only the mass they retain, so its residual compounds the omissions of every
 word beneath it: three words that each leave a residual of 0.9 retain at most
@@ -268,7 +268,7 @@ Here every word of `category-terms` is held to the run's 0.75, and every
 phrase cell to 0.999. A derived cell whose frontier is truncated past its
 bound stops the run with a refusal naming the span it was derived at, in the
 form `proof-term span (i, j): measured residual mass r exceeds the declared
-bound b`. The derived bound has no run-level default, so a proof-term
+bound b`. The derived bound has no run level default, so a proof term
 route without one is refused:
 
 ```python
@@ -293,7 +293,7 @@ A span decoder under `model.span_decoders` reconstructs the words a chart span
 covers. The one packaged kind, `rnn-span-decoder` in the `lofi.span_decoder`
 group, declares a recurrent `cell` (from the `lofi.recurrent_cell` group:
 `gru` by default, `lstm`, `elman-tanh` or `elman-relu`), `layers`, an optional
-`state_width`, a feed-forward `head`, and the `end` token that terminates a
+`state_width`, a feedforward `head`, and the `end` token that terminates a
 span (default `<eos>`). The S1 experiment's
 [`experiments/s1/s1-common-run.yaml`](https://github.com/logical-form-induction/lofi/blob/main/experiments/s1/s1-common-run.yaml)
 declares one under the role `reconstruction`:

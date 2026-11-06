@@ -2,7 +2,7 @@
 
 An experiment's ``pricing`` block is a declaration variant of the
 ``PricingSpec`` union and an installed plugin of the ``lofi.pricing``
-entry-point group. The plugin builds the cost model a price is read under:
+entry point group. The plugin builds the cost model a price is read under:
 how many bootstrap replicates its quantiles are read off and which reference
 timings, if any, the stacks' own timings are interpolated over.
 """

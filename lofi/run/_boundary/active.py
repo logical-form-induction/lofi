@@ -1,7 +1,7 @@
-"""Boundary records of an active-learning run.
+"""Boundary records of an active learning run.
 
 A run records its manifest beside its round rows. The manifest holds the
-resolved active-learning document, whether the run completed or stopped with a
+resolved active learning document, whether the run completed or stopped with a
 batch awaiting its responses, why a completed run stopped, how many rounds it
 recorded, the judgments it started from, and the content identity of every
 document it read. A run that
@@ -41,7 +41,7 @@ __all__ = [
 ]
 
 ACTIVE_LEARNING_ROLE: Final = "active-learning"
-"""The role an active-learning run's round rows are reported under."""
+"""The role an active learning run's round rows are reported under."""
 
 ACTIVE_LEARNING_METRICS: Final = (
     "agreement",
@@ -52,7 +52,7 @@ ACTIVE_LEARNING_METRICS: Final = (
 """The metrics each recorded round reports, one row each, a share per stratum."""
 
 ACTIVE_LEARNING_MANIFEST_NAME: Final = "active-learning.json"
-"""The file an active-learning run records its manifest in."""
+"""The file an active learning run records its manifest in."""
 
 ROUNDS_NAME: Final = "rounds"
 """The directory, under a run's, holding one directory per round."""
@@ -68,14 +68,14 @@ type ActiveLearningStatus = Literal["completed", "awaiting-responses"]
 
 
 class ActiveLearningManifest(dx.Model, extra="forbid"):
-    """Record one active-learning run and what it read.
+    """Record one active learning run and what it read.
 
     Attributes
     ----------
     kind : Literal["active-learning"]
         The manifest kind.
     document : ActiveLearningSpec
-        The resolved active-learning document.
+        The resolved active learning document.
     status : ActiveLearningStatus
         Whether the run completed or awaits the responses to a batch.
     rounds : int
@@ -149,7 +149,7 @@ def awaited_batch(directory: Path, manifest: ActiveLearningManifest, /) -> Path 
 def decode_active_learning_document(
     document: Mapping[str, JsonValue], /
 ) -> ActiveLearningSpec:
-    """Validate a resolved active-learning document at its run boundary."""
+    """Validate a resolved active learning document at its run boundary."""
     load_plugins()
     return ActiveLearningSpec.model_validate_json(json.dumps(dict(document)))
 
@@ -157,7 +157,7 @@ def decode_active_learning_document(
 def compose_active_learning(
     path: Path, /, *, search_path: tuple[Path, ...] = ()
 ) -> ActiveLearningSpec:
-    """Compose and validate one active-learning document from its file."""
+    """Compose and validate one active learning document from its file."""
     load_plugins()
     return (
         SpecLoader(search_path=search_path)
@@ -167,12 +167,12 @@ def compose_active_learning(
 
 
 def decode_active_learning_manifest(data: bytes, /) -> ActiveLearningManifest:
-    """Validate persisted active-learning manifest bytes.
+    """Validate persisted active learning manifest bytes.
 
     Raises
     ------
     ValueError
-        If the bytes are not an active-learning manifest.
+        If the bytes are not an active learning manifest.
     """
     load_plugins()
     try:
@@ -183,6 +183,6 @@ def decode_active_learning_manifest(data: bytes, /) -> ActiveLearningManifest:
 
 
 def encode_active_learning_manifest(manifest: ActiveLearningManifest, /) -> bytes:
-    """Encode a validated active-learning manifest deterministically."""
+    """Encode a validated active learning manifest deterministically."""
     document = json.loads(manifest.model_dump_json())
     return (json.dumps(document, sort_keys=True, indent=2) + "\n").encode()

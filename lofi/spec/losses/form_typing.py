@@ -1,4 +1,4 @@
-"""Logical-form typing loss declaration."""
+"""Logical form typing loss declaration."""
 
 from typing import Literal, NamedTuple, override
 
@@ -12,13 +12,13 @@ __all__ = ["FormTypingLossSettings", "FormTypingLossSpec"]
 
 
 class FormTypingLossSettings(NamedTuple):
-    """Settings for logical-form typing supervision."""
+    """Settings for logical form typing supervision."""
 
     readout: str
 
 
 class FormTypingLossSpec(LossSpec):
-    """Declare binary typing supervision over one complete-term readout."""
+    """Declare binary typing supervision over one complete term readout."""
 
     kind: Literal["form-typing"] = "form-typing"
     readout: str
@@ -31,7 +31,7 @@ class FormTypingLossSpec(LossSpec):
 
     @override
     def dependencies(self) -> tuple[Dependency, ...]:
-        """Return the complete-term readout dependency."""
+        """Return the complete term readout dependency."""
         return (Dependency(self.readout, "form-typing-readout"),)
 
     def settings(self) -> FormTypingLossSettings:

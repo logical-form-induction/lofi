@@ -72,7 +72,7 @@ class _Language(Protocol):
 
     @property
     def function_type(self) -> str:
-        """Return the declared function-type constructor."""
+        """Return the declared function type constructor."""
         ...
 
     def scheme(self, constant: str, /) -> _Scheme:

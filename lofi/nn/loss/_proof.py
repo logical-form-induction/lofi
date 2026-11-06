@@ -364,9 +364,9 @@ class ShapedProofReward[S]:
     type checker nor the prover accepts one. A closed form goes to the type
     checker, and one the checker leaves a constraint on stops at the
     well-formed credit. A form that type-checks with no reference to be judged
-    against stops at the type-checking credit. Otherwise the prover is asked
+    against stops at the type checking credit. Otherwise the prover is asked
     whether the form and the reference entail each other, which pays the proved
-    credit on a proof and leaves a countermodel at the type-checking credit,
+    credit on a proof and leaves a countermodel at the type checking credit,
     the proof term having been earned by neither.
 
     An abstention is not a payment. It comes back as its own type, since a
@@ -459,7 +459,7 @@ class ShapedProofReward[S]:
             The logical form the decoder sampled.
         reference : Term | None
             The form the proof is against, or None where the item has none, in
-            which case the payment stops at the type-checking credit.
+            which case the payment stops at the type checking credit.
         """
         if not form.is_closed:
             return self._paid(FormOutcome.ILL_FORMED, form, None)
@@ -511,7 +511,7 @@ class ShapedProofReward[S]:
         )
 
     def open_step(self) -> None:
-        """Open this reward's next proof-service budget window."""
+        """Open this reward's next proof service budget window."""
         self._service.open_step(self._site)
 
     @override

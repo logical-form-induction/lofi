@@ -1,4 +1,4 @@
-"""Premise-hypothesis pairs labeled by the oracle, and what a draw aims at.
+"""Pairs of premises and hypotheses labeled by the oracle, and what a draw aims at.
 
 A pair's label is the relation the premise bears to the hypothesis, decided
 by two questions to the entailment oracle: whether the premise entails the
@@ -1103,7 +1103,7 @@ def relation_complexity(premise: Term, hypothesis: Term, /) -> int:
 
 @final
 class PairRelations:
-    """Which premise-hypothesis relations a draw admits beside their labels.
+    """Which relations a draw admits between premises and hypotheses.
 
     A pair is trivial when its two logical forms are one term, which covers a
     reflexive pair and a pair of alphabetic variants.
@@ -1286,7 +1286,7 @@ class RelationReport:
 
 @final
 class InferencePair:
-    """One premise-hypothesis pair, its label, and the forms it was decided on.
+    """One premise and hypothesis, their label, and the deciding logical forms.
 
     Parameters
     ----------

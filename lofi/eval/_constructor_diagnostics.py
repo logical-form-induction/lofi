@@ -737,7 +737,7 @@ class ConstructorDiagnosticEvaluator:
     def predict[BatchT: HeldOutItems](
         self, outputs: ObjectiveOutputs[BatchT], /
     ) -> Mapping[ItemId, ConstructorDiagnosticPrediction]:
-        """Return each token's published complete-term beam."""
+        """Return each token's published complete term beam."""
         decoded = outputs.terms.get(self._readout)
 
         if decoded is None:

@@ -1,4 +1,4 @@
-"""The plugin a component variant registers under its family's entry-point group."""
+"""The plugin a component variant registers under its family's entry point group."""
 
 from typing import Protocol, cast, override
 

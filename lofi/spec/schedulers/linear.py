@@ -1,4 +1,4 @@
-"""Linear learning-rate scheduler declaration."""
+"""Linear learning rate scheduler declaration."""
 
 from typing import Literal, NamedTuple
 
@@ -69,7 +69,7 @@ class LinearSchedulerSpec(SchedulerSpec):
     @dx.validates("final_factor")
     @classmethod
     def _final_factor_is_a_fraction(cls, value: float) -> float:
-        """Validate the final learning-rate fraction."""
+        """Validate the final learning rate fraction."""
         checked = ensure_finite("final_factor", value)
 
         if not 0.0 <= checked <= 1.0:

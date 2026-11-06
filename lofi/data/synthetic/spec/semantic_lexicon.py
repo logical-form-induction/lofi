@@ -1,6 +1,6 @@
 """Semantic lexicon declarations and the lexicons they build.
 
-A semantic lexicon assigns logical-form classes and arities to the entries of
+A semantic lexicon assigns logical form classes and arities to the entries of
 a grammar's lexicon, either from a declared joint and assignment or by
 resembling the logical forms of a source at a declared size. Building one
 against a grammar assembly returns the interior semantic lexicon.
@@ -76,7 +76,7 @@ class QuantifierMeaningSpec(dx.Model, extra="forbid"):
     @dx.validates("template")
     @classmethod
     def _template_is_nonempty(cls, template: str | None) -> str | None:
-        """Return no override or a nonempty logical-form template."""
+        """Return no override or a nonempty logical form template."""
         if template == "":
             msg = "a quantifier meaning template is empty"
             raise ValueError(msg)
@@ -84,7 +84,7 @@ class QuantifierMeaningSpec(dx.Model, extra="forbid"):
 
 
 class SemanticFragmentSpec(dx.Model, extra="forbid"):
-    """The logical-form classes a generated semantic lexicon may draw."""
+    """The logical form classes a generated semantic lexicon may draw."""
 
     order: Literal["first", "second", "higher"] | None = None
     quantifiers: tuple[QuantifierMeaningSpec, ...] | None = None
@@ -152,7 +152,7 @@ class SemanticFragmentSpec(dx.Model, extra="forbid"):
 
 
 class SemanticClassSpec(dx.Model, extra="forbid"):
-    """One logical-form class with the number of forms in it and its share of tokens.
+    """One logical form class with the number of forms in it and its share of tokens.
 
     Attributes
     ----------
@@ -190,7 +190,7 @@ class SemanticClassSpec(dx.Model, extra="forbid"):
 
 
 class _SemanticJointDeclaration(Protocol):
-    """A declaration that supplies logical-form classes and their mass."""
+    """A declaration that supplies logical form classes and their mass."""
 
     def classes(self) -> tuple[tuple[LogicalClass, int, float], ...]:
         """Return each class with its size and token share."""
@@ -214,7 +214,7 @@ class _AmbiguityLawDeclaration(Protocol):
 
 
 class _AssignmentDeclaration(Protocol):
-    """A declaration that assigns logical-form classes to categories."""
+    """A declaration that assigns logical form classes to categories."""
 
     def categories(self) -> tuple[str, ...]:
         """Return the category texts named by the declaration."""
@@ -231,11 +231,11 @@ class _AssignmentDeclaration(Protocol):
 
 
 class SemanticJointSpec(dx.TaggedUnion, discriminator="spelling", extra="forbid"):
-    """A spelling of the joint distribution of logical-form class and token mass."""
+    """A spelling of the joint distribution of logical form class and token mass."""
 
 
 class ParametricSemanticJointSpec(SemanticJointSpec, extra="forbid"):
-    """A joint spelled as a class-size law and a coupling exponent.
+    """A joint spelled as a class size law and a coupling exponent.
 
     Class sizes follow the declared law over the members in declaration
     order, scaled so the heaviest rank holds ``largest_class`` forms and no
@@ -662,7 +662,7 @@ class TabularAssignmentSpec(AssignmentSpec, extra="forbid"):
 
 
 class SemanticLexiconStructure(dx.Model, extra="forbid"):
-    """The joint of logical-form class and token mass drawn over a lexicon.
+    """The joint of logical form class and token mass drawn over a lexicon.
 
     Each class of the joint has an inventory of forms: the fragment's
     quantifiers or connectives, fresh predicate symbols split across arities
@@ -694,7 +694,7 @@ class SemanticLexiconStructure(dx.Model, extra="forbid"):
     constants : int | None
         The total inventory size, or nothing to use the joint's row sizes.
     polysemy : AmbiguityLawSpec
-        The law over meanings per form-category item and their frequency placement.
+        The law over meanings per form category item and their frequency placement.
     """
 
     joint: SemanticJointSpec
@@ -1273,7 +1273,7 @@ class ResemblingSemanticLexiconSpec(dx.Model, extra="forbid"):
 
 
 def preset(name: str, /) -> SemanticLexiconStructure:
-    """Return a semantic-lexicon preset from the configured search path.
+    """Return a semantic lexicon preset from the configured search path.
 
     Parameters
     ----------

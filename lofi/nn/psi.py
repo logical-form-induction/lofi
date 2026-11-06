@@ -33,7 +33,7 @@ _WIDTH_AXIS: Final[str] = "width"
 """The feature axis."""
 
 _CELL_AXES: Final[tuple[str, ...]] = (_SPAN_AXIS, _ITEM_AXIS, _WIDTH_AXIS)
-"""Packed chart-cell axes."""
+"""Packed chart cell axes."""
 
 _PAIR_AXES: Final[tuple[str, ...]] = ("cell", _WIDTH_AXIS)
 """Controller input axes."""

@@ -41,10 +41,10 @@ __all__ = [
 ]
 
 _CELL_RANK: Final[int] = 3
-"""The rank of a chart-cell representation."""
+"""The rank of a chart cell representation."""
 
 _MASK_RANK: Final[int] = 2
-"""The widest mask a chart-cell representation may have."""
+"""The widest mask a chart cell representation may have."""
 
 _SCORE_AXES: Final[tuple[str, ...]] = ("span", "position", "token")
 """The axes the decoder scores a batch of spans over."""

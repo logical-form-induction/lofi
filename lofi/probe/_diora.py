@@ -1,4 +1,4 @@
-"""Released DIORA models and their split-posterior diagnostic."""
+"""Released DIORA models and their split posterior diagnostic."""
 
 from __future__ import annotations
 

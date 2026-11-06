@@ -313,7 +313,7 @@ class _CheckpointSnapshot(FrozenValue):
 
     @property
     def blocks(self) -> Mapping[str, StateTree]:
-        """Return component and run-state blocks by manifest key."""
+        """Return component and run state blocks by manifest key."""
         return self._blocks
 
     @property
@@ -393,7 +393,7 @@ def _parser_manifest(
     stop: Literal["target-met", "target-not-met"] | None = None,
     achieved_accuracy: float | None = None,
 ) -> CheckpointManifest:
-    """Return a manifest for one detached completed-epoch snapshot."""
+    """Return a manifest for one detached completed epoch snapshot."""
     fitting = ParserFittingRecord(
         kind=kind,
         completed_epochs=completed_epochs,

@@ -1,4 +1,4 @@
-"""Declared prover variants and proof-service budgets."""
+"""Declared prover variants and proof service budgets."""
 
 from lofi.spec.provers._base import (
     LabelingProverSpec,

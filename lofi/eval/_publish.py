@@ -83,7 +83,7 @@ class PublishTarget:
 
 
 LAYERS_TARGET: Final = PublishTarget("layers-records", "application/json")
-"""The Layers repository, which takes annotation-layer records."""
+"""The Layers repository, which takes annotation layer records."""
 
 
 @final
@@ -429,7 +429,7 @@ class LayersPredictionLens:
         return LAYERS_TARGET
 
     def render(self, source: PredictedAnalysis, /) -> str:
-        """Return the annotation-layer record for one predicted analysis.
+        """Return the annotation layer record for one predicted analysis.
 
         Parameters
         ----------

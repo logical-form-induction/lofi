@@ -156,7 +156,7 @@ class ComplexityControlSpec(dx.Model, extra="forbid"):
 
 
 class PairComplexitySpec(dx.Model, extra="forbid"):
-    """What a premise-hypothesis draw aims at on each side and across the pair.
+    """What a draw of a premise and hypothesis aims at on each side and across the pair.
 
     Attributes
     ----------
@@ -335,7 +335,7 @@ class _LabelConfusionDeclaration(Protocol):
 
 
 class _LengthDeclaration(Protocol):
-    """A declaration that builds a token-count distribution."""
+    """A declaration that builds a token count distribution."""
 
     def build(self) -> LengthDistribution:
         """Return the interior distribution."""
@@ -400,7 +400,7 @@ class TabularLabelConfusionSpec(LabelConfusionSpec, extra="forbid"):
 
 
 class PairRelationsSpec(dx.Model, extra="forbid"):
-    """Which premise-hypothesis relations a draw admits beside their labels.
+    """Which relations a draw admits between premises and hypotheses.
 
     A pair is trivial when its two logical forms are one term, which covers a
     reflexive pair and a pair of alphabetic variants.
@@ -538,7 +538,7 @@ class InferenceSemanticsSpec(dx.Model, extra="forbid"):
     Attributes
     ----------
     language : LanguageDecl
-        The logical-form language whose store contains categories and meanings.
+        The logical form language whose store contains categories and meanings.
         Its declared name is the stable identity of this treatment.
     interpretation : InterpretationSpec
         The interpretation of the shared grammar in that language.
@@ -644,7 +644,7 @@ class SyntheticInferenceDecl(DatasetSpec):
     @dx.validates("labeling")
     @classmethod
     def _labeling_is_registered(cls, value: str) -> str:
-        """Return the name of an installed inference-label vocabulary."""
+        """Return the name of an installed inference label vocabulary."""
         registered_labeling(value)
         return value
 
@@ -770,7 +770,7 @@ def inference_fingerprint(declaration: SyntheticInferenceDecl, /) -> str:
     Parameters
     ----------
     declaration : SyntheticInferenceDecl
-        The declaration whose shared grammar, source semantics and pair-drawing
+        The declaration whose shared grammar, source semantics and pair drawing
         controls identify the generated data.
     """
     return sha256(inference_bytes(declaration)).hexdigest()
@@ -833,7 +833,7 @@ class CheckedSyntheticInference(FrozenValue):
 
     @property
     def labeling(self) -> InferenceLabeling:
-        """Return the declared inference-label vocabulary."""
+        """Return the declared inference label vocabulary."""
         return self._labeling
 
 
@@ -975,7 +975,7 @@ class SyntheticInferenceLowerer:
     grammars : GrammarIso | None
         The converter grammars are compiled through, or a fresh one.
     languages : LanguageIso | None
-        The converter logical-form languages are lowered through, or a fresh
+        The converter logical form languages are lowered through, or a fresh
         one.
     """
 
@@ -1005,7 +1005,7 @@ class SyntheticInferenceLowerer:
 
     @property
     def languages(self) -> LanguageIso:
-        """Return the converter logical-form languages are lowered through."""
+        """Return the converter logical form languages are lowered through."""
         return self._languages
 
     def lower(

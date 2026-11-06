@@ -667,7 +667,7 @@ class JudgmentDesign:
 
     @property
     def unit_responses(self) -> None:
-        """Return no continuous unit-interval response column."""
+        """Return no continuous unit interval response column."""
         return None
 
     @property
@@ -920,7 +920,7 @@ class BoundedDesign:
 
     @property
     def n_rows(self) -> int:
-        """Return the number of bounded-response rows."""
+        """Return the number of bounded response rows."""
         return self._responses.numel()
 
     @property

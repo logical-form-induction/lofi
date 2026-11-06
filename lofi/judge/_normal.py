@@ -1,4 +1,4 @@
-"""Finite normal-form filters for derivation steps."""
+"""Finite normal form filters for derivation steps."""
 
 import json
 from itertools import product
@@ -51,13 +51,13 @@ _UNDIRECTED_COMPOSITION: Final = "UC"
 """Tag for an undirected-composition result of unread degree."""
 
 _FORWARD_RAISING: Final = "FTR"
-"""Tag for a forward type-raising result."""
+"""Tag for a forward type raising result."""
 
 _BACKWARD_RAISING: Final = "BTR"
-"""Tag for a backward type-raising result."""
+"""Tag for a backward type raising result."""
 
 _UNDIRECTED_RAISING: Final = "UTR"
-"""Tag for an undirected type-raising result."""
+"""Tag for an undirected type raising result."""
 
 _COORDINATION: Final = "COORD"
 """Tag for a coordination result."""
@@ -76,7 +76,7 @@ _EISNER_ALPHABET: Final = frozenset(
         _UNDIRECTED_COMPOSITION,
     }
 )
-"""Eisner normal-form tag alphabet."""
+"""Eisner normal form tag alphabet."""
 
 _HOCKENMAIER_BISK_ALPHABET: Final = frozenset(
     {
@@ -96,7 +96,7 @@ _HOCKENMAIER_BISK_ALPHABET: Final = frozenset(
         ),
     }
 )
-"""Hockenmaier-Bisk normal-form tag alphabet."""
+"""Hockenmaier-Bisk normal form tag alphabet."""
 
 
 def _decisions[T](
@@ -131,7 +131,7 @@ def _composition_role[T](rule: Rule[T]) -> CompositionRole | None:
 
 
 def _raising_tag[T](rule: Rule[T]) -> str | None:
-    """Return the tag of a type-raising rule's results, or None for another rule."""
+    """Return the tag of a type raising rule's results, or None for another rule."""
     direction = rule.normal_form_role.raising
 
     return None if direction is None else _raised_tag(direction)
@@ -373,7 +373,7 @@ class HockenmaierBiskNormalForm[T]:
 
     A composition result is tagged with its direction and its degree: one, more
     than one, or unread when its rule admits every degree, so that the degree is
-    fixed only once a step is in hand. A type-raising result is tagged with its
+    fixed only once a step is in hand. A type raising result is tagged with its
     direction, and a coordination result with its own tag. Unary rules of any
     other kind, such as coercions, reset the tag, so the step after a coercion is
     never compared with the step before it.
@@ -383,10 +383,10 @@ class HockenmaierBiskNormalForm[T]:
 
     1. A composition result is never the primary input of a step with $n\leq1$.
     2. A result of degree one is never the primary input of a step with $n\geq1$.
-    3. A type-raising result is never the primary input of a composition when the
+    3. A type raising result is never the primary input of a composition when the
        secondary input is an opposite-direction composition result with
        $m>n$.
-    4. A type-raising result is never the functor of an application.
+    4. A type raising result is never the functor of an application.
     5. A coordination result is never type-raised.
 
     Constraints 3 and 4 refuse a step only when combining the unraised category
@@ -585,7 +585,7 @@ class HockenmaierBiskNormalForm[T]:
         return _decisions(rules, self.alphabet, decide)
 
     def tag(self, rule: Rule[T], children: tuple[str, ...], /) -> str:
-        """Return the rule's normal-form tag."""
+        """Return the rule's normal form tag."""
         del children
         role = _composition_role(rule)
 
@@ -664,7 +664,7 @@ class HockenmaierBiskNormalForm[T]:
 
 @final
 class AllOf[T]:
-    """Conjunction of finite normal-form filters."""
+    """Conjunction of finite normal form filters."""
 
     __slots__ = ("_alphabet", "_decode", "_encode", "_name", "_normal_forms")
 

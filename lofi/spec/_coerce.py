@@ -517,8 +517,8 @@ def annotation_at(schema: type[dx.Model], path: str, /) -> Annotation:
     """Return the annotation a schema declares at a dotted path.
 
     A segment names a field of the model at that depth, a variant field of a
-    tagged-union slot, or an entry of a mapping. The discriminator of a
-    tagged-union slot reads as text whichever variant is later selected. A
+    tagged union slot, or an entry of a mapping. The discriminator of a
+    tagged union slot reads as text whichever variant is later selected. A
     field several variants declare must be declared alike by all of them.
 
     Parameters
@@ -602,7 +602,7 @@ def _variant_member(
     Parameters
     ----------
     root : type[dx.TaggedUnion]
-        The tagged-union root.
+        The tagged union root.
     segment : str
         The field name to inspect.
     here : str
@@ -653,7 +653,7 @@ def _node(annotation: Annotation) -> Annotation:
 
 
 def _is_union_root(model: type[dx.Model]) -> TypeIs[type[dx.TaggedUnion]]:
-    """Return whether a model is a tagged-union root rather than a variant.
+    """Return whether a model is a tagged union root rather than a variant.
 
     Parameters
     ----------
@@ -672,7 +672,7 @@ def _discriminator(root: type[dx.TaggedUnion]) -> str:
     Parameters
     ----------
     root : type[dx.TaggedUnion]
-        The tagged-union root.
+        The tagged union root.
     """
     field = root.__discriminator__
 
@@ -690,7 +690,7 @@ def _variants(root: type[dx.TaggedUnion]) -> dict[str, type[dx.TaggedUnion]]:
     Parameters
     ----------
     root : type[dx.TaggedUnion]
-        The tagged-union root.
+        The tagged union root.
     """
     return {str(tag): variant for tag, variant in root.__variants__.items()}
 
@@ -701,7 +701,7 @@ def _variant_field_names(root: type[dx.TaggedUnion]) -> tuple[str, ...]:
     Parameters
     ----------
     root : type[dx.TaggedUnion]
-        The tagged-union root.
+        The tagged union root.
     """
     names: set[str] = {_discriminator(root), *root.__field_specs__}
 

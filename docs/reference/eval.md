@@ -4,8 +4,8 @@ This page renders `lofi.eval`: result values, metrics and alignment policies.
 
 Held-out evaluator plugins receive one frozen evaluation context: the lowered
 grammar and either (i) derivations with their declared interpretation and
-logical-form texts or (ii) labeled inference-pair occurrences. A logical-form
-evaluator names a complete-term readout and one member of the logical-form
+logical form texts or (ii) labeled inference pair occurrences. A logical form
+evaluator names a complete term readout and one member of the logical form
 match family; it never infers gold forms from a private model layout.
 
 ## Inference evaluation
@@ -13,14 +13,14 @@ match family; it never infers gold forms from a private model layout.
 The `inference` evaluator reads the grounding's published label
 distribution. Its response scale comes from `InferenceLabel`, the same owner
 used by the data and grounding, and its pair identifiers name occurrences. It
-thus does not collapse repeated premise-hypothesis pairs.
+thus does not collapse repeated pairs of premises and hypotheses.
 
 On the native three-way scale, one evaluator emits accuracy, macro-F1,
 precision, recall, and F1 for each class, plus the explicit abstention rate. It
 emits no micro aggregate. An abstention remains in the denominator when
 `coverage: zero` and is excluded from the classification rows when
 `coverage: ignore`; the abstention row always reports it. Every defined row
-carries the evaluator's declared bootstrap interval over inference-pair
+carries the evaluator's declared bootstrap interval over inference pair
 occurrences. The declaration must state whether labels are reduced:
 `reduction: null` retains three classes, while a total map with exactly two
 images declares a two-way analysis. There is no implicit two-way collapse.
@@ -31,7 +31,7 @@ decided forecasts and applies the declared label reduction before scoring.
 The `bins` field fixes the calibration bin count. An ECE row is undefined when
 fewer decided pairs than bins are available.
 
-The majority-class and hypothesis-only controls fit on `partitions.fit_on`
+The majority class and hypothesis-only controls fit on `partitions.fit_on`
 and remain frozen while scoring `partitions.score_on`. The hypothesis
 featurizer receives only hypothesis tokens. Both names must select retained,
 disjoint dataset partitions; their occurrence identifiers cannot overlap.
@@ -86,7 +86,7 @@ This is the summed, not class-averaged, convention \citep{brier1950}.
 The category-specific version keeps one summand; in a binary task, the full
 score is twice either category-specific score.
 
-For top-label calibration, define $u_i=\max_k p_i(k)$ and
+For top label calibration, define $u_i=\max_k p_i(k)$ and
 $v_i=\mathbf{1}\{\arg\max_k p_i(k)=y_i\}$. Sort by $u_i$ and partition into
 $b$ equal-count bins $B_1,\ldots,B_b$, whose sizes differ by at most one.
 LoFI reports

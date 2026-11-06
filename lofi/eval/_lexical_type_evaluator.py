@@ -1,4 +1,4 @@
-"""Held-out lexical-type F1 over a trained parser's term readout."""
+"""Held-out lexical type F1 over a trained parser's term readout."""
 
 from statistics import fmean
 from types import MappingProxyType
@@ -768,7 +768,7 @@ class LexicalTypeEvaluator:
 
     @property
     def metrics(self) -> tuple[LexicalTypeF1, ...]:
-        """Return the lexical-type metric in report order."""
+        """Return the lexical type metric in report order."""
         if not self._metrics:
             msg = "lexical-type evaluation requires alignment fitted on development"
             raise ValueError(msg)
@@ -963,7 +963,7 @@ def _build(
     context: HeldOutEvaluationContext,
     /,
 ) -> LexicalTypeEvaluator:
-    """Build a held-out lexical-type evaluator from its declared settings.
+    """Build a held-out lexical type evaluator from its declared settings.
 
     Parameters
     ----------

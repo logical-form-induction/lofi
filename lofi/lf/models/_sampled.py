@@ -65,7 +65,7 @@ def _semilattice_types(language: ModelLanguage, /) -> tuple[str, ...]:
 
 @runtime_checkable
 class StructureSource(Protocol):
-    """Supply finite structures for one model-checking step."""
+    """Supply finite structures for one model checking step."""
 
     @property
     def name(self) -> str: ...

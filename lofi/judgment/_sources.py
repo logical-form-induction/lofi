@@ -1,4 +1,4 @@
-"""Shared judgment-source rows and the bead collection boundary."""
+"""Shared judgment source rows and the bead collection boundary."""
 
 from collections import Counter
 from enum import StrEnum

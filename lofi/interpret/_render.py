@@ -295,7 +295,7 @@ class BraceString[T]:
     tokens : Sequence[str]
         Input tokens in position order.
     tags : Sequence[str]
-        Part-of-speech tag for each token.
+        Part of speech tag for each token.
     spell : Callable[[T], str]
         Function that renders an output term.
     heads : Mapping[str, int]

@@ -1,4 +1,4 @@
-"""Finite propositional truth-table prover declaration."""
+"""Finite propositional truth table prover declaration."""
 
 from typing import Literal, NamedTuple
 
@@ -13,7 +13,7 @@ __all__ = ["TruthTableProverSettings", "TruthTableProverSpec"]
 
 
 class TruthTableProverSettings(NamedTuple):
-    """Resolved settings of a finite truth-table prover."""
+    """Resolved settings of a finite truth table prover."""
 
     atoms: int
     service: ProverServiceSettings

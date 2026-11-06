@@ -67,7 +67,7 @@ If $n$ grammatical items have interpreted forms and the share is $\rho$,
 a count $K\sim\operatorname{Binomial}(n,\rho)$. Selected items keep their
 gold forms and receive additional negative forms. Thus the injection share
 is relative to grammatical source items, not to the final combined count of
-positive and negative form-typing examples.
+positive and negative form typing examples.
 
 The packaged fragments are `data.datasets.train.dataset.ill_typing.operators:
 argument-swap` and `data.datasets.train.dataset.ill_typing.proportion:
@@ -119,7 +119,7 @@ Every one of the 48 grammatical items has a gold form, and a quarter of them,
 12, also yield an ill-typed form. Each ill-typed form records the operator,
 the source form, the corrupted text, and the typing failure that refutes it:
 here a unification conflict, since `john` is an individual and cannot be
-applied. `corpus.form_typing` holds, per item, the form-typing examples a
+applied. `corpus.form_typing` holds, per item, the form typing examples a
 learner trains on, with their true and observed labels.
 
 ## Mix operators and flip labels
@@ -192,7 +192,7 @@ data.datasets.train.dataset was refused: ill-typed forms are injected under an i
 ```
 
 The block is also refused for a proportion outside zero to one, a
-non-positive `attempts`, an empty or repeating operator list, or a `noise`
+nonpositive `attempts`, an empty or repeating operator list, or a `noise`
 rate outside the `label-flips` regime. An injection that exhausts its
 attempts for one form stops the draw.
 

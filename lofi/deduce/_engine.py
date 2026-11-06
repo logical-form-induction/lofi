@@ -102,7 +102,7 @@ type _NativeClosure = tuple[
 
 
 class _TagTable:
-    """Dense normal-form tags derived from the normal form's alphabet."""
+    """Dense normal form tags derived from the normal form's alphabet."""
 
     __slots__ = ("_ids", "_tags")
 
@@ -444,7 +444,7 @@ class _Kernel[T, W]:
     """The native rule-drawing kernel one parse shares across its cells.
 
     The steps a premise tuple licenses depend only on the exact premises and
-    their normal-form tags whenever every candidate rule enumerates its
+    their normal form tags whenever every candidate rule enumerates its
     conclusions completely, so they are drawn once per such tuple and reused at
     every span and split it recurs at. A tuple whose candidates include a
     checked rule is drawn afresh, since its proposals depend on the span.
@@ -844,7 +844,7 @@ def parse[T, W](
         Owner-declared category constructors and their structural measures.
         A measure is required when either category bound is declared.
     max_category_arity : int | None
-        Greatest admitted functor-spine arity, or no arity bound.
+        Greatest admitted functor spine arity, or no arity bound.
     max_category_size : int | None
         Greatest admitted exact category node count, or no size bound.
     proposer : Proposer[T] | None
@@ -866,7 +866,7 @@ def parse[T, W](
     measure_pruned_mass : bool
         Whether to reparse the sentence without the pruner and record, on the
         pruned forest, the goal probability mass pruning removed. Only a
-        pruned forest under log-probability weights is measured.
+        pruned forest under log probability weights is measured.
     strategy : ParseStrategy
         Traversal strategy that runs the chart kernel.
     span_index : SpanIndexFactory
@@ -891,7 +891,7 @@ def parse[T, W](
     ValueError
         If a pruner is given for an inside chart, which has no items to keep,
         reachability is asked of a goal that names no root categories, or
-        pruned mass is to be measured without a pruner or log-probability weights.
+        pruned mass is to be measured without a pruner or log probability weights.
     """
     rules.validate(GenerativeParsing(proposer_available=proposer is not None))
     _validate_rule_names(rules)

@@ -30,7 +30,7 @@ class ComputeDtype(enum.StrEnum):
 
 
 class MatmulPrecision(enum.StrEnum):
-    """Enumerates declared float32 matrix-multiplication precision levels."""
+    """Enumerates declared float32 matrix multiplication precision levels."""
 
     HIGHEST = "highest"
     HIGH = "high"
@@ -38,7 +38,7 @@ class MatmulPrecision(enum.StrEnum):
 
 
 class GradScalerSpec(dx.Model, extra="forbid"):
-    """Declares dynamic gradient-scaling parameters."""
+    """Declares dynamic gradient scaling parameters."""
 
     init_scale: float = 65536.0
     growth_factor: float = 2.0
@@ -147,7 +147,7 @@ class DevicePolicySpec(dx.Model, extra="forbid"):
     @dx.validates("activation_memory_bytes")
     @classmethod
     def _activation_memory_is_positive(cls, value: int) -> int:
-        """Return a positive activation-memory ceiling."""
+        """Return a positive activation memory ceiling."""
         return ensure_positive("activation memory budget", value)
 
     @dx.model_validator()

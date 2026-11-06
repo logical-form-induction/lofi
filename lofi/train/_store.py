@@ -318,7 +318,7 @@ class DirectoryStore:
 
     A checkpoint's directory holds ``manifest.json``, a block index ``blocks.json``
     recording the digest of every block, one block per component under
-    ``roles/<role>.pt`` and one per run-state reference under
+    ``roles/<role>.pt`` and one per run state reference under
     ``run_state/<key>.pt``. A save is written to a staging directory and renamed
     into place once every file is flushed, so a checkpoint is either listed in
     full or not at all. Handles order saves oldest first.
@@ -388,7 +388,7 @@ class DirectoryStore:
             What the checkpoint records about the run it is written from.
         states : Mapping[str, StateTree]
             One block per role the manifest names, keyed by that role, and one per
-            run-state reference the manifest holds, keyed by the reference's key.
+            run state reference the manifest holds, keyed by the reference's key.
 
         Returns
         -------
@@ -488,7 +488,7 @@ class DirectoryStore:
         -------
         Checkpoint[StateTree]
             The saved manifest, the block of each role and the block of each
-            run-state reference.
+            run state reference.
 
         Raises
         ------

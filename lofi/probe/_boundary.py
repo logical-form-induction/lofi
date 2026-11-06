@@ -1089,7 +1089,7 @@ class AbsoluteThresholdDecl(ACDCThresholdDecl):
 
 
 class RelativeThresholdDecl(ACDCThresholdDecl):
-    """Declare a bound that is a fraction of the full-corruption divergence.
+    """Declare a bound that is a fraction of the full corruption divergence.
 
     Parameters
     ----------
@@ -1109,7 +1109,7 @@ class RelativeThresholdDecl(ACDCThresholdDecl):
         return self
 
     def threshold(self) -> PruningThreshold:
-        """Return the fraction of the full-corruption divergence."""
+        """Return the fraction of the full corruption divergence."""
         return RelativeThreshold(self.fraction)
 
 
@@ -1142,7 +1142,7 @@ class CircuitProbeSpec(ProbeSpec):
         Right-endpoint integration steps used by EAP-IG.
     acdc_threshold : ACDCThresholdDecl
         The rule bounding the divergence increment ACDC accepts: a fixed
-        bound, or a fraction of the full-corruption divergence.
+        bound, or a fraction of the full corruption divergence.
     null_replicates : int
         Matched-random-circuit draws for each circuitry criterion.
     seed : int
@@ -1344,12 +1344,12 @@ class CausalSiteDecl(dx.Model, extra="forbid"):
 
 
 class NodeVocabularyArmDecl(dx.Model, extra="forbid"):
-    """Name the node-vocabulary representation one causal probe measures.
+    """Name the node vocabulary representation one causal probe measures.
 
     Parameters
     ----------
     representation : str
-        The node-vocabulary arm the probed point's representation is.
+        The node vocabulary arm the probed point's representation is.
     search : str
         The kind of the declared search arm whose sweep the arm records.
     """
@@ -1397,7 +1397,7 @@ class CausalProbeSpec(ProbeSpec):
     joint_search : str
         The kind of the declared arm the joint condition and the controls fit.
     arm : NodeVocabularyArmDecl | None
-        The node-vocabulary representation the probe measures, whose complete
+        The node vocabulary representation the probe measures, whose complete
         sweep each held-out pass records beside the probe's rows, or null where
         the probe records none.
     """

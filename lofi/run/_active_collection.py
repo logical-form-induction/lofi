@@ -1,4 +1,4 @@
-"""The bead and simulated collectors of an active-learning run.
+"""The bead and simulated collectors of an active learning run.
 
 A simulated collector answers from a rating design over the whole candidate
 pool, drawn or read once when the run builds it, so every batch selected again
@@ -15,7 +15,7 @@ its population cutpoints dividing the declared latent range evenly, and is
 drawn from the run's collector seed.
 
 The bead collector fields every batch through bead, reading the responses
-through the response encoding the active-learning document declares. Round
+through the response encoding the active learning document declares. Round
 ``r`` lives in ``rounds/<r>/`` under the run's directory; an initial draw is
 round 0. The first time a round's batch is
 selected the collector writes it there as ``batch.jsonl``, one bead item per

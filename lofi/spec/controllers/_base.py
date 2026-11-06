@@ -21,10 +21,10 @@ type ControllerInput = Literal["inside", "span"]
 """The chart representation handed to a controller."""
 
 type ControllerFeature = str
-"""The installed ``lofi.pair_feature`` name of one child-pair feature."""
+"""The installed ``lofi.pair_feature`` name of one child pair feature."""
 
 type ControllerRaising = Literal["none", "soft"]
-"""Whether the controller differentiably chooses type-raising targets."""
+"""Whether the controller differentiably chooses type raising targets."""
 
 
 class ControllerNormalizerSettings(NamedTuple):
@@ -104,7 +104,7 @@ _DEFAULT_INPUT: Final[ControllerInput] = "inside"
 """The shared default chart representation of controller declarations."""
 
 _DEFAULT_FEATURES: Final[tuple[ControllerFeature, ...]] = ("left", "right")
-"""The shared default child-pair features of controller declarations."""
+"""The shared default child pair features of controller declarations."""
 
 _DEFAULT_NORMALIZER: Final = dx.field(default_factory=_softmax)
 """The shared default action normalizer of controller declarations."""
@@ -129,7 +129,7 @@ class _CommonDeclaration(Protocol):
         ...
 
     def raising(self) -> ControllerRaising:
-        """Return the declared type-raising treatment."""
+        """Return the declared type raising treatment."""
         ...
 
 

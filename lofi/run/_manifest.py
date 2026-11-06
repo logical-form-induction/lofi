@@ -22,7 +22,7 @@ files published by the point's held-out evaluators. ``failure.json`` records the
 attempts a point has spent with its seed derivation: an attempt in progress or
 interrupted, or a
 numerical or infrastructure failure with its diagnostic. The point of a
-judgment-fit experiment records its judgment-fit manifest as ``fit.json``.
+judgment fit experiment records its judgment fit manifest as ``fit.json``.
 
 A directory an experiment's sweep was priced in holds ``price.json``, the
 experiment price with every raw timing it was read off, which is read back as
@@ -129,7 +129,7 @@ FAILURE_NAME: Final = "failure.json"
 """The file inside a failed point's directory that records its failure."""
 
 FIT_MANIFEST_NAME: Final = "fit.json"
-"""The file inside a judgment-fit point's directory that holds its manifest."""
+"""The file inside a judgment fit point's directory that holds its manifest."""
 
 RECORDED_DISTRIBUTIONS: Final = (
     "didactic",
@@ -311,7 +311,7 @@ def accelerator_runtime() -> str:
     """Return the accelerator runtime the installed framework was built against.
 
     The result is ``cuda`` followed by the CUDA version, ``mps`` followed by
-    the operating-system version that provides Metal, or ``cpu`` when the
+    the operating system version that provides Metal, or ``cpu`` when the
     framework was built against neither.
 
     Raises

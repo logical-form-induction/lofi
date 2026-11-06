@@ -55,7 +55,7 @@ Reading the structure:
 | `fragment` | The logic forms are drawn within: the quantifiers and connectives the quantifier and connective classes may use, and whether functions and equality are admitted. An omitted field takes the language's own. |
 | `seed` | The seed of the draw. Equal seeds over equal lexicons draw equal assignments. |
 | `constants` | The total inventory size, or nothing to use the joint's sizes. |
-| `polysemy` | The law over meanings per form-category item and where extra meanings fall in the frequency ranking. |
+| `polysemy` | The law over meanings per form category item and where extra meanings fall in the frequency ranking. |
 
 The logical classes are the `lofi.lf_class` entries: `quantifier`,
 `connective`, `predicate`, `identity` and `constant`. A structure may also be
@@ -105,7 +105,7 @@ bounded mixture construction as [lexical ambiguity](../grammars/declare-a-lexico
 
 `experiments/l3/distribution.yaml` sweeps the joint over twelve profiles
 packaged beside the run document, named for inventory size (`i6`, `i12`),
-class-size law (`du` uniform, `dp` power-law) and coupling (`cn` negative,
+class size law (`du` uniform, `dp` power law) and coupling (`cn` negative,
 `c0` zero, `cp` positive). Select two of them by group override and read the
 semantic report of each draw:
 
@@ -158,7 +158,7 @@ already differ. The report also gives
 the per-class frequency histograms, the item shares and the meanings per form,
 which is what L3 reads to separate inventory size from frequency.
 
-Let $n_{ac}$ count the report's category-class occurrences, let
+Let $n_{ac}$ count the report's category class occurrences, let
 $n=\sum_{a,c}n_{ac}>0$, and set $\widehat p_{AC}(a,c)=n_{ac}/n$.
 The empirical marginal PMFs follow by summation. Using natural logarithms,
 the report computes
@@ -179,7 +179,7 @@ report's specified normalization. Concordance is undefined, reported as
 `None`, when there are no observations or either variable has zero entropy.
 When both entropies are positive, a deterministic mapping in either
 direction gives concordance one. This statistic describes the recorded
-category-class counts, not the size of the declared symbol inventory.
+category class counts, not the size of the declared symbol inventory.
 
 ## Aim at a complexity band
 
@@ -228,8 +228,8 @@ If $S(t)$ is the set of predicate symbols in $t$, the overlap measurement is
 $|S(\varphi)\cap S(\psi)|$. All declared bands must hold together.
 Conditioning on these acceptances changes the distribution of sampled pairs;
 it does not merely annotate an otherwise unchanged draw. The
-[synthetic-design definition](../../explanation/synthetic-designs.md)
-formalizes the resulting rejection-sampling law.
+[synthetic design definition](../../explanation/synthetic-designs.md)
+formalizes the resulting rejection sampling law.
 
 ## Count scope readings
 
@@ -246,7 +246,7 @@ how many readings its bounded equivalence procedure distinguishes:
 Scope requires an interpretation, since readings are read from forms, and each
 equivalence decision runs under the interpretation's clock. The
 corpus's `scope` report lists the derivations and readings counted for each
-item. `experiments/l3/ambiguity.yaml` crosses a scope-reading target with
+item. `experiments/l3/ambiguity.yaml` crosses a scope reading target with
 lexical polysemy.
 
 The ideal equivalence relation is
@@ -294,7 +294,7 @@ data.datasets.train.dataset.complexity.premise.controls was refused: complexity 
 - A `controls` table that names no control, a negative tolerance, or a
   `scope` block on a corpus with no interpretation is refused.
 - A class size that is not positive, a class share that is not positive, or a
-  non-positive `constants` count is refused.
+  nonpositive `constants` count is refused.
 - A band that no candidate meets within `attempts` stops the draw.
 
 [Source and learner declarations](../../explanation/synthetic-designs.md)

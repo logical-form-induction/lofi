@@ -1,6 +1,6 @@
-"""The inputs an active-learning run reads from its declared documents.
+"""The inputs an active learning run reads from its declared documents.
 
-The candidate pool is the bead items a judgment-item construction document
+The candidate pool is the bead items a judgment item construction document
 declares, built through the installed lexicon generators. Judgments, the
 initial ones and every batch a bead collector ingests, are bead annotation
 records read through the bead judgment source, so their participant and item
@@ -133,7 +133,7 @@ def read_pool(
         [LexiconGeneratorSpec], LexiconGenerator
     ] = lexicon_generator_for,
 ) -> Pool:
-    """Construct the pool a judgment-item construction document declares.
+    """Construct the pool a judgment item construction document declares.
 
     The document's files are relative to the directory holding it, and the
     pool records each of them beside the document itself.

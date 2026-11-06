@@ -371,7 +371,7 @@ class TermFixture[T, O, A](NamedTuple):
         A function returning, per bound sort, one past the greatest open
         bound index of that sort, omitting a sort with none open.
     free : Callable[[T], int]
-        A function returning the free-variable mask.
+        A function returning the free variable mask.
     shift : Callable[[T, int], Mapping[str, int]]
         A function returning, per bound sort, how many binding sites of the
         root scope over one argument position.
@@ -656,7 +656,7 @@ def derived_fields_agree_with_their_definitions[T, O, A](
 def _summaries_agree[T, O, A](
     fixture: TermFixture[T, O, A], term: T, arguments: tuple[T, ...]
 ) -> None:
-    """Check a node's index and free-variable summaries.
+    """Check a node's index and free variable summaries.
 
     Parameters
     ----------

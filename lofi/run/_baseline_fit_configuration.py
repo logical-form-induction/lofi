@@ -1,6 +1,6 @@
-"""The baseline-fit configuration kind, whose points fit baseline systems.
+"""The baseline fit configuration kind, whose points fit baseline systems.
 
-A baseline-fit experiment sweeps a baseline-fit document. Its points fit the
+A baseline fit experiment sweeps a baseline fit document. Its points fit the
 registered baseline system in the launching process, train no step a step
 timer prices, and report the rows their fits persisted.
 """
@@ -46,14 +46,14 @@ __all__ = ["PLUGIN", "BaselineFitConfiguration"]
 
 @final
 class BaselineFitConfiguration(FrozenValue):
-    """A baseline-fit document whose points persist baseline report rows.
+    """A baseline fit document whose points persist baseline report rows.
 
     Parameters
     ----------
     kind : str
         The tag the experiment declares the document under.
     path : Path
-        The baseline-fit document.
+        The baseline fit document.
     """
 
     _noun = "baseline-fit configuration"
@@ -65,17 +65,17 @@ class BaselineFitConfiguration(FrozenValue):
 
     @property
     def kind(self) -> str:
-        """Return the tag the experiment declares the baseline-fit document under."""
+        """Return the tag the experiment declares the baseline fit document under."""
         return self._kind
 
     @property
     def path(self) -> Path:
-        """Return the baseline-fit document."""
+        """Return the baseline fit document."""
         return self._path
 
     @property
     def manifest_name(self) -> str:
-        """Return the file holding a completed baseline-fit manifest."""
+        """Return the file holding a completed baseline fit manifest."""
         return BASELINE_FIT_MANIFEST_NAME
 
     @property
@@ -94,7 +94,7 @@ class BaselineFitConfiguration(FrozenValue):
         return False
 
     def composer(self, search_path: tuple[Path, ...], /) -> TracedComposer:
-        """Return composition over the baseline-fit document."""
+        """Return composition over the baseline fit document."""
         return _BaselineComposer(
             self._path,
             BaselineFitCodec(search_path=search_path),
@@ -121,7 +121,7 @@ class BaselineFitConfiguration(FrozenValue):
         return frozenset({BASELINE_ROLE})
 
     def manifest_point(self, data: bytes, /) -> ManifestPoint:
-        """Return the completed point recorded by a baseline-fit manifest."""
+        """Return the completed point recorded by a baseline fit manifest."""
         manifest = decode_baseline_manifest(data)
         return ManifestPoint(
             ResolvedConfiguration(manifest.fit.model_dump_json()),
@@ -210,7 +210,7 @@ class _BaselineComposer:
     def sources(
         self, overrides: tuple[str, ...], seed: int, /
     ) -> Mapping[str, tuple[LeafOrigin, ...]]:
-        """Return every source of each resolved baseline-fit leaf."""
+        """Return every source of each resolved baseline fit leaf."""
         return self._composition(overrides, seed).sources
 
     def _composition(
@@ -230,7 +230,7 @@ class _BaselineComposer:
 def _baseline_fit_configuration(
     declaration: BaselineFitExperimentConfig, path: Path, /
 ) -> ExperimentConfiguration:
-    """Build the installed baseline-fit configuration."""
+    """Build the installed baseline fit configuration."""
     return BaselineFitConfiguration(declaration.kind, path)
 
 
@@ -238,4 +238,4 @@ PLUGIN: Final = ExperimentConfigPlugin(
     spec=BaselineFitExperimentConfig,
     build=_baseline_fit_configuration,
 )
-"""The installed baseline-fit configuration kind."""
+"""The installed baseline fit configuration kind."""

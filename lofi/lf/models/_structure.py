@@ -22,7 +22,7 @@ __all__ = ["Structure"]
 
 @final
 class Structure(FrozenValue):
-    """One finite frame and its non-logical constant denotations."""
+    """One finite frame and its nonlogical constant denotations."""
 
     _noun = "finite structure"
     __slots__ = ("_choice", "_denotations", "_frame", "_name", "_semilattices")

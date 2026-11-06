@@ -17,8 +17,8 @@ uv pip install "lofi[laws] @ file://$PWD"
 Each suite is a module, `lofi.<layer>.laws` for most layers and
 `lofi.nn.loss.laws` for the losses. No runtime module imports a suite, so the
 base install does not need Hypothesis. `lofi.run.laws`, which checks
-source-tree boundaries, needs no Hypothesis and is re-exported by `lofi.run`.
-The `lofi.laws` entry-point group names every installed suite under a
+source tree boundaries, needs no Hypothesis and is reexported by `lofi.run`.
+The `lofi.laws` entry point group names every installed suite under a
 capability name, so a plugin discovers them without importing a runtime
 package or keeping a module list:
 
@@ -32,7 +32,7 @@ print(sorted(point.name for point in entry_points(group="lofi.laws")))
 ['data', 'deduction', 'evaluation', 'interpretation', 'judgment', 'lexicon', 'neural-loss', 'probe', 'run', 'statistics', 'terms', 'training', 'typing']
 ```
 
-`point.load()` imports the suite. The combinatory-rule families publish their
+`point.load()` imports the suite. The combinatory rule families publish their
 cases through a second group, `lofi.rule_laws`, with one entry per family:
 `composition`, `substitution`, `raising` and `pattern`. Each case declares a
 small grammar and checks the rule the native grammar compiler builds from it,
@@ -86,7 +86,7 @@ except LawViolationError as violation:
 LawViolationError: plus is not commutative on 0 and 0
 ```
 
-A floating-point algebra takes a tolerant `equal`, since log-space addition
+A floating-point algebra takes a tolerant `equal`, since log space addition
 is not associative to the last bit. `max_examples` sets the search budget.
 
 ## Run one law
@@ -129,6 +129,6 @@ def test_my_semiring_satisfies_the_laws():
 
 The suites cover terms, rules, lexical sources, deduction, interpretation,
 typing, data, statistics, evaluation, neural losses and parser outputs,
-probes, training and run metric sinks. The [law-suite
+probes, training and run metric sinks. The [law suite
 reference](../../reference/laws.md) lists every export, and the [plugin
 guide](plugins.md) covers registering the implementation the laws check.

@@ -42,10 +42,10 @@ Reading the parts that differ from chapter 3:
 
 | Part | What it says |
 |---|---|
-| `l1-pairs` | A `synthetic-inference` dataset: six premise-hypothesis pairs of two-token sentences, each given a three-way inference label by proving the pair's gold forms under the source logic, with a sixth of the pairs held out for each of `validation`, `dev` and `test`. |
+| `l1-pairs` | A `synthetic-inference` dataset: six pairs of premises and hypotheses of two-token sentences, each given a three-way inference label by proving the pair's gold forms under the source logic, with a sixth of the pairs held out for each of `validation`, `dev` and `test`. |
 | `source.language`, `source.interpretation` | The logic and the meanings the labels are computed from. They sit under `source`, so the learner never receives them. |
 | `featurizer: pair` | The learner reads each pair's two token sequences and its label, not either sentence's form. |
-| `model.grounding: prover-enumerated` | Decode candidate forms for the premise and the hypothesis, and score each label by proving the decoded pair under the declared truth-table prover. |
+| `model.grounding: prover-enumerated` | Decode candidate forms for the premise and the hypothesis, and score each label by proving the decoded pair under the declared truth table prover. |
 | `loss` | One `inference` objective with `signal: likelihood`: the observed label's probability under the grounded distribution. |
 | `model.spaces.semantics` | A second representation space over the term sort `Tm`, with a type-directed decoder that only emits forms of the type the category erases to. |
 
@@ -109,7 +109,7 @@ logical-forms test fiber-floor 3 0.333
 logical-forms test fiber-size 3 6.0
 ```
 
-The logical-form rows separate three questions:
+The logical form rows separate three questions:
 
 | Row | Question it answers |
 |---|---|
@@ -128,7 +128,7 @@ inference judgments cannot identify.
 
 - Train the experiment's other arm with `--set model/grounding=nli-baseline`,
   which predicts the label from sentence vectors without proving a decoded
-  form, and compare its logical-form rows with this point's.
+  form, and compare its logical form rows with this point's.
 - Grow the pair set with `--set data.datasets.train.dataset.size=12` and
   compare `n` in each row and the time the point takes.
 - Read [Reward with a theorem prover](../how-to/training/reward-with-a-theorem-prover.md)

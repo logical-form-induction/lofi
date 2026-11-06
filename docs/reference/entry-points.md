@@ -1,6 +1,6 @@
-# Entry-point groups
+# Entry point groups
 
-This page lists every entry-point group LoFI's `pyproject.toml` declares, the
+This page lists every entry point group LoFI's `pyproject.toml` declares, the
 declaration family or runtime capability each group extends, and the names LoFI
 packages in it.
 

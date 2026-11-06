@@ -360,7 +360,7 @@ def pseudo_r_squared(
     fit : str
         Name of the fitted specification being reported.
     log_likelihood : Measurement
-        Fit log-likelihood.
+        Fit log likelihood.
     reference : str
         Name of the specification whose likelihood supplies the denominator.
     references : Mapping[str, Measurement]
@@ -429,7 +429,7 @@ class FoldPredictions:
         Probability of each level per row, integrating over the population
         of participants for a participant the fit never saw.
     plug_in : Tensor
-        Probability of each level per row, at the population-mean effects
+        Probability of each level per row, at the population mean effects
         for a participant the fit never saw.
 
     Raises
@@ -540,7 +540,7 @@ class MarginalPointPredictor:
     Parameters
     ----------
     program : ResponseProgram
-        Compiled truncated-marginal response program.
+        Compiled truncated marginal response program.
     codec : DesignCodec
         Codec that produced the retained and target designs.
     retained : JudgmentDesign

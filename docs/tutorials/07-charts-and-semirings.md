@@ -42,7 +42,7 @@ print(index.span_of(14))
 A wider span always has a higher ID than its subspans. Sweeping in ID order
 therefore processes every antecedent before the span that uses it.
 
-A split point `k` divides `(i, j)` into `(i, k)` and `(k, j)`, both non-empty:
+A split point `k` divides `(i, j)` into `(i, k)` and `(k, j)`, both nonempty:
 
 ```python
 print(list(index.splits(0, 3)))
@@ -79,7 +79,7 @@ two parts over its split points.
 ## Counting
 
 Hand it `Counting`, whose `plus` is addition and whose `times` is
-multiplication over the non-negative integers, and the accumulated value at the
+multiplication over the nonnegative integers, and the accumulated value at the
 root is the number of binary trees over the input:
 
 ```python

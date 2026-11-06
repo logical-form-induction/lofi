@@ -1,4 +1,4 @@
-"""Interchange-intervention accuracy over a preregistered grid of cells.
+"""Interchange intervention accuracy over a preregistered grid of cells.
 
 Each result records the digest of the grid, search, and budget fixed before the
 sweep. Cell accuracy is tested against a null fitted to exchanged decisions.
@@ -434,7 +434,7 @@ def _replicates_of(null: LabelPermutation[int]) -> int:
     """Return how many refits a null draws.
 
     A label permutation always draws a positive count of orderings; the count is
-    typed as optional only by the null-model protocol, which admits nulls that
+    typed as optional only by the null model protocol, which admits nulls that
     draw none.
 
     Parameters

@@ -1,4 +1,4 @@
-"""Held-out logical-form evaluator declaration."""
+"""Held-out logical form evaluator declaration."""
 
 from typing import Literal, NamedTuple, cast, override
 
@@ -21,11 +21,11 @@ __all__ = [
 ]
 
 type LogicalFormMeasure = Literal["exact", "alpha", "normal-form", "smatch", "nted"]
-"""A headline score a logical-form evaluator reports."""
+"""A headline score a logical form evaluator reports."""
 
 
 class LogicalFormEvaluatorSettings(NamedTuple):
-    """Settings resolved from a logical-form evaluator declaration."""
+    """Settings resolved from a logical form evaluator declaration."""
 
     readout: str
     measure: LogicalFormMeasure
@@ -36,14 +36,14 @@ class LogicalFormEvaluatorSettings(NamedTuple):
 
 
 class LogicalFormEvaluatorSpec(EvaluatorSpec):
-    """Declare logical-form matching over decoded held-out forms.
+    """Declare logical form matching over decoded held-out forms.
 
     Parameters
     ----------
     readout : str
-        Complete-term readout role that decodes logical forms.
+        Complete term readout role that decodes logical forms.
     measure : LogicalFormMeasure
-        Headline member of the logical-form match family.
+        Headline member of the logical form match family.
     restarts : int
         Random Smatch search restarts after the deterministic starts.
     permutation_limit : int
@@ -65,7 +65,7 @@ class LogicalFormEvaluatorSpec(EvaluatorSpec):
     @dx.validates("readout")
     @classmethod
     def _readout_is_named(cls, value: str) -> str:
-        """Return a nonempty complete-term readout role."""
+        """Return a nonempty complete term readout role."""
         return ensure_name("a logical-form term-readout role", value)
 
     @dx.validates("restarts")
@@ -82,7 +82,7 @@ class LogicalFormEvaluatorSpec(EvaluatorSpec):
 
     @override
     def dependencies(self) -> tuple[Dependency, ...]:
-        """Return the declared complete-term readout dependency."""
+        """Return the declared complete term readout dependency."""
         return (Dependency(self.readout, "terms-readout"),)
 
     @override

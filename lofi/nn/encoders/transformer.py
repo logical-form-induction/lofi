@@ -67,7 +67,7 @@ _ATTENTION_AXES: Final[tuple[str, ...]] = (
 """The axes of one head's attention scores."""
 
 _ACTIVATION_AXES: Final[tuple[str, ...]] = ("batch", "position", "feature")
-"""The axes of an internal stream or feed-forward activation."""
+"""The axes of an internal stream or feedforward activation."""
 
 
 class TransformerEncoderSettings(NamedTuple):

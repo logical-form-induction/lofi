@@ -2,7 +2,7 @@
 
 This page explains why LoFI declares the grammar that generates a synthetic
 corpus separately from the grammar a learner assumes, how an intervention on
-the data becomes a factor of an experiment, and what the source-comparison
+the data becomes a factor of an experiment, and what the source comparison
 reducer decides when it asks whether the source grammar is the one recovered.
 
 ## Two declarations, two owners
@@ -12,7 +12,7 @@ A synthetic dataset carries its own grammar. Under
 strings are drawn from, with its lexicon, and a `synthetic-inference` dataset
 declares the grammar and a source semantics (a language and an interpretation)
 used only to draw strings and label their relations. The learner's grammar and
-logical-form language are declared under `model.language`. The learner may
+logical form language are declared under `model.language`. The learner may
 take its language from the data, as the first tutorial's document does, or
 declare its own, which may name the same packaged fragment as the source or a
 different one.
@@ -45,7 +45,7 @@ Holding $p_{G_0}$ fixed permits a comparison of learner grammars on the same dat
 
 For positive length bounds $a\leq b$, uniform lengths have
 $p(n)=1/(b-a+1)$ on $\{a,\ldots,b\}$. A tabular law normalizes its
-declared nonnegative weights. The negative-binomial declaration uses
+declared nonnegative weights. The negative binomial declaration uses
 $N=a+K$ with shape $r>0$ and success parameter $\pi\in(0,1)$:
 
 $$
@@ -75,9 +75,9 @@ The synthetic declarations expose these families:
 | Derivation sampler | The local mass of each rule application: uniform, or weighted by rule name. Weights that omit or add a compiled rule are refused. |
 | Shape, ambiguity and scope targets | Bands on depth, branching, slash balance, lexical and derivational ambiguity, and scope readings, each sought within a declared number of attempts. |
 | String corruption | A proportion of items edited by weighted `swap`, `deletion`, `insertion` and `substitution` operators. |
-| Negative-data regime and label noise | Whether corrupted items are labeled negatives, absent (positive-only), or flipped, and at what rates grammatical and ungrammatical labels are observed wrongly. |
+| Negative data regime and label noise | Whether corrupted items are labeled negatives, absent (positive-only), or flipped, and at what rates grammatical and ungrammatical labels are observed wrongly. |
 | Ill-typed logical forms | A proportion of grammatical items whose form is corrupted into one the type checker refuses, by argument swap, over-application or sort mismatch. |
-| Inference-pair design | Premise and hypothesis lengths, logical-form complexity controls, label proportions, pairing by independence or predicate overlap, trivial and entailment relations, and label noise with a uniform or tabular confusion. |
+| Inference pair design | Premise and hypothesis lengths, logical form complexity controls, label proportions, pairing by independence or predicate overlap, trivial and entailment relations, and label noise with a uniform or tabular confusion. |
 | Resembling lexicon | A lexicon drawn from the joint distribution a measured source was estimated to have. |
 
 Each changes the realized training data. The experiments' records thus
@@ -91,20 +91,20 @@ For oracle label $Y$ and observed label $\widetilde Y$, a confusion matrix
 $\mathbf{C}$ has entries $c_{ab}=\mathbb{P}(\widetilde Y=b\mid Y=a)$,
 where $c_{ab}\geq0$ and $\sum_b c_{ab}=1$. It induces
 $p_{\widetilde Y}(b)=\sum_a c_{ab}p_Y(a)$. An edit probability is a different
-intervention: an edited string can remain grammatical. The negative-data
+intervention: an edited string can remain grammatical. The negative data
 policy determines whether an oracle check or an assumed negative label
 follows the edit.
 
 ## From intervention to factor
 
 An experiment's sweep declares axes over leaves or configuration groups and
-crosses them by a declared design: a full grid, a random or Latin-hypercube
+crosses them by a declared design: a full grid, a random or Latin hypercube
 sample, or a fractional factorial of at least resolution IV. Yoked axes advance
 together, so a source and the candidate that matches it can be paired rather
 than crossed. A preregistered factor is bound to an axis through the
 experiment's `factors` map, which names, for each level, the axis value that
 realizes it; the S1 document, for instance, maps the levels `uniform` and
-`negative-binomial` of a length-law factor to two complete length declarations.
+`negative-binomial` of a length law factor to two complete length declarations.
 A document is refused if it binds a factor the preregistration does not
 declare, leaves a factor without an axis, leaves a level unmapped, or maps a
 level to a value its axis does not take. An intervention is a factor only when
@@ -112,8 +112,8 @@ this binding exists; otherwise it is a setting.
 
 ## Does the source grammar win?
 
-The source-comparison reducer answers the question per source and data size.
-It scores each candidate by held-out fit minus a description-length charge per
+The source comparison reducer answers the question per source and data size.
+It scores each candidate by held-out fit minus a description length charge per
 held-out unit, so that a candidate that contains the source cannot win by
 inclusion alone. It refuses a comparison group whose candidates differ in
 measured parameter count, requires each candidate’s inventory to remain
@@ -121,7 +121,7 @@ consistent across its observations, and requires a primary fit
 for the source arm and shared seeds across candidates.
 
 For candidate $g$ and seed $j$, let $\ell_{g,j}$ be mean held-out fit,
-$c_{g,j}$ the description-length total, and $n_{g,j}>0$ the held-out unit
+$c_{g,j}$ the description length total, and $n_{g,j}>0$ the held-out unit
 count. The reducer compares
 
 $$
@@ -144,7 +144,7 @@ both controls pass. Otherwise the reducer classifies the winner as the source,
 a simpler grammar, a richer one or a differently directed one, and it reports
 the first data size at which the verdict becomes positive.
 
-A positive verdict says that, under the declared candidates, description-length
+A positive verdict says that, under the declared candidates, description length
 charge, capacity match and data distribution, the source was selected and the
 alternatives were not. It does not say that the learner recovers the source
 under candidates that were not declared, or under a data distribution the

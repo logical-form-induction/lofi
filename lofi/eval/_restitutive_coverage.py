@@ -1,4 +1,4 @@
-"""Restitutive-scope coverage over declared logical-form lexicons."""
+"""Restitutive scope coverage over declared logical form lexicons."""
 
 from typing import TYPE_CHECKING, Final, Protocol, final, runtime_checkable
 
@@ -70,7 +70,7 @@ def _interpreted(
 
 @final
 class RestitutiveCoverageEntry(FrozenValue):
-    """One lexical entry's restitutive-scope result and structural witness."""
+    """One lexical entry's restitutive scope result and structural witness."""
 
     _noun = "restitutive coverage entry"
     __slots__ = (

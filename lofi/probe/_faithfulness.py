@@ -1433,7 +1433,7 @@ def _subsets(
     Returns
     -------
     tuple[frozenset[Unit], ...]
-        Every unit on its own, the whole circuit, and the distinct non-empty
+        Every unit on its own, the whole circuit, and the distinct nonempty
         random subsets, in that order without repeats.
     """
     ordered = sorted(units, key=repr)

@@ -1,4 +1,4 @@
-"""Registered neural chart-cell composition families."""
+"""Registered neural chart cell composition families."""
 
 from __future__ import annotations
 

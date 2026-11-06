@@ -1,6 +1,6 @@
-"""The active-learning configuration kind, each of whose points is one run.
+"""The active learning configuration kind, each of whose points is one run.
 
-An active-learning experiment sweeps an active-learning document. Each point
+An active learning experiment sweeps an active learning document. Each point
 runs its rounds in the launching process, where a collector may await the
 responses to a fielded batch, trains no step a step timer prices, and reports
 the rows its rounds recorded.
@@ -44,14 +44,14 @@ __all__ = ["ActiveLearningConfiguration"]
 
 @final
 class ActiveLearningConfiguration(FrozenValue):
-    """An active-learning document, each of whose points is one run of it.
+    """An active learning document, each of whose points is one run of it.
 
     Parameters
     ----------
     kind : str
         The tag the experiment declares the document under.
     path : Path
-        The active-learning document.
+        The active learning document.
     """
 
     _noun = "active-learning configuration"
@@ -63,12 +63,12 @@ class ActiveLearningConfiguration(FrozenValue):
 
     @property
     def kind(self) -> str:
-        """Return the tag the experiment declares the active-learning document under."""
+        """Return the tag the experiment declares the active learning document under."""
         return self._kind
 
     @property
     def path(self) -> Path:
-        """Return the active-learning document."""
+        """Return the active learning document."""
         return self._path
 
     @property
@@ -92,7 +92,7 @@ class ActiveLearningConfiguration(FrozenValue):
         return False
 
     def composer(self, search_path: tuple[Path, ...], /) -> TracedComposer:
-        """Return the composition over the active-learning document."""
+        """Return the composition over the active learning document."""
         load_plugins()
         return _ActiveComposer(
             self._path,
@@ -119,12 +119,12 @@ class ActiveLearningConfiguration(FrozenValue):
         return frozenset({ACTIVE_LEARNING_ROLE})
 
     def manifest_point(self, data: bytes, /) -> ManifestPoint:
-        """Return the document, seed and status an active-learning manifest records.
+        """Return the document, seed and status an active learning manifest records.
 
         Raises
         ------
         ValueError
-            If the bytes are not an active-learning manifest, or it records no
+            If the bytes are not an active learning manifest, or it records no
             experiment seed derivation.
         """
         manifest = decode_active_learning_manifest(data)
@@ -188,7 +188,7 @@ class ActiveLearningConfiguration(FrozenValue):
 
 @final
 class _ActiveComposer:
-    """Compose one active-learning document and retain its traced provenance."""
+    """Compose one active learning document and retain its traced provenance."""
 
     __slots__ = ("_compositions", "_data_root", "_loader", "_path")
 
@@ -203,7 +203,7 @@ class _ActiveComposer:
     def __call__(
         self, overrides: tuple[str, ...], seed: int, /
     ) -> Mapping[str, JsonValue]:
-        """Return one resolved active-learning document and retain its provenance."""
+        """Return one resolved active learning document and retain its provenance."""
         with run_context(RunContext(self._data_root, seed)):
             composition = self._loader.compose_traced(
                 self._path, schema=ActiveLearningSpec, overrides=overrides

@@ -25,7 +25,7 @@ __all__ = ["MlpController"]
 
 
 class _MlpHead(nn.Module):
-    """Score declared pair features through a feed-forward network."""
+    """Score declared pair features through a feedforward network."""
 
     def __init__(
         self,

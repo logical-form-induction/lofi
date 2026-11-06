@@ -312,7 +312,7 @@ class SpecialCase:
 
 
 def _log_probabilities(field: str, values: Tensor, tokens: int) -> Tensor:
-    """Return one nonpositive, finite log-probability per token.
+    """Return one nonpositive, finite log probability per token.
 
     Parameters
     ----------
@@ -358,16 +358,16 @@ def _log_probabilities(field: str, values: Tensor, tokens: int) -> Tensor:
 class SentenceScore:
     """The per-token log-probabilities and unigram log-probabilities of one sentence.
 
-    Both vectors run over the same tokens in order. A token's log-probability
+    Both vectors run over the same tokens in order. A token's log probability
     is the language model's own, conditioned on the tokens before it, and its
-    unigram log-probability is read from a frequency table.
+    unigram log probability is read from a frequency table.
 
     Parameters
     ----------
     tokens : tuple[str, ...]
         The sentence's tokens, at least one.
     log_probabilities : Tensor
-        Log-probability of each token under the language model.
+        Log probability of each token under the language model.
     unigram_log_probabilities : Tensor
         Log relative frequency of each token in the unigram table.
 
@@ -415,7 +415,7 @@ class SentenceScore:
 
     @property
     def log_probabilities(self) -> Tensor:
-        """Return each token's log-probability under the language model."""
+        """Return each token's log probability under the language model."""
         return self._log_probabilities
 
     @property
@@ -425,12 +425,12 @@ class SentenceScore:
 
     @property
     def log_probability(self) -> Tensor:
-        """Return the sentence's log-probability, summed over its tokens."""
+        """Return the sentence's log probability, summed over its tokens."""
         return self._log_probabilities.sum()
 
     @property
     def unigram_log_probability(self) -> Tensor:
-        """Return the sentence's unigram log-probability, summed over its tokens."""
+        """Return the sentence's unigram log probability, summed over its tokens."""
         return self._unigram_log_probabilities.sum()
 
     @override

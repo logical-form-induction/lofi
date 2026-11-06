@@ -1,4 +1,4 @@
-"""Differentiable proof-search scoring declarations."""
+"""Differentiable proof search scoring declarations."""
 
 from typing import TYPE_CHECKING, Literal, NamedTuple, Self, override
 
@@ -37,7 +37,7 @@ class SimilarityKernelSettings(NamedTuple):
 
 
 class NeuralProofScorerSettings(NamedTuple):
-    """Resolved bounded neural proof-search settings."""
+    """Resolved bounded neural proof search settings."""
 
     order: str
     instantiations: int

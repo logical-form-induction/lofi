@@ -1,4 +1,4 @@
-"""One run's residual-mass budget and its component overrides."""
+"""One run's residual mass budget and its component overrides."""
 
 from json import dumps
 from types import MappingProxyType
@@ -24,7 +24,7 @@ __all__ = [
 
 
 def residual_mass_bound(value: float, /) -> float:
-    """Return a finite residual-mass probability strictly below one."""
+    """Return a finite residual mass probability strictly below one."""
     bound = ensure_finite("a residual mass bound", value)
 
     if not 0.0 <= bound < 1.0:
@@ -42,19 +42,19 @@ class ApproximationSpec(dx.Model, extra="forbid"):
     @dx.validates("residual_mass")
     @classmethod
     def _residual_mass_is_a_bound(cls, value: float) -> float:
-        """Validate the run-level residual-mass budget."""
+        """Validate the run level residual mass budget."""
         return residual_mass_bound(value)
 
 
 class ApproximationRequest(NamedTuple):
-    """A truncating component's optional explicit residual-mass override."""
+    """A truncating component's optional explicit residual mass override."""
 
     residual_mass: float | None
 
 
 @runtime_checkable
 class ApproximationConsumer(Protocol):
-    """A component declaration that may consume a residual-mass budget."""
+    """A component declaration that may consume a residual mass budget."""
 
     def approximation_request(self) -> ApproximationRequest | None:
         """Return this component's request, or none when it does not truncate."""
@@ -63,7 +63,7 @@ class ApproximationConsumer(Protocol):
 
 @final
 class ApproximationPlan(FrozenValue):
-    """Resolved residual-mass bounds keyed by structural component path."""
+    """Resolved residual mass bounds keyed by structural component path."""
 
     _noun = "approximation plan"
     __slots__ = ("_bounds", "_measurements")

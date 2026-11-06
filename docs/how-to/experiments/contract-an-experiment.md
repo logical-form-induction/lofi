@@ -29,7 +29,7 @@ contraction:
 ```
 
 A ladder declares at least one rung and each kind at most once. Each kind is
-an installed plugin in the `lofi.contraction_rung` entry-point group, which
+an installed plugin in the `lofi.contraction_rung` entry point group, which
 lowers the declaration to the sweep transformation it states when the
 experiment is read. Six kinds are built in:
 

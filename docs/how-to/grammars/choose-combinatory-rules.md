@@ -10,7 +10,7 @@ is refused.
 
 ## The rule families
 
-The `lofi.rule` entry-point group registers nine families, and two expanding
+The `lofi.rule` entry point group registers nine families, and two expanding
 entries declare several of them at once:
 
 | `rule` | Declares | Required fields |
@@ -24,7 +24,7 @@ entries declare several of them at once:
 | `clausal-adjunct` | An adjunct rule from a `source_view` to a `target_view` over `source_core` (`S`) and `argument` (`NP`). | `name`, `source_view`, `target_view` |
 | `pattern` | Any rule written as premise patterns and a conclusion pattern. | `name`, `premises`, `conclusion` |
 | `coercion` | One ground unary coercion, normally expanded from a `coercions` set. | `label`, `member`, `source`, `target` |
-| `combinators` | An application, composition, substitution and type-raising inventory expanded over every functor view. | none |
+| `combinators` | An application, composition, substitution and type raising inventory expanded over every functor view. | none |
 | `coercions` | Ground unary coercions sharing one `label`, one `coercion` rule per declared transition $X\Rightarrow Y$. | `label`, `entries` |
 
 The composition `direction` restriction fixes which slashes the composed
@@ -39,7 +39,7 @@ the target of its primary premise, the atom reached by following functor
 results, is one of its `primary_targets`, and its secondary premise is one of
 its `secondary_patterns`. The primary premise of an application, composition
 or substitution rule is its functor and the secondary its other premise; a
-type-raising, coercion or unary pattern rule has a primary premise only; a
+type raising, coercion or unary pattern rule has a primary premise only; a
 binary pattern rule names its primary premise through its composition role.
 A restriction on any other rule, or a secondary restriction on a unary rule,
 is refused when the grammar compiles, since the chart could not enforce it. An expanding entry hands each of
@@ -69,7 +69,7 @@ For the standard CCG application, composition, substitution, and raising
 schemas, see [Categories, productions, and lexical axioms](../../explanation/derivations-as-proofs.md#categories-productions-and-lexical-axioms)
 \citep{steedman2000}. An `order: null` declaration permits every positive
 composition degree in the rule relation; the compiler and parser still apply
-their declared bounds. Generalized-composition results depend on these rule
+their declared bounds. Generalized composition results depend on these rule
 restrictions and cannot be inferred from the plugin name alone
 \citep{kuhlmann-etal2010,kuhlmann-etal2015}.
 
@@ -182,7 +182,7 @@ admits every finite order. `raising_targets` requires `type_raising: true`;
 `raising_arguments` lists the categories that may raise, by default `N` and
 `S`, and a raising rule declaring arguments names them after its targets.
 The packaged `ccgbank` grammar lists one such entry after its explicit
-pattern, absorption, clausal-adjunct and coordination rules:
+pattern, absorption, clausal adjunct and coordination rules:
 
 ```python
 ccgbank = loader.compose_traced(packaged / "ccgbank.yaml", schema=GrammarDecl).spec
@@ -256,7 +256,7 @@ signature](declare-a-signature.md#how-a-signature-is-refused) shows it.
 
 ## Check a rule family's laws
 
-The `lofi.rule_laws` entry-point group publishes property-law cases for the
+The `lofi.rule_laws` entry point group publishes property law cases for the
 composition, substitution, raising and pattern families. Each case compiles a
 declared grammar and checks the rule the compiler adopts, so the cases check
 the same rules a grammar document declares. A plugin that adds a rule family

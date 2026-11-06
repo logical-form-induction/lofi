@@ -1,4 +1,4 @@
-"""Negative log-likelihood over the rows of a batch of terms."""
+"""Negative log likelihood over the rows of a batch of terms."""
 
 from typing import TYPE_CHECKING, Final
 

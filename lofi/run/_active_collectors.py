@@ -1,4 +1,4 @@
-"""The installed collectors of an active-learning run.
+"""The installed collectors of an active learning run.
 
 Each plugin pairs a collector declaration with a builder that loads the
 collector implementations, and with them the judgments capability, only when a

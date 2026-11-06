@@ -1,4 +1,4 @@
-"""Category and normal-form state addressing for tagged charts."""
+"""Category and normal form state addressing for tagged charts."""
 
 from typing import TYPE_CHECKING, Final
 

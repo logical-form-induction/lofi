@@ -241,7 +241,7 @@ class Clamp[T](FrozenValue):
     mode : ClampMode
         Whether the clamp filters incompatible analyses or penalizes them.
     penalty : float | None
-        Positive log-weight penalty for a soft clamp; absent for a hard clamp.
+        Positive log weight penalty for a soft clamp; absent for a hard clamp.
     scope : ClampScope
         Whether the clamp applies to each covered token or to the named span.
     require_constituent : bool
@@ -350,7 +350,7 @@ class Clamp[T](FrozenValue):
 
     @property
     def penalty(self) -> float | None:
-        """Return the soft-clamp penalty, or None for a hard clamp."""
+        """Return the soft clamp penalty, or None for a hard clamp."""
         return self._penalty
 
     @property

@@ -1,6 +1,6 @@
 # Evaluation declarations
 
-This page renders the classes that validate a run document's `evaluators` and `sinks` sections and a baseline-fit document's baseline system.
+This page renders the classes that validate a run document's `evaluators` and `sinks` sections and a baseline fit document's baseline system.
 
 ## Evaluators
 

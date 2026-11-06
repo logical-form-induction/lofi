@@ -1,4 +1,4 @@
-"""Constant learning-rate scheduler declaration."""
+"""Constant learning rate scheduler declaration."""
 
 from typing import Literal, NamedTuple
 

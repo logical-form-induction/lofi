@@ -237,7 +237,7 @@ def log_parent_posterior(
 
 
 class OutsideKernel:
-    """Compute outside values under a selected log-weight reduction.
+    """Compute outside values under a selected log weight reduction.
 
     Parameters
     ----------

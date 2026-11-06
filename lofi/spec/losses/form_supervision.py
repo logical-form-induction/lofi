@@ -1,4 +1,4 @@
-"""Gold logical-form supervision declaration."""
+"""Gold logical form supervision declaration."""
 
 from typing import Literal, NamedTuple, override
 
@@ -27,12 +27,12 @@ class FormSupervisionLossSpec(LossSpec):
     @dx.validates("readout")
     @classmethod
     def _readout_is_named(cls, value: str) -> str:
-        """Return a nonempty complete-term readout role."""
+        """Return a nonempty complete term readout role."""
         return ensure_name("a form-supervision readout role", value)
 
     @override
     def dependencies(self) -> tuple[Dependency, ...]:
-        """Return the complete-term readout dependency."""
+        """Return the complete term readout dependency."""
         return (Dependency(self.readout, "form-supervision-readout"),)
 
     def settings(self) -> FormSupervisionLossSettings:

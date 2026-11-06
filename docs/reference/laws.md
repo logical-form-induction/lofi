@@ -4,8 +4,8 @@ This page renders the exported law modules, which check protocol implementations
 Install the `laws` extra for the property-based suites. See [Running the law
 suites](../how-to/extending/laws.md).
 
-Property-law modules depend on Hypothesis and remain outside runtime package
-imports. `lofi.run` re-exports its source-tree laws, which do not use
+Property law modules depend on Hypothesis and remain outside runtime package
+imports. `lofi.run` reexports its source tree laws, which do not use
 Hypothesis.
 
 ## Law violation

@@ -11,7 +11,7 @@ __all__ = ["DerivationFeaturizerSettings", "DerivationFeaturizerSpec"]
 
 
 class DerivationFeaturizerSettings(NamedTuple):
-    """The settings a gold-derivation featurizer is built from.
+    """The settings a gold derivation featurizer is built from.
 
     Attributes
     ----------
@@ -23,7 +23,7 @@ class DerivationFeaturizerSettings(NamedTuple):
 
 
 class DerivationFeaturizerSpec(FeaturizerSpec):
-    """Declares gold-derivation featurization.
+    """Declares gold derivation featurization.
 
     Attributes
     ----------

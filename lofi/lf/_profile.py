@@ -1,4 +1,4 @@
-"""Logical-form profiles, the fragments they declare, and prover bounds."""
+"""Logical form profiles, the fragments they declare, and prover bounds."""
 
 from hashlib import sha256
 from json import dumps
@@ -37,7 +37,7 @@ _RANK: Final = MappingProxyType({order: rank for rank, order in enumerate(ORDERS
 
 
 class LogicProfileError(ValueError):
-    """Reports an invalid logical-form profile or fragment field."""
+    """Reports an invalid logical form profile or fragment field."""
 
     __slots__ = ("field",)
 
@@ -432,7 +432,7 @@ def _digest(identity: _ProfileIdentity) -> str:
 
 @final
 class LogicProfile(FrozenValue):
-    """A logical-form language declaration.
+    """A logical form language declaration.
 
     Parameters
     ----------

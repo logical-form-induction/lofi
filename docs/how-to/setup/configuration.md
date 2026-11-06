@@ -3,7 +3,7 @@
 Composition turns one run document into one validated
 [`RunSpec`](../../reference/spec.md): it fills each `defaults` slot with a
 packaged or project fragment, applies a profile, the overlay documents and the
-command-line overrides in that order, interpolates the resolvers, and
+command line overrides in that order, interpolates the resolvers, and
 validates the result as a whole. This guide shows each layer, how to read
 where a leaf came from, and how a bad declaration is refused.
 
@@ -92,7 +92,7 @@ looked for in this order, and the first option with a given name wins:
 2. under `configs/` in the current project;
 3. in LoFI's packaged library, `lofi/configs/`;
 4. in the directories installed plugins contribute through the
-   `lofi.config_dirs` entry-point group.
+   `lofi.config_dirs` entry point group.
 
 A project can thus replace a packaged option by placing one of the same name
 under its own `configs/`, without editing LoFI or a plugin. Put the subtree
@@ -107,14 +107,14 @@ Composition applies its layers from least to most specific:
 1. schema defaults and the selected fragments;
 2. the run document;
 3. a profile, `--profile NAME`;
-4. each overlay document, `--extra PATH`, in command-line order;
-5. each override, `--set KEY=VALUE`, in command-line order.
+4. each overlay document, `--extra PATH`, in command line order;
+5. each override, `--set KEY=VALUE`, in command line order.
 
 A profile is a document at `profiles/<NAME>` under any root of the search
 path. An overlay is a document named on the command line, so it stays visible
 in the invocation. An override sets one leaf.
 [`docs/examples/running/patient.yaml`](https://github.com/logical-form-induction/lofi/blob/main/docs/examples/running/patient.yaml)
-is an overlay that raises the early-stopping patience. Apply it and one
+is an overlay that raises the early stopping patience. Apply it and one
 override:
 
 ```bash
@@ -237,14 +237,14 @@ keeps its own source, and extending a field that is not a list is refused.
 
 ## Interpolate paths, fragments and seeds
 
-Three resolvers, registered through the `lofi.resolver` entry-point group,
+Three resolvers, registered through the `lofi.resolver` entry point group,
 read values that are not leaves of the document:
 
 | Expression | Value |
 | --- | --- |
 | `${lofi.path:rel}` | `rel` joined against the project's data root, for instance `source: ${lofi.path:ccgbank}` in `experiments/s1/s1-run.yaml`. |
 | `${lofi.pkg:group/option}` | The absolute path of a packaged fragment. |
-| `${lofi.seed:name}` | A sub-seed for the stream `name`, derived from the run seed. |
+| `${lofi.seed:name}` | A subseed for the stream `name`, derived from the run seed. |
 
 A path argument must be relative and POSIX-spelled: an absolute,
 home-relative, drive-qualified or `..` path is refused. A string beginning
@@ -258,7 +258,7 @@ model:
     vectors: lofi.resource:run/synthetic-parser.vec
 ```
 
-A sub-seed depends only on the run seed and the stream name, so a stream
+A subseed depends only on the run seed and the stream name, so a stream
 draws the same seed in every process that composes the same run, whichever
 other streams are asked for. [`derive_seed`](../../reference/spec.md)
 computes it:

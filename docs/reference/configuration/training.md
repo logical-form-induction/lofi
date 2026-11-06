@@ -1,6 +1,6 @@
 # Training declarations
 
-This page renders the classes that validate a run document's `loss`, `trainer`, `optimizer`, `scheduler`, `type_sampler` and `pair_sampler` sections, with the acquisition and judgment-source declarations a trainer reads.
+This page renders the classes that validate a run document's `loss`, `trainer`, `optimizer`, `scheduler`, `type_sampler` and `pair_sampler` sections, with the acquisition and judgment source declarations a trainer reads.
 
 ## Losses
 
@@ -9,7 +9,7 @@ This page renders the classes that validate a run document's `loss`, `trainer`, 
 The loss package exports the declarations a `loss` section names directly. The
 modules below hold the remaining term declarations and their settings.
 
-### Chart-scale penalty
+### Chart scale penalty
 
 ::: lofi.spec.losses.chart_scale
 
@@ -44,7 +44,7 @@ modules below hold the remaining term declarations and their settings.
 The loss package exports the declarations a `loss` section names directly. The
 modules below hold the remaining term declarations and their settings.
 
-### Chart-scale penalty
+### Chart scale penalty
 
 ::: lofi.spec.losses.chart_scale
 

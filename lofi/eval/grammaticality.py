@@ -89,12 +89,12 @@ class GrammaticalityReport(NamedTuple):
     mcc : float
         Matthews correlation at probability one half.
     noise_adjusted_auc : float
-        ROC-AUC adjusted for the declared symmetric label-flip rate under balanced
+        ROC-AUC adjusted for the declared symmetric label flip rate under balanced
         latent class prevalence.
     auc_ceiling : float
         Maximum observed ROC-AUC under the declared flip rate.
     flip_rate : float
-        Symmetric label-flip rate used for adjustment.
+        Symmetric label flip rate used for adjustment.
     """
 
     n: int
@@ -127,7 +127,7 @@ def _flip_rate(value: float) -> float:
 
 
 def noise_adjusted_auc(roc_auc: float, *, flip_rate: float) -> float:
-    r"""Adjust ROC-AUC for a declared symmetric label-flip rate.
+    r"""Adjust ROC-AUC for a declared symmetric label flip rate.
 
     The specified attenuation assumes balanced latent class prevalence.
 
@@ -136,7 +136,7 @@ def noise_adjusted_auc(roc_auc: float, *, flip_rate: float) -> float:
     roc_auc : float
         Observed ROC-AUC in the unit interval.
     flip_rate : float
-        Finite symmetric label-flip rate in $[0,\tfrac12)$. This argument is
+        Finite symmetric label flip rate in $[0,\tfrac12)$. This argument is
         required because the adjustment is undefined at one half and cannot infer
         an experimental noise rate from predictions.
 
@@ -305,7 +305,7 @@ def grammaticality_report(
     p_gram : Iterable[float]
         Predicted grammaticality probabilities in the unit interval.
     flip_rate : float
-        Finite symmetric label-flip rate in $[0,\tfrac12)$.
+        Finite symmetric label flip rate in $[0,\tfrac12)$.
 
     Returns
     -------

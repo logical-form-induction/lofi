@@ -3,10 +3,10 @@
 Three resolvers sit above the configuration engine's built-ins. ``${lofi.path:rel}``
 joins a relative path against the run's data root, ``${lofi.pkg:group/option}`` names
 a configuration fragment packaged with LoFI, and ``${lofi.seed:name}`` derives a
-sub-seed for a named stream.
+subseed for a named stream.
 
-A derived sub-seed is a function of the run's seed and the name alone rather than a
-draw from a stream, so a name gets the same sub-seed in every process that composes
+A derived subseed is a function of the run's seed and the name alone rather than a
+draw from a stream, so a name gets the same subseed in every process that composes
 the same run, whichever names are asked for and in whatever order. That is what lets
 two runs of one configuration shuffle the same data and initialize the same weights
 while a third run asks for one stream more.
@@ -46,7 +46,7 @@ FRAGMENT_SUFFIXES: Final = (".yaml", ".yml", ".toml", ".json")
 _RESOURCE_PREFIX: Final = "lofi.resource:"
 
 RESOLVER_GROUP: Final = entry_point_group("resolver")
-"""Entry-point group containing interpolation resolver callables."""
+"""Entry point group containing interpolation resolver callables."""
 
 
 class RunContext(NamedTuple):
@@ -102,14 +102,14 @@ def run_context(context: RunContext, /) -> Iterator[RunContext]:
 
 
 def derive_seed(seed: int, name: str, /) -> int:
-    """Return the sub-seed a named stream takes under a run's seed.
+    """Return the subseed a named stream takes under a run's seed.
 
     Parameters
     ----------
     seed : int
         The run's seed.
     name : str
-        The stream the sub-seed is for.
+        The stream the subseed is for.
 
     Returns
     -------
@@ -410,7 +410,7 @@ def lower_package_resource(value: str, /) -> str:
 
 
 def _lofi_seed(*args: str) -> int:
-    """Return ``${lofi.seed:name}``: the sub-seed a named stream takes.
+    """Return ``${lofi.seed:name}``: the subseed a named stream takes.
 
     Parameters
     ----------
@@ -420,7 +420,7 @@ def _lofi_seed(*args: str) -> int:
     Returns
     -------
     int
-        The sub-seed the name takes under the run's seed.
+        The subseed the name takes under the run's seed.
 
     Raises
     ------

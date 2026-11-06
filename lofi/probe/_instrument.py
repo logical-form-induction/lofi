@@ -633,7 +633,7 @@ class GradientSites(FrozenValue):
     ValueError
         If the map violates the inventory its kind declares, or a point is not
         published, does not permit observation or patching, or is declared
-        non-differentiable.
+        nondifferentiable.
     """
 
     _noun = "gradient site set"

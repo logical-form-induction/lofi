@@ -1,4 +1,4 @@
-"""Chart-scale loss declaration."""
+"""Chart scale loss declaration."""
 
 import enum
 from typing import Literal, NamedTuple
@@ -20,7 +20,7 @@ class ScalePenaltyName(enum.StrEnum):
 
 
 class ChartScaleLossSettings(NamedTuple):
-    """The settings a chart-scale regularizer is built from.
+    """The settings a chart scale regularizer is built from.
 
     Attributes
     ----------

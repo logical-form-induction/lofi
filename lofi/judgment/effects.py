@@ -1,4 +1,4 @@
-"""Random intercepts of one grouping factor over the cumulative-link head."""
+"""Random intercepts of one grouping factor over the cumulative link head."""
 
 from typing import TYPE_CHECKING, final, override
 

@@ -599,7 +599,7 @@ class TriangularTransform:
     """Row vectors transformed by a lower-triangular matrix.
 
     The result is ``vectors @ factor.T``. This is the row-vector form of
-    transforming standard-normal coefficient vectors by a Cholesky factor.
+    transforming standard normal coefficient vectors by a Cholesky factor.
 
     Parameters
     ----------
@@ -986,7 +986,7 @@ class Bind:
 
 @final
 class ObserveBounded:
-    """The observation of each row under a unit-interval truncated normal.
+    """The observation of each row under a unit interval truncated normal.
 
     Parameters
     ----------

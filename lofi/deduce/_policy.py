@@ -42,7 +42,7 @@ __all__ = [
 
 
 class InsideSweep[T](NamedTuple):
-    """Unary-closure evidence returned by one inside-chart strategy."""
+    """Unary closure evidence returned by one inside-chart strategy."""
 
     edges: tuple[tuple[ItemKey[T], Rule[T], ItemKey[T]], ...]
     concluded: tuple[ItemKey[T], ...]
@@ -134,7 +134,7 @@ class ChartStore(Protocol):
         normal_form: str,
         prune_lexical: bool,
     ) -> PackedForest[T, W]:
-        """Build packed-forest chart storage."""
+        """Build packed forest chart storage."""
 
 
 @runtime_checkable
@@ -217,7 +217,7 @@ class NativeChartStore(FrozenValue):
         normal_form: str,
         prune_lexical: bool,
     ) -> PackedForest[T, W]:
-        """Construct native packed-forest storage."""
+        """Construct native packed forest storage."""
         return kernel.forest_chart(
             index,
             semiring,

@@ -1,12 +1,12 @@
 # Acquire labels actively
 
-An active-learning document declares one bounded, round-by-round collection of
+An active learning document declares one bounded, round-by-round collection of
 judgments. Each round refits a judgment model to every judgment
 collected so far, scores the candidate items not yet judged, selects one batch
 under a declared acquisition rule, and collects the responses to that batch.
-The candidates are the bead items a judgment-item construction document
+The candidates are the bead items a judgment item construction document
 declares,
-the model is the response model of a judgment-fit document refitted by MAP, and
+the model is the response model of a judgment fit document refitted by MAP, and
 its predictors are readouts of a trained LoFI point. This guide writes the
 documents, runs them with `lofi active-learn`, fields the batches through bead
 or answers them with a simulated collector, and runs the same document as an
@@ -18,7 +18,7 @@ and the acceptance test `tests/acceptance/test_active_learning.py` runs them
 over the packaged synthetic parser, with the bead collector and with each
 simulated collector.
 
-## Write the active-learning document
+## Write the active learning document
 
 ```yaml
 acquisition:
@@ -55,18 +55,18 @@ Every path is relative to the directory holding the document.
 
 | Field | What it declares |
 | --- | --- |
-| `acquisition` | The rule that selects each batch, from the `lofi.acquisition` entry-point group. |
+| `acquisition` | The rule that selects each batch, from the `lofi.acquisition` entry point group. |
 | `stopping` | The condition, checked after each round, that ends collection. |
 | `max_rounds` | Positive bound on the number of rounds. |
-| `confidence` | Level of the agreement and rank-correlation intervals, in (0, 1). Defaults to `0.95`. |
+| `confidence` | Level of the agreement and rank correlation intervals, in (0, 1). Defaults to `0.95`. |
 | `bootstrap_samples` | Positive number of resamples behind the agreement interval. Defaults to `1000`. |
-| `pool` | The judgment-item construction document the candidate pool is built from. |
+| `pool` | The judgment item construction document the candidate pool is built from. |
 | `factors` | The bead expression each factor every judgment row records is read by over the item's attributes, keyed by the factor's name. The response model's factor terms and a factor `held_out_unit` read these; no other attribute becomes a factor, and an expression an item cannot answer as one level name is refused before the run starts. |
 | `initial` | How the judgments the first round starts from are obtained: `kind: bead` reads already collected bead judgments, and `kind: collected` has the collector answer a seeded draw from every declared stratum as round 0. |
 | `encoding` | The bead response encoding every bead response of the run answers. Required when `initial` or `collector` has `kind: bead`, and refused when neither does. |
-| `fit` | The judgment-fit document whose response model each round refits. |
+| `fit` | The judgment fit document whose response model each round refits. |
 | `predictors` | The trained point, by its run directory; the rendered element each input role it publishes reads; the bead tokenizer splitting that element into words; and the published readout that fills each predictor column the response model reads. |
-| `collector` | The collector that answers each batch, from the `lofi.active_collector` entry-point group. |
+| `collector` | The collector that answers each batch, from the `lofi.active_collector` entry point group. |
 | `cross_validation` | The cross-validation each round's performance is measured by. |
 
 The document declares no seed. Every random stream of a run derives from its
@@ -83,7 +83,7 @@ pool item; one naming an attribute an item does not carry is refused.
 
 ## Declare the candidate pool
 
-`pool` names a [judgment-item construction](../judgments/construct-judgment-items.md)
+`pool` names a [judgment item construction](../judgments/construct-judgment-items.md)
 document. Its resources are bead's, in bead's own serialized shape: bead
 templates whose slots are filled under their own constraints, bead lexicons,
 generators each proposing one more lexicon, the bead filling strategy of each
@@ -153,9 +153,9 @@ strata unrankable and is refused there.
 
 ## Declare the refitted model
 
-`fit` names a judgment-fit document, as
+`fit` names a judgment fit document, as
 [Fit a judgment model](../judgments/fit-a-judgment-model.md) describes. An
-active-learning run reads three of its sections:
+active learning run reads three of its sections:
 
 - `response`, the model refitted each round. Its levels must equal those of
   the document's `encoding`, which the run checks once before any round, and
@@ -166,8 +166,8 @@ active-learning run reads three of its sections:
 - `dataset`, the identifier the collected judgments are reported under.
 
 A fit declaring a `comparison`, a `dynamic_range` or an `ablation` is
-refused, since an active-learning run performs none of them; its
-cross-validation is declared in the active-learning document itself.
+refused, since an active learning run performs none of them; its
+cross-validation is declared in the active learning document itself.
 
 ```yaml
 dataset: collected-acceptability
@@ -203,7 +203,7 @@ model's performance and decide each stratum's share of the next batch.
 | Field | What it declares |
 | --- | --- |
 | `held_out_unit` | The row column held out together: `response`, `participant`, `item`, or one of the document's `factors`. |
-| `splitter` | The splitter, from the `lofi.splitter` entry-point group: `kfold` or `leave-one-group-out`. |
+| `splitter` | The splitter, from the `lofi.splitter` entry point group: `kfold` or `leave-one-group-out`. |
 | `folds` | The number of folds, at least two, for `kfold`; `null` for `leave-one-group-out`, which holds out one level per fold. |
 | `coverage_threshold` | The largest share, in [0, 1], of a fold's held-out participants its retained judgments may never show before the fold needs an unseen-participant rule. |
 | `unseen_participant` | `plug_in`, `marginal`, or `null`: the rule predicting every participant a fold never retained. |
@@ -343,11 +343,11 @@ $$
 $$
 
 For batch size $b$, quotas begin at $\lfloor b\pi_s\rfloor$; the remaining
-places go to the largest fractional remainders, with stratum-name order
+places go to the largest fractional remainders, with stratum name order
 breaking ties. The completed batch must satisfy
 $|n_s/b-\pi_s|\leq\epsilon$, where $n_s$ is its stratum count and
 $\epsilon$ is `share_tolerance`. The reported batch variance is the
-population-denominator statistic
+statistic with a population denominator
 $b^{-1}\sum_{i\in\mathcal B}(\mu_i-\bar\mu_{\mathcal B})^2$,
 computed after selection.
 
@@ -357,7 +357,7 @@ computed after selection.
 
 | `kind` | Stops when | Fields |
 | --- | --- | --- |
-| `agreement` | The implemented squared-distance agreement coefficient over multiply judged items reaches `threshold`. | `threshold` in [0, 1]; `basis` |
+| `agreement` | The implemented squared distance agreement coefficient over multiply judged items reaches `threshold`. | `threshold` in [0, 1]; `basis` |
 | `rank-correlation` | The Spearman correlation between every judged item's mean response and its mean cross-validated prediction reaches `threshold`. | `threshold` in [-1, 1]; `basis` |
 | `asymptote` | The rank correlations of the last `window` rounds lie within `maximum_gain` of one another. | `window` of at least 2; `maximum_gain` of at least 0 |
 
@@ -382,14 +382,14 @@ $$
 When $d_e=0$, it returns one by convention; with no multiply judged item,
 it refuses the calculation. Every within-item pair receives the same weight,
 so items with more responses contribute more pairs. This is not the standard
-ordinal-distance version of Krippendorff's alpha, and for unequal response
-counts its weighting also differs from the usual coincidence-matrix
+ordinal distance version of Krippendorff's alpha, and for unequal response
+counts its weighting also differs from the usual coincidence matrix
 calculation \citep{krippendorff2004,hayes-krippendorff2007}. The displayed formula specifies the
 quantity currently exposed by `agreement`.
 
 The agreement interval resamples items, retaining all their responses, and
 takes percentile bounds at $(1-c)/2$ and $(1+c)/2$ for declared confidence
-level $c$. The rank-correlation interval instead uses the Fisher transform:
+level $c$. The rank correlation interval instead uses the Fisher transform:
 
 $$
 \tanh\!\left(\operatorname{arctanh}(\widehat\rho)
@@ -488,7 +488,7 @@ Three simulated collectors are installed:
 | --- | --- | --- |
 | `predictor-truth` | `column`, `participants`, `scale`, `latent_range` | A known-effects design whose item scores are one predictor column of the trained point. `column` must be a column `predictors.readouts` fills. `scale` is required: `standardized` centers the column over the pool and divides it by its standard deviation, and `raw` takes it as it is. |
 | `drawn-effects` | `participants`, `latent_range` | A known-effects design with one item per candidate and its own item scores, drawn from the collector seed. |
-| `registered-design` | `design` | The design registered under `design` in the `lofi.judgment_design` entry-point group, such as `known-random-effects`. It must record ordinal responses on the fit's levels and rate at least as many items as the pool holds; its items beyond the pool are never asked. |
+| `registered-design` | `design` | The design registered under `design` in the `lofi.judgment_design` entry point group, such as `known-random-effects`. It must record ordinal responses on the fit's levels and rate at least as many items as the pool holds; its items beyond the pool are never asked. |
 
 A known-effects design draws each participant's intercept and cutpoint offsets
 and the responses through the generating model of the registered synthetic
@@ -532,7 +532,7 @@ the initial judgments and contributes no row.
 
 | `metric` | `value` | Further columns |
 | --- | --- | --- |
-| `agreement` | The implemented squared-distance agreement coefficient over multiply judged items so far | `lower`, `upper`; `n`, the judgments so far |
+| `agreement` | The implemented squared distance agreement coefficient over multiply judged items so far | `lower`, `upper`; `n`, the judgments so far |
 | `rank-correlation` | The cross-validated Spearman correlation | `lower`, `upper`; `n` |
 | `batch-variance` | The variance of the batch's predicted responses | `n`, the batch size |
 | `stratum-share` | One stratum's share of the batch | `stratum`; `performance`, the stratum's performance the batch was allocated by; `floored`, whether that performance was negative and floored at zero; `n`, the batch size |
@@ -566,7 +566,7 @@ resumes it.
 ## Related
 
 - [Fit a judgment model](../judgments/fit-a-judgment-model.md) declares the
-  response model an active-learning run refits.
+  response model an active learning run refits.
 - [Serve through bead](../serving/serve-through-bead.md) serves the trained
   point that predicts the items a batch holds.
 - [Run and price a sweep](../experiments/sweeps.md) launches an experiment and

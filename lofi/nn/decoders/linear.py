@@ -252,7 +252,7 @@ class LinearRnnDecoder(nn.Module):
 
     @property
     def width(self) -> int:
-        """Return the recurrent-state width."""
+        """Return the recurrent state width."""
         return self._width
 
     @property
@@ -424,7 +424,7 @@ class LinearRnnDecoder(nn.Module):
         return torch.stack(rows, dim=-1)
 
     def site_map(self) -> SiteMap:
-        """Return the decoder's declared choice-row and recurrent-state sites."""
+        """Return the decoder's declared choice-row and recurrent state sites."""
         return self._sites
 
     def instrument(

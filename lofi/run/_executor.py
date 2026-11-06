@@ -1,7 +1,7 @@
 """Production execution of one point through its run and checkpoint stores.
 
 A point ends in one of four outcomes. It completes, and its directory holds
-the report rows it emitted. It fails numerically, as a non-finite loss or
+the report rows it emitted. It fails numerically, as a nonfinite loss or
 metric does, and the failure is recorded with its diagnostic and never run
 again. Its configuration cannot be prepared for training, which the training
 operations report as a ``PreparationError``, and that failure too is recorded
@@ -22,7 +22,7 @@ path, is a defect of the configuration or the code: it propagates and the
 attempt it ended is not counted. A process asked to terminate by ``SIGTERM``,
 as a scheduler preempting it is, records the interrupted attempt and stops, so
 the point is resumed on a later launch rather than left running. Every failure
-records the point's seed derivation, and a point is never re-run at another
+records the point's seed derivation, and a point is never rerun at another
 seed or dropped.
 """
 
@@ -86,7 +86,7 @@ __all__ = [
 ]
 
 CHECKPOINTS_NAME = "checkpoints"
-"""Directory inside a run that holds completed-epoch checkpoints."""
+"""Directory inside a run that holds completed epoch checkpoints."""
 
 INFRASTRUCTURE_ERRNOS: Final = frozenset(
     {

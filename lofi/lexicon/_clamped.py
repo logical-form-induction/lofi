@@ -314,7 +314,7 @@ class ClampedSource[T]:
         entry: Entry[T],
         clamps: Sequence[Clamp[T]],
     ) -> float:
-        """Return the summed soft-clamp penalty for one offered entry."""
+        """Return the summed soft clamp penalty for one offered entry."""
         return sum(
             clamp.penalty or 0.0
             for clamp in clamps

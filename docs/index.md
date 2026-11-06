@@ -73,7 +73,7 @@ See what each grammatical and modeling family assumes and what a comparison betw
 
 ## [Look something up](reference/index.md)
 
-Find every command, entry-point group, configuration section, and public API.
+Find every command, entry point group, configuration section, and public API.
 
 </article>
 </nav>
@@ -81,9 +81,9 @@ Find every command, entry-point group, configuration section, and public API.
 ## One document per point
 
 A LoFI run is declared by one document. Its sections name the grammar that
-generates or reads the data, the logical-form language and interpretation, the
+generates or reads the data, the logical form language and interpretation, the
 model components, the loss terms, the trainer, and the evaluators. Composition
-resolves packaged fragments, profiles, overlays, and command-line overrides,
+resolves packaged fragments, profiles, overlays, and command line overrides,
 and validates the result once, as a `RunSpec`. The resolved document, not the
 spelling of its inputs, identifies the point.
 
@@ -104,7 +104,7 @@ a plugin adds a variant without editing LoFI.
 Second, data and learner are declared separately. A synthetic dataset carries
 the grammar and interpretation that generate it, together with its
 interventions: length and rule distributions, string corruption, label noise,
-ill-typed logical forms, and inference-pair designs. The learner declares its
+ill-typed logical forms, and inference pair designs. The learner declares its
 own candidate grammar and language. Crossing the two in one experiment asks
 whether the source grammar is the one recovered.
 

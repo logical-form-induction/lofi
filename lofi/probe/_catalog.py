@@ -1,7 +1,7 @@
 """The installed diagnostics and their resolution by the roles a model publishes.
 
 A diagnostic is installed by listing its class in the ``lofi.diagnostic``
-entry-point group under the tag the class declares. Reading the group builds a
+entry point group under the tag the class declares. Reading the group builds a
 catalog, which checks every listed declaration once and then resolves the
 diagnostics a set of published roles supports.
 """

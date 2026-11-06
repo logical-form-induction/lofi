@@ -167,12 +167,12 @@ class CheckedCcgbankReskin(FrozenValue):
 
     @property
     def source_interpretation(self) -> None:
-        """Return no logical-form interpretation for syntactic source data."""
+        """Return no logical form interpretation for syntactic source data."""
         return None
 
     @property
     def source_interpretation_declaration(self) -> None:
-        """Return no logical-form interpretation declaration."""
+        """Return no logical form interpretation declaration."""
         return None
 
     @property

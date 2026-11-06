@@ -1,6 +1,6 @@
 # Probe
 
-This page renders `lofi.probe`: site-map declarations and their lowering, the
+This page renders `lofi.probe`: site map declarations and their lowering, the
 instrumented and differentiable regions that observe, patch and take gradients
 at published sites, the declared probe kinds and their settings, the
 diagnostics catalog, circuit discovery (`receiver_circuit`, `attribute_edges`,

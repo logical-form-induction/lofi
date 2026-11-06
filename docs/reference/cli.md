@@ -32,7 +32,7 @@ usage: lofi [-h]
 | [`bead-predict`](#bead-predict) | score bead inference items with the trained point a run holds |
 | [`probe`](#probe) | execute declared probes against the trained point a run directory holds |
 | [`publish`](#publish) | publish a trained point's labeled derivations as Layers records |
-| [`active-learn`](#active-learn) | run the rounds of one active-learning document |
+| [`active-learn`](#active-learn) | run the rounds of one active learning document |
 
 ## Exit status
 
@@ -340,7 +340,7 @@ usage: lofi active-learn [-h] --out DIR [--seed N] DOCUMENT
 
 | Argument | Required | Help |
 | --- | --- | --- |
-| `DOCUMENT` | yes | the active-learning document |
+| `DOCUMENT` | yes | the active learning document |
 | `--out DIR` | yes | the directory the run keeps its rounds, manifest and rows under; the same directory resumes a run awaiting responses |
 | `--seed N` | no | the run seed |
 

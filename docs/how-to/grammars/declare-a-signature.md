@@ -73,7 +73,7 @@ from them with the declared `constructors`, and each constructor declares its
 spelling, or `mixfix` with one more part than it has arguments. An infix
 constructor must be binary, and every category constructor must take category arguments and return
 a category. Category text is read by the same notation reader that reads
-a logical-form language's semantic types: prefix and mixfix tokens are tried
+a logical form language's semantic types: prefix and mixfix tokens are tried
 longest first, and infix constructors bind by precedence and associativity. In
 category text a constructor token also ends the atom before it, so `S\NP` needs
 no spaces.
@@ -149,7 +149,7 @@ print(signature.functor_slots)
 ```
 
 `functor_slots` maps each functor constructor to its result and argument
-slots. Compiling the grammar against a logical-form language links the
+slots. Compiling the grammar against a logical form language links the
 signature into that language's term store:
 
 ```python

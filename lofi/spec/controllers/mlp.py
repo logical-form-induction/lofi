@@ -36,7 +36,7 @@ class MlpControllerSettings(NamedTuple):
 
 
 class MlpControllerSpec(ControllerSpec):
-    """Score declared pair features with a feed-forward network."""
+    """Score declared pair features with a feedforward network."""
 
     kind: Literal["mlp"] = "mlp"
     input: ControllerInput = _DEFAULT_INPUT

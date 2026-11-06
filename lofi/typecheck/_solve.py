@@ -1,4 +1,4 @@
-"""Total constraint solving for logical-form types."""
+"""Total constraint solving for logical form types."""
 
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Never, final, override
@@ -58,7 +58,7 @@ def _quantified(mask: int, free: int) -> tuple[int, ...]:
 
 @final
 class TypeChecker:
-    """Logical-form type checker over one many-sorted language store."""
+    """Logical form type checker over one many-sorted language store."""
 
     __slots__ = ("_store", "_unifier")
 

@@ -99,7 +99,7 @@ three kinds:
 | `negative-binomial` | `min_length`, `max_length`, `r`, `p`, `out_of_support` | a negative binomial with `r` successes and success probability `p`, shifted to `min_length` |
 | `tabular` | `masses`, a list of `{length, mass}` | each listed count in proportion to its mass |
 
-`out_of_support` says what happens to a negative-binomial draw above
+`out_of_support` says what happens to a negative binomial draw above
 `max_length`: `resample` (the default) draws again, `clip` takes the bound,
 and `error` refuses the draw. The packaged `synthetic` option uses a negative
 binomial with `r: 4.0` and `p: 0.6` between 2 and 24 tokens.
@@ -114,7 +114,7 @@ $$
 
 respectively, where $a,b$ are integer length bounds and $\mathcal S$ is the
 finite tabular support. A tabular entry may have zero mass, but the total
-must be positive. The negative-binomial parameterization and the distinct
+must be positive. The negative binomial parameterization and the distinct
 resampling and clipping laws are defined in
 [Source and learner declarations](../../explanation/synthetic-designs.md).
 
@@ -186,7 +186,7 @@ Here $u$ is a nonnegative weight function and $p_D$ a normalized PMF.
 derivations still affect string frequency. The string PMF sums derivation
 probabilities over a common yield,
 $p_W(w\mid N=n)=\sum_{d:\operatorname{yield}(d)=w}p_D(d\mid N=n)$.
-This is the weighted-deduction interpretation of the sampler
+This is the weighted deduction interpretation of the sampler
 \citep{goodman1999}. Increasing one rule's weight multiplies a derivation's
 weight once per occurrence of that rule, rather than fixing its observed
 frequency directly.
@@ -205,7 +205,7 @@ target is declared unreachable.
 | --- | --- |
 | `ambiguity` | `lexical`, the mean number of lexical categories per token, and `derivations`, the number of root derivations of a string. |
 | `shape` | `depth`, `right_branching`, `slash_balance` and `arity` of each accepted derivation, as a `default` target or one target per split under `splits`. |
-| `scope` | The logical-form readings per string, described in [Control semantic distributions](control-semantic-distributions.md). |
+| `scope` | The logical form readings per string, described in [Control semantic distributions](control-semantic-distributions.md). |
 
 A `shape` schedule without a `default` needs a target for every declared
 split, `train` included.

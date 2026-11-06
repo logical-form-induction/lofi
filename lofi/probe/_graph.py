@@ -1,6 +1,6 @@
 """Model computations represented as nodes, edges, and sites.
 
-Nodes distinguish packed-forest items, including their readings and normal-form
+Nodes distinguish packed forest items, including their readings and normal form
 tags. Edges follow the direction of the forest's inside recursion.
 """
 
@@ -26,7 +26,7 @@ class GraphNode[T]:
     component : ComponentId
         The component that took the step.
     key : ItemKey[T]
-        The item concluded, which names its span, its reading and its normal-form
+        The item concluded, which names its span, its reading and its normal form
         tag.
 
     Raises

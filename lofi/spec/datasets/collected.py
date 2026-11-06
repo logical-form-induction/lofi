@@ -37,7 +37,7 @@ __all__ = [
 _TOKENIZER_FIELD: Final = RegexTokenizerSpec()
 _AGGREGATION_FIELD: Final = MajorityGoldSpec()
 _DEFAULT_LABELING: Final = "three-way"
-"""The inference-label vocabulary a collected release reads when it names none."""
+"""The inference label vocabulary a collected release reads when it names none."""
 
 
 class CorpusReleaseSpec(dx.Model, extra="forbid"):
@@ -164,7 +164,7 @@ def _retained_splits(
 
 
 def _checked_labeling(value: str, /) -> str:
-    """Return the name of an installed inference-label vocabulary."""
+    """Return the name of an installed inference label vocabulary."""
     registered_labeling(value)
     return value
 
@@ -197,7 +197,7 @@ class PmbCcgDatasetSpec(DatasetSpec):
 
     @override
     def training_batches(self) -> frozenset[TrainingBatchKind]:
-        """Return the sentence and gold-derivation batches this corpus yields."""
+        """Return the sentence and gold derivation batches this corpus yields."""
         return frozenset({TrainingBatchKind.SENTENCES, TrainingBatchKind.GOLD_FORMS})
 
 
@@ -262,7 +262,7 @@ class SnliDatasetSpec(DatasetSpec):
     @dx.validates("labeling")
     @classmethod
     def _labeling_is_registered(cls, value: str) -> str:
-        """Return the name of an installed inference-label vocabulary."""
+        """Return the name of an installed inference label vocabulary."""
         return _checked_labeling(value)
 
     def inference_labels(self) -> tuple[str, ...]:
@@ -271,7 +271,7 @@ class SnliDatasetSpec(DatasetSpec):
 
     @override
     def training_batches(self) -> frozenset[TrainingBatchKind]:
-        """Return labeled inference-pair batches."""
+        """Return labeled inference pair batches."""
         return frozenset({TrainingBatchKind.INFERENCE_PAIRS})
 
 
@@ -308,7 +308,7 @@ class MnliDatasetSpec(DatasetSpec):
     @dx.validates("labeling")
     @classmethod
     def _labeling_is_registered(cls, value: str) -> str:
-        """Return the name of an installed inference-label vocabulary."""
+        """Return the name of an installed inference label vocabulary."""
         return _checked_labeling(value)
 
     def inference_labels(self) -> tuple[str, ...]:
@@ -317,7 +317,7 @@ class MnliDatasetSpec(DatasetSpec):
 
     @override
     def training_batches(self) -> frozenset[TrainingBatchKind]:
-        """Return labeled inference-pair batches."""
+        """Return labeled inference pair batches."""
         return frozenset({TrainingBatchKind.INFERENCE_PAIRS})
 
 
@@ -354,7 +354,7 @@ class ChaosNliDatasetSpec(DatasetSpec):
     @dx.validates("labeling")
     @classmethod
     def _labeling_is_registered(cls, value: str) -> str:
-        """Return the name of an installed inference-label vocabulary."""
+        """Return the name of an installed inference label vocabulary."""
         return _checked_labeling(value)
 
     def inference_labels(self) -> tuple[str, ...]:
@@ -363,7 +363,7 @@ class ChaosNliDatasetSpec(DatasetSpec):
 
     @override
     def training_batches(self) -> frozenset[TrainingBatchKind]:
-        """Return labeled inference-pair batches."""
+        """Return labeled inference pair batches."""
         return frozenset({TrainingBatchKind.INFERENCE_PAIRS})
 
 
@@ -393,12 +393,12 @@ class UnliDatasetSpec(DatasetSpec):
 
     @override
     def training_batches(self) -> frozenset[TrainingBatchKind]:
-        """Return graded inference-pair batches."""
+        """Return graded inference pair batches."""
         return frozenset({TrainingBatchKind.INFERENCE_PAIRS})
 
 
 class FracasDatasetSpec(DatasetSpec):
-    """Declare FraCaS XML releases as premise-hypothesis pairs.
+    """Declare FraCaS XML releases as pairs of premises and hypotheses.
 
     A grounding trains on the decided pairs of the declared training split,
     each relation read through the declared labeling.
@@ -430,7 +430,7 @@ class FracasDatasetSpec(DatasetSpec):
     @dx.validates("labeling")
     @classmethod
     def _labeling_is_registered(cls, value: str) -> str:
-        """Return the name of an installed inference-label vocabulary."""
+        """Return the name of an installed inference label vocabulary."""
         return _checked_labeling(value)
 
     def inference_labels(self) -> tuple[str, ...]:
@@ -439,5 +439,5 @@ class FracasDatasetSpec(DatasetSpec):
 
     @override
     def training_batches(self) -> frozenset[TrainingBatchKind]:
-        """Return labeled inference-pair batches."""
+        """Return labeled inference pair batches."""
         return frozenset({TrainingBatchKind.INFERENCE_PAIRS})

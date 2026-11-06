@@ -1,4 +1,4 @@
-"""Held-out gold-derivation reachability evaluator declaration."""
+"""Held-out gold derivation reachability evaluator declaration."""
 
 from typing import Final, Literal, NamedTuple, override
 
@@ -34,7 +34,7 @@ class ReachabilityEvaluatorSettings(NamedTuple):
 
 
 class ReachabilityEvaluatorSpec(EvaluatorSpec):
-    """Declare gold-derivation reachability under the run grammar's inventory.
+    """Declare gold derivation reachability under the run grammar's inventory.
 
     Each held-out gold derivation is checked against the label and rule
     inventory of the grammar the parser was trained under. The rows report

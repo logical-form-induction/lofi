@@ -225,7 +225,7 @@ def _identity(tree: TaggedTree, /) -> _Identity:
 
 
 class TaggedTree:
-    """Stores one derivation over categories and normal-form tags.
+    """Stores one derivation over categories and normal form tags.
 
     Parameters
     ----------
@@ -285,7 +285,7 @@ class TaggedTree:
 
     @property
     def tag(self) -> int:
-        """Return the normal-form tag index of its conclusion."""
+        """Return the normal form tag index of its conclusion."""
         return self._state[1]
 
     @property

@@ -440,12 +440,12 @@ class Encoded(_AxisTensor):
 
 
 class LogDistribution(_AxisTensor):
-    """Stores log-space values with an optional normalized axis.
+    """Stores log space values with an optional normalized axis.
 
     Parameters
     ----------
     tensor : Tensor
-        The log-space values, at floating precision.
+        The log space values, at floating precision.
     axes : tuple[str, ...]
         One name per axis, outermost first.
     mask : Tensor | None
@@ -1006,9 +1006,9 @@ class ChartReadouts:
     entropy : Encoded | None
         Derivation entropy per item, in nats.
     mbr : Encoded | None
-        The minimum-Bayes-risk tree as a binary constituent indicator per span.
+        The minimum Bayes risk tree as a binary constituent indicator per span.
     derivations : DerivationScoreChart[Hashable] | None
-        Gold-derivation scoring against the tagged chart's declared and
+        Gold derivation scoring against the tagged chart's declared and
         unrestricted derivation sets.
 
     Raises
@@ -1125,7 +1125,7 @@ class ChartReadouts:
 
     @property
     def derivations(self) -> DerivationScoreChart[Hashable] | None:
-        """Return published gold-derivation scoring, if available."""
+        """Return published gold derivation scoring, if available."""
         return self._derivations
 
     def _published(self) -> tuple[tuple[str, _AxisTensor], ...]:

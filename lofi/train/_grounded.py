@@ -1,4 +1,4 @@
-"""The single grounded-inference batch, forward pass, and training step."""
+"""The single grounded inference batch, forward pass, and training step."""
 
 from typing import TYPE_CHECKING, Protocol, cast, final, override
 

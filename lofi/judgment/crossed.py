@@ -1,8 +1,8 @@
 """Gaussian crossed random-effects models, their exact posterior and a sampler.
 
-A crossed model holds a fixed-effect design, one grouping factor index per
+A crossed model holds a fixed effect design, one grouping factor index per
 row for each crossed factor, and a continuous response. Its parameters are
-laid out with the fixed-effect coefficients first and then each factor's
+laid out with the fixed effect coefficients first and then each factor's
 levels in factor order, and every posterior over it reports one mean and one
 variance per parameter in that layout.
 
@@ -111,7 +111,7 @@ class CrossedScales:
     residual : float
         Spread of a response around its linear predictor.
     fixed : float
-        Spread of the prior on each fixed-effect coefficient.
+        Spread of the prior on each fixed effect coefficient.
     groups : Sequence[float]
         Spread of each grouping factor's effects, in factor order.
 
@@ -148,7 +148,7 @@ class CrossedScales:
 
     @property
     def fixed(self) -> float:
-        """Return the spread of the prior on each fixed-effect coefficient."""
+        """Return the spread of the prior on each fixed effect coefficient."""
         return self._fixed
 
     @property
@@ -186,16 +186,16 @@ class CrossedScales:
 class CrossedModel:
     r"""A Gaussian crossed random-effects model over recorded rows.
 
-    A row's linear predictor is its fixed-effect row against the coefficients
+    A row's linear predictor is its fixed effect row against the coefficients
     plus one effect of every grouping factor. The parameter layout puts the
-    fixed-effect coefficients first and then each factor's levels in factor
+    fixed effect coefficients first and then each factor's levels in factor
     order, so a parameter vector has $n_{\mathrm{fixed}}+n_{\mathrm{effects}}$ entries,
     where the two counts are `n_fixed` and `n_effects`.
 
     Parameters
     ----------
     fixed : Tensor
-        Fixed-effect design, one row per response and one column per
+        Fixed effect design, one row per response and one column per
         coefficient.
     groups : Sequence[Tensor]
         Zero-based level of each row under each grouping factor, in factor
@@ -210,7 +210,7 @@ class CrossedModel:
     Raises
     ------
     ValueError
-        If the fixed-effect design is not a floating matrix, the responses are
+        If the fixed effect design is not a floating matrix, the responses are
         not one finite float per row, a factor index is not one integer per
         row, a factor size is not positive, a level lies outside its factor,
         or the number of factors differs from the number of group scales.
@@ -336,7 +336,7 @@ class CrossedModel:
 
     @property
     def fixed(self) -> Tensor:
-        """Return the fixed-effect design, one row per response."""
+        """Return the fixed effect design, one row per response."""
         return self._fixed
 
     @property
@@ -390,7 +390,7 @@ class CrossedModel:
 
     @property
     def n_fixed(self) -> int:
-        """Return the number of fixed-effect coefficients."""
+        """Return the number of fixed effect coefficients."""
         return int(self._fixed.shape[1])
 
     @property
@@ -865,7 +865,7 @@ def simulate_crossed(
     Parameters
     ----------
     fixed : Tensor
-        Fixed-effect design, one row per response.
+        Fixed effect design, one row per response.
     groups : Sequence[Tensor]
         Zero-based level of each row under each grouping factor.
     group_sizes : Sequence[int]
@@ -927,7 +927,7 @@ def crossed_model_of(
     """Return the crossed model over a design's participants and items.
 
     The two grouping factors are the design's participants and its items, in
-    that order. The fixed-effect design is an intercept column followed by one
+    that order. The fixed effect design is an intercept column followed by one
     column per named covariate, read from the design's readouts, and the
     response is read from a readout as well, since a crossed model is over a
     continuous response rather than an ordered level.

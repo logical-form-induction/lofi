@@ -32,7 +32,7 @@ __all__ = ["PLUGIN", "ProverScorer"]
 
 @final
 class ProverScorer(FrozenValue, Unpicklable):
-    """Turn proof-service verdicts into certified zero-one pair scores."""
+    """Turn proof service verdicts into certified zero-one pair scores."""
 
     _noun = "prover scorer"
     _because = "holds a live proof service"
@@ -238,4 +238,4 @@ def _build(settings: ProverScorerSettings, context: BuildContext, /) -> ProverSc
 
 
 PLUGIN: Final = ComponentPlugin(spec=ProverScorerSpec, build=_build)
-"""The certified proof-service pair scorer plugin."""
+"""The certified proof service pair scorer plugin."""

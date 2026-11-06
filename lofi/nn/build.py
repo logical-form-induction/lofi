@@ -204,12 +204,12 @@ class BuildContext(FrozenValue, Unpicklable):
 
     @property
     def meaning(self) -> ProofTermMeaning | None:
-        """Return the run's proof-term interpretation, where one is declared."""
+        """Return the run's proof term interpretation, where one is declared."""
         return self._meaning
 
     @property
     def approximation(self) -> ApproximationBound | None:
-        """Return the run's resolved residual-mass budget, where declared."""
+        """Return the run's resolved residual mass budget, where declared."""
         return self._approximation
 
     def producer(self, port: str, /) -> object:

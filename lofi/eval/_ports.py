@@ -351,7 +351,7 @@ class HeldOutItems(Protocol):
 
 
 class InferenceItems(HeldOutItems, Protocol):
-    """A held-out batch of labeled inference-pair occurrences."""
+    """A held-out batch of labeled inference pair occurrences."""
 
     @property
     def pair_ids(self) -> Sequence[ItemId]:
@@ -396,7 +396,7 @@ class HeldOutData(Protocol):
         """Return the retained inference pair sides of a partition with theirs."""
 
     def pair_batches(self, split: str, /) -> Sequence[InferenceItems]:
-        """Return the retained inference-pair batches of a partition."""
+        """Return the retained inference pair batches of a partition."""
 
     def judgment_batches(self, split: str, /) -> Sequence[GrammaticalityItems]:
         """Return the retained grammaticality-judgment batches of a partition."""
@@ -542,7 +542,7 @@ class InferenceFeaturizer[Item](Protocol):
         Returns
         -------
         Mapping[str, int]
-            Non-negative counts keyed by feature name.
+            Nonnegative counts keyed by feature name.
         """
 
 

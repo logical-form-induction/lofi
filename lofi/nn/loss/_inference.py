@@ -1,4 +1,4 @@
-"""Inference-label objectives over one published grounded batch."""
+"""Inference label objectives over one published grounded batch."""
 
 from typing import TYPE_CHECKING, Final, final, override
 
@@ -226,4 +226,4 @@ def _build(
 
 
 PLUGIN: Final = ComponentPlugin(spec=InferenceLossSpec, build=_build)
-"""The inference-label objective plugin."""
+"""The inference label objective plugin."""

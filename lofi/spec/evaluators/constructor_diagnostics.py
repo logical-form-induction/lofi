@@ -100,7 +100,7 @@ class ConstructorDiagnosticSpec(EvaluatorSpec):
     @dx.validates("readout")
     @classmethod
     def _readout_is_named(cls, value: str) -> str:
-        """Return a nonempty complete-term readout role."""
+        """Return a nonempty complete term readout role."""
         return ensure_name("a constructor diagnostic term-readout role", value)
 
     @dx.validates("collapse_margin")
@@ -128,7 +128,7 @@ class ConstructorDiagnosticSpec(EvaluatorSpec):
 
     @override
     def dependencies(self) -> tuple[Dependency, ...]:
-        """Return the declared complete-term readout dependency."""
+        """Return the declared complete term readout dependency."""
         return (Dependency(self.readout, "terms-readout"),)
 
     @override

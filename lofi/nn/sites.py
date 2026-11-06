@@ -26,7 +26,7 @@ __all__ = [
 
 
 class _CustomPath:
-    """Permission used only by the explicit custom site-map constructor."""
+    """Permission used only by the explicit custom site map constructor."""
 
     __slots__ = ()
 

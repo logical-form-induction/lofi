@@ -5,12 +5,12 @@ hypothesis logical forms in a declared set of finite structures, under a
 declared fuzzy logic, and scores the pair by how true the hypothesis is among
 the structures in which the premise holds. It takes the place of the prover
 scorer in a `pairwise` grounding, and an `inference` loss term trains on its
-scores exactly as it does on proof verdicts. A model-checking score is
+scores exactly as it does on proof verdicts. A model checking score is
 recorded as truth in the declared structures, never as a proof verdict. This
 guide selects a structure source, declares the logic and the decision policy,
 and shows how each is refused.
 
-## Select a model-checking grounding
+## Select a model checking grounding
 
 Three packaged fragments under `lofi/configs/model/grounding/` extend
 `prover-enumerated.yaml` and replace its scorer:
@@ -34,7 +34,7 @@ uv run lofi show-config \
 ```
 
 The sampled and learned fragments draw their seeds from
-`${lofi.seed:model-structures}`, a sub-seed of the run seed. The command line
+`${lofi.seed:model-structures}`, a subseed of the run seed. The command line
 installs a run context for that resolver. Composing from Python needs one
 installed explicitly with `run_context`:
 
@@ -129,7 +129,7 @@ A pair whose forms cannot be evaluated in a structure is left undecided.
 
 ## Choose a structure source
 
-The `lofi.structure_source` entry-point group registers the three sources.
+The `lofi.structure_source` entry point group registers the three sources.
 All three bound their higher-order domains the same way: a function type whose
 full space has at most `full_function_space_cap` members is enumerated in
 full, and a larger one is represented by a pool of `henkin_pool` functions.
@@ -140,7 +140,7 @@ full, and a larger one is represented by a pool of `henkin_pool` functions.
 | `learned` | `structures` over `carriers`, fitted under `seed` from denotation logits drawn at the positive `initialization_scale` (the standard deviation of their normal start). `denotations` is `free`, in which each atomic denotation has its own learned logits, or `from-vocabulary`. The source publishes an auxiliary satisfiability term, which the `inference` objective's `auxiliary_weight` adds to the loss. A fitted structure scores pairs only once its theory holds at the scorer's `truth_threshold`, the floor a sampled or given structure must also meet; the evidence counts the structures read. |
 | `given` | A `knowledge_base` that defines one intended structure, with `full_function_space_cap` and `henkin_pool`. |
 
-The sampled source resolves its choices through four entry-point groups:
+The sampled source resolves its choices through four entry point groups:
 
 | Field | Group | Packaged choice |
 | --- | --- | --- |
@@ -224,11 +224,11 @@ The `tnorm`, `implication`, `quantifier` and `equality` names are checked
 against their installed families at composition, so a plugin that registers
 another operation under one of these groups is selectable by its name.
 
-The grounding-level checks of [Reward with a theorem
+The grounding level checks of [Reward with a theorem
 prover](reward-with-a-theorem-prover.md) apply unchanged, because the scorer
 sits inside the same `pairwise` grounding: a `reward` signal requires a
 declared `reward`, sampled forms require a moving baseline, and a grounding
-requires an `inference` term and an inference-pair dataset.
+requires an `inference` term and an inference pair dataset.
 
 [Inference as evidence](../../explanation/inference-as-evidence.md) explains
 how truth in a set of structures differs from entailment as evidence about a

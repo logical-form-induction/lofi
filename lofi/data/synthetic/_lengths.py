@@ -28,7 +28,7 @@ class LengthOutOfSupportError(ValueError):
 
 
 class LengthDistribution(Protocol):
-    """Supplies bounded token-count draws and their theoretical moments."""
+    """Supplies bounded token count draws and their theoretical moments."""
 
     @property
     def min_length(self) -> int:
@@ -47,7 +47,7 @@ class LengthDistribution(Protocol):
 
     @property
     def variance(self) -> float:
-        """Return the token-count variance."""
+        """Return the token count variance."""
         ...
 
     @property
@@ -338,7 +338,7 @@ class NegativeBinomialLength(FrozenValue):
 
 
 class TabularLength(FrozenValue):
-    """A finite token-count distribution declared by nonnegative masses."""
+    """A finite token count distribution declared by nonnegative masses."""
 
     __slots__ = ("_lengths", "_masses", "_mean", "_variance")
 
@@ -400,7 +400,7 @@ class TabularLength(FrozenValue):
 
     @property
     def variance(self) -> float:
-        """Return the token-count variance."""
+        """Return the token count variance."""
         return self._variance
 
     @property

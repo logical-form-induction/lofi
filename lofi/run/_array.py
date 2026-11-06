@@ -189,7 +189,7 @@ class UnpricedPointError(ValueError):
 
 
 class ResourceRequest(NamedTuple):
-    """The wall-clock minutes and memory one array task is granted."""
+    """The wall clock minutes and memory one array task is granted."""
 
     minutes: int
     megabytes: int

@@ -1,4 +1,4 @@
-"""Logical-form equivalence over the shared proof service."""
+"""Logical form equivalence over the shared proof service."""
 
 from statistics import fmean
 from time import perf_counter
@@ -44,7 +44,7 @@ EQUIVALENCE_MEASURES: Final[tuple[EquivalenceMeasure, ...]] = (
 """The four headline numbers, each a separate metric."""
 
 type AccountingMeasure = Literal["proof-calls", "memo-hits"]
-"""A proof-service count an equivalence evaluation reports beside its rates."""
+"""A proof service count an equivalence evaluation reports beside its rates."""
 
 ACCOUNTING_MEASURES: Final[tuple[AccountingMeasure, ...]] = ("proof-calls", "memo-hits")
 """The uncached prover calls and memo hits the equivalence checks spent."""
@@ -160,7 +160,7 @@ def _parsed(language: LanguageAssembly, text: str) -> bool:
     language : LanguageAssembly
         The language whose generated syntax reads the form.
     text : str
-        The predicted logical-form text.
+        The predicted logical form text.
     """
     try:
         desugared = language.syntax.desugar(language.syntax.parse(text))
@@ -180,7 +180,7 @@ def equivalence_scores(
     budget: ProofBudget,
     theory: Sequence[Term] = (),
 ) -> EquivalenceScores:
-    """Check one predicted logical-form text against its gold form.
+    """Check one predicted logical form text against its gold form.
 
     The text is parsed and desugared into the store, then type-checked. A
     text that does not parse into a closed form, or whose form does not
@@ -195,7 +195,7 @@ def equivalence_scores(
     language : LanguageAssembly
         The one-store language that reads and checks the prediction.
     predicted : str
-        The predicted logical-form text.
+        The predicted logical form text.
     gold : Term
         The gold form.
     budget : ProofBudget
@@ -241,7 +241,7 @@ class EquivalenceDecision(NamedTuple):
     Attributes
     ----------
     predicted : str
-        The predicted logical-form text.
+        The predicted logical form text.
     gold : Term
         The gold form.
     scores : EquivalenceScores
@@ -327,7 +327,7 @@ class EquivalenceLedger:
         Parameters
         ----------
         pred : str
-            The predicted logical-form text.
+            The predicted logical form text.
         gold : Term
             The gold form, interned in the ledger's language.
         key : ItemId
@@ -372,7 +372,7 @@ class EquivalenceLedger:
 
 @final
 class EquivalenceMetric:
-    """One equivalence rate over predicted logical-form texts.
+    """One equivalence rate over predicted logical form texts.
 
     Parameters
     ----------
@@ -444,7 +444,7 @@ class EquivalenceMetric:
         Parameters
         ----------
         pred : str
-            The predicted logical-form text.
+            The predicted logical form text.
         gold : Term
             The gold form, interned in the ledger's language.
         key : ItemId

@@ -132,7 +132,7 @@ class Nominal:
 
     @property
     def payload(self) -> str | None:
-        """Return the constant or free-variable name when present."""
+        """Return the constant or free variable name when present."""
         return self._payload
 
     @property
@@ -231,7 +231,7 @@ def _payload_name(
     term: Term,
     opened: Mapping[int, str],
 ) -> str | None:
-    """Resolve a constant or free-variable payload to its name."""
+    """Resolve a constant or free variable payload to its name."""
     payload = term.payload
     kind = term.op.payload_sort
 

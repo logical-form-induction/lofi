@@ -136,7 +136,7 @@ class SyntheticTrainingBatch[ConstraintT](FrozenValue):
     item_ids : Sequence[ItemId]
         Item identifiers in example order.
     form_typing : Sequence[Sequence[FormTypingTarget]]
-        Logical-form typing examples aligned to the surface items. A row is
+        Logical form typing examples aligned to the surface items. A row is
         empty when the corpus has no interpretation; otherwise it starts with
         the well-typed gold form and may include an injected form.
     constraints : Sequence[Sequence[ConstraintT]]
@@ -288,7 +288,7 @@ class SyntheticTrainingBatch[ConstraintT](FrozenValue):
 
     @property
     def form_typing(self) -> tuple[tuple[FormTypingTarget, ...], ...]:
-        """Return logical-form typing examples aligned to the surface items."""
+        """Return logical form typing examples aligned to the surface items."""
         return self._form_typing
 
     @property

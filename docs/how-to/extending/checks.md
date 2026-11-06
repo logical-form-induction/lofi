@@ -8,7 +8,7 @@ says when to use it.
 ## What is always checked
 
 Field validation is unconditional. A value is checked once, when it enters
-the system: a negative length, a non-finite score or an empty name is refused
+the system: a negative length, a nonfinite score or an empty name is refused
 at construction, with or without `LOFI_CHECK`. The variable controls only the
 second layer, the invariant checks that would otherwise repeat on every batch.
 

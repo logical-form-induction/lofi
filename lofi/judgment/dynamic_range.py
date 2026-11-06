@@ -1,8 +1,8 @@
-"""The dynamic-range gate over the published root log-odds.
+"""The dynamic range gate over the published root log odds.
 
 A recorder reads the mass pair published under the declared id at every
-item's sentence-spanning cell, step by step, and keeps the log-odds of each
-item. A gate reads the log-odds of a whole corpus against a criterion that
+item's sentence-spanning cell, step by step, and keeps the log odds of each
+item. A gate reads the log odds of a whole corpus against a criterion that
 was registered in advance and refuses a distribution that fails it.
 """
 
@@ -35,7 +35,7 @@ _QUARTILES = (0.0, 0.25, 0.5, 0.75, 1.0)
 
 
 class DynamicRangeError(ValueError):
-    """Reports a root log-odds distribution that fails the registered criterion.
+    """Reports a root log odds distribution that fails the registered criterion.
 
     Parameters
     ----------
@@ -73,7 +73,7 @@ def read_criterion(path: Path, /) -> DynamicRangeCriterion:
 
 @final
 class DynamicRangeGate:
-    """Reads a root log-odds distribution against a criterion registered in advance.
+    """Reads a root log odds distribution against a criterion registered in advance.
 
     Parameters
     ----------
@@ -94,7 +94,7 @@ class DynamicRangeGate:
     def report(
         self, odds: Tensor, /, *, inventory: str, observed_at: datetime
     ) -> DynamicRangeReport:
-        """Return the distribution of the log-odds read against the criterion.
+        """Return the distribution of the log odds read against the criterion.
 
         The report is validated as it is built, so an unnamed inventory, an
         observation with no UTC offset and an observation earlier than the
@@ -103,7 +103,7 @@ class DynamicRangeGate:
         Parameters
         ----------
         odds : Tensor
-            The log-odds of every item, in any order.
+            The log odds of every item, in any order.
         inventory : str
             Name of the declared inventory the scores were computed under.
         observed_at : datetime
@@ -112,7 +112,7 @@ class DynamicRangeGate:
         Raises
         ------
         ValueError
-            If there is no item, or the log-odds are not a vector.
+            If there is no item, or the log odds are not a vector.
         """
         if odds.ndim != 1:
             msg = (
@@ -155,7 +155,7 @@ class DynamicRangeGate:
         Parameters
         ----------
         odds : Tensor
-            The log-odds of every item, in any order.
+            The log odds of every item, in any order.
         inventory : str
             Name of the declared inventory the scores were computed under.
         observed_at : datetime
@@ -166,7 +166,7 @@ class DynamicRangeGate:
         DynamicRangeError
             If the distribution fails the criterion.
         ValueError
-            If there is no item, or the log-odds are not a vector.
+            If there is no item, or the log odds are not a vector.
         """
         report = self.report(odds, inventory=inventory, observed_at=observed_at)
 

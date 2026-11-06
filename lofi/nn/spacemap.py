@@ -3,7 +3,7 @@
 The map sends the vector a type has in one embedding space, a syntactic
 inventory's say, to a vector in another, a semantic inventory's, and comes in
 two forms. The linear form is one linear layer. The multilayer form is a
-feed-forward network with a declared depth.
+feedforward network with a declared depth.
 """
 
 from enum import StrEnum
@@ -233,7 +233,7 @@ class TypeSpaceMap(nn.Module):
 
 
 def _multilayer(source: int, target: int, options: MultilayerOptions) -> nn.Sequential:
-    """Return a feed-forward network from the source width to the target width.
+    """Return a feedforward network from the source width to the target width.
 
     Parameters
     ----------

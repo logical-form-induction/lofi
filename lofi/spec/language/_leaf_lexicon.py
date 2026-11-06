@@ -1,4 +1,4 @@
-"""Declared inline and file-backed sources of non-logical constants."""
+"""Declared inline and file-backed sources of nonlogical constants."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def _json_value(value: ConfigValue, /) -> JsonValue:
 
 
 class LeafConstantSpec(dx.Model, extra="forbid"):
-    """One typed or inferred non-logical constant in a leaf source."""
+    """One typed or inferred nonlogical constant in a leaf source."""
 
     name: str
     type: str = "infer"
@@ -99,7 +99,7 @@ class LeafLexiconDocument(dx.Model, extra="forbid"):
 
 
 class LeafLexiconSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
-    """A source of non-logical constant declarations."""
+    """A source of nonlogical constant declarations."""
 
 
 class InlineLeafLexiconSpec(LeafLexiconSpec, extra="forbid"):

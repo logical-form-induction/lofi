@@ -1,4 +1,4 @@
-"""Logical-form typing, clamp-projection and span-accessor protocols."""
+"""Logical form typing, clamp-projection and span-accessor protocols."""
 
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Protocol, runtime_checkable
@@ -23,7 +23,7 @@ type Substitution = Mapping[int, Term]
 
 @runtime_checkable
 class TypingSystem[S](Protocol):
-    """A logical-form type checker and inferred-type comparator."""
+    """A logical form type checker and inferred-type comparator."""
 
     def check(
         self,
@@ -77,7 +77,7 @@ class SortedLanguage(Protocol):
 
     @property
     def function_type(self) -> str:
-        """Return the name of the function-type constructor."""
+        """Return the name of the function type constructor."""
         ...
 
 

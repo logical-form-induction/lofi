@@ -60,7 +60,7 @@ value and its interval (`value`, `n`, `ci_low`, `ci_high`, `ci_level` and the
 resampling fields), and the approximation fields (`budget_kind` and its
 bounds, `residual_measured` and one `residual_<source>` per residual source).
 `convention_hash` is null on a row that no parsing convention affects, such as
-a judgment-model score.
+a judgment model score.
 `nan_rate` is the derived column: for each row it gives the fraction of rows sharing its
 configuration, grammar, method and metric whose value is missing or NaN.
 
@@ -113,7 +113,7 @@ suffix with its dot, and a `render(labels, rows, /, *, precision)` method that
 returns the table's bytes; `lofi.report.ReportRenderer` is the protocol it
 satisfies. `lofi.report.format_cell` writes one scalar cell at a precision,
 which a renderer escapes for its format. A package installs a format by
-naming the object in its `lofi.report_format` entry-point group, and a report
+naming the object in its `lofi.report_format` entry point group, and a report
 declares it by that entry's name:
 
 ```toml
@@ -127,9 +127,9 @@ A reducer reads an experiment's completed rows when the results are ingested
 (`lofi ingest`, or `ingest_results` from Python) and adds the rows and
 comparisons it derives. The derived rows are written with the accepted rows,
 and the comparisons feed the preregistration audit and the declared
-multiple-comparison correction (see
+multiple comparison correction (see
 [Choose a sweep design](choose-a-sweep-design.md#declare-a-multiple-comparison-correction)).
-Each reducer is an installed plugin in the `lofi.reducer` entry-point group,
+Each reducer is an installed plugin in the `lofi.reducer` entry point group,
 and an experiment declares at most one reducer of each kind.
 
 [`experiments/s2/source-complexity.yaml`](https://github.com/logical-form-induction/lofi/blob/main/experiments/s2/source-complexity.yaml)
@@ -161,27 +161,27 @@ the reducer reads the point's values there to say which source and candidate
 grammar, data size, condition and twin a row belongs to. Its two tests run
 under declared replicate counts and seeds. The declaration refuses two
 conditions or two paths that coincide, and a fit metric that is also the
-description-length metric.
+description length metric.
 
 The packaged reducers:
 
 | `kind` | Derives |
 | --- | --- |
-| `variance` | A method-of-moments decomposition of one metric over at least two named random factors, each read from a row column, with a bootstrap interval. |
+| `variance` | A method of moments decomposition of one metric over at least two named random factors, each read from a row column, with a bootstrap interval. |
 | `rescoring` | One metric rescored over released predictions across a grid of scoring conventions, read in a declared prediction format. |
 | `rank-churn` | The change in method ranking between two named scoring conditions. |
-| `source-comparison` | Source-grammar selection from held-out fit rows and point values, with permutation and equivalence tests. |
+| `source-comparison` | Source grammar selection from held-out fit rows and point values, with permutation and equivalence tests. |
 | `transfer` | A zero-shot transfer report from a source language to declared gold or silver languages. |
-| `cross-lingual` | Macro, floor, disparity and transfer-gap summaries over languages. |
-| `encoder-ablation` | The encoder-checkpoint-by-freeze-state table, over at least four seeds. |
+| `cross-lingual` | Macro, floor, disparity and transfer gap summaries over languages. |
+| `encoder-ablation` | The table crossing encoder checkpoint and freeze state, over at least four seeds. |
 | `crossed-recovery` | Recovery summaries over fully crossed factor cells and at least four seeds, against a sign-flip null. |
 | `coherence-collapse` | A seed-paired comparison of collapse under KL and cross-entropy coherence, over at least four seeds. |
-| `residual-structure` | A regression of a held-out response column on declared root-entropy, non-target and derivation-count columns. |
-| `restitutive-coverage` | A restitutive-scope query over one interpreted dataset lexicon. |
-| `node-vocabulary` | A comparison of the four node-vocabulary arms, each read from a persisted causal-probe record. |
+| `residual-structure` | A regression of a held-out response column on declared root entropy, non-target and derivation count columns. |
+| `restitutive-coverage` | A restitutive scope query over one interpreted dataset lexicon. |
+| `node-vocabulary` | A comparison of the four node vocabulary arms, each read from a persisted causal probe record. |
 
 The `node-vocabulary` reducer declares `arms`, one entry for each of the four
-representations, each naming the `source` probe-records file (relative to the
+representations, each naming the `source` probe records file (relative to the
 experiment document's directory), the causal `probe` role and the `record`
 (such as `pass-0`). It refuses arms whose evaluated pair sets, logical cells or
 per-cell nulls differ, and emits one row per arm with its `pair_digest`,
@@ -198,7 +198,7 @@ reducers:
 ```
 
 The `rescoring` reducer's `metric` is resolved through the
-`lofi.rescoring_metric` entry-point group, whose packaged entry is
+`lofi.rescoring_metric` entry point group, whose packaged entry is
 `recall-homogeneity`, and its `prediction_format` through
 `lofi.prediction_format`, whose packaged entry is `lofi-json`. The
 [configuration reference](../../reference/configuration/index.md) places

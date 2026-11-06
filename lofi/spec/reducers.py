@@ -165,7 +165,7 @@ class RestitutiveCoverageReducerSettings(NamedTuple):
 
 
 class RestitutiveCoverageReducerSpec(ReducerSpec):
-    """Declare a restitutive-scope query over one interpreted dataset lexicon."""
+    """Declare a restitutive scope query over one interpreted dataset lexicon."""
 
     kind: Literal["restitutive-coverage"] = "restitutive-coverage"
     dataset: str
@@ -199,7 +199,7 @@ type NodeVocabularyRepresentation = Literal[
     "dense-linear-probe",
     "random-transformer-sae-control",
 ]
-"""The four representations a node-vocabulary comparison holds one arm for."""
+"""The four representations a node vocabulary comparison holds one arm for."""
 
 _NODE_VOCABULARY_ARMS: tuple[NodeVocabularyRepresentation, ...] = (
     "derivation-variables",
@@ -219,14 +219,14 @@ class NodeVocabularySourceSettings(NamedTuple):
 
 
 class NodeVocabularySourceSpec(dx.Model, extra="forbid"):
-    """Name one arm and the persisted causal-probe record that holds its sweep.
+    """Name one arm and the persisted causal probe record that holds its sweep.
 
     Parameters
     ----------
     representation : str
         The arm the record measures.
     source : str
-        The probe-records file, relative to the experiment root.
+        The probe records file, relative to the experiment root.
     probe : str
         The causal probe role the record is filed under.
     record : str
@@ -252,13 +252,13 @@ class NodeVocabularySourceSpec(dx.Model, extra="forbid"):
 
 
 class NodeVocabularyReducerSettings(NamedTuple):
-    """Resolved persisted records of the four node-vocabulary arms."""
+    """Resolved persisted records of the four node vocabulary arms."""
 
     arms: tuple[NodeVocabularySourceSettings, ...]
 
 
 class NodeVocabularyReducerSpec(ReducerSpec):
-    """Declare a node-vocabulary comparison over four persisted arm sweeps.
+    """Declare a node vocabulary comparison over four persisted arm sweeps.
 
     Parameters
     ----------
@@ -435,7 +435,7 @@ class SourceComparisonReducerSpec(ReducerSpec):
         return self
 
     def settings(self) -> SourceComparisonReducerSettings:
-        """Return the immutable source-comparison declaration."""
+        """Return the immutable source comparison declaration."""
         return SourceComparisonReducerSettings(
             metric=self.metric,
             source_path=self.source_path,
@@ -471,7 +471,7 @@ class VarianceReducerSettings(NamedTuple):
 
 
 class VarianceReducerSpec(ReducerSpec):
-    """Declare a method-of-moments decomposition over named row factors."""
+    """Declare a method of moments decomposition over named row factors."""
 
     kind: Literal["variance"] = "variance"
     metric: str
@@ -752,7 +752,7 @@ class CrosslingualReducerSettings(NamedTuple):
 
 
 class CrosslingualReducerSpec(ReducerSpec):
-    """Declare macro, floor, disparity, and transfer-gap language summaries."""
+    """Declare macro, floor, disparity, and transfer gap language summaries."""
 
     kind: Literal["cross-lingual"] = "cross-lingual"
     metrics: tuple[str, ...]

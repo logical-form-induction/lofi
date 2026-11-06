@@ -1,6 +1,6 @@
 """Entailment prediction from paired structured or raw sentence representations.
 
-Each head declares whether it reads expected logical-form embeddings or the raw
+Each head declares whether it reads expected logical form embeddings or the raw
 token-encoder baseline.
 """
 

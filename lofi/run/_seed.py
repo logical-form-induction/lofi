@@ -1,4 +1,4 @@
-"""Run-level random-stream policy and restorable backend state."""
+"""Run level random-stream policy and restorable backend state."""
 
 import base64
 import json

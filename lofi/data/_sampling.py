@@ -592,7 +592,7 @@ class TypeSampleReport(FrozenValue):
 
 
 class PairSampleReport(FrozenValue):
-    """Observed rule-instance emissions by premise count.
+    """Observed rule instance emissions by premise count.
 
     Parameters
     ----------

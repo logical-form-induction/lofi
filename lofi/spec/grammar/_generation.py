@@ -168,7 +168,7 @@ class CategoryInventory[T](FrozenValue):
 
 
 def _tag[T](derivation: InventoryDerivation[T], rules: RuleSet[T], /) -> str | None:
-    """Return a derivation's normal-form tag, or nothing if a step is refused.
+    """Return a derivation's normal form tag, or nothing if a step is refused.
 
     Parameters
     ----------
@@ -441,7 +441,7 @@ def generate_inventory(
         The deepest category, by :func:`category_depth`, that may be a leaf
         or a premise.
     max_arguments : int | None
-        The greatest functor-spine argument count a lexical category or
+        The greatest functor spine argument count a lexical category or
         generated premise may have, or no bound.
     max_order : int | None
         The greatest category order a lexical category or generated premise

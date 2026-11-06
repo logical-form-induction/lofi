@@ -9,7 +9,7 @@ and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ### Added
 
-- The initial LoFI package, including the symbolic grammar-induction core,
+- The initial LoFI package, including the symbolic grammar induction core,
   optional neural and corpus capabilities, typed configuration boundaries,
   documentation, and contributor tooling.
 

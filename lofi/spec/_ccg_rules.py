@@ -170,7 +170,7 @@ def _targets(
 
 
 def _normal_form_role(source: _CompiledNormalFormRole, /) -> NormalFormRole:
-    """Adopt one native-compiled normal-form role."""
+    """Adopt one native-compiled normal form role."""
     direction = cast("Literal['forward', 'backward', 'undirected']", source.direction)
     if source.kind == "composition":
         return NormalFormRole(
@@ -283,7 +283,7 @@ def _adopt_composition(
     context: CCGAssembly,
     compiled: _CompiledRule,
 ) -> tuple[object, HeadSelection]:
-    """Adopt a native generalized-composition recipe."""
+    """Adopt a native generalized composition recipe."""
     functors, slash = context.resolve_functor(cast("str", compiled.view))
     slot = (
         None
@@ -329,7 +329,7 @@ def _adopt_type_raising(
     context: CCGAssembly,
     compiled: _CompiledRule,
 ) -> tuple[object, HeadSelection]:
-    """Adopt a native type-raising recipe."""
+    """Adopt a native type raising recipe."""
     functors, slash = context.resolve_functor(cast("str", compiled.view))
     return (
         TypeRaising(
@@ -349,7 +349,7 @@ def _adopt_clausal_adjunct(
     context: CCGAssembly,
     compiled: _CompiledRule,
 ) -> tuple[object, HeadSelection]:
-    """Adopt a typed native clausal-adjunct recipe."""
+    """Adopt a typed native clausal adjunct recipe."""
     declaration = _ClausalRecipe(compiled)
     _, source_slash = context.resolve_functor(declaration.source_view)
     _, target_slash = context.resolve_functor(declaration.target_view)

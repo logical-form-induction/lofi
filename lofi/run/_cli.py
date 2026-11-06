@@ -935,7 +935,7 @@ def _publish(namespace: argparse.Namespace, context: _Context) -> int:
 
 
 def _active_learn(namespace: argparse.Namespace, context: _Context) -> int:
-    """Run one active-learning document and report where its run stands.
+    """Run one active learning document and report where its run stands.
 
     A run that completes reports its rounds and directory. A run whose
     collector awaits the responses to a batch reports the round and the batch
@@ -1667,7 +1667,7 @@ def main(
         What renders an experiment's declared reports, or None for a command
         that renders no reports.
     active_learn : ActiveLearningRun | None
-        What runs an active-learning document, or None for a command that runs
+        What runs an active learning document, or None for a command that runs
         none.
     environ : Mapping[str, str] | None
         The environment a launch or poll resolves the site profile from; the

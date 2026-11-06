@@ -50,7 +50,7 @@ class FormalizationPipeline(Protocol):
 
     @property
     def refinements(self) -> int:
-        """Return how many solver-feedback refinements the pipeline allows."""
+        """Return how many solver feedback refinements the pipeline allows."""
         ...
 
     def check_trace(
@@ -190,7 +190,7 @@ class LogicLmPipeline:
     Parameters
     ----------
     refinements : int
-        The most solver-feedback refinements an item may record.
+        The most solver feedback refinements an item may record.
     """
 
     __slots__ = ("_refinements",)
@@ -282,7 +282,7 @@ class LincPipelineSpec(LmProverPipelineSpec):
 
 
 class LogicLmPipelineSpec(LmProverPipelineSpec):
-    """Declare one formalization followed by solver-feedback refinements."""
+    """Declare one formalization followed by solver feedback refinements."""
 
     kind: Literal["logic-lm"] = "logic-lm"
     refinements: int
@@ -290,7 +290,7 @@ class LogicLmPipelineSpec(LmProverPipelineSpec):
     @dx.validates("refinements")
     @classmethod
     def _refinements_are_nonnegative(cls, value: int) -> int:
-        """Return a nonnegative solver-feedback refinement limit."""
+        """Return a nonnegative solver feedback refinement limit."""
         return ensure_non_negative("a Logic-LM refinement limit", value)
 
     def settings(self) -> FormalizationPipeline:

@@ -40,7 +40,7 @@ class TreeRnnEncoderSpec(TermEncoderSpec):
 
     The cell names any installed ``lofi.recurrent_cell`` plugin. A one-layer
     encoder whose cell carries no memory apart from its hidden state also
-    publishes exact synthetic-tree continuation from a live term vector. Soft
+    publishes exact synthetic tree continuation from a live term vector. Soft
     controller raising requires this capability; multilayer encoders and encoders
     whose cell carries memory, such as ``lstm``, do not publish it.
 

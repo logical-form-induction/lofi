@@ -226,7 +226,7 @@ def _validate_soft_space(space: Space, /) -> None:
 
 @final
 class ExpectedEmbeddingGrounding(nn.Module):
-    """Classify pairs from expected logical-form or sentence vectors."""
+    """Classify pairs from expected logical form or sentence vectors."""
 
     def __init__(
         self,

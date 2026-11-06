@@ -1,4 +1,4 @@
-"""Registered split weights for neural chart-cell mixtures."""
+"""Registered split weights for neural chart cell mixtures."""
 
 from __future__ import annotations
 
@@ -88,7 +88,7 @@ class MarginalSplitWeigher(FrozenValue):
 
 @final
 class AttendSplitWeigher(nn.Module):
-    """Weight splits only by the learned child-pair score."""
+    """Weight splits only by the learned child pair score."""
 
     def __init__(self, score: SpanFunctionModule, /) -> None:
         super().__init__()
@@ -120,7 +120,7 @@ class AttendSplitWeigher(nn.Module):
 
     @property
     def score(self) -> SpanFunctionModule:
-        """Return the declared child-pair scorer."""
+        """Return the declared child pair scorer."""
         return self._score
 
     def weights(
@@ -135,7 +135,7 @@ class AttendSplitWeigher(nn.Module):
         *,
         dim: int,
     ) -> Tensor:
-        """Return normalized attention over the child-pair scores."""
+        """Return normalized attention over the child pair scores."""
         del joined, local
 
         if left is None or right is None:
@@ -203,13 +203,13 @@ def build_split_weigher(
 def _marginal(
     settings: MarginalSplitWeigherSettings, width: int, /
 ) -> MarginalSplitWeigher:
-    """Build exact conditional split-posterior weighting."""
+    """Build exact conditional split posterior weighting."""
     del settings, width
     return MarginalSplitWeigher()
 
 
 def _attend(settings: AttendSplitWeigherSettings, width: int, /) -> AttendSplitWeigher:
-    """Build learned child-pair attention weighting."""
+    """Build learned child pair attention weighting."""
     return AttendSplitWeigher(build_span_function(settings.score, (width, width), 1))
 
 

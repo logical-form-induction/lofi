@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 
 class _Rule[T](Protocol):
-    """Rule operations used by rule-instance sampling."""
+    """Rule operations used by rule instance sampling."""
 
     @property
     def name(self) -> str:
@@ -247,10 +247,10 @@ class RulePairSampler:
 def _build_rule_pairs(
     settings: RulePairSamplerSettings, context: RulePairSamplerContext, /
 ) -> RulePairSampler:
-    """Build the rule-instance sampler selected by a run declaration."""
+    """Build the rule instance sampler selected by a run declaration."""
     del settings
     return RulePairSampler(context.types, context.rules, context.actions)
 
 
 PLUGIN: Final = ComponentPlugin(spec=RulePairSamplerSpec, build=_build_rule_pairs)
-"""The rule-instance sampler's plugin."""
+"""The rule instance sampler's plugin."""

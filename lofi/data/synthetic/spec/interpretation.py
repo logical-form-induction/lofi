@@ -1,8 +1,8 @@
-"""The declared interpretation of a grammar into a logical-form language.
+"""The declared interpretation of a grammar into a logical form language.
 
 An interpretation declaration names the symbol inventory, the semantic types
 of the primitive categories and the semantic action of each rule. Building
-it checks every action against the compiled logical-form language and
+it checks every action against the compiled logical form language and
 returns the interpretation function a draw applies.
 """
 
@@ -59,7 +59,7 @@ __all__ = [
 ]
 
 type MeaningEntry = tuple[str, str, str]
-"""One surface form, category text and logical-form text."""
+"""One surface form, category text and logical form text."""
 
 
 @final
@@ -88,7 +88,7 @@ class MeaningAssignment(FrozenValue):
 
     @property
     def constants(self) -> tuple[ConstantSpec, ...]:
-        """Return the generated non-logical constant declarations."""
+        """Return the generated nonlogical constant declarations."""
         return self._constants
 
     @property
@@ -332,7 +332,7 @@ class ProofSearchSpec(dx.Model, extra="forbid"):
         return self
 
     def build(self, *, max_inhabitants: int) -> ProofSearch:
-        """Build the immutable proof-search policy."""
+        """Build the immutable proof search policy."""
         rules = PROOF_LOGICS[self.logic]
 
         return ProofSearch(
@@ -375,7 +375,7 @@ def _language_uses(
     erasure: Erasure,
     language: LanguageAssembly,
 ) -> tuple[tuple[str, str], ...]:
-    """Return logical-form uses paired with their category-induced types."""
+    """Return logical form uses paired with their category-induced types."""
     return tuple(
         (
             meaning,
@@ -392,7 +392,7 @@ def _meaning_texts(
     meanings: tuple[MeaningEntry, ...],
     /,
 ) -> dict[tuple[str, str], tuple[str, ...]]:
-    """Group logical-form texts by form and canonical category spelling."""
+    """Group logical form texts by form and canonical category spelling."""
     held: dict[tuple[str, str], list[str]] = {}
 
     for form, category_text, meaning in meanings:
@@ -435,7 +435,7 @@ def _validate_associative_commutative(
 
 
 class InterpretationSpec(dx.Model, extra="forbid"):
-    """The declared interpretation of a grammar into a logical-form language.
+    """The declared interpretation of a grammar into a logical form language.
 
     Attributes
     ----------
@@ -453,9 +453,9 @@ class InterpretationSpec(dx.Model, extra="forbid"):
     erasure : ErasureSpec
         The images of category atoms and non-functor constructors. Functor
         images are derived from the grammar's roles and the language's
-        function-type constructor.
+        function type constructor.
     constants : tuple[ConstantSpec, ...]
-        The typed non-logical constants the forms are built from.
+        The typed nonlogical constants the forms are built from.
     meanings : MeaningSpec
         The lexical source, inhabitant selection and search budget.
     actions : dict[str, str]

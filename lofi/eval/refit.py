@@ -719,7 +719,7 @@ def _pointwise(fit: DataTree, *, var_name: str | None) -> tuple[float, ...]:
     Parameters
     ----------
     fit : DataTree
-        A fitted model with a log-likelihood group.
+        A fitted model with a log likelihood group.
     var_name : str | None
         Observed variable to score on, when the group holds more than one.
     """
@@ -894,7 +894,7 @@ def refit_study(
     method : WeightingMethod
         Estimator the model weights come from.
     var_name : str | None
-        Observed variable to compare on, when a fit's log-likelihood group holds
+        Observed variable to compare on, when a fit's log likelihood group holds
         more than one.
 
     Returns

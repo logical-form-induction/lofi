@@ -71,7 +71,7 @@ class GrammaticalityLossSpec(LossSpec):
         Raises
         ------
         ValueError
-            If no readout of the model publishes a target-mass pair under
+            If no readout of the model publishes a target mass pair under
             ``readout``.
         """
         published = sorted(

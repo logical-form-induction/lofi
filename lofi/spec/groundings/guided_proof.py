@@ -1,4 +1,4 @@
-"""Learned guided symbolic proof-search declarations."""
+"""Learned guided symbolic proof search declarations."""
 
 from typing import TYPE_CHECKING, Literal, NamedTuple, override
 
@@ -58,7 +58,7 @@ class GuidedProofScorerSpec(PairScorerSpec):
         return ensure_positive("a guided-proof resource", value)
 
     def settings(self) -> GuidedProofScorerSettings:
-        """Resolve each search and proof-service resource once."""
+        """Resolve each search and proof service resource once."""
         return GuidedProofScorerSettings(
             self.readout,
             self.order,

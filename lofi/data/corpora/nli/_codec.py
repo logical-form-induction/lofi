@@ -110,7 +110,7 @@ def _decimal_of(value: NliDecimal) -> Decimal:
 
 
 class NliPair(NamedTuple):
-    """A normalized premise-hypothesis pair."""
+    """A normalized pair consisting of a premise and hypothesis."""
 
     pair_id: str
     premise: str

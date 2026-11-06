@@ -30,7 +30,7 @@ BASELINE_ROLE: Final = "baseline"
 """The evaluator role under which a baseline fit reports its rows."""
 
 BASELINE_FIT_MANIFEST_NAME: Final = "baseline-fit.json"
-"""The file a completed baseline-fit point writes its manifest to."""
+"""The file a completed baseline fit point writes its manifest to."""
 
 
 class _ConfiguredBaseline(Protocol):
@@ -93,13 +93,13 @@ class BaselineFitManifest(dx.Model, extra="forbid"):
 
 
 def decode_baseline_fit(document: Mapping[str, JsonValue], /) -> BaselineFitSpec:
-    """Validate a resolved baseline-fit declaration at its run boundary."""
+    """Validate a resolved baseline fit declaration at its run boundary."""
     load_plugins()
     return BaselineFitSpec.model_validate_json(json.dumps(dict(document)))
 
 
 def decode_baseline_manifest(data: bytes, /) -> BaselineFitManifest:
-    """Validate persisted baseline-fit manifest bytes."""
+    """Validate persisted baseline fit manifest bytes."""
     load_plugins()
     try:
         return BaselineFitManifest.model_validate_json(data)
@@ -109,13 +109,13 @@ def decode_baseline_manifest(data: bytes, /) -> BaselineFitManifest:
 
 
 def encode_baseline_manifest(manifest: BaselineFitManifest, /) -> bytes:
-    """Encode a validated baseline-fit manifest deterministically."""
+    """Encode a validated baseline fit manifest deterministically."""
     document = json.loads(manifest.model_dump_json())
     return (json.dumps(document, sort_keys=True, indent=2) + "\n").encode()
 
 
 class BaselineFitCodec:
-    """Compose baseline-fit documents through their declared boundary."""
+    """Compose baseline fit documents through their declared boundary."""
 
     __slots__ = ("_loader", "_plugins_loaded")
 
@@ -135,7 +135,7 @@ class BaselineFitCodec:
         *,
         overrides: tuple[str, ...] = (),
     ) -> BaselineFitSpec:
-        """Compose and validate one baseline-fit document."""
+        """Compose and validate one baseline fit document."""
         return self.compose_traced(path, overrides=overrides).spec
 
     def compose_traced(

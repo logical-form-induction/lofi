@@ -1,4 +1,4 @@
-"""Held-out inference-label evaluator declaration."""
+"""Held-out inference label evaluator declaration."""
 
 from typing import (
     TYPE_CHECKING,
@@ -102,7 +102,7 @@ def inference_evaluation_metrics(classes: tuple[str, ...], /) -> tuple[str, ...]
 
 
 class LabelReductionSpec(dx.Model, extra="forbid"):
-    """Declare a total two-way coarsening of the inference-label scale."""
+    """Declare a total two-way coarsening of the inference label scale."""
 
     mapping: dict[str, str]
 
@@ -134,7 +134,7 @@ class LabelReductionSpec(dx.Model, extra="forbid"):
 
 
 class InferenceEvaluatorSettings(NamedTuple):
-    """Validated settings used to build an inference-label evaluator."""
+    """Validated settings used to build an inference label evaluator."""
 
     conventions: ConventionSettings
     reduction: tuple[tuple[str, str], ...] | None
@@ -145,7 +145,7 @@ class InferenceEvaluatorSettings(NamedTuple):
 
 
 class InferenceEvaluatorSpec(EvaluatorSpec):
-    """Declare inference-label evaluation over held-out sentence pairs.
+    """Declare inference label evaluation over held-out sentence pairs.
 
     ``reduction`` is required. A null value reports the data's native scale; a
     mapping explicitly declares a two-way coarsening of that scale.
@@ -209,7 +209,7 @@ class InferenceEvaluatorSpec(EvaluatorSpec):
         Parameters
         ----------
         labels : tuple[str, ...]
-            The inference-label inventory the run's data owns; empty reads the
+            The inference label inventory the run's data owns; empty reads the
             canonical logical-relation response scale.
         """
         return self._metrics(self.classes(labels or None))

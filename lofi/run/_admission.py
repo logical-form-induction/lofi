@@ -50,7 +50,7 @@ def admit(
     companions : Sequence[Experiment]
         The experiments of the same freeze admitted together with it.
     admitted_hours : float
-        The accelerator-hours the site lets one paper's experiments hold.
+        The accelerator hours the site lets one paper's experiments hold.
 
     Returns
     -------

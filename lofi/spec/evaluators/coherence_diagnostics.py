@@ -50,7 +50,7 @@ class CoherenceDiagnosticsSettings(NamedTuple):
 
 
 class CoherenceDiagnosticsSpec(EvaluatorSpec):
-    """Declare objective, entropy, collapse, usage, and mass-agreement rows."""
+    """Declare objective, entropy, collapse, usage, and mass agreement rows."""
 
     kind: Literal["coherence-diagnostics"] = "coherence-diagnostics"
     objective: str
@@ -83,7 +83,7 @@ class CoherenceDiagnosticsSpec(EvaluatorSpec):
 
     @override
     def dependencies(self) -> tuple[Dependency, ...]:
-        """Return the complete-term readout used for entropy and symbolic decode."""
+        """Return the complete term readout used for entropy and symbolic decode."""
         return (Dependency(self.readout, "terms-readout"),)
 
     @override

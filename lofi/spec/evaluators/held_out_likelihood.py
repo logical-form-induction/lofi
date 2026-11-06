@@ -40,7 +40,7 @@ class HeldOutLikelihoodSettings(NamedTuple):
 
 
 class HeldOutLikelihoodSpec(EvaluatorSpec):
-    """Declare held-out string and normal-form derivational likelihood."""
+    """Declare held-out string and normal form derivational likelihood."""
 
     kind: Literal["held-out-likelihood"] = "held-out-likelihood"
     readout: str

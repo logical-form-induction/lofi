@@ -128,7 +128,7 @@ NEGATIVE_DATA_REGIMES: Final[tuple[NegativeDataRegime, ...]] = (
     "positive-only",
     "label-flips",
 )
-"""The negative-data regimes in declaration order."""
+"""The negative data regimes in declaration order."""
 
 GRAMMATICALITY_LABELS: Final[tuple[GrammaticalityLabel, ...]] = (
     "grammatical",
@@ -264,7 +264,7 @@ def _by_failure(
 def _by_form_label(
     counts: Mapping[FormTypingLabel, int],
 ) -> Mapping[FormTypingLabel, int]:
-    """Return a count per logical-form typing label in report order."""
+    """Return a count per logical form typing label in report order."""
     unknown = [label for label in counts if label not in FORM_TYPING_LABELS]
 
     if unknown:
@@ -547,7 +547,7 @@ class AmbiguityTarget:
 
     @property
     def derivations(self) -> Target | None:
-        """Return the derivation-count target, when one is set."""
+        """Return the derivation count target, when one is set."""
         return self._derivations
 
     @property
@@ -1009,7 +1009,7 @@ class ShapeReport(FrozenValue):
 
 
 class ScopeTarget:
-    """What a sample aims at in logical-form readings per string.
+    """What a sample aims at in logical form readings per string.
 
     Each equivalence decision runs under the clock of the interpretation the
     readings are read under.
@@ -1374,7 +1374,7 @@ class LengthReport:
 
 
 class NamedOperator(Protocol):
-    """An installed operator whose entry-point name identifies report counts."""
+    """An installed operator whose entry point name identifies report counts."""
 
     @property
     def name(self) -> str:
@@ -2374,7 +2374,7 @@ class NoiseReport:
 
 @final
 class SymbolInventory(FrozenValue):
-    """The non-logical symbols a declared interpretation draws its forms from.
+    """The nonlogical symbols a declared interpretation draws its forms from.
 
     Parameters
     ----------
@@ -2485,7 +2485,7 @@ class GrammarKnobs:
     combinators : tuple[str, ...]
         The rule names, in declaration order.
     inventory : SymbolInventory | None
-        The non-logical symbols of the declared interpretation, or nothing
+        The nonlogical symbols of the declared interpretation, or nothing
         when the grammar is drawn from without one.
 
     Raises
@@ -2802,7 +2802,7 @@ class LexiconReport:
     def concordance(self) -> float | None:
         """Return the rank correlation of entry token count with inverse class size.
 
-        Every form-category pair of the lexicon is one unit. The correlation
+        Every form category pair of the lexicon is one unit. The correlation
         is near one when the most frequent forms belong to the smallest
         classes, near zero when frequency says nothing about class size, and
         near minus one when the most frequent forms belong to the largest
@@ -2863,7 +2863,7 @@ class InventoryReport:
         primitive has depth zero and a constructor one more than its deepest
         argument.
     argument_counts : Mapping[str, int]
-        Each category's functor-spine argument count, in category order.
+        Each category's functor spine argument count, in category order.
     composition_orders : Mapping[str, int]
         Each category's order under the grammar's declared functor roles, in
         category order.
@@ -2959,7 +2959,7 @@ class InventoryReport:
 
     @property
     def argument_counts(self) -> Mapping[str, int]:
-        """Return each lexical category's functor-spine argument count."""
+        """Return each lexical category's functor spine argument count."""
         return self._argument_counts
 
     @property

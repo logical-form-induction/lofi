@@ -1,4 +1,4 @@
-"""Logical-form operations over declared one-store languages."""
+"""Logical form operations over declared one-store languages."""
 
 from lofi.lf._codec import term_codec
 from lofi.lf._labeling import (

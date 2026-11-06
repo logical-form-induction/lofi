@@ -87,8 +87,8 @@ Each diagnostic declares the roles it requires and the scores it reports:
 | Tag | Requires | Measures |
 | --- | --- | --- |
 | `finite-readings` | none | The live positions of each reading that hold no finite number. |
-| `span-length-bias` | `CONSTITUENT_MARGINAL` | Normalized proper-internal span length under the observed marginals. |
-| `cutpoint-entropy` | `SPLIT_DISTRIBUTION` | Normalized entropy over non-forced, non-root split choices. |
+| `span-length-bias` | `CONSTITUENT_MARGINAL` | Normalized length of proper internal spans under the observed marginals. |
+| `cutpoint-entropy` | `SPLIT_DISTRIBUTION` | Normalized entropy over non-forced, nonroot split choices. |
 | `split-posterior-kl` | `INSIDE_SCORE`, `OUTSIDE_SCORE`, `SPLIT_DISTRIBUTION` | How far DIORA attention lies from its exact split posterior. |
 | `action-margin` | `COMBINATOR_LOGITS` | The gap between the two highest action weights, averaged over rows. |
 | `controller-choice` | `COMBINATOR_LOGITS` | Confidence, normalized entropy and top-two margin of each controller choice. |
@@ -99,11 +99,11 @@ Each diagnostic declares the roles it requires and the scores it reports:
 | `recursion-spread` | `NODE_ENCODING` | How far a term holds its own nodes apart as it takes on more. |
 | `superposition-interference` | `TERM_ENCODING` | Angular interference as type encodings are superposed in row order. |
 | `gate-patterns` | `GATE` | The first two moments of every observed recurrent gate activation. |
-| `hidden-state-evolution` | `RECURRENT_HIDDEN` | Normalized hidden-state displacement from each child to its parent. |
-| `memory-cell-dynamics` | `GATE`, `RECURRENT_CELL`, `RECURRENT_HIDDEN` | Displacement and directional retention across memory-cell edges. |
+| `hidden-state-evolution` | `RECURRENT_HIDDEN` | Normalized hidden state displacement from each child to its parent. |
+| `memory-cell-dynamics` | `GATE`, `RECURRENT_CELL`, `RECURRENT_HIDDEN` | Displacement and directional retention across memory cell edges. |
 | `recurrent-connection-analysis` | `RECURRENT_HIDDEN` | Directional continuity between observed child and parent states. |
 | `attention-patterns` | `ATTENTION_LOGITS`, `ATTENTION_WEIGHTS` | Exact observed attention distributions, without labeling heads. |
-| `feed-forward-specialization` | `FFN_PREACTIVATION` | Feature sparsity and declared-group effects in feed-forward preactivations. |
+| `feed-forward-specialization` | `FFN_PREACTIVATION` | Feature sparsity and declared group effects in feedforward preactivations. |
 | `residual-contributions` | `ATTENTION_LOGITS`, `ATTENTION_WEIGHTS`, `FFN_PREACTIVATION`, `RESIDUAL_STREAM` | Update and skip norm shares from paired residual stages. |
 
 Which diagnostics a point can run depends on the roles its components publish
@@ -180,8 +180,8 @@ two stored action columns. The probability margin orders the zero-padded
 columns, so a single live action and a masked column give $p_{(1)}-0$.
 `controller-choice` reports these three quantities.
 `action-margin` instead subtracts the two largest **observed weights**,
-$z_{(1)}-z_{(2)}$, so a log-probability declaration yields a log-ratio margin.
-Log-probability rows with at most one possible action are counted as
+$z_{(1)}-z_{(2)}$, so a log probability declaration yields a log ratio margin.
+Log probability rows with at most one possible action are counted as
 `certain` and excluded from the mean gap.
 
 For eligible spans $S$, values $v_s$, and constituent marginals $\mu_s$,
@@ -201,11 +201,11 @@ do not pool every span across passes into one denominator.
 ### Chart and controller diagnostics
 
 `finite-readings` counts live entries, nonfinite entries, and their ratio.
-For log-probability observations, $-\infty$ denotes zero mass and has its own
+For log probability observations, $-\infty$ denotes zero mass and has its own
 `log-zero` count; it is not a malformed nonfinite reading.
 `span-length-bias` sets $v_s=(j-i)/n$ for proper internal spans $[i,j)$ of an
 $n$-token sentence, excluding leaves and the root.
-`cutpoint-entropy` applies $h$ to split probabilities only at non-root spans
+`cutpoint-entropy` applies $h$ to split probabilities only at nonroot spans
 with at least two admitted split choices.
 
 For DIORA attention $p_s(k)$ at span $s=[i,j)$ and child inside log scores
@@ -243,7 +243,7 @@ consistency equation to declared similar-input groups. An empty family of
 relations receives one. Thus the result depends on supplied relations, not
 on an inferred clustering of inputs.
 
-### Term-representation diagnostics
+### Term representation diagnostics
 
 For nonzero vectors define
 $\operatorname{cos}(\mathbf{u},\mathbf{v})=
@@ -264,7 +264,7 @@ implementation convention for an undefined correlation.
 | --- | --- |
 | `atomic-complex-differentiation` | $(1-\operatorname{cos}(\bar{\mathbf{h}}_{\mathrm{atomic}},\bar{\mathbf{h}}_{\mathrm{complex}}))/2$, using the two groups' mean node vectors. A missing group yields counts without a separation score. |
 | `constructor-embedding` | For every within-constructor pair cosine $a$ and between-constructor pair cosine $b$, average $\mathbf{1}[a>b]+\tfrac12\mathbf{1}[a=b]$ over their Cartesian product. Both pair sets must be nonempty. |
-| `depth-graded-encoding` | Pearson correlation of node depth with cosine similarity to that term's root; the unit-interval grading score is its absolute value. |
+| `depth-graded-encoding` | Pearson correlation of node depth with cosine similarity to that term's root; the unit interval grading score is its absolute value. |
 | `recursion-spread` | For a term with $n\geq2$ live nodes, average $(1-\operatorname{cos}(\mathbf{h}_i,\mathbf{h}_j))/2$ over $i<j$. Report mean spread, its correlation with node count across terms, and the absolute correlation. |
 | `superposition-interference` | For successive prefixes of the first at most five term vectors, let $\mathbf{s}_m=\sum_{i=1}^m\mathbf{h}_i$. Report $(1-m^{-1}\sum_{i=1}^m\operatorname{cos}(\mathbf{h}_i,\mathbf{s}_m))/2$. Zero input vectors are refused; zero resultant sums are omitted. The measurement depends on row order. |
 
@@ -272,7 +272,7 @@ These angular and correlation measurements describe observed encodings.
 They do not establish that a decoder can recover a constructor or that an
 encoding respects a compositional semantics.
 
-### Recurrent-state diagnostics
+### Recurrent state diagnostics
 
 On each live child–parent edge with vectors $\mathbf{u},\mathbf{v}$, define
 
@@ -283,7 +283,7 @@ $$
 
 `hidden-state-evolution` averages this displacement for hidden states.
 `memory-cell-dynamics` reports it for cell states together with their mean
-child–parent cosine. `recurrent-connection-analysis` reports mean hidden-state
+child–parent cosine. `recurrent-connection-analysis` reports mean hidden state
 child–parent cosine. Displacement omits edges with two zero vectors; cosine
 omits edges with either vector zero. These are state comparisons, not causal
 effects or eigenvalues of recurrent weight matrices.
@@ -292,7 +292,7 @@ For $n$ live scalar gate activations $g_i$, `gate-patterns` reports
 $\bar g=n^{-1}\sum_i g_i$ and population variance
 $n^{-1}\sum_i(g_i-\bar g)^2$ separately for each gate site.
 
-### Attention, feed-forward, and residual diagnostics
+### Attention, feedforward, and residual diagnostics { #attention-feed-forward-and-residual-diagnostics }
 
 For each query $i$, `attention-patterns` reads the **observed** nonnegative
 attention weights $a_{ij}$, using finite logits to check their support $J_i$.
@@ -306,7 +306,7 @@ Live rows with zero total weight are refused.
 
 It reports normalized
 entropy, maximum mass, self mass $p_i(i)$, local mass
-$\sum_{j:|j-i|\leq1}p_i(j)$, and significant-mass coverage
+$\sum_{j:|j-i|\leq1}p_i(j)$, and significant mass coverage
 $\sum_{j:p_i(j)\geq0.1}p_i(j)$. These quantities are averaged over live queries.
 Cross-head consistency is one minus mean normalized Jensen–Shannon divergence
 between pairs of heads in the same layer \citep{lin1991}:
@@ -321,7 +321,7 @@ With natural logarithms, $0\leq\operatorname{JS}(p,q)\leq\log 2$. Compared heads
 contribute. No pair yields no cross-head score. These summaries do not
 label a head's function.
 
-For a live feed-forward preactivation vector $\mathbf{x}$ with feature set
+For a live feedforward preactivation vector $\mathbf{x}$ with feature set
 $J$, the sparsity score is
 
 $$
@@ -360,7 +360,7 @@ and skip vectors can change the output norm.
 A diagnostic is a class with a `tag`, a frozen set of required `Role`s, a frozen
 set of `scores`, and a `run(trace, *, context)` method returning a
 `DiagnosticResult`. It is installed by listing the class in the
-`lofi.diagnostic` entry-point group under its tag; a class listed under another
+`lofi.diagnostic` entry point group under its tag; a class listed under another
 tag than the one it declares is refused when the catalog is read.
 [Publish plugins](../extending/plugins.md) covers entry points.
 

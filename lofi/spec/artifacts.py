@@ -75,7 +75,7 @@ class PretrainedSourceSpec(dx.TaggedUnion, discriminator="kind", extra="forbid")
 
 
 class HubSourceSpec(PretrainedSourceSpec):
-    """Declare a model-hub repository pinned to one commit.
+    """Declare a model hub repository pinned to one commit.
 
     Parameters
     ----------

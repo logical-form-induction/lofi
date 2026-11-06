@@ -6,7 +6,7 @@ LoFI is pre-1.0. Minor releases may change public signatures.
 
 A package's `__init__` exports its supported surface, which is rendered in the
 [API reference](../reference/index.md). Direct imports from underscore-prefixed
-modules are private; names re-exported by a package `__init__` are public.
+modules are private; names reexported by a package `__init__` are public.
 
 ## Current implementation
 
@@ -30,7 +30,7 @@ use named extras.
 
 **The symbolic core remains independent.** Modules from `lofi.terms` through
 `lofi.grammars` do not import tensor libraries, corpus readers, or the
-logical-form packages.
+logical form packages.
 
 **A probe reaches a model through published surfaces.** `lofi.nn.sites`,
 `lofi.nn.ports` and `lofi.nn.policy` define that interface.

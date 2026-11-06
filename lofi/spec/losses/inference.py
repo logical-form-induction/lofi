@@ -53,7 +53,7 @@ class LabelResponseSettings(NamedTuple):
 
 
 class LabelResponseSpec(InferenceResponseSpec):
-    """Declare categorical inference-label supervision."""
+    """Declare categorical inference label supervision."""
 
     kind: Literal["label"] = "label"
 

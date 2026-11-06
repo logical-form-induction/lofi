@@ -38,7 +38,7 @@ def _declared(readouts: Iterable[ReadoutId]) -> tuple[ReadoutId, ...]:
     Parameters
     ----------
     readouts : Iterable[ReadoutId]
-        Published target-mass identifiers.
+        Published target mass identifiers.
 
     Raises
     ------
@@ -78,7 +78,7 @@ class SpanConstraintObjective[T, ScopeT: Hashable]:
     Parameters
     ----------
     readouts : Iterable[ReadoutId]
-        Published target-mass identifiers accepted from localized constraints.
+        Published target mass identifiers accepted from localized constraints.
     name : str
         The name the term is logged and namespaced under.
 
@@ -115,7 +115,7 @@ class SpanConstraintObjective[T, ScopeT: Hashable]:
 
     @property
     def readouts(self) -> tuple[ReadoutId, ...]:
-        """Return the declared target-mass identifiers."""
+        """Return the declared target mass identifiers."""
         return self._readouts
 
     def _published(
@@ -211,7 +211,7 @@ class SpanConstraintObjective[T, ScopeT: Hashable]:
     def _bracket_instances(
         constraints: Iterable[BatchLocalNegativeBracket[ScopeT]],
     ) -> list[tuple[int, int, int]]:
-        """Return negative-bracket cells in batch and source order."""
+        """Return negative bracket cells in batch and source order."""
         return [
             (item, *span)
             for constraint in constraints

@@ -438,7 +438,7 @@ class _ProbabilityItemTarget(FrozenValue):
 
     @property
     def response(self) -> float:
-        """Return the item's mean unit-interval response."""
+        """Return the item's mean unit interval response."""
         return self._response
 
     @property
@@ -523,7 +523,7 @@ class _ProbabilityTargetRow(FrozenValue):
 class ProbabilityTargets(FrozenValue):
     """Bounded probabilities stratified by item-level binary uncertainty.
 
-    An item's mean unit-interval response defines a binary distribution over
+    An item's mean unit interval response defines a binary distribution over
     the relation and its complement. Its agreement is one minus that
     distribution's normalized entropy, on the same scale used for ordinal
     item distributions.

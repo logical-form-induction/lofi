@@ -41,7 +41,7 @@ _SLACK: Final = 1e-12
 
 
 class NullModelFixture[Data](NamedTuple):
-    """Stores inputs for a null-model law.
+    """Stores inputs for a null model law.
 
     Parameters
     ----------
@@ -457,7 +457,7 @@ NULL_MODEL_LAWS: Final = (
     the_provenance_names_the_null_that_ran,
     a_test_leaves_the_observed_data_alone,
 )
-"""Null-model laws in conformance order."""
+"""Null model laws in conformance order."""
 
 CORRECTION_LAWS: Final = (
     the_raw_p_values_come_back_unchanged,

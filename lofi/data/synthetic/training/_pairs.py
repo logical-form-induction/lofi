@@ -1,4 +1,4 @@
-"""Labeled inference-pair batches and the pair training of a pair corpus."""
+"""Labeled inference pair batches and the pair training of a pair corpus."""
 
 from typing import TYPE_CHECKING, Protocol, Self, final, override
 
@@ -33,7 +33,7 @@ __all__ = [
 
 @final
 class CorpusPair(FrozenValue):
-    """One premise-hypothesis pair of a pair corpus, with its observed relation.
+    """One premise and hypothesis from a corpus, with their observed relation.
 
     Parameters
     ----------
@@ -50,7 +50,7 @@ class CorpusPair(FrozenValue):
         The pair's declared ordinal response level, when the data supplies one.
     gold : tuple[str, str] | None
         The gold logical forms of the premise and the hypothesis in the
-        logical-form surface syntax, when the data supplies them.
+        logical form surface syntax, when the data supplies them.
     """
 
     _noun = "corpus pair"
@@ -114,7 +114,7 @@ class CorpusPair(FrozenValue):
 
 
 class PairCorpus(Protocol):
-    """A lowered dataset of labeled premise-hypothesis pairs a grounding trains on."""
+    """Provides labeled premises and hypotheses for grounding."""
 
     @property
     def fingerprint(self) -> str:

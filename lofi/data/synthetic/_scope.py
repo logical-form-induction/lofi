@@ -1,4 +1,4 @@
-"""The logical-form readings of one string, read off its parse forest.
+"""The logical form readings of one string, read off its parse forest.
 
 A string's derivations are enumerated from the forest, each read into a
 logical form under the declared interpretation, and the forms grouped by

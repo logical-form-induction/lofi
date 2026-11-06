@@ -3,7 +3,7 @@
 A synthetic corpus's `corruption` block replaces a declared share of its items
 with strings for which the configured parser finds no derivation, and its `noise` block
 flips the grammaticality label an item is observed with. Together they spell
-the three string-supervision regimes: positive-only data, labeled strings, and
+the three string supervision regimes: positive-only data, labeled strings, and
 certified negatives. This guide declares the corruption operators and
 proportion, declares label noise, composes the packaged regime documents, and
 reads the reports a draw records.
@@ -44,7 +44,7 @@ Each operator is one entry in the `lofi.corruption` group and applies its edit
 | `substitution` | Replace one token by a form that shares no category with it under the grammar's matching relation. |
 
 A candidate is kept only when the configured parser finds no root derivation,
-so every corrupted item carries a non-derivability certificate for that
+so every corrupted item carries a nonderivability certificate for that
 grammar and parse configuration. A candidate the
 grammar still derives is counted as rejected, and an operator that cannot edit
 a string, e.g. a swap over identical tokens, is counted as inapplicable.
@@ -62,7 +62,7 @@ inapplicable. Retaining only candidates that receive certificates conditions
 this proposal on acceptance, so accepted operator frequencies need not equal
 $p_J$: operators can have different rejection and inapplicability rates.
 
-A certificate records the grammar, theory, and unary-closure budget. Writing
+A certificate records the grammar, theory, and unary closure budget. Writing
 $\mathcal D_b(w')$ for the root derivations found with that configuration,
 its acceptance condition is $|\mathcal D_b(w')|=0$. This establishes
 unbounded nonmembership only when the configured search is complete for the
@@ -120,7 +120,7 @@ swap ('word-4', 'word-5') -> word-5 word-4
 
 `corpus.examples` holds the 36 grammatical items with their derivations and
 `corpus.corrupted` the 12 negatives, each with the operator that made it, the
-string it was made from, and a non-derivability certificate. The insertion
+string it was made from, and a nonderivability certificate. The insertion
 here was inapplicable once because the parser document's strings already have
 the greatest length the corpus allows.
 
@@ -165,7 +165,7 @@ label and whether it was flipped.
 Let $Y\in\{0,1\}$ be the true grammaticality label and
 $\widetilde Y$ the observed label, with one denoting grammatical. Write
 $\eta_1$ for `grammatical.rate` and $\eta_0$ for `ungrammatical.rate`.
-The row-stochastic label-transition matrix is
+The row-stochastic label transition matrix is
 
 $$
 \mathbf C=
@@ -177,7 +177,7 @@ c_{ab}=\mathbb P(\widetilde Y=b\mid Y=a),
 $$
 
 with rows and columns ordered $(0,1)$. Thus, if a learner assigns
-$p_Y(1\mid w)=m$, the noisy-label PMF is
+$p_Y(1\mid w)=m$, the noisy label PMF is
 
 $$
 p_{\widetilde Y}(1\mid w)
@@ -226,13 +226,13 @@ rates with lexical profiles; its `positive-only.yaml` yokes the corruption
 share to the ungrammatical flip rate in exactly this way.
 
 A corrupted string is always labeled ungrammatical, and the `noise` block alone
-decides how often that label is observed as grammatical. The negative-data
+decides how often that label is observed as grammatical. The negative data
 `regime` belongs to ill-typed logical forms, as
 [Generate ill-typed forms](generate-ill-typed-forms.md) shows.
 
 ## Refusals
 
-- A proportion outside zero to one, a non-positive `attempts`, an empty
+- A proportion outside zero to one, a nonpositive `attempts`, an empty
   operator list, or an operator named twice is refused when the document is
   validated.
 - A flip rate outside zero to one is refused.

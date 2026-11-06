@@ -1,6 +1,6 @@
-"""The judgment-fit configuration kind, whose points fit judgment models.
+"""The judgment fit configuration kind, whose points fit judgment models.
 
-A judgment-fit experiment sweeps a judgment-fit document. Its points fit in
+A judgment fit experiment sweeps a judgment fit document. Its points fit in
 the launching process against the designs their datasets register, train no
 step a step timer prices, and add the declared model comparisons over the
 persisted fits to the rows their fits recorded. The judgment capability is
@@ -51,14 +51,14 @@ __all__ = ["JudgmentFitConfiguration"]
 
 @final
 class JudgmentFitConfiguration(FrozenValue):
-    """A judgment-fit document, whose points write judgment-fit manifests.
+    """A judgment fit document, whose points write judgment fit manifests.
 
     Parameters
     ----------
     kind : str
         The tag the experiment declares the document under.
     path : Path
-        The judgment-fit document.
+        The judgment fit document.
     """
 
     _noun = "judgment-fit configuration"
@@ -76,12 +76,12 @@ class JudgmentFitConfiguration(FrozenValue):
 
     @property
     def path(self) -> Path:
-        """Return the judgment-fit document."""
+        """Return the judgment fit document."""
         return self._path
 
     @property
     def manifest_name(self) -> str:
-        """Return the file a fit's directory holds its judgment-fit manifest in."""
+        """Return the file a fit's directory holds its judgment fit manifest in."""
         return FIT_MANIFEST_NAME
 
     @property
@@ -100,7 +100,7 @@ class JudgmentFitConfiguration(FrozenValue):
         return False
 
     def composer(self, search_path: tuple[Path, ...], /) -> TracedComposer:
-        """Return the judgment-fit composition over the fit document.
+        """Return the judgment fit composition over the fit document.
 
         Parameters
         ----------
@@ -149,9 +149,9 @@ class JudgmentFitConfiguration(FrozenValue):
         return frozenset({FIT_ROLE})
 
     def manifest_point(self, data: bytes, /) -> ManifestPoint:
-        """Return the fit, seed and source a judgment-fit manifest records.
+        """Return the fit, seed and source a judgment fit manifest records.
 
-        A judgment-fit manifest is written only once its fit completes, so it
+        A judgment fit manifest is written only once its fit completes, so it
         records a completed point.
 
         Parameters

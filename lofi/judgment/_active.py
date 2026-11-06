@@ -67,7 +67,7 @@ __all__ = [
 ]
 
 COLLECTOR_FAMILY = "active_collector"
-"""The entry-point family the installed collectors register under."""
+"""The entry point family the installed collectors register under."""
 
 
 @final
@@ -157,7 +157,7 @@ class CollectorContext(FrozenValue):
     directory : Path
         Directory the run keeps its rounds under.
     root : Path
-        Directory the active-learning document's declared paths are relative
+        Directory the active learning document's declared paths are relative
         to.
     candidates : Sequence[Item]
         The whole candidate pool, in construction order.

@@ -121,7 +121,7 @@ class TermEncoderSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "term_encoder"
 
 
@@ -142,7 +142,7 @@ class TokenEncoderSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "token_encoder"
 
 
@@ -153,7 +153,7 @@ class SubwordPoolerSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "subword_pooler"
 
 
@@ -171,7 +171,7 @@ class TermDecoderSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "term_decoder"
 
 
@@ -184,7 +184,7 @@ class ControllerSpec(
     locals()["raise"] = "none"
 
     def raising(self) -> Literal["none", "soft"]:
-        """Return the declared type-raising treatment."""
+        """Return the declared type raising treatment."""
         return cast("Literal['none', 'soft']", getattr(self, "raise"))
 
     @override
@@ -204,7 +204,7 @@ class ControllerSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "controller"
 
 
@@ -250,7 +250,7 @@ class PairScorerSpec(
 
 
 class ReadoutSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="forbid"):
-    """Declares a chart-cell readout."""
+    """Declares a chart cell readout."""
 
     space: str
 
@@ -262,7 +262,7 @@ class ReadoutSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="fo
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "readout"
 
     def estimate_kind(self) -> str | None:
@@ -270,7 +270,7 @@ class ReadoutSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="fo
         return None
 
     def published_masses(self) -> frozenset[str]:
-        """Return the ids of the target-mass pairs this readout publishes."""
+        """Return the ids of the target mass pairs this readout publishes."""
         return frozenset()
 
 
@@ -279,7 +279,7 @@ class ParserSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="for
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "chart"
 
     def controller_inputs(self) -> frozenset[str]:
@@ -294,7 +294,7 @@ class SpanDecoderSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "span_decoder"
 
 
@@ -366,7 +366,7 @@ class ModelSection(dx.Model, extra="forbid"):
     spaces : dict[str, SpaceSpec]
         Represented sorts bound to named encoders and decoders.
     readouts : dict[str, ReadoutSpec]
-        Chart-cell readouts keyed by role.
+        Chart cell readouts keyed by role.
     span_decoders : dict[str, SpanDecoderSpec]
         Span decoders keyed by role.
     actions : ActionsSpec
@@ -550,7 +550,7 @@ class ModelSection(dx.Model, extra="forbid"):
         """Return the batch kinds a trainer's requirement asks of this model's data.
 
         A grounded model fits its parser on labeled inference pairs, so a
-        trainer's sentence requirement is met by inference-pair batches.
+        trainer's sentence requirement is met by inference pair batches.
 
         Parameters
         ----------

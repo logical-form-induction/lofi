@@ -116,7 +116,7 @@ def expected_description_lengths(
     scope : SimplicityScope
         Cells whose expected cost is included.
     symbol_cost : DescriptionCost
-        Declared constructor-cost policy.
+        Declared constructor cost policy.
 
     Returns
     -------

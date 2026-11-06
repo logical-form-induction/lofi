@@ -72,7 +72,7 @@ _PARTICIPANT_EFFECTS: Final = (
     "participant_intercept_offsets",
     "participant_cutpoint_offsets",
 )
-"""The standard-normal participant sites, drawn from the design's seed."""
+"""The standard normal participant sites, drawn from the design's seed."""
 
 
 def _population(levels: int, latent_range: tuple[float, float], /) -> dict[str, float]:

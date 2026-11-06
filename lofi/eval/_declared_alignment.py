@@ -103,7 +103,7 @@ class FittedDeclaredAlignment(FrozenValue):
 
 @final
 class DeclaredAlignmentScore(FrozenValue):
-    """A held-out alignment score beside its random-relabeling floor."""
+    """A held-out alignment score beside its random relabeling floor."""
 
     _noun = "declared alignment score"
     __slots__ = ("_floor", "_kind", "_observed", "_rows")

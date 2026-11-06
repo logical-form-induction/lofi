@@ -1,4 +1,4 @@
-"""Normalized premise-hypothesis corpus support."""
+"""Normalized corpora of premises and hypotheses."""
 
 from lofi.data.corpora.nli._codec import (
     ChaosNliCodec,

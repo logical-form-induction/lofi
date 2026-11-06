@@ -212,7 +212,7 @@ def log_likelihood(program: BoundProgram, params: Tensor, /) -> Tensor:
     ValueError
         If the vector is not one axis of the layout's length.
     MarginalLikelihoodError
-        If the program declares the truncated-marginal treatment, whose
+        If the program declares the truncated marginal treatment, whose
         population layout and group reduction are evaluated by
         :class:`ApproximateMarginalLikelihood`.
     """
@@ -485,7 +485,7 @@ class TorchBackend:
         design: ResponseDesign,
         /,
     ) -> Tensor:
-        """Return one log-likelihood per response.
+        """Return one log likelihood per response.
 
         Parameters
         ----------
@@ -571,7 +571,7 @@ class QuiversBackend:
         design: ResponseDesign,
         /,
     ) -> Tensor:
-        """Return one log-likelihood per response.
+        """Return one log likelihood per response.
 
         Parameters
         ----------

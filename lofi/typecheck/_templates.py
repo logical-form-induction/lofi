@@ -233,7 +233,7 @@ class TypeTemplate(FrozenValue):
         UnknownPrimitiveError
             If the template names a primitive the signature does not declare.
         UnknownOperatorError
-            If the signature declares no such function-type operator.
+            If the signature declares no such function type operator.
         """
         return _resolved(self._shape, language, _primitives(language))
 
@@ -427,7 +427,7 @@ class ConstraintTemplate(FrozenValue):
         UnknownPrimitiveError
             If a template names a primitive the signature does not declare.
         UnknownOperatorError
-            If the signature declares no such function-type operator.
+            If the signature declares no such function type operator.
         """
         return ResolvedConstraint(
             self._accessor,

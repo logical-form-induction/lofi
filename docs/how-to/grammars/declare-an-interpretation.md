@@ -31,7 +31,7 @@ interpretations:
 | `meaning` | The logical form the semantic actions build. |
 
 Evaluators and readouts refer to a reading by its name; the packaged
-category-side evaluator, for instance, declares
+category side evaluator, for instance, declares
 `dependency_interpretation: dependency`.
 
 ## Declare the dataset's interpretation
@@ -69,7 +69,7 @@ Reading the interpretation line by line:
 |---|---|
 | `meaning` on each entry | The lexical logical form of that form and category, in the language's term syntax. |
 | `erasure` | The image of each category atom as a semantic type. Functor images are derived from the signature's functor views, so $\mathrm S\backslash\mathrm{NP}$ erases to $e\to t$. |
-| `constants` | The non-logical constants the meanings use, each typed and given at least one `classes` role for the symbol inventory. They are added to the language's own constants. |
+| `constants` | The nonlogical constants the meanings use, each typed and given at least one `classes` role for the symbol inventory. They are added to the language's own constants. |
 | `meanings` | Read the meanings from the lexical entries. |
 
 Compose the document and read the declarations back:
@@ -100,7 +100,7 @@ lexical unique
 
 Write $E(A)$ for the semantic type assigned to category $A$. A lexical
 meaning $t$ for an entry of category $A$ must satisfy the typing judgment
-$\vdash t:E(A)$ in the declared logical-form language. For a rule
+$\vdash t:E(A)$ in the declared logical form language. For a rule
 $A_1,\ldots,A_k\Rightarrow B$, its closed semantic action must have type
 
 $$
@@ -126,7 +126,7 @@ equations and budget, not an assertion that every term normalizes within
 that budget. This realizes the compositional correspondence between
 syntactic combination and semantic interpretation \citep{montague1970};
 [Category-to-type interpretation](../../explanation/logical-forms-as-types.md#category-to-type-interpretation)
-defines the erasure and proof-term correspondence in detail.
+defines the erasure and proof term correspondence in detail.
 
 ## Lower the interpretation
 
@@ -178,7 +178,7 @@ its premises and conclusion. `proof_search` declares the structural `logic`
 `max_uses`, which must be one for the linear and affine logics.
 `meanings.inhabitant_selection` decides which inhabitants the search
 returns become the action: `unique` (the default) takes the only one and
-none if there are several, `first` takes the first in proof-search order,
+none if there are several, `first` takes the first in proof search order,
 `smallest` the smallest term, and `all` keeps every one.
 `meanings.search_budget` (64) bounds how many inhabitants the search
 collects. A rule with no unique derived action needs one in
@@ -214,7 +214,7 @@ The other fields:
 | `kind` | Meanings |
 |---|---|
 | `lexical` | The `meaning` on each lexical entry. At least one entry must carry one. |
-| `structured` | Generated over the compiled lexicon from a semantic-lexicon `structure` declared inline, or a `preset` read from `semantic_lexicons/<name>.json` on the configuration search path. LoFI packages `natural`. |
+| `structured` | Generated over the compiled lexicon from a semantic lexicon `structure` declared inline, or a `preset` read from `semantic_lexicons/<name>.json` on the configuration search path. LoFI packages `natural`. |
 | `resembling` | Drawn at a declared size to resemble a measured semantic lexicon. |
 
 A generated source also generates the typed constants its meanings use.
@@ -254,7 +254,7 @@ validated.
 
 ## Related
 
-- [Declare a logical-form language](declare-a-logical-form-language.md) for the
+- [Declare a logical form language](declare-a-logical-form-language.md) for the
   language the meanings are written in.
 - [Map between signatures](map-between-signatures.md) for the erasure in
   detail.

@@ -76,7 +76,7 @@ class _SpanWidthProducer(Protocol):
 
 
 class _ReadoutVectors(FrozenValue):
-    """The vector width selected by a chart-cell readout."""
+    """The vector width selected by a chart cell readout."""
 
     __slots__ = ("_output_width",)
     _noun = "readout vector producer"

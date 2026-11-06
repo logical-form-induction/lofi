@@ -537,7 +537,7 @@ class GoldDerivationSource[C: Hashable, L: Hashable]:
         Returns
         -------
         ConstraintSelection[C, L]
-            One constrained example per gold-derivation item, a report skipping
+            One constrained example per gold derivation item, a report skipping
             every item whose supervision is not a gold derivation, and what the
             selection pinned against the constituents it could have drawn.
         """
@@ -725,7 +725,7 @@ class GoldLexiconSource[C: Hashable, L: Hashable]:
 class LogicalFormSource[C: Hashable, L: Hashable]:
     """Pins the logical form of a lexical form at every occurrence of it.
 
-    A logical-form clamp permits one meaning on the span it names, so the
+    A logical form clamp permits one meaning on the span it names, so the
     assignment gives each form the one meaning it bears rather than a set for
     the policy's rule to resolve. The logical-constant classes that meaning
     belongs to are what a category class selects on and what the achieved

@@ -1,6 +1,6 @@
 # Fit a judgment model
 
-A judgment-fit document declares one response model over a registered judgment
+A judgment fit document declares one response model over a registered judgment
 design, the inference its posterior is drawn by, and the protocol the
 judgments were elicited under; [`JudgmentFitSpec`](../../reference/judgment.md)
 validates it. This guide composes the checked-in document, fits it at small
@@ -49,15 +49,15 @@ written `null` or `[]`.
 
 | Field | What it declares |
 | --- | --- |
-| `dataset` | The tag of a design registered in the `lofi.judgment_design` entry-point group. |
+| `dataset` | The tag of a design registered in the `lofi.judgment_design` entry point group. |
 | `response` | The response model, under one constructor key: `ResponseDeclaration_responsespec` for an ordinal `ResponseSpec`, or `ResponseDeclaration_boundedresponsespec` for a `BoundedResponseSpec` over a closed scale. |
 | `inference` | `nuts`, `svi` or `map`, below. |
 | `elicitation` | `method` (`participants`, `model_prompting` or `model_probability`) and a nonempty protocol `version`. |
 | `calibration` | Simulation-based calibration, or `null`. See [Simulate a judgment design](simulate-judgment-designs.md). |
-| `comparison` | A held-out split and a fitted-model comparison, or `null` for an in-sample fit. |
-| `dynamic_range` | A dynamic-range gate, read before fitting, or `null`: `readout` names the predictor column of a response link term whose root mass, as log-odds against its complement, is read against the registered `criterion`. |
-| `ablation` | Table-ablation rungs, each with its `rows` (`attribute`, `levels`), its `columns` (`attribute`, `inventory`), width, lift and fit schedule; empty for none. Neither attribute has a default: each names the design factor its levels are recorded under. |
-| `interannotator` | An interannotator correlation ceiling, or `null` for none: the `coefficients` reported (`spearman`, `pearson`, or both, in report order), the participant-pair bootstrap's `replicates` and its interval `level`. Participants who rated exactly the same items form the pairs. |
+| `comparison` | A held-out split and a fitted model comparison, or `null` for an in-sample fit. |
+| `dynamic_range` | A dynamic range gate, read before fitting, or `null`: `readout` names the predictor column of a response link term whose root mass, as log odds against its complement, is read against the registered `criterion`. |
+| `ablation` | Table ablation rungs, each with its `rows` (`attribute`, `levels`), its `columns` (`attribute`, `inventory`), width, lift and fit schedule; empty for none. Neither attribute has a default: each names the design factor its levels are recorded under. |
+| `interannotator` | An interannotator correlation ceiling, or `null` for none: the `coefficients` reported (`spearman`, `pearson`, or both, in report order), the participant pair bootstrap's `replicates` and its interval `level`. Participants who rated exactly the same items form the pairs. |
 
 The ordinal response model reads:
 
@@ -121,7 +121,7 @@ ConfigValueError | inference.learning_rate was refused: a guide's learning rate 
 ```
 
 A link term naming a linking family that is not installed, a family that
-compiles to no program, and a sampled fit under the truncated-marginal
+compiles to no program, and a sampled fit under the truncated marginal
 objective are refused the same way. The dataset tag is resolved only when the
 fit is executed.
 
@@ -137,7 +137,7 @@ fit is executed.
 
 No seed is declared. A fit run as an experiment point takes each method's seed
 from its own sampler stream of the point's run seed (`nuts`, `guide`, `map`).
-Only MAP may declare the truncated-marginal objective, since NUTS and the
+Only MAP may declare the truncated marginal objective, since NUTS and the
 guides draw every site, the group-local block among them.
 
 ## Fit it at small scale
@@ -181,7 +181,7 @@ The draws are one chain of 100 over the program's 295 parameters. Because the
 design's responses were drawn at a known vector, each site's posterior mean is
 read against its generating value: here the slope is close to its value and
 the intercept scale and cutpoint base are not, at this budget. A fitting
-failure, such as a non-finite bound at any step, raises
+failure, such as a nonfinite bound at any step, raises
 `PosteriorFittingError`. `QuiversNutsFitter(NutsPlan(...))` and
 `MapFitter(plan, seed=...)` fit the other two methods over the same program.
 
@@ -230,7 +230,7 @@ b699565f1a2167c0 0 mean_field
 96bce03fd782bff3 2 mean_field
 ```
 
-Each point holds one fully resolved fit. A judgment-fit experiment is launched
+Each point holds one fully resolved fit. A judgment fit experiment is launched
 from its freeze like any other, with `lofi launch`; it is fitted in the
 launching process, so only a launcher that submits nothing to a site runs it,
 and `lofi price` refuses it. [Run and price a sweep](../experiments/sweeps.md) covers the
@@ -246,7 +246,7 @@ names the gated `readout`.
 ## What a fitted point records
 
 A completed point's directory holds its rows, its draws or point, and a
-judgment-fit manifest that records the fit, the design's provenance (tag, seed,
+judgment fit manifest that records the fit, the design's provenance (tag, seed,
 counts and digests), the seed derivation, the artifact's digest, the package
 versions and the source revision. Its rows are:
 
@@ -257,12 +257,12 @@ versions and the source revision. Its rows are:
 | `map-log-posterior` | fit, with its `objective` | MAP |
 | `response-prediction` | design row, with its `participant`, `item`, `response`, predicted `distribution` and `soft_label` | the design is ordinal |
 | `split-half-ceiling` | fit, with its interval | the design is ordinal |
-| `interannotator-spearman`, `interannotator-pearson` | declared coefficient, with its interval and its participant-pair count as `n`; undefined with `n` zero when fewer than two same-list pairs exist | `interannotator` is declared |
+| `interannotator-spearman`, `interannotator-pearson` | declared coefficient, with its interval and its participant pair count as `n`; undefined with `n` zero when fewer than two same-list pairs exist | `interannotator` is declared |
 | `held-out-participant-fraction` | held-out fold, with its `fold` and `held_out_unit` | `comparison` is declared |
 | calibration records | record of the calibration report and replicate | `calibration` is declared |
 
 Every fit row states `budget_kind` as `none`, since a posterior fit enumerates
-nothing. A sampler that reports a non-finite position, draw or diagnostic, or a
+nothing. A sampler that reports a nonfinite position, draw or diagnostic, or a
 calibration whose cutpoint recovery falls below the preregistered floor, is a
 numerical failure and is recorded rather than refitted.
 
@@ -299,14 +299,14 @@ pooled over the folds and rungs of a cross-fitted comparison is keyed by a
 
 ## Campaign scripts
 
-The analyses under `scripts/judgment/` read a judgment-fit experiment's results
+The analyses under `scripts/judgment/` read a judgment fit experiment's results
 or run a declared campaign, and each writes a fresh output directory. Each
 takes `--help`:
 
 | Script | What it computes |
 | --- | --- |
-| `factor_effects.py` | Fits declared factor-effect rungs and a shuffled-factor control by held-out NUTS, from one declaration. |
-| `marginal_likelihood.py` | Compares the conditional and truncated-marginal objectives on `known-random-effects` from an experiment's results and run store. |
+| `factor_effects.py` | Fits declared factor effect rungs and a shuffled-factor control by held-out NUTS, from one declaration. |
+| `marginal_likelihood.py` | Compares the conditional and truncated marginal objectives on `known-random-effects` from an experiment's results and run store. |
 | `monotonicity.py` | Tests whether one root scalar suffices for cross-fitted acceptability fits, from one analysis document. |
 | `morcela_pilot.py` | Reports a MORCELA-linked acceptability candidate against the agreement ceiling. |
 | `simulation_calibration.py` | Runs simulation-based calibration of the reference specification; see [Simulate a judgment design](simulate-judgment-designs.md). |

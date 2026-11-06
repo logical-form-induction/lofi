@@ -72,7 +72,7 @@ def _percentile_interval(ordered: Sequence[float], level: float) -> Interval:
 
 
 def _bias(ordered: Sequence[float], observed: float) -> float | None:
-    """Return bootstrap bias in standard-normal units.
+    """Return bootstrap bias in standard normal units.
 
     Parameters
     ----------

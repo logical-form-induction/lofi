@@ -196,7 +196,7 @@ class MeaningPairSampler:
         max_depth: int,
         /,
     ) -> None:
-        """Add bounded logical-form pairs for selected action terms."""
+        """Add bounded logical form pairs for selected action terms."""
         for meaning in meanings:
             for inputs in product(terms, repeat=arity):
                 output = run_action(

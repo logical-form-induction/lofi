@@ -1,4 +1,4 @@
-"""The checked grammar and sentences the parser training-step benchmarks time.
+"""The checked grammar and sentences the parser training step benchmarks time.
 
 The fixture is packaged data, read through the package's resources. Its record
 pins both the compiled grammar and the sentence bytes, so packaging cannot

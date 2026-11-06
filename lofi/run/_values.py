@@ -1,4 +1,4 @@
-"""Run-level report values: evaluation rows, and what an experiment costs to train."""
+"""Run level report values: evaluation rows, and what an experiment costs to train."""
 
 from enum import StrEnum
 from importlib import import_module
@@ -37,7 +37,7 @@ SECONDS_PER_HOUR: Final = 3600
 """How many seconds an hour holds."""
 
 HOUR_DECIMALS: Final = 6
-"""The decimal places an experiment's accelerator-hours are reported and declared to."""
+"""The decimal places an experiment's accelerator hours are reported and declared to."""
 
 COST_MODEL: Final = "experiment-total-mean-bootstrap"
 """The cost model that reads each stack off its own timed steps.
@@ -324,7 +324,7 @@ class StackPrice(FrozenValue):
     timing : StackTiming
         What repeated training steps of the stack took.
     budget : MemoryBudget
-        The activation-memory ceiling the stack's device policy declares, which
+        The activation memory ceiling the stack's device policy declares, which
         its peak is read against.
 
     Raises
@@ -392,7 +392,7 @@ class StackPrice(FrozenValue):
 
     @property
     def budget(self) -> MemoryBudget:
-        """Return the activation-memory ceiling the stack's peak is read against."""
+        """Return the activation memory ceiling the stack's peak is read against."""
         return self._budget
 
     @property
@@ -433,7 +433,7 @@ class StackPrice(FrozenValue):
 
     @property
     def mean_hours(self) -> float:
-        """Return the accelerator-hours every point costs at the mean timed step."""
+        """Return the accelerator hours every point costs at the mean timed step."""
         return len(self._points) * self.steps * self.mean_seconds / SECONDS_PER_HOUR
 
     @override

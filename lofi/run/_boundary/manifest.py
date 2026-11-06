@@ -168,13 +168,13 @@ def judgment_report_row(
     seed : int
         Run seed.
     normal_form : str | None
-        Normal-form name, if applicable.
+        Normal form name, if applicable.
     specification_hash : str
         Judgment specification digest.
     fold : int
         Zero-based held-out fold index.
     rung : str
-        Judgment-model rung.
+        Judgment model rung.
     held_out_convention : str | None
         Participant-effect treatment for held-out participants, if needed.
     """
@@ -662,7 +662,7 @@ def _training_checkpoint_manifest(
     step: int,
     data_position: int,
 ) -> CheckpointManifest:
-    """Return complete role and run-state metadata for configured training."""
+    """Return complete role and run state metadata for configured training."""
     component_state, optimization = prepared.state()
     model = blueprint.run_spec.model
     declarations = model.checkpointed_components()
@@ -897,7 +897,7 @@ class StackPriceRecord(dx.Model, extra="forbid"):
     shape : BatchShapeRecord | None
         The mean batch shape, or None for a stack that reads no sentences.
     budget : MemoryBudgetRecord
-        The activation-memory ceiling the peak is read against.
+        The activation memory ceiling the peak is read against.
     """
 
     stack: str

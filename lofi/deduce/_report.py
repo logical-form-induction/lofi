@@ -1,4 +1,4 @@
-"""Derivation-count reports."""
+"""Derivation count reports."""
 
 from typing import TYPE_CHECKING, Final, Literal, NamedTuple
 
@@ -38,9 +38,9 @@ class DerivationCountRow(NamedTuple):
     normal_form_count : int
         Derivations admitted by the declared normal form.
     unconstrained_count : int
-        Derivations admitted without a normal-form restriction.
+        Derivations admitted without a normal form restriction.
     retention_ratio : float | None
-        Normal-form count divided by the unconstrained count, or ``None`` when
+        Normal form count divided by the unconstrained count, or ``None`` when
         both counts are zero.
     """
 

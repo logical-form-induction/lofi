@@ -370,7 +370,7 @@ def _merged(corpora: Sequence[CollectedCorpus], /) -> CollectedCorpus:
     """Join the corpora read from the releases of one declaration.
 
     Each release holds its own splits, so the examples join by split and the
-    record, emission and skip counts add. Reachability and normal-form analyses
+    record, emission and skip counts add. Reachability and normal form analyses
     describe one reader's examples, so a joined corpus carries them only when
     one release was read.
     """

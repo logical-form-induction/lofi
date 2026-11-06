@@ -508,14 +508,14 @@ def compare_models(
     Parameters
     ----------
     fits : Mapping[str, DataTree]
-        Fitted models by name, each with a log-likelihood group.
+        Fitted models by name, each with a log likelihood group.
     gate : ParetoGate
         Reliability rule over each fit's Pareto shapes. A difference involving a
         fit the gate rejects is flagged.
     method : WeightingMethod
         Estimator of the model weights.
     var_name : str | None
-        Observed variable to compare on, when a fit's log-likelihood group holds
+        Observed variable to compare on, when a fit's log likelihood group holds
         more than one.
 
     Returns
@@ -600,7 +600,7 @@ def compare_declared_models(
     *,
     var_name: str | None = None,
 ) -> ModelComparison:
-    """Run the predictive comparison declared by a judgment-fit document.
+    """Run the predictive comparison declared by a judgment fit document.
 
     The declaration is the sole source of the weighting method and both parts
     of the Pareto reliability gate. Its criterion is currently PSIS-LOO, the

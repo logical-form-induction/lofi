@@ -1,4 +1,4 @@
-"""Symbolic type raising and differentiable synthetic-tree continuation."""
+"""Symbolic type raising and differentiable synthetic tree continuation."""
 
 from __future__ import annotations
 
@@ -43,7 +43,7 @@ type _NormalFormDirection = Literal["forward", "backward", "undirected"]
 
 @runtime_checkable
 class _RaisingRule(Protocol):
-    """A rule exposing the symbolic type-raising construction."""
+    """A rule exposing the symbolic type raising construction."""
 
     @property
     def name(self) -> str:

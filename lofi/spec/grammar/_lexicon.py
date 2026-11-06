@@ -67,7 +67,7 @@ class LexicalEntrySpec(dx.Model, extra="forbid"):
         Parameters
         ----------
         weight : float
-            The declared log-weight.
+            The declared log weight.
 
         Raises
         ------
@@ -231,7 +231,7 @@ class PowerLawRankLawSpec(RankLawSpec, extra="forbid"):
         return ensure_finite("a power law's exponent", exponent)
 
     def weights(self, count: int) -> tuple[float, ...]:
-        """Return the power-law weights of the ranks, scaled to mean one.
+        """Return the power law weights of the ranks, scaled to mean one.
 
         Parameters
         ----------
@@ -456,7 +456,7 @@ def _independent_supports(
     shares: tuple[float, ...],
     random: Random,
 ) -> tuple[tuple[int, ...], ...]:
-    """Return category supports without a class-size intervention."""
+    """Return category supports without a class size intervention."""
     supports: list[tuple[int, ...] | None] = [None] * len(ambiguities)
     covered = [0.0] * len(shares)
     form_order = sorted(
@@ -848,7 +848,7 @@ def _coupled_class_sizes(
     forms: int,
     coupling: float,
 ) -> tuple[int, ...]:
-    r"""Return class-size targets for a category-frequency coupling.
+    r"""Return class size targets for a category-frequency coupling.
 
     With category token shares held fixed, coupling zero assigns class sizes in
     proportion to those shares, so mean token mass per form does not depend on
@@ -892,7 +892,7 @@ def _coupled_class_sizes(
 
 
 class JointSpec(dx.TaggedUnion, discriminator="spelling", extra="forbid"):
-    """A spelling of the category token-mass marginal."""
+    """A spelling of the category token mass marginal."""
 
 
 class ParametricJointSpec(JointSpec, extra="forbid"):
@@ -1187,7 +1187,7 @@ class GeneratedLexiconSpec(LexiconSpec, extra="forbid"):
         argument, so ``(S/NP)/NP`` has depth two. It also bounds every
         premise drawn or residuated during generation.
     max_arguments : CategoryComplexityBoundSpec | None
-        The greatest functor-spine argument count an admitted category may
+        The greatest functor spine argument count an admitted category may
         have, or no bound.
     max_order : CategoryComplexityBoundSpec | None
         The greatest order under the signature's declared functor roles an

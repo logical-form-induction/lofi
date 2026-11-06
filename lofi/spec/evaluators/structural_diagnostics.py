@@ -1,4 +1,4 @@
-"""Declared bracketing, dependency, attachment, and normal-form reports."""
+"""Declared bracketing, dependency, attachment, and normal form reports."""
 
 from typing import TYPE_CHECKING, Literal, NamedTuple, cast, override
 
@@ -147,7 +147,7 @@ class StructuralDiagnosticsSpec(EvaluatorSpec):
 
     @override
     def metrics(self, labels: tuple[str, ...] = (), /) -> tuple[str, ...]:
-        """Return the bracketing, attachment and derivation-count rows."""
+        """Return the bracketing, attachment and derivation count rows."""
         del labels
         structural = (
             "unlabeled-bracketing-f1",

@@ -289,7 +289,7 @@ def _macro_f1(pairs: Sequence[_ScoredPair], classes: Sequence[str]) -> float | N
 type InferenceMeasure = Literal[
     "accuracy", "macro-f1", "precision", "recall", "f1", "abstention"
 ]
-"""One report row computed from an inference-label confusion table."""
+"""One report row computed from an inference label confusion table."""
 
 
 class InferenceLabelMetric:

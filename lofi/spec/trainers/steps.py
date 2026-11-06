@@ -135,7 +135,7 @@ class StepSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
         return False
 
     def sampler_roles(self) -> frozenset[RunRole]:
-        """Return the generated-data component roles this step consumes."""
+        """Return the generated data component roles this step consumes."""
         return frozenset()
 
 
@@ -203,7 +203,7 @@ class JudgmentStepSpec(StepSpec, extra="forbid"):
 
     @override
     def required_batches(self) -> frozenset[TrainingBatchKind]:
-        """Return collected inference-judgment pairs."""
+        """Return collected inference judgment pairs."""
         return frozenset(
             {TrainingBatchKind.INFERENCE_PAIRS, TrainingBatchKind.JUDGMENTS}
         )
@@ -220,7 +220,7 @@ class JudgmentStepSpec(StepSpec, extra="forbid"):
 
 
 class GroundedStepSpec(StepSpec, extra="forbid"):
-    """Train declared grounded-inference objectives."""
+    """Train declared grounded inference objectives."""
 
     kind: Literal["grounded"] = "grounded"
 
@@ -231,7 +231,7 @@ class GroundedStepSpec(StepSpec, extra="forbid"):
 
     @override
     def required_batches(self) -> frozenset[TrainingBatchKind]:
-        """Return labeled inference-pair batches."""
+        """Return labeled inference pair batches."""
         return frozenset({TrainingBatchKind.INFERENCE_PAIRS})
 
     @override
@@ -246,7 +246,7 @@ class GroundedStepSpec(StepSpec, extra="forbid"):
 
 
 class TokenWarmupStepSpec(StepSpec, extra="forbid"):
-    """Train declared token warm-up objectives."""
+    """Train declared token warmup objectives."""
 
     kind: Literal["token-warm-up"] = "token-warm-up"
     space: str
@@ -264,12 +264,12 @@ class TokenWarmupStepSpec(StepSpec, extra="forbid"):
 
     @override
     def requires_featurizer(self) -> bool:
-        """Return that token warm-up batches are featurized."""
+        """Return that token warmup batches are featurized."""
         return True
 
     @override
     def consumes_constraints(self) -> bool:
-        """Return that token warm-up reads the selected lexical constraints."""
+        """Return that token warmup reads the selected lexical constraints."""
         return True
 
 
@@ -344,7 +344,7 @@ class ControllerStepSpec(StepSpec, extra="forbid"):
     @dx.validates("max_depth")
     @classmethod
     def _depth_is_positive(cls, value: int) -> int:
-        """Validate the rule-instance depth bound."""
+        """Validate the rule instance depth bound."""
         return ensure_positive("a controller-supervision depth", value)
 
     @override

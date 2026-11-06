@@ -91,7 +91,7 @@ class _LikelihoodPrediction:
         return self._description_cells
 
     def score(self, gold: Derivation[Term], /) -> tuple[DerivationSetScore, ...]:
-        """Return constrained and unrestricted gold-derivation scores."""
+        """Return constrained and unrestricted gold derivation scores."""
         chart = self._chart
         if chart is None:
             msg = "this prediction carries no derivational score chart"
@@ -102,7 +102,7 @@ class _LikelihoodPrediction:
 
 
 class _StringLikelihoodMetric:
-    """Accumulate root target-mass log likelihood under one reporting unit."""
+    """Accumulate root target mass log likelihood under one reporting unit."""
 
     __slots__ = ("_conventions", "_likelihood", "_name", "_unit")
 
@@ -157,7 +157,7 @@ class _StringLikelihoodMetric:
 
 
 class _DerivationalLikelihoodMetric:
-    """Score and accumulate one normal-form side under one reporting unit."""
+    """Score and accumulate one normal form side under one reporting unit."""
 
     __slots__ = ("_conventions", "_index", "_likelihood", "_name", "_unit")
 
@@ -245,7 +245,7 @@ class _DescriptionLengthMetric:
 
     @property
     def name(self) -> str:
-        """Return the source-comparison description-length row name."""
+        """Return the source comparison description length row name."""
         return "description-length-nats"
 
     @property

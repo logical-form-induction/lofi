@@ -1,4 +1,4 @@
-"""Declared normalization for logical-form boundaries."""
+"""Declared normalization for logical form boundaries."""
 
 from typing import TYPE_CHECKING
 

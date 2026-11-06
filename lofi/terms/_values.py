@@ -5,7 +5,7 @@ derives for it. A sort that declares a vocabulary gets one constant operator
 ``#const[S]`` whose payload is a constant's stable identifier, its position in
 the vocabulary. A sort that some binding site binds gets one bound-variable
 operator ``#bvar[S]``, and it and every sort declared open get one
-free-variable operator ``#fvar[S]``, so a binder can be opened over free
+free variable operator ``#fvar[S]``, so a binder can be opened over free
 variables of its sort. A signature declared with holes gets one ``#hole[S]``
 per sort. Declared operators never carry a payload and never use a name,
 family or payload the kernel derives.
@@ -347,7 +347,7 @@ class Operator(FrozenValue):
 
     @property
     def is_free_variable(self) -> bool:
-        """Return whether this is a kernel-declared free-variable operator."""
+        """Return whether this is a kernel-declared free variable operator."""
         return self._payload_sort == "free"
 
     @property
@@ -1618,7 +1618,7 @@ class Signature(FrozenValue):
         return self._declared(_derived_name("bvar", sort))
 
     def free(self, sort: Sort, /) -> Operator:
-        """Return a sort's free-variable operator.
+        """Return a sort's free variable operator.
 
         Parameters
         ----------
@@ -1663,7 +1663,7 @@ class Signature(FrozenValue):
         )
 
     def is_free_variable(self, op: Operator, /) -> bool:
-        """Return whether an operator is this signature's free-variable role."""
+        """Return whether an operator is this signature's free variable role."""
         declared = self._declared(op)
 
         return (

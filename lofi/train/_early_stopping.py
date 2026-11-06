@@ -238,7 +238,7 @@ class EarlyStopping(FrozenValue):
 
     @property
     def patience(self) -> int:
-        """Return the permitted consecutive non-improving observations."""
+        """Return the permitted consecutive nonimproving observations."""
         return self._patience
 
     @property

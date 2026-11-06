@@ -46,7 +46,7 @@ class BatchSamplerSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists batch samplers."""
+        """Return the family whose entry point group lists batch samplers."""
         return "batch_sampler"
 
 
@@ -55,7 +55,7 @@ class TrainerSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="fo
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "trainer"
 
     def refuse_epoch(self, occurrences: int, /) -> None:
@@ -94,7 +94,7 @@ class TrainerSpec(ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="fo
         return frozenset()
 
     def dataset_requirements(self) -> Mapping[str, frozenset[TrainingBatchKind]]:
-        """Return required batch capabilities keyed by training-dataset role."""
+        """Return required batch capabilities keyed by training dataset role."""
         return {}
 
     def evaluation_dataset(self) -> str | None:
@@ -117,18 +117,18 @@ class OptimizerSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "optimizer"
 
 
 class SchedulerSpec(
     ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="forbid"
 ):
-    """Declares a learning-rate scheduler."""
+    """Declares a learning rate scheduler."""
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "scheduler"
 
 
@@ -139,16 +139,16 @@ class TypeSamplerSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "type_sampler"
 
 
 class PairSamplerSpec(
     ComponentSpec, dx.TaggedUnion, discriminator="kind", extra="forbid"
 ):
-    """Declares a labeled rule-instance sampler."""
+    """Declares a labeled rule instance sampler."""
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the plugins."""
+        """Return the family whose entry point group lists the plugins."""
         return "pair_sampler"

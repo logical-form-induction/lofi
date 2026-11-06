@@ -232,7 +232,7 @@ class SampleDecodingSpec(DecodingSpec):
     @dx.validates("rescore_tolerance")
     @classmethod
     def _rescore_tolerance_is_nonnegative(cls, value: float) -> float:
-        """Return a finite non-negative sample-then-rescore tolerance."""
+        """Return a finite nonnegative sample-then-rescore tolerance."""
         tolerance = ensure_finite("a rescore tolerance", value)
 
         if tolerance < 0.0:

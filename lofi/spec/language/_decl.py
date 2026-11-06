@@ -250,7 +250,7 @@ class PreparedLanguagePlugins(FrozenValue):
 
     @property
     def function_type(self) -> str:
-        """Return the distinguished function-type constructor."""
+        """Return the distinguished function type constructor."""
         return self._function_type
 
     @property
@@ -260,7 +260,7 @@ class PreparedLanguagePlugins(FrozenValue):
 
     @property
     def type_sort(self) -> str:
-        """Return the semantic-type sort."""
+        """Return the semantic type sort."""
         return self._type_sort
 
     @property

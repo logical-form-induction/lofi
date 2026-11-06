@@ -188,12 +188,12 @@ class FeatureErasureMatchingSpec(MatchingSpec, extra="forbid"):
 
     @classmethod
     def reify(cls, matching: FeatureErasure, /) -> Self:
-        """Recover the feature-erasure declaration from its native relation.
+        """Recover the feature erasure declaration from its native relation.
 
         Parameters
         ----------
         matching : FeatureErasure
-            The native feature-erasure relation.
+            The native feature erasure relation.
         """
         del matching
 

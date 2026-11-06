@@ -24,7 +24,7 @@ $$
 Soundness connects a calculus's derivations to its chosen semantics;
 completeness is a separate property. A bounded prover run is not a complete
 decision procedure merely because its underlying calculus is complete.
-The logical-form signature and the prover's supported translation determine
+The logical form signature and the prover's supported translation determine
 the fragment being queried; unsupported binders or types are not silently
 erased. For typed lambda syntax and typing judgments, see
 [Categories, semantic types, and logical forms](logical-forms-as-types.md).
@@ -82,7 +82,7 @@ is inconsistent: explosion then derives every formula and its negation.
 This is a statement about the premise together with the theory and the
 declared logic, not a theorem about every possible consequence relation.
 Which label
-each cell supports is the logical-form language's relation-cell semantics, a
+each cell supports is the logical form language's relation cell semantics, a
 label map that the labeling then coarsens into its own vocabulary. The
 classical map counts a degenerate cell toward both entailment and
 contradiction, as classical consequence does; the strict map lets it support
@@ -91,7 +91,7 @@ entailment label by assigning the premise a contradictory form. A
 `joint-inconsistency` contradiction adds a second negative question, whether
 the hypothesis proves the premise's negation.
 
-During training under the observed-label query, only the questions the gold
+During training under the observed label query, only the questions the gold
 label needs are asked: the positive question unless the label is
 `contradicts`, the negative one unless it is `entails`.
 
@@ -102,8 +102,8 @@ This product construction is an implementation choice for combining degrees,
 not a theorem that proof questions are independent random events. Each label
 receives the sum of its compatible cell weights, then these sums are
 normalized across labels for that form pair. With `joint-inconsistency`,
-the two negative-question degrees are combined by their minimum. A question
-omitted by the observed-label query is assigned degree $1/2$; a question
+the two negative question degrees are combined by their minimum. A question
+omitted by the observed label query is assigned degree $1/2$; a question
 actually asked but undecided instead prevents that pair from contributing.
 
 ## Deciding a question
@@ -120,7 +120,7 @@ equality, quantifiers, abstractions and free variables put a formula outside
 its fragment. The `tptp` prover translates to first-order or higher-order TPTP
 and calls E, Vampire or Leo-III, mapping the SZS status to a verdict. The `smt`
 prover calls Z3 or cvc5 incrementally. A proof service applies per-step call,
-wall-clock and CPU budgets, and abstains when one is spent. Only decided
+wall clock and CPU budgets, and abstains when one is spent. Only decided
 verdicts are memoized.
 
 These backends implement different calculi and fragments
@@ -139,7 +139,7 @@ countermodel proves nothing about structures outside those carriers. A found
 countermodel satisfies
 $\mathcal{M}\models\Gamma\cup\{\varphi\}$ and
 $\mathcal{M}\not\models\psi$; this single structure refutes the corresponding
-universal semantic-consequence claim.
+universal semantic consequence claim.
 
 For higher-order model evaluation, a full function domain is
 $D_{\sigma\to\tau}=D_\tau^{D_\sigma}$. LoFI enumerates full function
@@ -148,7 +148,7 @@ use finite pools. A pooled evaluation is not quantification over the full
 function space. The countermodel route rejects required non-full domains
 before treating a result as a certified countermodel.
 
-**Fuzzy model checking.** A model-checking scorer evaluates the pair in a set
+**Fuzzy model checking.** A model checking scorer evaluates the pair in a set
 of structures under a declared [fuzzy logic](../reference/configuration/model.md):
 a t-norm (`product`, `goedel` or `lukasiewicz`) with its t-conorm, an
 implication (`material` or the t-norm's `residuum`), a quantifier reading
@@ -157,7 +157,7 @@ equality (`crisp` or with a margin). Its score is the t-norm of premise and
 hypothesis summed over structures in which the premise holds above a floor,
 divided by the premise's summed value, an estimate of conditional
 satisfaction. Structures are given by a knowledge base (an intended model),
-sampled, or learned. A model-checking score is not certified: it reports how
+sampled, or learned. A model checking score is not certified: it reports how
 well the forms fit the structures, not whether the entailment holds in every
 model.
 
@@ -206,7 +206,7 @@ zero according to `unsatisfied_premise`. A positive `abstain_band` excludes
 scores within that distance of `truth_threshold`.
 
 The two routes give evidence of different strength. A sound positive prover
-verdict supports consequence in the backend's semantics. A model-checking score is a claim about the
+verdict supports consequence in the backend's semantics. A model checking score is a claim about the
 structures consulted, and a learner can satisfy it with forms that happen to
 agree on those structures.
 
@@ -224,7 +224,7 @@ question is proved. Abstained responses are excluded from the mean.
 For one alignment, write $a_{uv}=p_{\boldsymbol{\theta}}(u\mid w^{\mathrm{prem}})
 p_{\boldsymbol{\theta}}(v\mid w^{\mathrm{hyp}})$ for a decoded form pair's
 weight and $A_y$ for pairs whose evidence decides label $y$. If $c_y(u,v)$
-is their normalized per-pair label-support score defined above, marginal composition computes
+is their normalized per-pair label support score defined above, marginal composition computes
 
 $$
 \widetilde p(y)=\sum_{(u,v)\in A_y}
@@ -236,8 +236,8 @@ The `tempered` option normalizes $a_{uv}^{1/\tau}$ for temperature $\tau>0$;
 combined by the declared composition: marginal uses their arithmetic mean,
 best their maximum, and tempered their power mean with exponent $1/\tau$.
 The resulting categorical label scores are normalized over labels, including
-under the observed-label query. This normalization matters when
-the relation map allows overlapping label support. The observed-label
+under the observed label query. This normalization matters when
+the relation map allows overlapping label support. The observed label
 training query may decide only the requested label. These are conditional
 computations over available decisions; the residual reports evidence not
 scored rather than inventing a negative verdict for it.
@@ -260,7 +260,7 @@ $$
 
 The baseline $b$ must not depend on the current sampled outcome, conditional
 on the sampling context, for its expected contribution to vanish. LoFI uses
-the declared moving-average control variate for its nondifferentiable sampled
+the declared moving average control variate for its nondifferentiable sampled
 route. A differentiable credit adds
 $\mathbb{E}[\nabla_{\boldsymbol{\theta}}c_{\boldsymbol{\theta}}(U)]$.
 Truncation, decision masks, and renormalization change the objective whose
@@ -270,7 +270,7 @@ In particular, LoFI samples restricted choices, deduplicates completed
 terms, and retains their decoder log weights. Its sampled surrogate uses
 detached normalized composition shares $\pi_k$ over decided candidates,
 not equal-weight independent Monte Carlo samples. With score
-$\widehat s=\sum_k\pi_k c_k>0$, its log-score contribution is
+$\widehat s=\sum_k\pi_k c_k>0$, its log score contribution is
 
 $$
 \sum_k\frac{\pi_k(c_k-b)}{\widehat s}
@@ -290,9 +290,9 @@ b_{t+1}=\delta b_t+(1-\delta)\frac1n\sum_{i=1}^{n}r_{t,i}.
 $$
 
 An empty batch leaves the baseline unchanged. Grounding uses $b_t$ before
-this update; payments are detached. For an observed-label affine payoff
+this update; payments are detached. For an observed label affine payoff
 $c_{\mathrm{refuted}}+(c_{\mathrm{proved}}-c_{\mathrm{refuted}})p$, the
-probability-scale baseline is
+baseline on the probability scale is
 $(b_t-c_{\mathrm{refuted}})/(c_{\mathrm{proved}}-c_{\mathrm{refuted}})$.
 Payments are the response's probabilities or transformed credits, not
 necessarily individual sampled zero-or-one proof outcomes. This conversion
@@ -303,9 +303,9 @@ the estimator limitations described above.
 
 Entailment labels constrain lexical forms only through the relations among the
 sentences they are attached to. Two lexicons whose forms differ by a renaming
-of non-logical constants that preserves every labeled relation are
+of nonlogical constants that preserves every labeled relation are
 indistinguishable to an inference objective. The L1 experiment thus
-reports, beside exact normal-form match, the random-relabeling floor, recovery
+reports, beside exact normal form match, the random relabeling floor, recovery
 relative to the logical vocabulary's fiber, and the fiber's size, so that a
 failure to recover a meaning can be told apart from a relabeling the labels
 cannot resolve.

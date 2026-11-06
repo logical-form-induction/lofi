@@ -1,4 +1,4 @@
-"""Registered inference-label vocabularies over logical relation cells."""
+"""Registered inference label vocabularies over logical relation cells."""
 
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Final, final, override
@@ -122,7 +122,7 @@ class InferenceLabeling(FrozenValue):
             raise ValueError(msg) from None
 
     def label_map(self, relation_map: LabelMap, /) -> LabelMap:
-        """Coarsen a language's relation-cell semantics into this vocabulary."""
+        """Coarsen a language's relation cell semantics into this vocabulary."""
         if tuple(relation_map.labels) != RELATION_LABELS:
             msg = (
                 "an inference labeling coarsens the three logical relations, not "
@@ -209,7 +209,7 @@ RTE: Final = InferenceLabeling(
     exclusive=True,
     graded=False,
 )
-"""The RTE entailment versus non-entailment categorical labeling."""
+"""The RTE entailment versus nonentailment categorical labeling."""
 
 GRADED: Final = InferenceLabeling(
     "graded",
@@ -226,7 +226,7 @@ GRADED: Final = InferenceLabeling(
 
 
 def registered_labeling(name: str, /) -> InferenceLabeling:
-    """Return the installed inference-label vocabulary of one name.
+    """Return the installed inference label vocabulary of one name.
 
     Parameters
     ----------

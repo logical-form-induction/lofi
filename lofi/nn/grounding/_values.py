@@ -58,7 +58,7 @@ class GradientPath(Enum):
 
 @final
 class ProofMetadata(FrozenValue):
-    """Stable proof-service identity and the scorer's use-site budget."""
+    """Stable proof service identity and the scorer's use-site budget."""
 
     _noun = "proof metadata"
     __slots__ = ("_budget", "_prover", "_version")

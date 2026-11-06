@@ -220,7 +220,7 @@ class CounterfactualsSpec(dx.Model, extra="forbid"):
     @dx.validates("unary_depth")
     @classmethod
     def _depth_is_non_negative(cls, value: int) -> int:
-        """Return a valid number of unary-closure rounds."""
+        """Return a valid number of unary closure rounds."""
         return ensure_non_negative("the counterfactual unary_depth", value)
 
     @dx.validates("readings")

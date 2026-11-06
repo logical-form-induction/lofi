@@ -1,4 +1,4 @@
-"""Diagnostics for non-finite probe readings."""
+"""Diagnostics for nonfinite probe readings."""
 
 from typing import TYPE_CHECKING, ClassVar, Final, override
 
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 __all__ = ["FiniteReadings"]
 
 _SHARE: Final[str] = "nonfinite-share"
-"""The report name for the non-finite share of live positions."""
+"""The report name for the nonfinite share of live positions."""
 
 
 class FiniteReadings:

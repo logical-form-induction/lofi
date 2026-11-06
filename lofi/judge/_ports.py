@@ -1,4 +1,4 @@
-"""Rule and normal-form protocols."""
+"""Rule and normal form protocols."""
 
 from typing import TYPE_CHECKING, Final, Literal, Protocol, override, runtime_checkable
 
@@ -56,11 +56,11 @@ type NormalFormDirection = Literal["forward", "backward", "undirected"]
 """Direction of a composition or raising role."""
 
 _DIRECTIONS: Final = frozenset({"forward", "backward", "undirected"})
-"""Declared normal-form directions."""
+"""Declared normal form directions."""
 
 
 def _direction(direction: NormalFormDirection, /) -> NormalFormDirection:
-    """Validate one normal-form direction."""
+    """Validate one normal form direction."""
     if direction not in _DIRECTIONS:
         msg = f"unknown normal-form direction: {direction!r}"
         raise ValueError(msg)
@@ -68,7 +68,7 @@ def _direction(direction: NormalFormDirection, /) -> NormalFormDirection:
 
 
 class CompositionRole(FrozenValue):
-    """The composition facet of a rule's normal-form role.
+    """The composition facet of a rule's normal form role.
 
     Parameters
     ----------
@@ -285,7 +285,7 @@ class ProofWitness(Protocol):
         Parameters
         ----------
         calculus : ProofCalculus
-            The proof-term construction channels.
+            The proof term construction channels.
         """
 
 
@@ -353,7 +353,7 @@ class StructuralErasure(Protocol):
 
     @property
     def function_type(self) -> OpName:
-        """Return the target function-type constructor."""
+        """Return the target function type constructor."""
 
     @property
     def target_sort(self) -> str:
@@ -368,11 +368,11 @@ class StructuralErasure(Protocol):
 
 @runtime_checkable
 class ProofCalculus(Protocol):
-    """Caller-owned proof-term construction."""
+    """Caller-owned proof term construction."""
 
     @property
     def store(self) -> TermStore:
-        """Return the proof-term store."""
+        """Return the proof term store."""
 
     @property
     def operators(self) -> Calculus:
@@ -511,7 +511,7 @@ class Rule[T](Protocol):
 
     @property
     def restriction(self) -> RuleRestriction | None:
-        """Return the rule-instance restriction, if declared."""
+        """Return the rule instance restriction, if declared."""
 
     @property
     def probe(self) -> RuleProbe | None:

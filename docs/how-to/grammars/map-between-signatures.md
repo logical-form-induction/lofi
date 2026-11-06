@@ -2,8 +2,8 @@
 
 LoFI relates one signature to another in three places. Feature erasure maps
 each featured category to its core in the same signature, so `S[dcl]` and `S`
-can match. A signature-morphism erasure maps a category signature onto the
-type signature of a logical-form language, so that every category has a
+can match. A signature morphism erasure maps a category signature onto the
+type signature of a logical form language, so that every category has a
 semantic type. And an evaluator's alignment maps a learner grammar's category
 labels onto a source grammar's, so that a learner whose primitives are named
 `P1` and `P2` can be scored against a source whose primitives are `NP` and
@@ -125,7 +125,7 @@ $$
 
 The configuration writes the positional metavariables $\alpha_i$ as `a0`,
 `a1`, and so on. A category's depth thus determines a finite recursive
-calculation of its image. This is the term-level extension of the declared
+calculation of its image. This is the term level extension of the declared
 signature mapping \citep{meinke-tucker1992}; it does not require the mapping
 to be injective.
 
@@ -198,7 +198,7 @@ Nothing requires a learner's labels to coincide with the source's, and the
 learner's categories are not mapped onto the source's by a declared morphism.
 Instead, an evaluator that compares them declares an `alignment`, fitted on
 one retained split and frozen for another. The
-packaged category-side evaluator,
+packaged category side evaluator,
 `lofi/configs/evaluators/category-side/category-side.yaml`, declares:
 
 ```yaml
@@ -235,7 +235,7 @@ morphism.
 
 `fit_on` and `score_on` must differ, so the alignment is never scored on the
 split it was fitted on. The evaluator reports the aligned accuracy of
-primitives and constructors beside a random-relabeling floor computed over
+primitives and constructors beside a random relabeling floor computed over
 `random_floor.replicates` relabelings. The `lexical-types` evaluator declares
 the same `alignment` block; [Evaluate a run](../evaluation/evaluate-a-run.md)
 covers the evaluators.

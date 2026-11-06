@@ -1,12 +1,12 @@
 # Configuration documents
 
-This page maps each section of a run, experiment, baseline-fit, judgment-fit
-and active-learning document, and of a site profile, onto the declaration class
+This page maps each section of a run, experiment, baseline fit, judgment fit
+and active learning document, and of a site profile, onto the declaration class
 that validates it and the reference page that renders that class.
 
 Each root class is closed, so a key it does not declare is refused. A tagged
 field selects its variant by `kind`, and the variants of each family are
-the names registered in its [entry-point group](../entry-points.md). The
+the names registered in its [entry point group](../entry-points.md). The
 [configuration guide](../../how-to/setup/configuration.md) explains how a
 document is composed from packaged groups; `lofi configs` lists those groups and
 `lofi show-config` prints the resolved document (see
@@ -16,9 +16,9 @@ document is composed from packaged groups; `lofi configs` lists those groups and
 | --- | --- | --- | --- |
 | Run document | `RunSpec` | [Spec](../spec.md) | `docs/examples/synthetic-parser.yaml`, `lofi/configs/run/` |
 | Experiment document | `ExperimentDocument` | [Run](../run.md) | `experiments/s1/bisk-hockenmaier.yaml` |
-| Baseline-fit document | `BaselineFitSpec` | [Run](../run.md) | `experiments/s1/bisk-hockenmaier-fit.json` |
-| Judgment-fit document | `JudgmentFitSpec` | [Judgment](../judgment.md) | `docs/examples/models-training/active-learning/fit.yaml` |
-| Active-learning document | `ActiveLearningSpec` | [Training](training.md) | `docs/examples/models-training/active-learning/active-learning.yaml` |
+| Baseline fit document | `BaselineFitSpec` | [Run](../run.md) | `experiments/s1/bisk-hockenmaier-fit.json` |
+| Judgment fit document | `JudgmentFitSpec` | [Judgment](../judgment.md) | `docs/examples/models-training/active-learning/fit.yaml` |
+| Active learning document | `ActiveLearningSpec` | [Training](training.md) | `docs/examples/models-training/active-learning/active-learning.yaml` |
 | Site profile | `SiteProfile` | [Run](../run.md) | `docs/examples/site-profile.toml` |
 
 An experiment document's `config` names the document its points are composed
@@ -54,7 +54,7 @@ over, and its `kind` (`run`, `baseline-fit`, `judgment-fit` or
 
 | Field | Required | Class | Rendered on |
 | --- | --- | --- | --- |
-| `language` | yes | `ModelLanguageSpec` | [Spec](../spec.md); languages on [Logical-form language](language.md) |
+| `language` | yes | `ModelLanguageSpec` | [Spec](../spec.md); languages on [Logical form language](language.md) |
 | `capacity` | no | `ParameterCapacitySpec` | [Spec](../spec.md) |
 | `parser` | no | `ParserSpec` | [Model](model.md#parsers) |
 | `token_encoder` | no | `TokenEncoderSpec` | [Model](model.md#tokens) |
@@ -70,7 +70,7 @@ over, and its `kind` (`run`, `baseline-fit`, `judgment-fit` or
 
 ### The `data` section
 
-`DataSection` has one field, `datasets`, which maps each training-dataset role
+`DataSection` has one field, `datasets`, which maps each training dataset role
 to a `DatasetSection` and must name at least one.
 
 | Field of a dataset role | Required | Class | Rendered on |
@@ -118,15 +118,15 @@ section class the table names.
 | `decision_point` | yes | `ExperimentDecision`, whose `signal` is a `PredicateSpec` | [Run](../run.md) |
 | `evaluation` | yes | `EvaluationSpec`, whose `correction` is a `CorrectionSpec` | [Run](../run.md) |
 
-## Baseline-fit document
+## Baseline fit document
 
 `BaselineFitSpec` has one field, `system`, a `BaselineSystemSpec` variant
 rendered on [Evaluation](evaluation.md#baselines). The system must declare at
 least one named metric and no metric twice.
 
-## Judgment-fit document
+## Judgment fit document
 
-`JudgmentFitSpec` validates a judgment-fit document. Every field is required;
+`JudgmentFitSpec` validates a judgment fit document. Every field is required;
 a field typed `| None` is written as `null` when it is absent.
 
 | Field | Class | Rendered on |

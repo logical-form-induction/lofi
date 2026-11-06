@@ -2,7 +2,7 @@
 
 An experiment's sweep is expanded over one configuration document of the kind
 the experiment declares. Each kind is an installed plugin of the
-``lofi.experiment_config`` entry-point group, whose
+``lofi.experiment_config`` entry point group, whose
 :class:`ExperimentConfiguration` composes its points, reads its point
 manifests, executes its points and reports their rows, so expansion, launching,
 freezing, pricing and ingestion take the same route for every kind.
@@ -1095,7 +1095,7 @@ def read_experiment(path: Path, /, *, overrides: tuple[str, ...] = ()) -> Experi
     experiment is named by the document's stem. Its
     configuration document and preregistration are read relative to the
     document's directory, the configuration being a run document or a
-    judgment-fit document as the experiment declares. Every preregistered
+    judgment fit document as the experiment declares. Every preregistered
     factor must be spanned by an axis of the sweep taking a value for each of
     its levels, and every row must name a metric of an evaluator the
     configuration document declares. A document must declare ``compute``,

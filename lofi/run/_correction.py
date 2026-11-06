@@ -1,4 +1,4 @@
-"""Declared multiple-comparison corrections resolved through installed plugins."""
+"""Declared multiple comparison corrections resolved through installed plugins."""
 
 from __future__ import annotations
 

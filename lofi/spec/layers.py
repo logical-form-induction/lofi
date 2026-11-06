@@ -81,7 +81,7 @@ def dropout_rate(what: str, value: float, /) -> float:
 
 
 class FeedForwardLayer(NamedTuple):
-    """Resolved settings for one hidden feed-forward layer."""
+    """Resolved settings for one hidden feedforward layer."""
 
     width: int
     activation: Activation
@@ -106,7 +106,7 @@ class FeedForwardLayer(NamedTuple):
 
 
 class FeedForwardLayerSpec(dx.Model, extra="forbid"):
-    """Declare one hidden feed-forward layer."""
+    """Declare one hidden feedforward layer."""
 
     width: int
     activation: str

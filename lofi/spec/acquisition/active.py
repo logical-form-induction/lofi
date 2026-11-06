@@ -1,9 +1,9 @@
 """Declarations for quantitative active judgment collection.
 
-An active-learning document names everything one collection draws on: the
-judgment-item construction its candidate pool is built from, the item
+An active learning document names everything one collection draws on: the
+judgment item construction its candidate pool is built from, the item
 attributes its response model reads as factors, how the judgments the first
-round starts from are obtained, the judgment-fit document whose
+round starts from are obtained, the judgment fit document whose
 response model is refitted each round, the trained point whose readouts score
 the candidates, the collector that answers each acquired batch, and the
 cross-validation each round's performance is measured by. A document whose
@@ -115,14 +115,14 @@ class AgreementStopSettings(NamedTuple):
 
 
 class RankStopSettings(NamedTuple):
-    """Resolved cross-validated rank-correlation stopping threshold."""
+    """Resolved cross-validated rank correlation stopping threshold."""
 
     threshold: float
     basis: Literal["estimate", "lower-bound"]
 
 
 class AsymptoteStopSettings(NamedTuple):
-    """Resolved rank-correlation asymptote rule."""
+    """Resolved rank correlation asymptote rule."""
 
     window: int
     maximum_gain: float
@@ -155,7 +155,7 @@ class CollectedInitialSettings(NamedTuple):
 
 
 type InitialSettings = BeadInitialSettings | CollectedInitialSettings
-"""The resolved start of an active-learning run."""
+"""The resolved start of an active learning run."""
 
 
 class _InitialDeclaration(Protocol):
@@ -352,7 +352,7 @@ class RankStopSpec(StoppingSpec):
 
 
 class AsymptoteStopSpec(StoppingSpec):
-    """Stop when rank-correlation improvement is below a declared gain."""
+    """Stop when rank correlation improvement is below a declared gain."""
 
     kind: Literal["asymptote"] = "asymptote"
     window: int
@@ -388,7 +388,7 @@ class InitialSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
         """Return whether the start reads bead responses.
 
         A start that does reads them through the response encoding the
-        active-learning document declares.
+        active learning document declares.
         """
         return False
 
@@ -396,7 +396,7 @@ class InitialSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
 class BeadInitialSpec(InitialSpec):
     """Start from bead judgments already collected.
 
-    The records are read through the response encoding the active-learning
+    The records are read through the response encoding the active learning
     document declares.
 
     Parameters
@@ -560,7 +560,7 @@ class CrossValidationSpec(dx.Model, extra="forbid"):
         The row column held out together: ``response``, ``participant``,
         ``item``, or one of the document's declared factors.
     splitter : str
-        Tag of a splitter in the ``lofi.splitter`` entry-point group.
+        Tag of a splitter in the ``lofi.splitter`` entry point group.
     folds : int | None
         Number of folds, at least two, or null for one fold per level of the
         held-out unit, as the splitter requires.
@@ -640,11 +640,11 @@ class ActiveLearningSpec(dx.Model, extra="forbid"):
     max_rounds : int
         Bound on the number of rounds.
     confidence : float
-        Level of the agreement and rank-correlation intervals.
+        Level of the agreement and rank correlation intervals.
     bootstrap_samples : int
         Resamples behind the agreement interval.
     pool : str
-        Judgment-item construction document the candidate pool is built from.
+        Judgment item construction document the candidate pool is built from.
     factors : dict[str, str]
         The bead expression each factor every judgment row records is read
         by, keyed by the factor's name; the response model's factor terms read
@@ -653,7 +653,7 @@ class ActiveLearningSpec(dx.Model, extra="forbid"):
         The bead judgments the first round starts from, or the per-stratum draw
         the collector answers before it.
     fit : str
-        Judgment-fit document whose response model is refitted by MAP each
+        Judgment fit document whose response model is refitted by MAP each
         round.
     predictors : TrainedPredictorsSpec
         Trained point whose readouts are the response model's predictors.
@@ -765,5 +765,5 @@ class ActiveLearningSpec(dx.Model, extra="forbid"):
 
 
 def decode_active_learning(data: bytes, /) -> ActiveLearningSpec:
-    """Decode and validate one active-learning JSON document."""
+    """Decode and validate one active learning JSON document."""
     return ActiveLearningSpec.model_validate_json(data)

@@ -3,7 +3,7 @@
 Three syntaxes read and write the terms of a declared signature. The
 s-expression syntax spells every node as its quoted operator name, its payload
 and its arguments. The constructor syntax writes a category inventory using
-its declared prefix, infix, and mixfix forms. The angle-bracket syntax writes
+its declared prefix, infix, and mixfix forms. The angle bracket syntax writes
 one declared binary constructor as an unlabeled
 pair, so that under a type signature whose function constructor is that pair
 ``⟨⟨e,t⟩,t⟩`` is the type of a generalized quantifier; every other node is
@@ -1557,19 +1557,19 @@ _ANGLE_RESERVED: Final = frozenset(f'{_OPEN}{_CLOSE},{{}}"')
 
 
 def _is_bare(name: str) -> bool:
-    """Return whether a name can be written unquoted in angle-bracket text."""
+    """Return whether a name can be written unquoted in angle bracket text."""
     return not any(
         character.isspace() or character in _ANGLE_RESERVED for character in name
     )
 
 
 def _spelled(name: str) -> str:
-    """Return a name as angle-bracket text, quoted when it holds reserved syntax."""
+    """Return a name as angle bracket text, quoted when it holds reserved syntax."""
     return name if _is_bare(name) else dumps(name, ensure_ascii=False)
 
 
 class _AngleTable(NamedTuple):
-    """Compiled lookup tables for one angle-bracket syntax."""
+    """Compiled lookup tables for one angle bracket syntax."""
 
     pair: Operator
     sort: Sort
@@ -1577,7 +1577,7 @@ class _AngleTable(NamedTuple):
 
 
 class _AngleReader(_Cursor):
-    """A sort-directed cursor over one angle-bracket expression."""
+    """A sort-directed cursor over one angle bracket expression."""
 
     __slots__ = ("_max_depth", "_signature", "_table")
 
@@ -1735,7 +1735,7 @@ class _AngleReader(_Cursor):
 
 
 def _angle_table(signature: Signature, pair: OpName, sort: Sort | None) -> _AngleTable:
-    """Return the lookup tables of an angle-bracket syntax.
+    """Return the lookup tables of an angle bracket syntax.
 
     Raises
     ------
@@ -1768,7 +1768,7 @@ def _angle_table(signature: Signature, pair: OpName, sort: Sort | None) -> _Angl
 
 @final
 class AngleSyntax(_Syntax):
-    """Angle-bracket syntax over one declared pair constructor.
+    """Angle bracket syntax over one declared pair constructor.
 
     The pair constructor applied to two arguments is written ``⟨a,b⟩``. A
     payload-free nullary operator, and a constant of the sort a position
@@ -1827,7 +1827,7 @@ class AngleSyntax(_Syntax):
         return _materialize(store, parsed)
 
     def render(self, store: TermStore, term: Term, /) -> str:
-        """Render a term of the root sort in canonical angle-bracket syntax.
+        """Render a term of the root sort in canonical angle bracket syntax.
 
         Raises
         ------
@@ -2180,7 +2180,7 @@ def from_record(store: TermStore, record: TermRecord, /) -> Term:
     ------
     UnknownOperatorError
         If the store's signature declares no such operator, or no constant,
-        bound-variable or free-variable operator for a record's sort.
+        bound-variable or free variable operator for a record's sort.
     UnknownConstantError
         If a constant is absent from its sort's vocabulary.
     TermError

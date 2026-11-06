@@ -73,7 +73,7 @@ _SPAN_VECTOR_AXES: Final[tuple[str, ...]] = ("item", "span", "span_width")
 """The axes of the concatenated inside and outside span representation."""
 
 _RECEIVER_AXES: Final[tuple[str, ...]] = ("item", "edge", "width")
-"""The axes of chart-cell activations at the receivers that consume them."""
+"""The axes of chart cell activations at the receivers that consume them."""
 
 _ITEM_AXES: Final[tuple[str, ...]] = ("item",)
 """The axes of a readout with one value per item."""
@@ -538,7 +538,7 @@ class _ReceiverEdges:
 def _site_map(
     component: ComponentId, receiver: Site, published: frozenset[str]
 ) -> SiteMap:
-    """Return every readout and receiver-edge site of one scorer component."""
+    """Return every readout and receiver edge site of one scorer component."""
     sites = {
         Site(component, role, (name,)): SiteSpec(
             axes,
@@ -695,7 +695,7 @@ class DeepInsideOutside(nn.Module):
 
     @property
     def output_width(self) -> int:
-        """Return the width of every chart-cell representation."""
+        """Return the width of every chart cell representation."""
         return self._composition.output_width
 
     @property
@@ -729,7 +729,7 @@ class DeepInsideOutside(nn.Module):
 
     @property
     def receiver_site(self) -> Site:
-        """Return the observe-and-patch site holding receiver-edge activations.
+        """Return the observe-and-patch site holding receiver edge activations.
 
         A pass reaches the site once per chart width. Each reach hands a patch the
         edges processed so far, masked to the live edges that width consumes, so
@@ -801,7 +801,7 @@ class DeepInsideOutside(nn.Module):
         -------
         ChartReadouts
             Every readout filled, each masked to the spans that lie within its item,
-            with negative infinity at every log-space position outside them.
+            with negative infinity at every log space position outside them.
 
         Raises
         ------
@@ -1001,7 +1001,7 @@ class DeepInsideOutside(nn.Module):
         sites : frozenset[Site]
             The published chart points to observe.
         patches : Mapping[Site, Patch[_Reading]]
-            Replacements at receiver-edge activations.
+            Replacements at receiver edge activations.
 
         Raises
         ------
@@ -1087,7 +1087,7 @@ class DeepInsideOutside(nn.Module):
         Returns
         -------
         SiteMap
-            One point per named readout and one receiver-edge activation point, over
+            One point per named readout and one receiver edge activation point, over
             the axes each projection is published over.
         """
         return self._sites

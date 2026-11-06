@@ -29,11 +29,11 @@ __all__ = [
 
 
 class IllTypingOperator(Protocol):
-    """A named logical-form corruption constructed by an installed plugin."""
+    """A named logical form corruption constructed by an installed plugin."""
 
     @property
     def name(self) -> str:
-        """Return the entry-point name used in reports."""
+        """Return the entry point name used in reports."""
         ...
 
     def apply(self, random: Random, form: Term, /) -> Term | None:

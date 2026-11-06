@@ -75,7 +75,7 @@ def normalized_responses(
     """Return the number each row's recorded level is observed as.
 
     Under the identity the zero-based level is the number itself. Under
-    unit-interval scaling it is divided by the highest level, and under ridit
+    unit interval scaling it is divided by the highest level, and under ridit
     scaling it is replaced by its place in the participant's own scale use.
 
     Parameters
@@ -118,7 +118,7 @@ def item_response_weights(
     """Return one response weight per item, in item-index order.
 
     The identity channel assigns every item weight one, so passing it to an
-    objective leaves the objective unchanged. Ridit and unit-interval channels
+    objective leaves the objective unchanged. Ridit and unit interval channels
     first normalize every judgment row by the declared scale and then average
     the normalized rows belonging to each item.
 

@@ -94,7 +94,7 @@ def _method_mapping[T](
 
 @final
 class CalibrationReplicate(FrozenValue):
-    """One prior-predictive truth and three posterior approximations.
+    """One prior predictive truth and three posterior approximations.
 
     Posterior tensors have shape ``(chain, draw, *truth_shape)``. Cutpoint
     truths have shape ``(participant, cutpoint)`` and their draws prepend the
@@ -760,7 +760,7 @@ def calibration_report(
     *,
     rank_seed: int,
 ) -> CalibrationReport:
-    """Reduce completed prior-predictive replicates without fitting or I/O.
+    """Reduce completed prior predictive replicates without fitting or I/O.
 
     Randomized ranks use only NUTS, the reference posterior, and draw from a
     private stream initialized by ``rank_seed``. Coverage and participant-level

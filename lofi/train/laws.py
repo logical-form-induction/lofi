@@ -796,7 +796,7 @@ def check_checkpoint_store_laws[StateT](fixture: CheckpointFixture[StateT]) -> N
 
 
 class StepFixture[InputsT, OutputsT](NamedTuple):
-    """A training-step law fixture."""
+    """A training step law fixture."""
 
     step: TrainStep[InputsT, OutputsT]
     inputs: Callable[[], InputsT]
@@ -819,7 +819,7 @@ def _read_names[InputsT, OutputsT](
     Parameters
     ----------
     fixture : StepFixture[InputsT, OutputsT]
-        The training-step fixture.
+        The training step fixture.
     """
     values = fixture.inputs()
 
@@ -836,7 +836,7 @@ def the_output_schema_does_not_depend_on_a_setting[InputsT, OutputsT](
     Parameters
     ----------
     fixture : StepFixture[InputsT, OutputsT]
-        The training-step fixture.
+        The training step fixture.
     """
     law = "the_output_schema_does_not_depend_on_a_setting"
 
@@ -877,7 +877,7 @@ def every_declared_parameter_is_consumed[InputsT, OutputsT](
     Parameters
     ----------
     fixture : StepFixture[InputsT, OutputsT]
-        The training-step fixture.
+        The training step fixture.
     """
     law = "every_declared_parameter_is_consumed"
     declared = fixture.step.requires
@@ -906,7 +906,7 @@ def nothing_raises_to_report_success[InputsT, OutputsT](
     Parameters
     ----------
     fixture : StepFixture[InputsT, OutputsT]
-        The training-step fixture.
+        The training step fixture.
 
     Raises
     ------
@@ -946,7 +946,7 @@ def the_edges_are_exactly_the_data_dependencies[InputsT, OutputsT](
     Parameters
     ----------
     fixture : StepFixture[InputsT, OutputsT]
-        The training-step fixture.
+        The training step fixture.
     """
     law = "the_edges_are_exactly_the_data_dependencies"
     step = fixture.step
@@ -979,7 +979,7 @@ TRAIN_STEP_LAWS: Final = (
     nothing_raises_to_report_success,
     the_edges_are_exactly_the_data_dependencies,
 )
-"""Training-step laws in execution order."""
+"""Training step laws in execution order."""
 
 
 def check_train_step_laws[InputsT, OutputsT](
@@ -990,7 +990,7 @@ def check_train_step_laws[InputsT, OutputsT](
     Parameters
     ----------
     fixture : StepFixture[InputsT, OutputsT]
-        The training-step fixture.
+        The training step fixture.
     """
     for law in TRAIN_STEP_LAWS:
         law(fixture)

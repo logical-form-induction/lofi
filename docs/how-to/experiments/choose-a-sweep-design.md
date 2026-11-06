@@ -3,7 +3,7 @@
 A sweep's `design` selects which assignments of its axes become points: the
 complete `grid`, a seeded `random` sample of it, a seeded `latin-hypercube`
 sample, or a resolution-IV `fractional-factorial` fraction of its two-level
-axes. An experiment's `evaluation` block then names the multiple-comparison
+axes. An experiment's `evaluation` block then names the multiple comparison
 correction its preregistered comparisons are read under. This guide declares
 each design, shows how many assignments each selects, and declares the
 correction. [Run and price a sweep](sweeps.md) covers the axes themselves.
@@ -24,7 +24,7 @@ sweep:
   expected_points: 6
 ```
 
-Each design is an installed plugin in the `lofi.sweep_design` entry-point
+Each design is an installed plugin in the `lofi.sweep_design` entry point
 group, and the `kind` names the entry. The design runs first; the expansion
 then drops every assignment an `exclude` clause matches, crosses each survivor
 with every seed, and collapses any two points whose resolved configuration and
@@ -185,7 +185,7 @@ for assignment in design_assignments(sweep.design, sweep):
 ```
 
 Encode a two-level factor's first and second declared values by
-$b_j=0$ and $b_j=1$. A generator with target factor $g$ and basic-factor
+$b_j=0$ and $b_j=1$. A generator with target factor $g$ and basic factor
 word $W_g$ sets
 
 $$
@@ -198,7 +198,7 @@ $x_g\prod_{j\in W_g}x_j=1$. Products of defining words cancel repeated
 letters because $x_j^2=1$. The shortest nonidentity word gives the design's
 resolution \citep{box-hunter1961}; the validator requires its length to be
 at least four.
-A main-effect column can thus coincide with a three-factor interaction,
+A main effect column can thus coincide with a three-factor interaction,
 and two-factor interactions can coincide with one another, even though main
 effects do not coincide with two-factor interactions. These statements concern
 the complete constructed fraction; exclusions or missing runs can remove its
@@ -242,7 +242,7 @@ generators can be held back as a `resolution-iv` rung and applied to a full
 grid only if the experiment has to shrink; see
 [Contract an experiment](contract-an-experiment.md).
 
-## Declare a multiple-comparison correction
+## Declare a multiple comparison correction
 
 An experiment document declares how its preregistered comparisons are
 corrected in its `evaluation` block. The documentation experiment,
@@ -267,7 +267,7 @@ evaluation:
 `independent`, `prds` (positive regression dependence on the true nulls) or
 `arbitrary`. The families are the ones the preregistration assigns its
 hypotheses to, and ingestion applies the correction within each family. The
-correction is an installed plugin in the `lofi.correction` entry-point group:
+correction is an installed plugin in the `lofi.correction` entry point group:
 
 | `kind` | Controls | Valid under |
 | --- | --- | --- |

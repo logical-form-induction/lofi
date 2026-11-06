@@ -2,7 +2,7 @@
 
 An injected form is a corruption of a well-typed one that the declared type
 checker refuses. The refusal itself is the certificate: the constraints the
-checker left unsatisfied, written in the semantic-type syntax, beside the
+checker left unsatisfied, written in the semantic type syntax, beside the
 digest of the language declaration they were left under.
 """
 
@@ -32,7 +32,7 @@ FORM_TYPING_LABELS: Final[tuple[FormTypingLabel, ...]] = (
     "well-typed",
     "ill-typed",
 )
-"""The logical-form typing labels in report order."""
+"""The logical form typing labels in report order."""
 
 
 class FormTypingExample(FrozenValue):
@@ -47,7 +47,7 @@ class FormTypingExample(FrozenValue):
     true_label : FormTypingLabel
         Whether the declared type checker accepts the form.
     observed_label : FormTypingLabel
-        The label presented to training after applying the negative-data policy.
+        The label presented to training after applying the negative data policy.
 
     Raises
     ------
@@ -145,9 +145,9 @@ class TypingConflict:
     kind : TypingFailureKind
         Why the constraint remained unsatisfied.
     left : str
-        One side of the constraint, in the semantic-type syntax.
+        One side of the constraint, in the semantic type syntax.
     right : str
-        The other side, in the semantic-type syntax.
+        The other side, in the semantic type syntax.
     path : Path
         The node of the logical form the constraint arose at.
 
@@ -178,12 +178,12 @@ class TypingConflict:
 
     @property
     def left(self) -> str:
-        """Return one side of the constraint in the semantic-type syntax."""
+        """Return one side of the constraint in the semantic type syntax."""
         return self._left
 
     @property
     def right(self) -> str:
-        """Return the other side in the semantic-type syntax."""
+        """Return the other side in the semantic type syntax."""
         return self._right
 
     @property
@@ -226,7 +226,7 @@ class TypingFailure:
         The constraints the checker left unsatisfied, in the order it
         returned them.
     language_digest : str
-        The SHA-256 of the declaration bytes of the logical-form language the
+        The SHA-256 of the declaration bytes of the logical form language the
         form was checked under.
 
     Raises
@@ -300,14 +300,14 @@ class IllTyped:
     kind : str
         The operator that produced the form.
     source : str
-        The well-typed form the operator was applied to, in the logical-form
+        The well-typed form the operator was applied to, in the logical form
         surface syntax.
     text : str
-        The refused form, in the logical-form surface syntax.
+        The refused form, in the logical form surface syntax.
     certificate : TypingFailure
         The refusal the checker returned on the form.
     observed_label : FormTypingLabel
-        The label training observes after applying the negative-data regime.
+        The label training observes after applying the negative data regime.
 
     Raises
     ------
@@ -371,7 +371,7 @@ class IllTyped:
 
     @property
     def text(self) -> str:
-        """Return the refused form in the logical-form surface syntax."""
+        """Return the refused form in the logical form surface syntax."""
         return self._text
 
     @property
@@ -386,7 +386,7 @@ class IllTyped:
 
     @property
     def observed_label(self) -> FormTypingLabel:
-        """Return the label presented to logical-form training."""
+        """Return the label presented to logical form training."""
         return self._observed_label
 
     @property

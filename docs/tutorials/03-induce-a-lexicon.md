@@ -122,7 +122,7 @@ Reading the rows:
 |---|---|
 | `unlabeled-bracketing-f1` | Over the eight test sentences, the decoded trees share most of their spans with the gold trees. With at most five tokens and binary trees, many spans are forced, so this number is read against the length distribution, not on its own. |
 | `lexical-type-f1` | The induced categories, after alignment, match a quarter of the gold token categories. |
-| `primitive-one-to-one-accuracy` and its floor | Aligned accuracy over the primitive positions of the categories is slightly below the random-relabeling floor, so this point has not recovered the primitives beyond what the alignment alone supplies. |
+| `primitive-one-to-one-accuracy` and its floor | Aligned accuracy over the primitive positions of the categories is slightly below the random relabeling floor, so this point has not recovered the primitives beyond what the alignment alone supplies. |
 | `constructor-…` | No constructor position was scored (`n` is 0), so these rows hold no value. |
 
 One epoch on sixteen training sentences is not expected to recover a lexicon;
@@ -138,7 +138,7 @@ machine reproduces it from the same seeds.
 - Grow the corpus with `--set data.datasets.train.dataset.size=160` and watch
   `n` grow in every row.
 - Set `--set evaluators.brackets.decoder=viterbi` to score the single most
-  probable tree instead of the minimum-risk tree, and compare the two
+  probable tree instead of the minimum risk tree, and compare the two
   bracketing rows.
 
 ## Next

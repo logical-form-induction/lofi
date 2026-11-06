@@ -5,7 +5,7 @@ which rules there are. `normal_form` filters which derivation steps are
 admitted, `matching` declares the congruence categories are compared under,
 `goal` declares what a complete derivation ends in, and `budget` bounds the
 compiled grammar's approximations and its structural closure. Each of the
-first three selects a variant by its `kind` from an entry-point group. This
+first three selects a variant by its `kind` from an entry point group. This
 guide declares each, compiles the variants, and lists the refusals.
 
 All examples start from the packaged `directed` grammar with first-order
@@ -134,7 +134,7 @@ product product(feature-erasure,alpha)
 Each matching choice supplies a relation $\sim$ over category terms. The
 `product` relation is intersection:
 $A\sim B$ if and only if $A\sim_1 B$ and $A\sim_2 B$.
-Feature-erasure matching is equality of erased images; alpha matching is
+Feature erasure matching is equality of erased images; alpha matching is
 equality up to consistent renaming of bound variables. The
 [matching definitions](../../explanation/logical-forms-as-types.md#substitution-equality-and-matching)
 separate these relations from substitution and type checking.
@@ -195,13 +195,13 @@ structural closure the compiler runs to check that the goal is reachable:
 | Field | Default | Bounds |
 |---|---|---|
 | `depth` | 5 | Term depth. |
-| `mass` | 1.0 | The probability-mass target, in (0, 1]. |
+| `mass` | 1.0 | The probability mass target, in (0, 1]. |
 | `beam` | 8 | The search beam width. |
 | `unary_rounds` | 1 | Rounds of unary closure. |
-| `threads` | 1 | Chart-cell workers for every parse inside a run, held-out decoding included. |
-| `beta_fuel` | 1000 | Beta-reduction steps. |
+| `threads` | 1 | Chart cell workers for every parse inside a run, held-out decoding included. |
+| `beta_fuel` | 1000 | Beta reduction steps. |
 | `closure_rounds`, `closure_nodes` | 2, 2048 | Rounds and nodes of the structural closure. |
-| `max_category_arity`, `max_category_size` | none | A category's functor-spine arity and node count. |
+| `max_category_arity`, `max_category_size` | none | A category's functor spine arity and node count. |
 
 The compile report records what the closure reached. With no closure rounds,
 the goal cannot be shown reachable and the grammar is refused:
@@ -244,7 +244,7 @@ set supplies a derivation witness; absence from an unsaturated set is not a
 proof of unreachability. Likewise, a mass target or beam bound controls the
 search procedure and does not by itself certify the probability of omitted
 analyses. See [Charts and approximation](../../explanation/charts-and-approximation.md)
-for the relevant normalization and residual-mass conditions.
+for the relevant normalization and residual mass conditions.
 
 ## How these sections are refused
 

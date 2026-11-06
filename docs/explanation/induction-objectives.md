@@ -10,11 +10,11 @@ simplicity, supervision, regularization, and combinations of these terms.
 
 Write $\boldsymbol{\theta}$ for the trainable parameters, $w_i$ for input
 item $i$, and $\mathbf{h}_{i,s}$ for its representation at span $s$.
-A decoder supplies complete-term weights
+A decoder supplies complete term weights
 $w_{\boldsymbol{\theta}}(t\mid\mathbf{h}_{i,s})$, obtained from locally
 normalized choices. Admitted terms can have total weight below one when
 decoding encounters dead ends or rejects completed terms. Below, $p$ and $q$
-denote the normalized distributions supplied to a comparison; target-mass
+denote the normalized distributions supplied to a comparison; target mass
 readouts retain their declared scoring convention. A root target mass is
 not the partition function of the symbolic parser.
 
@@ -23,12 +23,12 @@ labels, or constraints. A missing output is an error. In the equations below,
 index sets contain only the observations the implementation scores, after
 its masks and selection rules. An empty set makes the term inapplicable;
 it does not introduce a zero observation into an epoch mean. Logs are natural
-logs unless a symbol-cost declaration explicitly uses bits.
+logs unless a symbol cost declaration explicitly uses bits.
 
 ## Grammaticality
 
 Let $I$ contain items with observed binary labels $y_i\in\{0,1\}$ and
-let $m_i\in[0,1]$ be the root target mass. Under symmetric label-flip
+let $m_i\in[0,1]$ be the root target mass. Under symmetric label flip
 probability $\eta\in[0,1/2)$,
 
 $$
@@ -161,7 +161,7 @@ $$
 
 Here $J$ contains live, unpadded leaves. Predicting a word from its outside
 representation follows DIORA \citep{drozdov-etal2019}; this particular
-word-plus-end-token likelihood is LoFI's decoder objective. Reconstruction
+likelihood of the word and end token is LoFI's decoder objective. Reconstruction
 rewards representations useful for word prediction. Whether the resulting
 bracketing recovers the source grammar remains an empirical question.
 
@@ -200,7 +200,7 @@ constructor, `log-alphabet` charges the code's alphabet-based cost, and
 `per-constructor` uses the declared map. The default scope includes width-one
 cells only; `all-cells` also prices the interior representations.
 
-This is an expected constructor-cost regularizer, motivated by description
+This is an expected constructor cost regularizer, motivated by description
 length \citep{rissanen1978}. Arbitrary costs do not automatically define a
 prefix code or a normalized prior. A Gibbs interpretation
 $p(t)\propto\exp[-\lambda\sum_{v\in t}\kappa(o_v)]$ additionally requires
@@ -226,7 +226,7 @@ not the total probability of the set of all well-typed terms. Its averaging
 unit is a supplied term–label pair, so one sentence can contribute several.
 
 `shaped-proof` assigns a credit $u(t)=c_{o(t)}-\lambda|t|$, where $o(t)$ is
-the decided outcome (ill-formed, well-formed, type-checking, or proved).
+the decided outcome (ill-formed, well-formed, type checking, or proved).
 For each item, it renormalizes decoded weights over decided candidates
 $A_i$ and minimizes their negative expected credit:
 

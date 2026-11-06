@@ -214,7 +214,7 @@ class DerivedAction(Unpicklable, FrozenValue):
 
     @property
     def inhabitants(self) -> Inhabitants:
-        """Return the proof-search result."""
+        """Return the proof search result."""
         return self._inhabitants
 
     @override
@@ -418,7 +418,7 @@ def _uncurry(
 
 @final
 class CompositionWitness(FrozenValue):
-    """The orientation and argument spine of one generalized-composition step.
+    """The orientation and argument spine of one generalized composition step.
 
     The principal premise is the functor whose argument the container premise
     delivers, and the frames are the operators of the container's result spine,
@@ -508,7 +508,7 @@ class CompositionWitness(FrozenValue):
         Parameters
         ----------
         calculus : ProofCalculus
-            The caller's proof-term construction channels.
+            The caller's proof term construction channels.
 
         Returns
         -------
@@ -955,7 +955,7 @@ def elaborate_step(
     erasure : StructuralErasure
         The category-to-type erasure.
     calculus : ProofCalculus
-        The caller's proof-term construction channels.
+        The caller's proof term construction channels.
 
     Returns
     -------

@@ -53,7 +53,7 @@ A design document declares where its judgments come from under `source`:
   `"judgment['nativeenglish'] == 'True'"` reads only the self-reported native
   speakers of a MegaAcceptability release.
 - `bead`: constructed bead items and bead annotation records. `items` names a
-  [judgment-item construction](construct-judgment-items.md) document,
+  [judgment item construction](construct-judgment-items.md) document,
   `judgments` the annotation records, one JSON object per line, and `encoding`
   the bead response encoding they answer.
 
@@ -101,8 +101,8 @@ An ordinal design may join one of two readout sources to every row:
 
 | `kind` | Fields |
 | --- | --- |
-| `root-mass` | `path`, a published root-mass artifact; `mass` and `complement`, the readout columns its pair fills |
-| `causal-lm` | `element`, the element each item record renders its corpus text under, which the model scores; `unigrams`, the token-count table; `checkpoint`, a hub source `{kind: hub, repository, revision}` with a full 40-character `revision`; `artifacts`, the cache (`root`, `offline`) the model is fetched into; `columns`, the readout columns `log_probability`, `unigram_log_probability` and `length` fill |
+| `root-mass` | `path`, a published root mass artifact; `mass` and `complement`, the readout columns its pair fills |
+| `causal-lm` | `element`, the element each item record renders its corpus text under, which the model scores; `unigrams`, the token count table; `checkpoint`, a hub source `{kind: hub, repository, revision}` with a full 40-character `revision`; `artifacts`, the cache (`root`, `offline`) the model is fetched into; `columns`, the readout columns `log_probability`, `unigram_log_probability` and `length` fill |
 
 MORCELA's unigram table is a UTF-8 tab-separated file with the header
 `token	count`, one token per line. The checkpoint is fetched through the one

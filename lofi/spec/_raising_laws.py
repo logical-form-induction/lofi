@@ -43,7 +43,7 @@ def _raised(grammar: LawGrammar, role: SlashRole, target: str) -> Term:
 
 
 class _Rebuild:
-    """Rebuild a type-raising rule from its declaration."""
+    """Rebuild a type raising rule from its declaration."""
 
     __slots__ = ("_atoms", "_grammar")
 
@@ -120,7 +120,7 @@ class _Rebuild:
 def _ordinary_case(
     grammar: LawGrammar, role: SlashRole, *, targeted: bool
 ) -> RuleLawCase:
-    """Build one ordinary type-raising case."""
+    """Build one ordinary type raising case."""
     rule = grammar.rule(
         TypeRaisingSpec(
             view=grammar.view_name(role),
@@ -135,7 +135,7 @@ def _ordinary_case(
     mode = "targeted" if targeted else "untargeted"
 
     def check() -> None:
-        """Run every law for the captured type-raising fixture."""
+        """Run every law for the captured type raising fixture."""
         check_rule_laws(fixture)
 
     return RuleLawCase(f"raising/{grammar.view}/{role}/{mode}", rule.name, check)
@@ -170,7 +170,7 @@ def _totality_case(grammar: LawGrammar) -> RuleTotalityCase:
 
 
 def provide_rule_laws() -> RuleLawCases:
-    """Return ordinary and totality type-raising cases."""
+    """Return ordinary and totality type raising cases."""
     grammars = {view: LawGrammar(view) for view in _VIEWS}
     ordinary = tuple(
         _ordinary_case(grammars[view], role, targeted=targeted)

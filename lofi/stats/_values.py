@@ -474,7 +474,7 @@ def p_value_against_replicates(
 
 
 class Decisions:
-    """Stores a multiple-comparison decision.
+    """Stores a multiple comparison decision.
 
     Parameters
     ----------

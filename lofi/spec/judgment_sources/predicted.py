@@ -40,7 +40,7 @@ class PredictedJudgmentSourceSpec(dx.Model, extra="forbid"):
     producer_point : str
         The producer point.
     item_set : str
-        The judgment-item construction document the items are built from,
+        The judgment item construction document the items are built from,
         relative to the directory holding this document.
     inputs : dict[str, str]
         The rendered element of every item each input role the point publishes

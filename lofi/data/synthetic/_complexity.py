@@ -99,7 +99,7 @@ class ComplexityPlugin(FrozenValue):
 
 
 def _plugins() -> tuple[ComplexityPlugin, ...]:
-    """Return the installed complexity plugins in entry-point order."""
+    """Return the installed complexity plugins in entry point order."""
     found: list[ComplexityPlugin] = []
 
     for tag, member in Registry[object]("lf_complexity").members():
@@ -195,7 +195,7 @@ def _predicate_count(context: ComplexityContext, form: Term, /) -> int:
 
 
 def _variable_count(context: ComplexityContext, form: Term, /) -> int:
-    """Return binder occurrences plus distinct free-variable names."""
+    """Return binder occurrences plus distinct free variable names."""
     binders = 0
     free: set[str] = set()
     pending = [form]
@@ -251,7 +251,7 @@ MEANING_DEPTH = ComplexityPlugin("meaning_depth", _meaning_depth)
 OPERATOR_NESTING = ComplexityPlugin("operator_nesting", _operator_nesting)
 
 type ComplexityControl = str
-"""The registry name of one installed logical-form complexity meter."""
+"""The registry name of one installed logical form complexity meter."""
 
 COMPLEXITY_CONTROLS: Final[tuple[str, ...]] = complexity_controls()
 """The installed complexity controls in registry order."""
@@ -548,7 +548,7 @@ class ComplexityTarget:
 
 @final
 class PairComplexityTarget:
-    """What a premise-hypothesis draw aims at on each side and across the pair.
+    """What a draw of a premise and hypothesis aims at on each side and across the pair.
 
     Parameters
     ----------

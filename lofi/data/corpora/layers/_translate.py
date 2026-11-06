@@ -1649,7 +1649,7 @@ class LayerContext(NamedTuple):
 
 
 class LayerLift(NamedTuple):
-    """A decoder for one annotation-layer kind.
+    """A decoder for one annotation layer kind.
 
     Parameters
     ----------
@@ -1722,7 +1722,7 @@ LAYER_LIFTS: Final[tuple[LayerLift, ...]] = (
     LayerLift(_RELATION_KIND, _DEPENDENCY_SUBKIND, GoldDependencies, _dependency_arm),
     LayerLift(_TAG_KIND, None, SpanConstraints, _tag_arm),
 )
-"""The annotation-layer decoders."""
+"""The annotation layer decoders."""
 
 
 class GraphLift(NamedTuple):

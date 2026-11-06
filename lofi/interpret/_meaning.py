@@ -51,7 +51,7 @@ NORMALIZES_STEPS: Final[Mapping[NormalizationPolicy, bool]] = MappingProxyType(
 """Whether each declared policy normalizes the meaning of every rule application."""
 
 type InhabitantSelection = Literal["unique", "first", "smallest", "all"]
-"""How proof-search inhabitants become semantic rule actions."""
+"""How proof search inhabitants become semantic rule actions."""
 
 INHABITANT_SELECTIONS: Final[tuple[InhabitantSelection, ...]] = (
     "unique",
@@ -68,7 +68,7 @@ def _unique(terms: tuple[Term, ...], /) -> tuple[Term, ...]:
 
 
 def _first(terms: tuple[Term, ...], /) -> tuple[Term, ...]:
-    """Keep the first inhabitant in proof-search order."""
+    """Keep the first inhabitant in proof search order."""
     return terms[:1]
 
 
@@ -120,7 +120,7 @@ class MeaningSelection(FrozenValue):
         return self._kind
 
     def select(self, terms: Sequence[Term], /) -> tuple[Term, ...]:
-        """Return selected terms in deterministic proof-search order."""
+        """Return selected terms in deterministic proof search order."""
         return self._select(tuple(terms))
 
 

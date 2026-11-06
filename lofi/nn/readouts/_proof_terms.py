@@ -32,7 +32,7 @@ __all__ = ["ProofTermMeaning", "ProofTermPushforward"]
 
 
 class SplitWeights(Protocol):
-    """The per-span split posterior consumed by proof-term induction."""
+    """The per-span split posterior consumed by proof term induction."""
 
     @property
     def spans(self) -> SpanIndex:
@@ -48,7 +48,7 @@ class SplitWeights(Protocol):
 
 @runtime_checkable
 class DerivedResidualBound(Protocol):
-    """The residual-mass check applied to each derived phrase cell."""
+    """The residual mass check applied to each derived phrase cell."""
 
     def check_terms(
         self,
@@ -71,7 +71,7 @@ class ProofTermMeaning(Protocol):
 
     @property
     def normalization(self) -> Normalization:
-        """Return the declared proof-term normal form and reduction bound."""
+        """Return the declared proof term normal form and reduction bound."""
 
 
 def _estimate(children: tuple[WeightedTerms, ...]) -> Estimate:
@@ -199,7 +199,7 @@ class ProofTermPushforward(FrozenValue):
         splits: SplitWeights,
         actions: Mapping[Action, LogDistribution],
     ) -> Mapping[tuple[int, int], WeightedTerms]:
-        """Return lexical leaves and their proof-term pushforward at every span."""
+        """Return lexical leaves and their proof term pushforward at every span."""
         if splits.spans is not spans:
             msg = "proof-term splits and lexical forms use different span addressing"
             raise ValueError(msg)

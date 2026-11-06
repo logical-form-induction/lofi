@@ -445,7 +445,7 @@ def _items[T](chart: Chart[T, float]) -> tuple[ItemKey[T], ...]:
 
 
 def _require_log_inside[T](chart: Chart[T, float]) -> Semiring[float]:
-    """Return the chart's semiring once it carries log-probability weights."""
+    """Return the chart's semiring once it carries log probability weights."""
     semiring = chart.semiring
 
     if not semiring.log_probability:
@@ -658,14 +658,14 @@ def goal_partition[T](chart: ProductChart[T, float], goal: Goal[T], /) -> float:
     Parameters
     ----------
     chart : ProductChart[T, float]
-        A finished forest under log-probability weights.
+        A finished forest under log probability weights.
     goal : Goal[T]
         The goal the partition is relative to.
 
     Raises
     ------
     ValueError
-        If the forest does not carry log-probability weights, or contains a cycle.
+        If the forest does not carry log probability weights, or contains a cycle.
     """
     semiring = _require_log_inside(chart)
     _, _, inside = _goal_relative_inside(chart, goal, semiring)

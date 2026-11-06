@@ -1,6 +1,6 @@
-"""Execution of the points of a judgment-fit experiment.
+"""Execution of the points of a judgment fit experiment.
 
-A judgment-fit point is one resolved judgment fit. Its dataset is resolved to
+A judgment fit point is one resolved judgment fit. Its dataset is resolved to
 a design, its response model is compiled over that design, and its parameters
 are inferred by the declared method: NUTS under the declared plan, a
 variational guide fitted for the declared steps and then drawn from, or a
@@ -10,7 +10,7 @@ executor serves one launch: it reads each dataset once, on the first point
 that needs it, and every later point of the launch shares that read, so the
 design and the provenance of the bytes it was read from are both taken from
 one read; each manifest records the provenance. A fit that declares
-calibration is also calibrated over prior-predictive replicates simulated over
+calibration is also calibrated over prior predictive replicates simulated over
 its design, each fitted by NUTS and by the structured and mean-field guides,
 with every simulation, inference and rank seed derived from the point's run
 seed through its named sampler streams. Each point is checked once per launch,
@@ -19,7 +19,7 @@ response model compiled, a program that draws no parameter is refused, and a
 calibrated fit whose response model does not vary its thresholds over
 participants is refused. The point's directory is claimed for the experiment's
 freeze, then records the rows of the fit's diagnostics and calibration and
-then its judgment-fit manifest. A fit gated by a declared dynamic range of one
+then its judgment fit manifest. A fit gated by a declared dynamic range of one
 readout also records the passing distribution report computed before the point was
 claimed, so the result preserves the evidence that admitted the fit. A
 completed fit is served from disk when it is executed again. A fit whose
@@ -201,7 +201,7 @@ RANK_STREAM: Final = "calibration-rank"
 """The sampler stream the calibration reducer's randomized ranks take."""
 
 ABLATION_STREAM: Final = "table-ablation"
-"""The sampler stream initializing a point's declared table-ablation rungs."""
+"""The sampler stream initializing a point's declared table ablation rungs."""
 
 POSTERIOR_NAME: Final = "posterior.nc"
 POINT_ESTIMATE_NAME: Final = "point-estimate.safetensors"
@@ -213,7 +213,7 @@ DESIGN_FAMILY: Final = "judgment_design"
 """The registry family a judgment dataset's design reader registers under."""
 
 HELD_OUT_PREDICTIVE_METRIC: Final = "held-out-predictive-log-density"
-"""The metric owned by a complete fitted-model candidate set."""
+"""The metric owned by a complete fitted model candidate set."""
 
 HELD_OUT_UNPREDICTED_METRIC: Final = "held-out-unpredicted-participants"
 """The metric counting a fold's new participants when no policy is declared."""
@@ -263,7 +263,7 @@ class RegisteredDesigns:
     """Resolves a dataset through the reader registered under its identifier.
 
     A judgment dataset's reader registers under the ``lofi.judgment_design``
-    entry-point group, named by the identifier a fit declares.
+    entry point group, named by the identifier a fit declares.
     """
 
     __slots__ = ()
@@ -319,7 +319,7 @@ def _dynamic_range_row(
     freeze_id: str,
     seed: int,
 ) -> Mapping[str, JsonValue]:
-    """Return the report row preserving a fit's dynamic-range gate."""
+    """Return the report row preserving a fit's dynamic range gate."""
     criterion = report.criterion
 
     return {
@@ -724,7 +724,7 @@ def _interannotator_rows(
 
 
 def _gated_readout(fit: JudgmentFitSpec, /) -> str:
-    """Return the readout a fit's declared dynamic-range gate reads."""
+    """Return the readout a fit's declared dynamic range gate reads."""
     if fit.dynamic_range is None:
         msg = "a fit with a dynamic-range report declares its gate"
         raise RuntimeError(msg)
@@ -734,7 +734,7 @@ def _gated_readout(fit: JudgmentFitSpec, /) -> str:
 def _readout_odds(
     readout: str, fit: JudgmentFitSpec, design: ResponseDesign, /
 ) -> torch.Tensor:
-    """Return one root log-odds value of the declared readout per design item."""
+    """Return one root log odds value of the declared readout per design item."""
 
     def links(term: Predictor) -> tuple[LinkTerm, ...]:
         match term:
@@ -1103,7 +1103,7 @@ def map_fold_probabilities(
     The point was fitted to the retained design. A held-out participant the
     retained design never shows is predicted under the given policy: a
     conditional point admits only the plug-in policy for one, and a
-    truncated-marginal point integrates it unless the policy is plug-in.
+    truncated marginal point integrates it unless the policy is plug-in.
 
     Raises
     ------
@@ -1360,7 +1360,7 @@ def _ablation_rows(
 
 @final
 class FitExecutor:
-    """Execute the judgment-fit points of one launch through an experiment's store.
+    """Execute the judgment fit points of one launch through an experiment's store.
 
     The executor keeps what one launch shares: the checked fit and compiled
     response model of each point it has checked, and the design of each

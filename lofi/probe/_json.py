@@ -65,7 +65,7 @@ def field(fields: dict[str, JsonValue], name: str) -> JsonValue:
 
 
 def a_name(fields: dict[str, JsonValue], name: str) -> str:
-    """Return one field of a JSON object as a non-empty string.
+    """Return one field of a JSON object as a nonempty string.
 
     Parameters
     ----------
@@ -127,7 +127,7 @@ def a_number(fields: dict[str, JsonValue], name: str) -> float:
 
 
 def a_count(fields: dict[str, JsonValue], name: str) -> int:
-    """Return one field of a JSON object as a non-negative integer.
+    """Return one field of a JSON object as a nonnegative integer.
 
     Parameters
     ----------

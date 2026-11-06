@@ -1,4 +1,4 @@
-"""Summaries of node-vocabulary sweeps over one evaluated pair population."""
+"""Summaries of node vocabulary sweeps over one evaluated pair population."""
 
 from enum import Enum
 from hashlib import sha256
@@ -24,14 +24,14 @@ __all__ = [
 ]
 
 _PAIR_SET_DOMAIN = "lofi.node-vocabulary-pairs"
-"""The content-address domain for evaluated node-vocabulary pair sets."""
+"""The content-address domain for evaluated node vocabulary pair sets."""
 
 _PAIR_SET_VERSION = 1
 """The canonical pair-set record version."""
 
 
 class NodeVocabularyArm(Enum):
-    """The four fixed representations in a node-vocabulary comparison."""
+    """The four fixed representations in a node vocabulary comparison."""
 
     #: High-level variables supplied by the derivations.
     DERIVATION_VARIABLES = "derivation-variables"
@@ -114,7 +114,7 @@ class NodeVocabularyCell(FrozenValue):
     cell : str
         The canonical JSON spelling of the logical cell, without its site.
     accuracy : float
-        The cell's held-out interchange-intervention accuracy.
+        The cell's held-out interchange intervention accuracy.
     null : str
         The canonical JSON spelling of the cell's null provenance.
 
@@ -147,7 +147,7 @@ class NodeVocabularyCell(FrozenValue):
 
     @property
     def accuracy(self) -> float:
-        """Return the cell's interchange-intervention accuracy."""
+        """Return the cell's interchange intervention accuracy."""
         return self._accuracy
 
     @property
@@ -390,7 +390,7 @@ def node_vocabulary_row(
 
 @final
 class NodeVocabularyComparison(FrozenValue):
-    """Four complete node-vocabulary sweeps over identical evaluated evidence.
+    """Four complete node vocabulary sweeps over identical evaluated evidence.
 
     Parameters
     ----------
@@ -400,7 +400,7 @@ class NodeVocabularyComparison(FrozenValue):
     Raises
     ------
     TypeError
-        If a member is not a node-vocabulary row.
+        If a member is not a node vocabulary row.
     ValueError
         If an arm is absent or repeated, or the rows differ in pair population,
         logical cells, or per-cell null provenance.

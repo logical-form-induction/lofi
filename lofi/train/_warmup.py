@@ -1,4 +1,4 @@
-"""The token-encoder warm-up step, and the row transfer that seeds it."""
+"""The token-encoder warmup step, and the row transfer that seeds it."""
 
 from typing import TYPE_CHECKING, Never, final, override
 
@@ -27,7 +27,7 @@ __all__ = ["TokenWarmupStep", "Utterances", "WarmupBatch", "transfer_rows"]
 
 
 class Utterances:
-    """The utterances and selected lexical candidates a warm-up step reads.
+    """The utterances and selected lexical candidates a warmup step reads.
 
     Parameters
     ----------

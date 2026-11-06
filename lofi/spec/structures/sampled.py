@@ -35,7 +35,7 @@ class SampledStructureSourceSpec(StructureSourceSpec):
     )
     @classmethod
     def _sampling_is_named(cls, value: str) -> str:
-        """Require an installed sampling capability's entry-point name."""
+        """Require an installed sampling capability's entry point name."""
         return ensure_name("a sampling capability", value)
 
     @dx.model_validator()

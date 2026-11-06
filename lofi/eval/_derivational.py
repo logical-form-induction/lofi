@@ -30,7 +30,7 @@ __all__ = [
 ]
 
 type LikelihoodUnit = Literal["sentence", "token"]
-"""The unit a held-out derivational log-likelihood is divided by."""
+"""The unit a held-out derivational log likelihood is divided by."""
 
 LIKELIHOOD_UNITS: Final[tuple[LikelihoodUnit, ...]] = ("sentence", "token")
 """The reporting units, in report order."""
@@ -153,7 +153,7 @@ class _Contained(NamedTuple):
 
 @final
 class DerivationalLikelihood[L: Hashable]:
-    """Held-out derivational log-likelihood over one derivation set.
+    """Held-out derivational log likelihood over one derivation set.
 
     Each update reads one held-out sentence's gold derivation against the
     derivation set the model normalizes over, and takes the sentence length
@@ -380,7 +380,7 @@ class NormalFormScores(NamedTuple):
 
 
 class LikelihoodRow(NamedTuple):
-    """One published held-out derivational log-likelihood.
+    """One published held-out derivational log likelihood.
 
     Attributes
     ----------

@@ -179,7 +179,7 @@ class TrainingBlueprint(Protocol):
         ...
 
     def pair_training(self, role: str, dataset: LoweredDataset, /) -> PairTraining:
-        """Return the inference-pair training one lowered dataset's plugin supplies."""
+        """Return the inference pair training one lowered dataset's plugin supplies."""
         ...
 
     @property

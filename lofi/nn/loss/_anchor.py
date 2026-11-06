@@ -39,7 +39,7 @@ if TYPE_CHECKING:
 __all__ = ["AnchorAggregateName", "AnchorDistanceName", "VectorAnchorObjective"]
 
 _CELL_RANK = len(CELL_AXES)
-"""The rank of a chart-cell representation."""
+"""The rank of a chart cell representation."""
 
 _CELL_MASK_RANK = _CELL_RANK - 1
 """The widest mask that selects whole chart cells."""
@@ -169,7 +169,7 @@ def _live_cells(cells: Encoded, spans: SpanIndex) -> Tensor:
     Parameters
     ----------
     cells : Encoded
-        The published chart-cell representations.
+        The published chart cell representations.
     spans : SpanIndex
         The addressing of the span axis.
 
@@ -431,7 +431,7 @@ class _BoundVectorAnchorObjective[T, ScopeT: Hashable](nn.Module):
         Raises
         ------
         MissingOutputError
-            If the step published no chart-cell vectors.
+            If the step published no chart cell vectors.
         UncomputedCellError
             If a constraint addresses a masked chart cell.
         IndexError

@@ -87,7 +87,7 @@ class _ValueTable[T]:
 class InsideChart[T, W]:
     """Stores the inside weight of every exact category over every span.
 
-    A category can be derived under several normal-form tags. The chart keeps
+    A category can be derived under several normal form tags. The chart keeps
     a weight per tag while it is filled, since a normal form reads the tag of
     each premise, and reports a category's weight as the semiring sum over its
     tags. No derivation step is kept, so a weight cannot be unpacked into the
@@ -145,7 +145,7 @@ class InsideChart[T, W]:
         """Return the name of the normal form whose steps the weights sum over.
 
         Under any normal form but ``"none"`` a category's weight sums over its
-        normal-form derivations only, so ``Counting`` counts those.
+        normal form derivations only, so ``Counting`` counts those.
         """
         return self._normal_form
 
@@ -178,7 +178,7 @@ class InsideChart[T, W]:
         category : T
             The exact category derived.
         tag : str
-            The normal-form tag the derivation gives it.
+            The normal form tag the derivation gives it.
         weight : W
             The derivation's weight.
 
@@ -271,7 +271,7 @@ class InsideChart[T, W]:
         category : T
             The exact category.
         tag : str
-            The normal-form tag.
+            The normal form tag.
 
         Returns
         -------

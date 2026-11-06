@@ -243,7 +243,7 @@ def _nominal(
 
 
 def _row_measurement(row: BaselineRow, *, metric: str) -> BaselineMeasurement:
-    """Lower one harness row into the baseline-fit reporting boundary."""
+    """Lower one harness row into the baseline fit reporting boundary."""
     result = row.result
     return BaselineMeasurement(
         row.family,

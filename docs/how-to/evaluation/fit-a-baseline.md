@@ -1,8 +1,8 @@
 # Fit an external baseline
 
-A baseline-fit document declares one external comparison system under
+A baseline fit document declares one external comparison system under
 `system`, whose `kind` names a plugin in the `lofi.baseline_system`
-entry-point group. An experiment over a baseline-fit document fits the system
+entry point group. An experiment over a baseline fit document fits the system
 once per point and records its measurements as report rows, in the same
 results layout as the rows of LoFI points. This guide declares the two packaged systems, Bisk and
 Hockenmaier's CCG induction and the LM-plus-prover pipelines, runs them, and
@@ -87,7 +87,7 @@ repeated one.
 
 ## The Bisk-Hockenmaier system
 
-`kind: bisk-hockenmaier` re-runs the CCG induction system of \citet{bisk-hockenmaier2012} on CCGbank, since no prediction file was released for it,
+`kind: bisk-hockenmaier` reruns the CCG induction system of \citet{bisk-hockenmaier2012} on CCGbank, since no prediction file was released for it,
 and scores supertagging and unlabeled directed attachment on the evaluation
 section. Its declaration states every treatment the published description
 fixes:
@@ -95,14 +95,14 @@ fixes:
 | Fields | What they declare |
 | --- | --- |
 | `ccgbank_source`, `dependency_gold_source` | The CCGbank AUTO files and the CoNLL-2008 dependency gold, each resolved against the experiment document's directory. |
-| `reference_source`, `reference_tolerance` | The published Figure 4(a) scores, and how far a re-run score may lie from each. |
+| `reference_source`, `reference_tolerance` | The published Figure 4(a) scores, and how far a rerun score may lie from each. |
 | `training_sections`, `training_max_length`, `development_section`, `evaluation_section` | The sections read and the length bound on training sentences; defaults 2 to 21, 10, 0 and 23. |
 | `evaluation_length_bands`, `length_excludes_punctuation` | The length bands scored, increasing and ending in one unbounded band (default `[10, 20, null]`), and whether length counts punctuation. |
 | `grammar` | The grammar the system induces a lexicon over, a complete [grammar declaration](../grammars/choose-a-formalism.md); by default the packaged [`lofi/configs/system/grammar/bisk-hockenmaier.yaml`](https://github.com/logical-form-induction/lofi/blob/main/lofi/configs/system/grammar/bisk-hockenmaier.yaml), described below. |
 | `language` | The registered or inline language the grammar is compiled within (default `propositional`); the baseline reads no meanings, but the language bounds the category store. |
 | `nominal_category`, `sentence_category`, `coordination_category` | The grammar primitives that play the nominal, sentence and coordination roles. With the goal category, they must be exactly the grammar's primitives, and the coordination category must be a conjunction marker. |
-| `gold_sentence_atom`, `gold_coordination_atom` | The two distinct gold-corpus atoms (`S` and `conj` in CCGbank) whose feature-erased occurrences score as the sentence and coordination categories; every other gold atom scores as the nominal category. |
-| `nominal_tags`, `verbal_tags`, `coordination_tags`, `other_tags`, `punctuation_tags`, `gerund_tag` | The part-of-speech classes that seed the lexicon. |
+| `gold_sentence_atom`, `gold_coordination_atom` | The two distinct gold corpus atoms (`S` and `conj` in CCGbank) whose feature-erased occurrences score as the sentence and coordination categories; every other gold atom scores as the nominal category. |
+| `nominal_tags`, `verbal_tags`, `coordination_tags`, `other_tags`, `punctuation_tags`, `gerund_tag` | The part of speech classes that seed the lexicon. |
 | `headed_or_modifier_arguments`, `sentence_arguments`, `max_arity`, `second_order_modifiers`, `category_induction_steps` | How categories are induced from the seed lexicon. |
 | `em_max_iterations`, `convergence_tolerance`, `probability_floor` | The EM horizon, its convergence test and the probability floor (default $\exp(-6)$). |
 | `parse`, `threads` | The chart parse each sentence's packed forest is built with (default `{retain: forest, reachability: roots}`), and how many chart cells of one width it may fill concurrently (default 1, positive). The thread count does not change a score, so it is not one of the system's conventions. |
@@ -112,10 +112,10 @@ The remaining fields, such as `k: 100` and
 published value and default to it, so a declaration states them only to make
 them explicit.
 
-The declaration is checked as a whole: the part-of-speech classes must be
+The declaration is checked as a whole: the part of speech classes must be
 disjoint and contain the punctuation tags and the gerund tag; the development
 and evaluation sections must differ and lie outside training; the grammar's
-goal must be one root category; every type-raising rule must declare finite
+goal must be one root category; every type raising rule must declare finite
 targets and arguments; and the grammar budget's `threads` must stay
 1, since the parse takes its thread count from the system's own `threads`.
 
@@ -123,7 +123,7 @@ targets and arguments; and the grammar budget's `threads` must stay
 
 The implementation associates each derivation node with categorical events.
 For parent category $A$, head category $H$, sister category $S$, direction
-$d\in\{\mathrm{left},\mathrm{right}\}$, and part-of-speech tag $t$, its local
+$d\in\{\mathrm{left},\mathrm{right}\}$, and part of speech tag $t$, its local
 weight is
 
 $$
@@ -155,7 +155,7 @@ q_{\boldsymbol{\theta}}(T\mid x,\mathcal{A})=
 $$
 
 Write $n_e(T)$ for the number of occurrences of event $e$ in $T$. The
-expectation step computes both restricted and full-forest expected counts:
+expectation step computes both restricted and full forest expected counts:
 
 $$
 a_e=\sum_x\mathbb{E}_{T\sim q_{\boldsymbol{\theta}}(\cdot\mid x,\mathcal{K}_x)}[n_e(T)],
@@ -165,7 +165,7 @@ $$
 
 Training sentences with no complete derivation under the induced lexicon
 are excluded from these sums; if none remain, fitting is refused. Event
-support is fixed from the complete training forests. Full-forest counts
+support is fixed from the complete training forests. Full forest counts
 come from inside–outside rule marginals. For context $c$,
 let $E_c$ be its event support, $a_c=\sum_{e\in E_c}a_e$, and
 $b_c=\sum_{e\in E_c}b_e$. The update combines these estimates as
@@ -177,7 +177,7 @@ $$
 
 A component with zero total contributes zero, and $\lambda_c=0$ when both
 totals vanish. For a supported context with $|E_c|\varepsilon\leq1$, the
-probability-floor update is the constrained categorical maximization
+probability floor update is the constrained categorical maximization
 
 $$
 \underset{\{p_e:e\in E_c\}}{\operatorname{maximize}}\quad
@@ -199,7 +199,7 @@ $$
 or `em_max_iterations` is reached; $\tau$ is `convergence_tolerance`.
 This is parameter convergence under the implemented full-forest/top-$k$
 mixture and floor. It does not establish a global optimum or monotonicity of
-an unrestricted observed-data likelihood. The published induction system
+an unrestricted observed data likelihood. The published induction system
 provides the methodological reference \citep{bisk-hockenmaier2012}; these
 equations specify the procedure implemented here.
 
@@ -215,10 +215,10 @@ The packaged grammar declares the published system's choices:
 | `goal`, `matching` | The root `TOP`, matched by identity. |
 | `normal_form` | `hockenmaier-bisk` with `order_bound: 1`, `raised_application: true` and `coordination_raising: true`. |
 | `budget` | One unary step per cell and categories of at most five arguments. |
-| `lexicon` | A three-entry witness the compile checks the goal against; the system induces its own lexicon from part-of-speech tags. |
+| `lexicon` | A three-entry witness the compile checks the goal against; the system induces its own lexicon from part of speech tags. |
 
 The category set the support parse explores stays finite only if type raising
-is bounded. Every type-raising declaration must state finite targets and
+is bounded. Every type raising declaration must state finite targets and
 finite arguments, and a grammar that raises to or from every category is
 refused. Finite targets alone bound only the result `T`: a declaration that
 raises every category `X` still raises composed categories, composes the
@@ -263,15 +263,15 @@ figure in the artifact `reference_source` names, whose format is that of the
 packaged
 [`lofi/configs/eval/bisk_hockenmaier_2012.json`](https://github.com/logical-form-induction/lofi/blob/main/lofi/configs/eval/bisk_hockenmaier_2012.json).
 A score further from its published value than `reference_tolerance` fails the
-fit, naming every score outside the gate, so a re-run that does not reproduce
+fit, naming every score outside the gate, so a rerun that does not reproduce
 the published system reports no rows. The reference artifact is itself validated: it must cite Figure 4(a), the
 WSJ10 training band and the declared evaluation section, and list exactly the
 three dependency metrics.
 
 ## The LM-plus-prover system
 
-`kind: lm-prover` replays recorded language-model formalizations through
-LoFI's own logical-form parser, type checker and prover. The source records
+`kind: lm-prover` replays recorded language model formalizations through
+LoFI's own logical form parser, type checker and prover. The source records
 model generations rather than scores, so every reported measurement is
 computed by LoFI.
 
@@ -279,10 +279,10 @@ computed by LoFI.
 | --- | --- |
 | `data_source`, `generations_source`, `prompt_source` | The evaluation items, the recorded generations and the prompt they were generated from. |
 | `model` | The identity of the model that generated them. |
-| `pipeline` | `{kind: linc, samples: n}` samples `n` independent formalizations and votes on the prover's verdicts; `{kind: logic-lm, refinements: n}` takes one formalization and up to `n` solver-feedback refinements. |
-| `language` | The logical-form language the generations are parsed and type-checked in, with its prover. |
+| `pipeline` | `{kind: linc, samples: n}` samples `n` independent formalizations and votes on the prover's verdicts; `{kind: logic-lm, refinements: n}` takes one formalization and up to `n` solver feedback refinements. |
+| `language` | The logical form language the generations are parsed and type-checked in, with its prover. |
 | `budget`, `normalization`, `normalization_fuel` | The proof budget, the normalization applied before comparison, and its positive reduction budget. |
-| `measure`, `alignment`, `scoring` | The logical-form measure, the alignment between predicted and gold forms, and the eight scoring conventions of [Evaluate a trained point](evaluate-a-run.md). |
+| `measure`, `alignment`, `scoring` | The logical form measure, the alignment between predicted and gold forms, and the eight scoring conventions of [Evaluate a trained point](evaluate-a-run.md). |
 
 The alignment must fit on `dev` and score on `test`. The system reports
 `logical-form-<measure>` and `<alignment>-accuracy`, named by the declared
@@ -336,7 +336,7 @@ uv run lofi launch \
   --freeze freezes/1/FREEZE.json --out launch.json
 ```
 
-A baseline-fit point is fitted in the launching process, by the serial
+A baseline fit point is fitted in the launching process, by the serial
 executor. A point whose completed result is cached is served from its
 directory, and an infrastructure failure is retried within the attempts the
 point is given, as for run points.
@@ -352,7 +352,7 @@ the ones it declares, or in another order. Each row carries:
 | `freeze_id`, `config_hash`, `point_id` | The freeze, the digest of the resolved fit document, and the point. |
 | `task` | Always `baseline`, the role under which an experiment names baseline rows. |
 | `family`, `system`, `metric`, `arm` | The comparison family, the system, the metric and the arm, such as `re-running`. |
-| `cites`, `reason` | The citation the figure comes from and why the system was re-run or replayed. |
+| `cites`, `reason` | The citation the figure comes from and why the system was rerun or replayed. |
 | `value`, `n`, `unit` | The measurement, the units it counts and their kind, such as `accuracy`. |
 | `seed`, `convention_hash`, `conventions` | The run seed, and the system's declared conventions with the digest of every source file, and their hash. |
 
@@ -366,7 +366,7 @@ A baseline experiment runs under a freeze and writes its results directory in
 the layout [Run and price a sweep](../experiments/sweeps.md) describes, so its
 rows are ingested against the freeze as a run experiment's are. The L1
 campaign runs its neural experiment and its two LM-plus-prover experiments
-through one freeze and ingests the three result roots, so the logical-form and
+through one freeze and ingests the three result roots, so the logical form and
 inference measurements of LINC and Logic-LM sit beside those of the trained
 points. [Reduce and report results](../experiments/reduce-and-report-results.md)
 declares the tables an experiment renders from its rows.

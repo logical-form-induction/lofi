@@ -9,7 +9,7 @@ reward, with a moving control variate when forms are sampled.
 This guide declares the prover, the scorer, the reward and the loss term, and
 shows how each mismatch is refused.
 
-## Start from a prover-reward run
+## Start from a prover reward run
 
 [`experiments/l4/l4-run.yaml`](https://github.com/logical-form-induction/lofi/blob/main/experiments/l4/l4-run.yaml)
 trains lexical logical forms from synthetic inference pairs under a prover
@@ -80,7 +80,7 @@ InferenceLossSpec(kind='inference', signal='reward', response=LabelResponseSpec(
 TruthTableProverSpec(timeout=5.0, workers=1, batch_size=64, cache_size=None, memory_mb=None, cpu_seconds=None, seed=None, polymorphism='refuse', certificates=(), kind='truth-table', atoms=12)
 ```
 
-The last line is the prover itself. It belongs to the logical-form language,
+The last line is the prover itself. It belongs to the logical form language,
 under `logic.prover`, not to the grounding. `l4-run.yaml` takes the learner's
 language from the data (`model.language: {from: data}`), so this is the
 language that declares the prover the scorer calls.
@@ -92,7 +92,7 @@ A language declares its prover under `logic`. The packaged
 `prover: {kind: truth-table, timeout: 30.0}`, and
 `language/_shared/higher-order-logic.yaml` declares
 `prover: {kind: tptp, engine: vampire, dialect: thf, timeout: 10.0, polymorphism: monomorphize}`.
-The `lofi.prover` entry-point group registers three families:
+The `lofi.prover` entry point group registers three families:
 
 | `kind` | Decides entailment by | Own fields |
 | --- | --- | --- |
@@ -112,7 +112,7 @@ last. A stopped SMT worker has `terminate_grace` seconds to exit after the
 terminate signal before it is killed. Each TPTP dialect serves its own fragment:
 `fof` and `tff` first-order logic, `thf` higher-order logic, which a registered
 engine may narrow but never widen. Every family shares the
-proof-service fields: `timeout` per call (default `30.0` seconds), `workers`,
+proof service fields: `timeout` per call (default `30.0` seconds), `workers`,
 `batch_size`, `cache_size`, `memory_mb`, `cpu_seconds`, `seed`,
 `certificates`, and `polymorphism`, which says how a translation treats a
 polymorphic constant: `refuse` (default), `monomorphize` or `erase`.
@@ -241,7 +241,7 @@ The converse checks hold as well. Forms decoded exhaustively, as in
 declared reward; a grounding with no `inference` term is refused with
 "model.grounding requires an inference objective"; and a grounding over a
 dataset that yields no inference pairs is refused with "model.grounding
-requires a selected inference-pair dataset".
+requires a selected inference pair dataset".
 
 [Inference as evidence](../../explanation/inference-as-evidence.md) explains
 what a proof verdict licenses about a lexical logical form. The declaration

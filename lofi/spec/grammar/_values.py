@@ -61,7 +61,7 @@ class CategoryMeasure(FrozenValue):
         return 1 + max(map(self.depth, term.args)) if term.args else 0
 
     def arity(self, term: Term, /) -> int:
-        """Return functor-spine arity along declared result roles."""
+        """Return functor spine arity along declared result roles."""
         arity = 0
         current = term
 
@@ -118,7 +118,7 @@ class GrammarAssembly(Unpicklable, FrozenValue):
     compile_report : CompileReport
         Frozen measurements and diagnostics of the compiled grammar.
     category_measure : CategoryMeasure
-        Owner-declared category size and functor-spine arity.
+        Owner-declared category size and functor spine arity.
     head_selections : Mapping[str, HeadSelection]
         The declared head policy and slot of every compiled rule, by name.
     max_category_arguments : int | None
@@ -219,7 +219,7 @@ class GrammarAssembly(Unpicklable, FrozenValue):
 
     @property
     def category_measure(self) -> CategoryMeasure:
-        """Return owner-declared category size and functor-spine arity."""
+        """Return owner-declared category size and functor spine arity."""
         return self._category_measure
 
     @property

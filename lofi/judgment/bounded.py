@@ -1,4 +1,4 @@
-"""Program steps and density for bounded truncated-normal responses."""
+"""Program steps and density for bounded truncated normal responses."""
 
 import math
 from collections import Counter
@@ -260,7 +260,7 @@ def _log_standard_normal_interval(lower: Tensor, upper: Tensor) -> Tensor:
 
 
 def closed_unit_log_prob(response: Tensor, location: Tensor, scale: Tensor) -> Tensor:
-    """Return truncated-normal log density on the inclusive unit interval.
+    """Return truncated normal log density on the inclusive unit interval.
 
     Parameters
     ----------
@@ -308,7 +308,7 @@ class ClosedUnitTruncatedNormal(Distribution):
 
     @override
     def log_prob(self, value: Tensor) -> Tensor:
-        """Return the inclusive truncated-normal log density.
+        """Return the inclusive truncated normal log density.
 
         Parameters
         ----------
@@ -366,7 +366,7 @@ class TruncatedNormalFamily:
 
     @property
     def location_site(self) -> str:
-        """Return the site holding each row's unit-interval location."""
+        """Return the site holding each row's unit interval location."""
         return "bounded_location"
 
     @property

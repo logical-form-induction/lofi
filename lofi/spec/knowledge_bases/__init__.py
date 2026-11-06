@@ -1,4 +1,4 @@
-"""Knowledge-base boundary declarations."""
+"""Knowledge base boundary declarations."""
 
 from lofi.spec.knowledge_bases.wikidata import (
     KnowledgeBaseSpec,

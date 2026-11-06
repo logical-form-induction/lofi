@@ -269,12 +269,12 @@ class SourceComparisonObservation(FrozenValue):
 
     @property
     def description_length(self) -> float:
-        """Return the description-length charge in score units."""
+        """Return the description length charge in score units."""
         return self._description_length
 
     @property
     def selection_score(self) -> float:
-        """Return held-out fit minus the description-length charge."""
+        """Return held-out fit minus the description length charge."""
         return self._score - self._description_length
 
     @property
@@ -738,7 +738,7 @@ def _count_value(config: Mapping[str, JsonValue], path: str, /) -> int:
 
 
 class _ComparisonContext(Protocol):
-    """Expose experiment metadata needed by the source-comparison reducer."""
+    """Expose experiment metadata needed by the source comparison reducer."""
 
     @property
     def preregistration(self) -> Preregistration: ...
@@ -757,7 +757,7 @@ class _ComparisonContext(Protocol):
 
 @final
 class SourceComparisonReducer:
-    """Build source-comparison observations from rows and expanded points."""
+    """Build source comparison observations from rows and expanded points."""
 
     __slots__ = ("_context", "_settings")
 
@@ -770,7 +770,7 @@ class SourceComparisonReducer:
         self._context = context
 
     def reduce(self, rows: Sequence[Mapping[str, JsonValue]], /) -> Reduction:
-        """Return the declared source-comparison report."""
+        """Return the declared source comparison report."""
         settings = self._settings
         selected = tuple(row for row in rows if row.get("metric") == settings.metric)
         lengths = tuple(

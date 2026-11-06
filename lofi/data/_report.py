@@ -79,7 +79,7 @@ class AnalysisCounts:
 
     @property
     def normal_form_conformance(self) -> float | None:
-        """Return the normal-form share, or None if no analyses were checked."""
+        """Return the normal form share, or None if no analyses were checked."""
         return None if self._checked == 0 else self._in_normal_form / self._checked
 
     def _identity(self) -> tuple[int, int, int]:
@@ -228,7 +228,7 @@ class LoadReport[L: Hashable = Hashable]:
 
     @property
     def normal_form_conformance(self) -> float | None:
-        """Return the normal-form share, or None if no analyses were checked."""
+        """Return the normal form share, or None if no analyses were checked."""
         return (
             None if self._analyses is None else self._analyses.normal_form_conformance
         )

@@ -1,1 +1,1 @@
-"""Synthetic rule-instance sampler declarations."""
+"""Synthetic rule instance sampler declarations."""

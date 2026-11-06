@@ -25,7 +25,7 @@ print(sorted(point.name for point in entry_points(group="lairs.codecs")))
 ['bead', 'brat', 'ccgbank-auto', 'ccgbank-parg', 'chaosnli', 'conllu', 'fracas', 'layers-export', 'megaacceptability', 'megaintensionality', 'meganegraising', 'megaveridicality', 'mnli', 'pmb-ccg', 'pmb-drs', 'snli', 'unli']
 ```
 
-The [entry-point reference](../../reference/entry-points.md) lists the module
+The [entry point reference](../../reference/entry-points.md) lists the module
 each name loads. Codecs such as `bead`, `brat` and `conllu` come from the
 installed `lairs` package rather than from LoFI. The dataset kinds other than
 the two synthetic ones fall into five groups:

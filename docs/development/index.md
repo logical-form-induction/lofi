@@ -9,7 +9,7 @@ and documentation build.
   jobs that run the same tests under different conditions.
 - [Documentation](documentation.md): building these pages, and what strict mode
   catches.
-- [Public-release preflight](public-release.md): the six read-only checks that
+- [Public release preflight](public-release.md): the six read-only checks that
   must pass before a repository visibility change.
 
 ## The tree
@@ -45,7 +45,7 @@ Tests mirror source modules one to one under `tests/unit`. For instance,
 
 Inside a package, `_ports.py` defines protocols, `_values.py` defines value
 types, `_errors.py` defines package errors, and `laws.py` exports conformance
-properties. The package `__init__` re-exports the public API.
+properties. The package `__init__` reexports the public API.
 
 ## Where the layer order lives
 

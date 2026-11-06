@@ -133,7 +133,7 @@ type _RestrictionReduction = tuple[
 
 
 class RuleRestriction:
-    """Rule-instance premise-category restriction.
+    """Rule instance premise-category restriction.
 
     Parameters
     ----------

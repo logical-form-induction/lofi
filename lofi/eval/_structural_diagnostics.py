@@ -290,7 +290,7 @@ def _sentence_mean(
 
 
 def _normal_form_count(prediction: StructuralPrediction, /) -> float | None:
-    """Return the normal-form derivation count, when the census ran."""
+    """Return the normal form derivation count, when the census ran."""
     count = prediction.normal_form_count
     return None if count is None else float(count)
 
@@ -302,7 +302,7 @@ def _unconstrained_count(prediction: StructuralPrediction, /) -> float | None:
 
 
 def _retention(prediction: StructuralPrediction, /) -> float | None:
-    """Return the normal-form retention, when the census ran."""
+    """Return the normal form retention, when the census ran."""
     return prediction.retention
 
 

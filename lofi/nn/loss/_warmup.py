@@ -1,4 +1,4 @@
-"""Token warm-up against the nearest of the types a token may take."""
+"""Token warmup against the nearest of the types a token may take."""
 
 from typing import TYPE_CHECKING, Final, NamedTuple, override
 

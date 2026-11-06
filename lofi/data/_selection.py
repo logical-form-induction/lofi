@@ -140,7 +140,7 @@ class CorpusProfile[C: Hashable]:
     def concordance(self) -> float | None:
         """Return the rank correlation of a form's count with its inverse class size.
 
-        Every form-category pair is one unit. The correlation is near one when
+        Every form category pair is one unit. The correlation is near one when
         the most frequent forms belong to the smallest classes, near zero when
         frequency says nothing about class size, and nothing when the counts or
         the sizes do not vary.

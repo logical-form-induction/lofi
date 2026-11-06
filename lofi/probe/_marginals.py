@@ -73,7 +73,7 @@ class SpanAggregate:
             The quantity at each span, of any shape.
         weights : Tensor
             The constituent marginal of each span, of the same shape, each
-            non-negative.
+            nonnegative.
         live : Tensor | None
             Which positions hold data, of the same shape, or None where all do.
 
@@ -495,7 +495,7 @@ class SpanWeighting:
     Parameters
     ----------
     tensor : Tensor
-        The expected number of constituents at each position, non-negative and
+        The expected number of constituents at each position, nonnegative and
         finite throughout.
     axes : Iterable[str]
         The name of each axis, outermost first, as the readings it weighs declare

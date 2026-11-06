@@ -62,7 +62,7 @@ class MovingControlVariateSettings(NamedTuple):
 
 
 class ControlVariateSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
-    """Declare a policy-gradient control variate."""
+    """Declare a policy gradient control variate."""
 
 
 class ControlVariateSettingsDeclaration(Protocol):

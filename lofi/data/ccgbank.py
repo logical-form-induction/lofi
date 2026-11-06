@@ -161,7 +161,7 @@ class CcgbankDataset(FrozenValue):
 
     @property
     def report(self) -> LoadReport[str]:
-        """Return skip, reachability and normal-form counts."""
+        """Return skip, reachability and normal form counts."""
         return self._report
 
     @property
@@ -176,7 +176,7 @@ class CcgbankDataset(FrozenValue):
 
     @property
     def source_interpretation(self) -> None:
-        """Return no logical-form interpretation for syntactic CCGbank data."""
+        """Return no logical form interpretation for syntactic CCGbank data."""
         return None
 
     @property

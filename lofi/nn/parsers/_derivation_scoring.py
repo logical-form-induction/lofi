@@ -1,4 +1,4 @@
-"""Gold-derivation scoring over tagged chart channels."""
+"""Gold derivation scoring over tagged chart channels."""
 
 from __future__ import annotations
 
@@ -251,7 +251,7 @@ class TaggedDerivationScoreChart[T: Hashable]:
     def score(
         self, item: int, derivation: DerivationTree[T], /
     ) -> NormalFormDerivationScores:
-        """Score one item's gold derivation under both normal-form filters."""
+        """Score one item's gold derivation under both normal form filters."""
         raw, admitted = self._gold_score(item, derivation)
 
         return NormalFormDerivationScores(

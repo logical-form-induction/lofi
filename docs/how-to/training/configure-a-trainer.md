@@ -3,8 +3,8 @@
 A run document's `trainer` section declares how a point is fitted: which
 trainer kind drives the optimizer, over which dataset, for how long, in what
 batches, when it stops early, and how often it checkpoints. The `optimizer` and
-`scheduler` sections declare the update rule and its learning-rate schedule,
-and the root-level `type_sampler` and `pair_sampler` sections declare the
+`scheduler` sections declare the update rule and its learning rate schedule,
+and the root level `type_sampler` and `pair_sampler` sections declare the
 generated data that pretraining trainers draw. This guide selects each one,
 composes the trainers that run several objectives over one model, and lists
 how each declaration is refused.
@@ -34,10 +34,10 @@ $a^{-1}\sum_{j=1}^{a}\ell_j(\boldsymbol{\theta})$ before one optimizer update.
 Thus it averages microbatch objectives; when their sizes differ, it is not
 necessarily an average over examples. With gradient
 $\mathbf{g}=\nabla_{\boldsymbol{\theta}}\ell$ and clipping threshold $c>0$,
-the ideal norm-clipping operation is
+the ideal norm clipping operation is
 $\mathbf{g}\leftarrow\mathbf{g}\min(1,c/\|\mathbf{g}\|_2)$, leaving a zero
 gradient unchanged. The implementation uses Torch's numerically stabilized
-norm clip after unscaling mixed-precision gradients. Only active, trainable
+norm clip after unscaling mixed precision gradients. Only active, trainable
 parameter groups receive updates.
 
 For minimization, early stopping counts an improvement when the monitored
@@ -47,7 +47,7 @@ the final held-out evaluation.
 
 ## Choose a trainer kind
 
-Five trainer kinds are registered under the `lofi.trainer` entry-point group.
+Five trainer kinds are registered under the `lofi.trainer` entry point group.
 Each validates its own fields and declares which component roles it needs and
 which it refuses as inert.
 
@@ -88,7 +88,7 @@ The fields of [`ParserTrainerSpec`](../../reference/configuration/training.md):
 | `epochs` | Positive number of passes over the training partition. |
 | `batch_size` | Positive number of items in one microbatch. |
 | `accumulation_steps` | Positive number of microbatches whose gradients are averaged into one optimizer step. Defaults to `1`. |
-| `max_grad_norm` | Positive gradient-clipping norm, or `null` for no clipping. |
+| `max_grad_norm` | Positive gradient clipping norm, or `null` for no clipping. |
 | `active_groups` | The parameter groups that take a gradient, or `null` for every declared group. A group whose component is declared frozen stays frozen even when named. |
 | `batch_sampler` | How an epoch is partitioned into batches (see below). |
 | `early_stopping` | The retained metric that selects the best checkpoint, and when to stop. |
@@ -111,7 +111,7 @@ ConfigDocumentError | docs/examples/synthetic-parser.yaml cannot be composed: tr
 ConfigDocumentError | docs/examples/synthetic-parser.yaml cannot be composed: trainer.accumulation_steps: 2 cannot divide an epoch of 3 training occurrences, taken 1 at a time, whose 3 microbatches close no whole accumulation windows
 ```
 
-The second refusal is the epoch-shape check. Composition counts the
+The second refusal is the epoch shape check. Composition counts the
 occurrences the dataset assigns to training, takes them `batch_size` at a time,
 and refuses an `accumulation_steps` that does not divide the resulting
 microbatches into whole optimizer steps. The synthetic example retains a
@@ -139,7 +139,7 @@ validation pass:
 | --- | --- |
 | `metric` | The telemetry key of the monitored metric, such as `loss/grammaticality`. A loss term logs under `loss/<name>`, where the name defaults to the objective's `kind`. |
 | `mode` | `min` or `max`: whether smaller or larger values improve. |
-| `patience` | Consecutive non-improving epochs after which fitting stops. |
+| `patience` | Consecutive nonimproving epochs after which fitting stops. |
 | `minimum_delta` | Absolute change a value must exceed to count as an improvement. |
 | `keep_best` | How many validation-best checkpoints to keep. |
 
@@ -163,7 +163,7 @@ A diagnostic name is not checked, because objectives do not declare their
 diagnostics; a `loss/<name>/<diagnostic>` key that the term never reports is
 refused after the first validation pass.
 
-Field-level refusals name the leaf:
+Field level refusals name the leaf:
 
 ```python
 for overrides in [
@@ -222,7 +222,7 @@ alternating ['grammaticality', 'coherence'] round-robin
 ```
 
 Each task is a step from the `lofi.step` group. A step names itself, its
-dataset role and, in `objectives`, the loss-term names it trains; an empty
+dataset role and, in `objectives`, the loss term names it trains; an empty
 `objectives` trains every term. Composition refuses a name that no loss term
 carries, at any depth of nesting, and lists the declared names:
 
@@ -249,8 +249,8 @@ ConfigDocumentError | docs/examples/models-training/alternating-trainer.yaml can
 | `token-warm-up` | The token encoder on sentences whose tokens have lexical types in a space. | `space` |
 | `terms` | A space's term encoder and identity decoder on generated terms and, with `combinators: true`, its combinator decoders on generated rule instances. | `space`, `combinators`, `generation`, `stop` |
 | `controller` | The controller on generated rule instances. | `space`, `max_depth`, `stop` |
-| `grounded` | Grounded-inference objectives on labeled inference pairs. | none |
-| `judgment` | Judgment objectives on collected inference-judgment pairs. | none |
+| `grounded` | Grounded inference objectives on labeled inference pairs. | none |
+| `judgment` | Judgment objectives on collected inference judgment pairs. | none |
 | `alternating` | Nested tasks under their own mixing policy. | `tasks`, `mixing` |
 
 The `terms` and `controller` steps draw generated data, so a run that uses them
@@ -329,7 +329,7 @@ lexical-warm-up token-warm-up ('token_encoder',) 1
 parser parser ('token_encoder', 'terms', 'identity', 'application', 'controller', 'parser') 1
 ```
 
-A token warm-up step needs lexical types for the tokens, which the document
+A token warmup step needs lexical types for the tokens, which the document
 takes from a `gold-lexicon` constraint source; see
 [Supervise and constrain a learner](supervise-and-constrain.md).
 `validation_stage` names the stage whose epochs are validated, and must be the
@@ -356,7 +356,7 @@ ConfigValueError | trainer was refused: staged training declares active groups o
 
 ## Pretrain terms or type distances
 
-The `terms` and `distance` trainers fit term-space components on generated
+The `terms` and `distance` trainers fit term space components on generated
 data, counting progress in optimizer steps. Their checkpoint `interval` is
 thus a number of steps.
 
@@ -369,7 +369,7 @@ which the decoders' sampled share of each batch, rising linearly from zero,
 reaches one; `null` keeps every step teacher-forced.
 
 A `distance` trainer names one `encoder` and the `sort` of its types, and
-declares `steps`, `inverse_distance_power` (the exponent of inverse-distance
+declares `steps`, `inverse_distance_power` (the exponent of inverse distance
 pair weights) and `embedding_penalty`. An optional `ball_radius` bounds the
 edit distance between the two types of a pair, and an optional
 `depth_curriculum` grows the available depth from `start_depth` over `steps`
@@ -393,8 +393,8 @@ distance 4 CheckpointPolicySpec(interval=2, keep=2) resume-latest
 ExhaustiveTypeSamplerSpec(kind='exhaustive', max_size=3, weighting=UniformExhaustiveWeightingSpec(kind='uniform'))
 ```
 
-For live generated pairs $(t_i,u_i)$, let $d_i$ be their declared tree-edit
-distance, $\mathbf{x}_i=e(t_i)$, and $\mathbf{y}_i=e(u_i)$. With inverse-distance
+For live generated pairs $(t_i,u_i)$, let $d_i$ be their declared tree edit
+distance, $\mathbf{x}_i=e(t_i)$, and $\mathbf{y}_i=e(u_i)$. With inverse distance
 power $\gamma\geq0$ and penalty $\lambda\geq0$, the distance trainer minimizes
 
 $$
@@ -405,7 +405,7 @@ a_i=\frac{(1+d_i)^{-\gamma}}{\sum_{j\in I}(1+d_j)^{-\gamma}},\qquad
 $$
 
 The live-pair set is $I$; weights are renormalized after masking. The reported
-absolute-error diagnostic instead averages
+absolute error diagnostic instead averages
 $|\|\mathbf{x}_i-\mathbf{y}_i\|_2-d_i|$ without these pair weights.
 The objective regresses squared distances and does not assert an isometric
 embedding of all terms.
@@ -415,7 +415,7 @@ A distance trainer writes no validation-best checkpoint, so its run releases
 
 ## Declare the samplers
 
-Generated-data trainers and steps read two root-level sections.
+Generated data trainers and steps read two root level sections.
 
 `type_sampler` draws types from the learner language. `kind: recursive` grows
 types to the requested depth; `max_size` bounds its companion inventory. `kind: exhaustive` enumerates every type up to
@@ -427,7 +427,7 @@ Packaged fragments are `type_sampler/recursive.yaml` and
 Its one kind, `rule`, takes no fields; the packaged fragment is
 `pair_sampler/rule.yaml`.
 
-### Term and rule-instance distributions
+### Term and rule instance distributions
 
 Sampler depth counts levels, with leaves at depth one. For root sort $s$,
 exact requested depth $d$, and inventory node bound $m$, let
@@ -480,7 +480,7 @@ sort and a depth at most `max_depth`, but need not have the requested exact
 depth; the exhaustive sampler also enforces its node bound. A nonempty
 exhaustive request still requires a nonempty base inventory when $\beta=1$.
 
-The rule-instance sampler enumerates a finite set $P$ of admitted
+The rule instance sampler enumerates a finite set $P$ of admitted
 $(\mathbf{t},u,L)$ triples: ordered premise terms $\mathbf{t}$ from the
 bounded inventory, a conclusion $u$ emitted by a rule with complete forward
 enumeration, and the nonempty set $L$ of actions admitting those premises and
@@ -538,7 +538,7 @@ Here $\eta_{\mathrm{base}}$ is the configured rate and the initial rate is
 $a\eta_{\mathrm{base}}$. After warmup, write $v=(t-u)/(h-u)$. The `constant`, `linear`, and `cosine`
 schedules use factors $1$, $1-(1-f)v$, and $(1+\cos(\pi v))/2$,
 respectively, where $f$ is `final_factor`. The scheduler advances when an accumulation window closes. In the current
-implementation it also advances when the mixed-precision scaler skips the
+implementation it also advances when the mixed precision scaler skips the
 optimizer update; the schedule counts closed windows rather than only
 successful parameter changes.
 

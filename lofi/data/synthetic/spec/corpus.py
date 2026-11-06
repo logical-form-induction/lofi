@@ -4,7 +4,7 @@ A declaration composes a grammar declaration with the controls a draw takes:
 the number of items, the seed, the length distribution, the ambiguity
 target, the corruption, the label noise, the interpretation, the readings
 target and the ill-typed forms. Lowering checks it by compiling the grammar
-and the logical-form language and building the interior request values,
+and the logical form language and building the interior request values,
 then draws the corpus and returns it beside the declaration's canonical
 bytes.
 """
@@ -147,10 +147,10 @@ TARGET_VERSION: Final = "lofi-synthetic-corpus-native"
 """The native dataset version the lowerer produces."""
 
 _DEFAULT_CORRUPTION_ATTEMPTS: Final = 64
-"""Candidate budget shared by string and logical-form corruption declarations."""
+"""Candidate budget shared by string and logical form corruption declarations."""
 
 _MINIMUM_LENGTH: Final = 1
-"""The shared lower bound of every positive token-count distribution."""
+"""The shared lower bound of every positive token count distribution."""
 
 
 class TargetSpec(dx.Model, extra="forbid"):
@@ -217,7 +217,7 @@ class AmbiguitySpec(dx.Model, extra="forbid"):
 
 
 class ScopeSpec(dx.Model, extra="forbid"):
-    """What a draw aims at in logical-form readings per string.
+    """What a draw aims at in logical form readings per string.
 
     Each equivalence decision runs under the declared interpretation's clock.
 
@@ -347,7 +347,7 @@ class ShapeScheduleSpec(dx.Model, extra="forbid"):
 
 
 class _LengthDeclaration(Protocol):
-    """A declaration that builds a token-count distribution."""
+    """A declaration that builds a token count distribution."""
 
     def build(self) -> LengthDistribution:
         """Return the interior distribution."""
@@ -617,7 +617,7 @@ class NegativeDataSpec(dx.Model, extra="forbid"):
         return self
 
     def build_policy(self) -> NegativeDataPolicy:
-        """Return the interior negative-data policy."""
+        """Return the interior negative data policy."""
         return NegativeDataPolicy(self.regime, noise=self.noise)
 
 
@@ -1448,7 +1448,7 @@ class SyntheticCorpusLowerer:
     grammars : GrammarIso | None
         The converter grammars are compiled through, or a fresh one.
     languages : LanguageIso | None
-        The converter logical-form languages are lowered through, or a fresh
+        The converter logical form languages are lowered through, or a fresh
         one.
     """
 
@@ -1478,7 +1478,7 @@ class SyntheticCorpusLowerer:
 
     @property
     def languages(self) -> LanguageIso:
-        """Return the converter logical-form languages are lowered through."""
+        """Return the converter logical form languages are lowered through."""
         return self._languages
 
     def check(self, source: SyntheticCorpusDecl, /) -> CheckedSyntheticCorpus:
@@ -1704,7 +1704,7 @@ class SyntheticCorpusIso(dx.Iso[SyntheticCorpusDecl, SyntheticDataset]):
     grammars : GrammarIso | None
         The converter grammars are compiled through, or a fresh one.
     languages : LanguageIso | None
-        The converter logical-form languages are lowered through, or a fresh
+        The converter logical form languages are lowered through, or a fresh
         one.
     """
 
@@ -1830,4 +1830,4 @@ PLUGIN: Final = DatasetPlugin(
     ),
     streams=_dataset_streams,
 )
-"""The installed synthetic-corpus dataset route."""
+"""The installed synthetic corpus dataset route."""

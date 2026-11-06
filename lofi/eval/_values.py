@@ -347,7 +347,7 @@ class Comparison(FrozenValue):
     smoke_test : bool
         Whether the setup entails the result.
     family : str
-        Multiple-comparison family.
+        Multiple comparison family.
     ci : Interval | None
         Effect interval, if computed.
 
@@ -643,7 +643,7 @@ class ConventionVector:
     self_arcs : SelfArcPolicy
         Self-arc policy.
     gold_derivation : GoldDerivation
-        Gold-derivation policy.
+        Gold derivation policy.
     """
 
     __slots__ = (

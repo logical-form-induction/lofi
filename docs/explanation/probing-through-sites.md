@@ -11,7 +11,7 @@ For input $x$ and fixed trained parameters $\boldsymbol{\theta}$, write
 $\mathbf{H}_s(x)$ for the tensor published at site $s$. Its declared
 axes specify a product shape $n_1\times\cdots\times n_k$ and its mask
 $\mathbf{M}_s$ specifies live entries. A probability dtype
-requires entries in $[0,1]$ and a log-probability dtype requires entries at
+requires entries in $[0,1]$ and a log probability dtype requires entries at
 most zero when numeric checks are enabled. These checks do not enforce
 normalization. Normalization belongs to the particular role: a split PMF
 sums to one over alternatives, whereas constituent marginals need not sum
@@ -68,7 +68,7 @@ refused when a region opens rather than matched approximately
 Every operation on a site is checked at the region that performs it. Opening a
 region refuses a site the component does not publish and an access it does not
 permit: an observation of a patch-only site, a patch of an observe-only one, a
-gradient at a site declared non-differentiable. A probe declared in a run
+gradient at a site declared nondifferentiable. A probe declared in a run
 document is checked earlier still. The held-out passes are run once before
 training to find which published points they reach, and a probe naming a role
 or site no reached component publishes is refused before any training step, so
@@ -84,7 +84,7 @@ Some guarantees are conditional. Whether each reading matches its declared
 axes, numeric class and fill is checked only when `LOFI_CHECK=1` is set; with
 it unset, a component that publishes a wrong specification is trusted. A site
 specification describes the value, not its meaning: `SPLIT_DISTRIBUTION`
-promises a log-probability over splits for each span, not that the distribution
+promises a log probability over splits for each span, not that the distribution
 corresponds to anything a linguist would call a constituent.
 
 ## Shared role inventories
@@ -117,7 +117,7 @@ over it relies on the declaration's own account of its roles.
 A probe sees what a held-out pass reaches. The diagnostics, intervention and
 classifier probes need only published points; the circuit probe needs a pass
 that also publishes a computation graph and the endpoints to interrogate it,
-and the causal and sparse-autoencoder probes need a causal population of
+and the causal and sparse autoencoder probes need a causal population of
 aligned clean and counterfactual inputs. A pass that publishes none of these
 makes those probes unanswerable, and they are refused rather than run over
 something weaker. The same reasoning governs tokenization: a causal intervention
@@ -143,7 +143,7 @@ ability to memorize regularities rather than information used by the model.
 
 For distributed interchange interventions, an orthogonal matrix
 $\mathbf{R}\in\mathbb{R}^{h\times h}$ and coordinate mask
-$\mathbf{M}\in\mathbb{R}^{h\times h}$ define, in column-vector notation,
+$\mathbf{M}\in\mathbb{R}^{h\times h}$ define, in column vector notation,
 
 $$
 \mathbf{h}'=\mathbf{R}
@@ -195,7 +195,7 @@ $$
 
 Decoder rows are normalized after each update. Encoder and decoder weights
 are separately trainable; the decoder is initialized from the encoder's
-transpose, but they remain untied. Sparse-autoencoder feature analysis is
+transpose, but they remain untied. Sparse autoencoder feature analysis is
 background for this probe \citep{huben-etal2024}; the equation states LoFI's
 particular objective and normalization. Reported activation sparsity is the
 fraction of exactly zero activations. Reconstruction error or sparsity alone

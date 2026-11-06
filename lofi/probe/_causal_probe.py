@@ -223,7 +223,7 @@ class CausalProbe:
     ) -> tuple[tuple[ProbeValue, ...], JsonValue | None]:
         """Run sweep, joint, controls, and bucketing over one causal pass.
 
-        Returns the pass's rows and, where the probe declares a node-vocabulary
+        Returns the pass's rows and, where the probe declares a node vocabulary
         arm, the record of that arm's complete sweep over the held-out pairs.
         """
         generation: CounterfactualGeneration = held.causal_population()

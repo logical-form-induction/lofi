@@ -149,7 +149,7 @@ class CollectedCorpus(FrozenValue):
 
 @final
 class CheckedCorpusDataset[S](FrozenValue):
-    """A collected-corpus declaration beside its compiled grammar."""
+    """A collected corpus declaration beside its compiled grammar."""
 
     __slots__ = ("_declaration", "_grammar", "_source")
     _noun = "checked collected dataset"
@@ -475,7 +475,7 @@ class PmbCcgDataset(FrozenValue):
 
     @property
     def source_interpretation(self) -> None:
-        """Return no logical-form interpretation for syntactic PMB data."""
+        """Return no logical form interpretation for syntactic PMB data."""
         return None
 
     @property
@@ -485,7 +485,7 @@ class PmbCcgDataset(FrozenValue):
 
     @property
     def report(self) -> LoadReport[str]:
-        """Return skip, reachability and normal-form counts."""
+        """Return skip, reachability and normal form counts."""
         return self._gold.report
 
     @property

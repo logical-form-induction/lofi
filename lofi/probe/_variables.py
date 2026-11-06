@@ -1,7 +1,7 @@
 """High-level variables read off one gold derivation.
 
 The type at a cell is read at every cell the derivation concludes an item on. The
-split at a cell and the combinator at that split are read only where the normal-form
+split at a cell and the combinator at that split are read only where the normal form
 tags on the derivation's items show that the derivation was filtered by a normal form
 with more than one tag, since a derivation no normal form constrained leaves both
 undetermined under spurious ambiguity. The unconstrained arm reads all three

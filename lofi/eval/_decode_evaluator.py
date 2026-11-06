@@ -1,4 +1,4 @@
-"""Held-out neural-term beams and supertag-factored A* diagnostics."""
+"""Held-out neural term beams and supertag-factored A* diagnostics."""
 
 from math import fsum
 from types import MappingProxyType
@@ -62,7 +62,7 @@ class _UnitScorer:
         return UnitEdges()
 
     def axiom_weight(self, position: int, entry: Entry[Term], /) -> float:
-        """Return the log-space multiplicative identity."""
+        """Return the log space multiplicative identity."""
         del position, entry
         return 0.0
 
@@ -75,7 +75,7 @@ class _UnitScorer:
         split: int | None,
         /,
     ) -> float:
-        """Return the log-space multiplicative identity."""
+        """Return the log space multiplicative identity."""
         del rule, inputs, output, span, split
         return 0.0
 

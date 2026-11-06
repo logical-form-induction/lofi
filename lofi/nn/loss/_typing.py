@@ -69,7 +69,7 @@ class TensorSoftTypingInstance(NamedTuple):
     split : int
         The split point used by the application.
     op : OpName
-        The logical-form operator whose typing rule applies.
+        The logical form operator whose typing rule applies.
     distributions : TensorSoftTypingDistributions
         Marginals for the rule's bindings, premises, and result.
     constituent_marginal : Tensor
@@ -112,7 +112,7 @@ def _metavariable_atom(term: Term) -> int | None:
     Raises
     ------
     ValueError
-        If the canonical free-variable operator is malformed.
+        If the canonical free variable operator is malformed.
     """
     if not term.op.is_free_variable:
         return None
@@ -640,7 +640,7 @@ class SoftTypingObjective:
         Parameters
         ----------
         rules : Mapping[OpName, TypingRule]
-            Typing rules keyed by logical-form operator.
+            Typing rules keyed by logical form operator.
         subsumes : Callable[[Term, Term], Substitution | None] | None
             One-way matcher. When provided, every instance must supply principal and
             erased types.
@@ -670,7 +670,7 @@ class SoftTypingObjective:
 
     @property
     def op(self) -> OpName:
-        """Return the logical-form operator this objective scores."""
+        """Return the logical form operator this objective scores."""
         return self._rule.op
 
     @property

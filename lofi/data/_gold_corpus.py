@@ -58,7 +58,7 @@ class GoldCorpus(FrozenValue):
     corpus : SyntheticCorpus
         The canonical examples with their measured reports.
     report : LoadReport[str]
-        The reader's counts with the corpus's reachability and normal-form
+        The reader's counts with the corpus's reachability and normal form
         analyses.
     digest : str
         The digest of the canonical source analyses.
@@ -81,7 +81,7 @@ class GoldCorpus(FrozenValue):
 
     @property
     def report(self) -> LoadReport[str]:
-        """Return the load counts with reachability and normal-form analyses."""
+        """Return the load counts with reachability and normal form analyses."""
         return self._report
 
     @property
@@ -150,7 +150,7 @@ def corpus_digest(examples: tuple[Example[GoldDerivation[str]], ...], /) -> str:
 def lexical_counts(
     examples: tuple[Example[GoldDerivation[str]], ...], /
 ) -> Counter[tuple[str, str]]:
-    """Count observed form-category pairs."""
+    """Count observed form category pairs."""
     leaves: Counter[tuple[str, str]] = Counter()
     for example in examples:
         derivation = example.supervision.derivation

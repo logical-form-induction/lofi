@@ -5,12 +5,12 @@ drawn from a compiled response program at a known parameter vector, so a fit
 to it can be read against the truth. This guide draws the two packaged
 synthetic designs, resamples responses from a program, and runs
 simulation-based calibration, which checks that a response model's posterior
-recovers parameters drawn from its own priors, both through a judgment-fit
+recovers parameters drawn from its own priors, both through a judgment fit
 document and through the campaign script.
 
 ## The packaged designs
 
-The `lofi.judgment_design` entry-point group registers two synthetic designs,
+The `lofi.judgment_design` entry point group registers two synthetic designs,
 both instances of `KnownEffectsDesign` from
 `lofi.judgment.synthetic_designs`:
 
@@ -61,7 +61,7 @@ known-random-effects 20261012 8c9a9146b606
 
 The same seed reproduces the same design, and the provenance records the tag,
 seed, counts and the digest of the population values, the cutpoints among them, so a fit's manifest
-identifies exactly what it was fitted to. A judgment-fit document names either
+identifies exactly what it was fitted to. A judgment fit document names either
 design by its tag in `dataset`, as
 [Fit a judgment model](fit-a-judgment-model.md) does.
 
@@ -115,7 +115,7 @@ calibration: {replicates: 2, guide_iterations: 20, guide_learning_rate: 0.01}
 
 | Field | What it declares |
 | --- | --- |
-| `replicates` | Prior-predictive replicates, at least one. |
+| `replicates` | Prior predictive replicates, at least one. |
 | `guide_iterations` | Steps each guide is fitted for, at least one. |
 | `guide_learning_rate` | The Adam step size each guide is fitted at, finite and positive. |
 
@@ -185,7 +185,7 @@ diagnostics or the message NUTS failed with, each guide's final evidence lower
 bound or failure message, and whether every method fitted it (`retained`).
 Only retained replicates are reduced. `report` is the `CalibrationReport` over
 them, or `None` when no replicate was retained, and `failed` lists the records
-some method could not fit. The report holds a rank-uniformity test per
+some method could not fit. The report holds a rank uniformity test per
 parameter block for NUTS, the interval coverage of each method on each block,
 and each method's Pearson recovery of every cutpoint across participants
 against the preregistered floor; `clears_floor` says whether every NUTS

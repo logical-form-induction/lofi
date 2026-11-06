@@ -37,7 +37,7 @@ class GrammaticalityEvaluatorSettings(NamedTuple):
 
 
 class GrammaticalityEvaluatorSpec(EvaluatorSpec):
-    """Declare the grammaticality battery over a root-mass readout."""
+    """Declare the grammaticality battery over a root mass readout."""
 
     kind: Literal["grammaticality"] = "grammaticality"
     readout: str
@@ -71,7 +71,7 @@ class GrammaticalityEvaluatorSpec(EvaluatorSpec):
 
     @override
     def dependencies(self) -> tuple[Dependency, ...]:
-        """Return the declared root-mass readout dependency."""
+        """Return the declared root mass readout dependency."""
         return (Dependency(self.readout, "span-readout"),)
 
     @override

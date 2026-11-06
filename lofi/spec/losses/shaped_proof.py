@@ -91,7 +91,7 @@ class ShapedProofLossSpec(LossSpec):
     @dx.validates("budget")
     @classmethod
     def _budget_is_a_proof_budget(cls, value: ProofBudgetSpec) -> ProofBudgetSpec:
-        """Return the proof-service budget declaration."""
+        """Return the proof service budget declaration."""
         if not isinstance(value, ProofBudgetSpec):
             msg = f"a shaped-proof budget is a ProofBudgetSpec, not {value!r}"
             raise TypeError(msg)

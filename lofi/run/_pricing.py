@@ -5,7 +5,7 @@ differ only in their seed and share one stack, so each distinct stack is built
 once and its training step is timed over a seeded random sample of its steps on
 one device. The training steps a point takes follow from the training length
 its trainer's plugin states and from the steps one unit of that length holds in
-the built stack. The experiment's accelerator-hours at the median and at the
+the built stack. The experiment's accelerator hours at the median and at the
 ninetieth percentile are quantiles of its total hours under a seeded bootstrap
 over those timings, and the price keeps every raw timing, the resample count,
 the seed and the machine the device belongs to, so the figures can be
@@ -24,7 +24,7 @@ training builds it. Nothing is priced whose training length is not declared.
 A trainer that stops early at the latest after its declared epochs is priced
 at those epochs; a
 trainer whose plugin states no training length is refused before any stack is
-built. Each stack's peak allocation is read against the activation-memory
+built. Each stack's peak allocation is read against the activation memory
 budget its own run document's device policy declares.
 """
 
@@ -241,7 +241,7 @@ def price_experiment(
     ExperimentPrice
         Every raw timing, the grid the experiment declares timed when it
         declares one, and the machine timed on, with the bootstrap that reads
-        the P50 and P90 accelerator-hours off them seeded by the experiment's
+        the P50 and P90 accelerator hours off them seeded by the experiment's
         root.
 
     Raises

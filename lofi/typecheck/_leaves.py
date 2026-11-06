@@ -12,7 +12,7 @@ __all__ = ["LeafConstant", "LeafLexicon"]
 
 @final
 class LeafConstant(FrozenValue):
-    """One non-logical constant supplied by a leaf lexicon."""
+    """One nonlogical constant supplied by a leaf lexicon."""
 
     _noun = "leaf constant"
 

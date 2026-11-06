@@ -75,7 +75,7 @@ class LearnerSemanticFragmentSpec(dx.Model, extra="forbid"):
 
 
 class LearnerSemanticClassSpec(dx.Model, extra="forbid"):
-    """Declare one generated logical-form class and its mass."""
+    """Declare one generated logical form class and its mass."""
 
     logical_class: str
     size: int
@@ -105,7 +105,7 @@ class _LearnerSemanticJointDeclaration(Protocol):
 class LearnerSemanticJointSpec(
     dx.TaggedUnion, discriminator="spelling", extra="forbid"
 ):
-    """Declare the joint distribution of logical-form class and token mass."""
+    """Declare the joint distribution of logical form class and token mass."""
 
 
 class LearnerParametricSemanticJointSpec(LearnerSemanticJointSpec, extra="forbid"):
@@ -196,7 +196,7 @@ class LearnerArityLawSpec(dx.Model, extra="forbid"):
 
 
 class LearnerClassWeightSpec(dx.Model, extra="forbid"):
-    """Declare one logical-form class available to a category."""
+    """Declare one logical form class available to a category."""
 
     logical_class: str
     arity: int | None = None
@@ -223,7 +223,7 @@ class LearnerClassWeightSpec(dx.Model, extra="forbid"):
 
 
 class LearnerAssignmentRowSpec(dx.Model, extra="forbid"):
-    """Declare the logical-form classes available to one category."""
+    """Declare the logical form classes available to one category."""
 
     category: str
     classes: tuple[LearnerClassWeightSpec, ...]
@@ -241,11 +241,11 @@ class LearnerAssignmentRowSpec(dx.Model, extra="forbid"):
 
 
 class LearnerAssignmentSpec(dx.TaggedUnion, discriminator="kind", extra="forbid"):
-    """Declare how generated logical-form classes depend on categories."""
+    """Declare how generated logical form classes depend on categories."""
 
 
 class LearnerIndependentAssignmentSpec(LearnerAssignmentSpec, extra="forbid"):
-    """Draw a logical-form class independently of category."""
+    """Draw a logical form class independently of category."""
 
     kind: Literal["independent"] = "independent"
 
@@ -396,7 +396,7 @@ class LexicalLearnerMeaningSourceSpec(LearnerMeaningSourceSpec, extra="forbid"):
 
 
 class StructuredLearnerMeaningSourceSpec(LearnerMeaningSourceSpec, extra="forbid"):
-    """Read an inline or packaged semantic-lexicon structure."""
+    """Read an inline or packaged semantic lexicon structure."""
 
     kind: Literal["structured"] = "structured"
     structure: LearnerSemanticLexiconStructureSpec | None = None

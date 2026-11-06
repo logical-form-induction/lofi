@@ -24,11 +24,11 @@ __all__ = [
 
 
 class MarginalSplitWeigherSettings(NamedTuple):
-    """Resolved settings of exact conditional split-posterior weighting."""
+    """Resolved settings of exact conditional split posterior weighting."""
 
 
 class AttendSplitWeigherSettings(NamedTuple):
-    """Resolved settings of learned child-pair attention weighting."""
+    """Resolved settings of learned child pair attention weighting."""
 
     score: SpanFunctionDeclaration
 
@@ -73,7 +73,7 @@ class MarginalSplitWeigherSpec(SplitWeigherSpec):
 
 
 class AttendSplitWeigherSpec(SplitWeigherSpec):
-    """Mix splits by the learned child-pair scores alone."""
+    """Mix splits by the learned child pair scores alone."""
 
     kind: Literal["attend"] = "attend"
     reads_children = True

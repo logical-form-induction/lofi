@@ -13,7 +13,7 @@ type Cell = tuple[int, int]
 
 
 def _cuts(i: int, j: int, parts: int) -> Iterator[tuple[Cell, ...]]:
-    """Yield the ways of cutting one span into a fixed number of non-empty spans.
+    """Yield the ways of cutting one span into a fixed number of nonempty spans.
 
     Parameters
     ----------

@@ -3,7 +3,7 @@
 The `decode` evaluator reads the term beams a trained point publishes through
 a term readout and, when it declares an `astar` block, parses each held-out
 sentence from its per-token beams with supertag-factored A* search and
-selects one derivation by Viterbi or minimum-Bayes-risk (MBR) decoding. This
+selects one derivation by Viterbi or minimum Bayes risk (MBR) decoding. This
 guide declares the evaluator, chooses each part of the search, and shows how an
 inconsistent choice is refused.
 
@@ -44,7 +44,7 @@ Reading the declaration field by field:
 | Field | What it says |
 | --- | --- |
 | `readout` | The term readout whose complete terms the evaluator reads. It must name a readout of kind `terms` that the model declares. |
-| `output` | `lexical-types` reads category beams, one per token; `logical-forms` reads logical-form beams. |
+| `output` | `lexical-types` reads category beams, one per token; `logical-forms` reads logical form beams. |
 | `astar` | The A* search over the lexical beams. Omit it to report the beams alone. |
 | `decode` | How one derivation is chosen from the A* chart: `viterbi`, or `mbr` with a utility and a candidate count. |
 | `interval`, `conventions` | The bootstrap interval and the eight scoring conventions every held-out evaluator declares, as in [Evaluate a trained point](evaluate-a-run.md). |
@@ -52,7 +52,7 @@ Reading the declaration field by field:
 ## Choose the search
 
 Each part of `astar` is a tagged declaration whose `kind` names an entry in
-its own entry-point group, so a plugin can add a variant to any of them:
+its own entry point group, so a plugin can add a variant to any of them:
 
 | Field | Group | Packaged kinds | Default |
 | --- | --- | --- | --- |
@@ -63,7 +63,7 @@ its own entry-point group, so a plugin can add a variant to any of them:
 
 The run's `parse` section supplies the semiring, retention, reachability and
 pruning policy. A* requires `parse.retain: forest` and a semiring with
-log-probability weights. MBR also requires posterior marginals, supplied by
+log probability weights. MBR also requires posterior marginals, supplied by
 `parse.semiring: {kind: log-inside}`. A Viterbi decision may use that semiring
 or `parse.semiring: {kind: viterbi}`.
 
@@ -209,7 +209,7 @@ make these changes. Several evaluator kinds declare `astar`, `decode` and
 Change these fields in the document itself.
 
 An MBR decode needs posterior marginals, which the `viterbi` semiring does not
-supply. `astar` and `decode` are declared together or not at all. Logical-form
+supply. `astar` and `decode` are declared together or not at all. Logical form
 beams do not enter supertag-factored A*, so a `logical-forms` decode reports
 its beams only. When the evaluator is built, a declared `astar` block is also
 refused unless the trained grammar's profile is lexicalized.

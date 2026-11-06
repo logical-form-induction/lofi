@@ -177,7 +177,7 @@ class ResponseBackend[Compiled](Protocol):
         design: ResponseDesign,
         /,
     ) -> Tensor:
-        """Return one log-likelihood per response.
+        """Return one log likelihood per response.
 
         Parameters
         ----------
@@ -191,7 +191,7 @@ class ResponseBackend[Compiled](Protocol):
         Returns
         -------
         Tensor
-            Log-likelihood for each response row.
+            Log likelihood for each response row.
         """
         ...
 
@@ -272,7 +272,7 @@ class PosteriorFitter(Protocol):
         Raises
         ------
         PosteriorFittingError
-            If the sampler reports a numerical condition: a non-finite
+            If the sampler reports a numerical condition: a nonfinite
             position, draw, density or convergence diagnostic, or a chain
             whose every retained transition diverged.
         MemoryError
@@ -439,7 +439,7 @@ class Linking(Protocol):
 
 @runtime_checkable
 class LmScore(Protocol):
-    """Direct per-token language-model scores for sentences.
+    """Direct per-token language model scores for sentences.
 
     Implementations read token probabilities without adding a prompt or
     instruction.
@@ -643,7 +643,7 @@ class VariationalGuide[State](Protocol):
         ...
 
     def update(self, model: CrossedModel, state: State, /) -> State:
-        """Return the state after one coordinate-ascent sweep.
+        """Return the state after one coordinate ascent sweep.
 
         A sweep never lowers the evidence lower bound.
 

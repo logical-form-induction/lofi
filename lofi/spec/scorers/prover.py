@@ -36,7 +36,7 @@ class ProverScorerSpec(PairScorerSpec):
         return False
 
     def settings(self) -> ProverScorerSettings:
-        """Return the interior proof-service budget."""
+        """Return the interior proof service budget."""
         if not isinstance(self.budget, ProofBudgetSpec):
             msg = f"a prover scorer budget is a ProofBudgetSpec, not {self.budget!r}"
             raise TypeError(msg)

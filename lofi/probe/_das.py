@@ -1113,7 +1113,7 @@ class DistributedAlignment[ReadingT: Reading, PairT: CausalPair = Counterfactual
         return Assessment(result, p_value)
 
     def iia(self, pairs: Sequence[PairT]) -> IIAResult:
-        """Return held-out interchange-intervention accuracy."""
+        """Return held-out interchange intervention accuracy."""
         return self.assess(pairs).result
 
     def _ensure_access(self) -> None:

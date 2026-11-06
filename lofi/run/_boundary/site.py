@@ -249,7 +249,7 @@ class SiteSubmission(dx.Model, extra="forbid"):
     task_index_variable : str
         The environment variable the scheduler sets to a task's array index.
     walltime_syntax : str
-        The per-task wall-clock limit spelling, a template over ``minutes``.
+        The per-task wall clock limit spelling, a template over ``minutes``.
     memory_syntax : str
         The per-task memory request spelling, a template over ``megabytes``.
     cpus_syntax : str
@@ -364,7 +364,7 @@ class SiteSubmission(dx.Model, extra="forbid"):
     @dx.validates("walltime_syntax")
     @classmethod
     def _walltime_syntax_names_minutes(cls, syntax: str) -> str:
-        """Validate the wall-clock template."""
+        """Validate the wall clock template."""
         return _ensure_template(
             "walltime syntax", syntax, fields=frozenset({"minutes"})
         )
@@ -460,7 +460,7 @@ class SiteSubmission(dx.Model, extra="forbid"):
             The placement the same site profile declares, whose core count
             each task takes.
         minutes : int
-            The wall-clock minutes one task is granted.
+            The wall clock minutes one task is granted.
         megabytes : int
             The memory one task is granted, in mebibytes.
         directory : str
@@ -469,7 +469,7 @@ class SiteSubmission(dx.Model, extra="forbid"):
         Returns
         -------
         tuple[str, ...]
-            The wall-clock, memory, core and log directives, in that order,
+            The wall clock, memory, core and log directives, in that order,
             without the directive prefix.
         """
         return (
@@ -593,7 +593,7 @@ class ArtifactClass(dx.Model, extra="forbid"):
     pattern : str
         The glob, relative to a point's directory, its files match.
     regeneration_hours : float
-        The accelerator-hours remaking one point's files of the class costs;
+        The accelerator hours remaking one point's files of the class costs;
         reclamation removes the cheapest classes first.
     """
 
@@ -670,12 +670,12 @@ class SiteStorage(dx.Model, extra="forbid"):
 
 
 class SiteAllocation(dx.Model, extra="forbid"):
-    """Declares the accelerator-hours a site grants and the share one paper may hold.
+    """Declares the accelerator hours a site grants and the share one paper may hold.
 
     Attributes
     ----------
     accelerator_hours : float
-        The accelerator-hours the allocation grants.
+        The accelerator hours the allocation grants.
     share : float
         The largest fraction of the allocation one paper's admitted
         experiments may hold at once, in $(0, 1]$.
@@ -710,7 +710,7 @@ class SiteAllocation(dx.Model, extra="forbid"):
 
     @property
     def admitted_hours(self) -> float:
-        """Return the accelerator-hours one paper's experiments may hold."""
+        """Return the accelerator hours one paper's experiments may hold."""
         return self.accelerator_hours * self.share
 
 
@@ -801,7 +801,7 @@ class SiteProfile(dx.Model, extra="forbid"):
     transport : SiteTransport
         How the host is reached from elsewhere.
     allocation : SiteAllocation
-        The accelerator-hours the site grants and the share a paper may hold.
+        The accelerator hours the site grants and the share a paper may hold.
     """
 
     submission: SiteSubmission

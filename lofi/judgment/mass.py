@@ -61,7 +61,7 @@ _LOG_PROBABILITY: Final = Interval(-1000.0, 0.0)
 """The interval a published log probability is declared over."""
 
 _SLOPE_INTERVAL: Final = Interval(0.0, 10.0)
-"""The interval the slope on the log-odds is declared over."""
+"""The interval the slope on the log odds is declared over."""
 
 _SLOPE_PRIOR: Final = Prior("HalfNormal", 1.0)
 """The prior a fitted slope is drawn from in a program."""
@@ -71,7 +71,7 @@ _SIGNED_SLOPE_PRIOR: Final = Prior("Normal", 0.0, 1.0)
 
 
 def log_odds(log_mass: Tensor, log_complement: Tensor) -> Tensor:
-    """Return the log-odds of a mass from its published log pair.
+    """Return the log odds of a mass from its published log pair.
 
     Parameters
     ----------
@@ -84,7 +84,7 @@ def log_odds(log_mass: Tensor, log_complement: Tensor) -> Tensor:
 
 
 def log_odds_spread(log_mass: Tensor, log_complement: Tensor) -> Tensor:
-    """Measure the range of a published mass pair on the log-odds scale.
+    """Measure the range of a published mass pair on the log odds scale.
 
     Parameters
     ----------
@@ -123,7 +123,7 @@ def _ensure_family(term: LinkTerm, family: str) -> None:
 
 @final
 class LogitLinking:
-    r"""The log-odds of a published mass pair, times a slope.
+    r"""The log odds of a published mass pair, times a slope.
 
     Each row contributes $a[\log m-\log(1-m)]$, where $a$ is the slope.
     The slope is fitted unless pinned by the term or held at one by scale
@@ -216,7 +216,7 @@ class LogitLinking:
 
     @property
     def special_cases(self) -> tuple[SpecialCase, ...]:
-        """Return the log-odds as the case at a slope of one.
+        """Return the log odds as the case at a slope of one.
 
         The case is declared unless the slope is pinned elsewhere, and a
         pinned unit slope declares it with no fitted coordinate.
@@ -384,7 +384,7 @@ def logit_steps(
     unit_slope: bool = False,
     signed_slope: bool = False,
 ) -> LinkingSteps:
-    """Return the program form of a link term entering through the log-odds.
+    """Return the program form of a link term entering through the log odds.
 
     Parameters
     ----------

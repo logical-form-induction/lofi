@@ -2,7 +2,7 @@
 
 An interpretation function assigns every lexical entry a meaning term, every
 rule a semantic action, every primitive category a semantic type, and every
-non-logical symbol a type scheme. A derivation is read bottom up: entries
+nonlogical symbol a type scheme. A derivation is read bottom up: entries
 contribute their meanings and rule applications run their actions, so the
 root of a goal derivation is a closed formula. The interpretation holds the
 shared proof service and the data-labeling budget that decide pairs of such
@@ -89,7 +89,7 @@ class LambdaCalculus:
 
     @property
     def store(self) -> TermStore:
-        """Return the proof-term store."""
+        """Return the proof term store."""
         return self._store
 
     @property
@@ -158,12 +158,12 @@ class LambdaCalculus:
 
 @final
 class InterpretationFunction:
-    """A total interpretation of one grammar into one logical-form language.
+    """A total interpretation of one grammar into one logical form language.
 
     Parameters
     ----------
     language : LanguageAssembly
-        The logical-form language, with its stores, checker and profile.
+        The logical form language, with its stores, checker and profile.
     erasure : Erasure
         The total morphism from the grammar's categories to semantic types.
     meanings : Mapping[tuple[str, Term], tuple[Term, ...]]
@@ -173,11 +173,11 @@ class InterpretationFunction:
     rules : Mapping[str, Rule[Term]]
         The grammar's rules, keyed by name.
     signature : LexicalSignature
-        The type scheme of every non-logical symbol.
+        The type scheme of every nonlogical symbol.
     truth : Term
         The type of a formula.
     inventory : SymbolInventory
-        The non-logical symbols the forms are built from.
+        The nonlogical symbols the forms are built from.
     service : ProofService
         The shared, memoized service that decides entailment between formulas.
     budget : ProofBudget
@@ -252,7 +252,7 @@ class InterpretationFunction:
 
     @property
     def language(self) -> LanguageAssembly:
-        """Return the logical-form language."""
+        """Return the logical form language."""
         return self._language
 
     @property
@@ -262,7 +262,7 @@ class InterpretationFunction:
 
     @property
     def calculus(self) -> ProofCalculus:
-        """Return the semantic actions' proof-term calculus."""
+        """Return the semantic actions' proof term calculus."""
         return self._actions.calculus
 
     @property
@@ -277,7 +277,7 @@ class InterpretationFunction:
 
     @property
     def signature(self) -> LexicalSignature:
-        """Return the type scheme of every non-logical symbol."""
+        """Return the type scheme of every nonlogical symbol."""
         return self._signature
 
     @property
@@ -287,7 +287,7 @@ class InterpretationFunction:
 
     @property
     def inventory(self) -> SymbolInventory:
-        """Return the non-logical symbols the forms are built from."""
+        """Return the nonlogical symbols the forms are built from."""
         return self._inventory
 
     @property
@@ -301,12 +301,12 @@ class InterpretationFunction:
         return self._budget
 
     def open_proof_step(self) -> None:
-        """Open the data-labeling site's next proof-service budget window."""
+        """Open the data-labeling site's next proof service budget window."""
         self._service.open_step(self._site)
 
     @property
     def normalization(self) -> Normalization:
-        """Return the compiled logical-form normalization settings."""
+        """Return the compiled logical form normalization settings."""
         return self._normalization
 
     @property
@@ -315,7 +315,7 @@ class InterpretationFunction:
         return self._reading.policy
 
     def report(self) -> Mapping[str, ReportValue]:
-        """Return action coverage and proof-search exhaustion for persistence."""
+        """Return action coverage and proof search exhaustion for persistence."""
         return MappingProxyType(
             {
                 "actions": len(self._actions),
@@ -696,7 +696,7 @@ class InterpretationFunction:
 
 
 def _mask(atoms: Iterable[Term]) -> int:
-    """Return the free-variable mask of some variables.
+    """Return the free variable mask of some variables.
 
     Parameters
     ----------
@@ -717,9 +717,9 @@ def _spine(types: TermStore, arrow: str, names: Sequence[str]) -> Term:
     Parameters
     ----------
     types : TermStore
-        The semantic-type store.
+        The semantic type store.
     arrow : str
-        The function-type constructor.
+        The function type constructor.
     names : Sequence[str]
         The atomic types, at least one, the last being the result.
 
@@ -831,7 +831,7 @@ def _meanings(
     assembly : GrammarAssembly
         The compiled grammar with its lexicon.
     language : LanguageAssembly
-        The logical-form language.
+        The logical form language.
     erasure : Erasure
         The homomorphism from categories to semantic types.
     declared : Mapping[tuple[str, str], tuple[str, ...]]
@@ -923,11 +923,11 @@ def interpretation_function(
     assembly : GrammarAssembly
         The compiled grammar with its lexicon.
     language : LanguageAssembly
-        The logical-form language the forms are written in.
+        The logical form language the forms are written in.
     erasure : Erasure
         The total signature morphism from categories to semantic types.
     inventory : SymbolInventory
-        The non-logical symbols the forms are built from.
+        The nonlogical symbols the forms are built from.
     meanings : Mapping[tuple[str, str], tuple[str, ...]]
         The meaning texts of each lexical entry, keyed by form and category
         text.

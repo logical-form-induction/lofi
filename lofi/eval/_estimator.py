@@ -286,7 +286,7 @@ def estimator_arms(
 
 
 class ArmCost(FrozenValue):
-    """Matched optimizer steps and measured proof-service clocks."""
+    """Matched optimizer steps and measured proof service clocks."""
 
     _noun = "arm cost"
     __slots__ = ("_optimizer_steps", "_prover_cpu_seconds", "_wall_seconds")

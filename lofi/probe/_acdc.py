@@ -127,7 +127,7 @@ class AbsoluteThreshold(FrozenValue):
         return self._bound
 
     def cutoff(self, full_corruption: float, /) -> float:
-        """Return the bound, whatever the full-corruption divergence.
+        """Return the bound, whatever the full corruption divergence.
 
         Parameters
         ----------
@@ -172,7 +172,7 @@ class RelativeThreshold(FrozenValue):
     Parameters
     ----------
     fraction : float
-        The finite nonnegative fraction of the full-corruption divergence that
+        The finite nonnegative fraction of the full corruption divergence that
         strictly bounds an accepted increment.
     """
 
@@ -189,11 +189,11 @@ class RelativeThreshold(FrozenValue):
 
     @property
     def fraction(self) -> float:
-        """Return the fraction of the full-corruption divergence."""
+        """Return the fraction of the full corruption divergence."""
         return self._fraction
 
     def cutoff(self, full_corruption: float, /) -> float:
-        """Return the fraction of the full-corruption divergence.
+        """Return the fraction of the full corruption divergence.
 
         Parameters
         ----------
@@ -473,7 +473,7 @@ class ReceiverCircuit[T](FrozenValue):
     """The computation graph of one chart's receiver edges and their targets.
 
     Each receiver edge of the chart is one graph edge, from the node of its child
-    span to the node of the span that receives it, under the receiver-edge role.
+    span to the node of the span that receives it, under the receiver edge role.
     Its target is the unit at the scorer's receiver site that indexes that edge's
     coordinate on the edge axis alone. The order runs the edges into the widest
     receivers first and, among receivers of one width, by ascending edge-axis
@@ -537,7 +537,7 @@ def _receiver_width(index: SpanIndex, edge: ReceiverEdge) -> int:
 def receiver_circuit[T](
     scorer: ReceiverLocalChartScorer, index: SpanIndex, /, *, reading: T
 ) -> ReceiverCircuit[T]:
-    """Return the receiver-edge graph, targets and pruning order of one chart.
+    """Return the receiver edge graph, targets and pruning order of one chart.
 
     Parameters
     ----------

@@ -11,7 +11,7 @@ refused.
 
 ## The packaged formalisms
 
-The `lofi.formalism` entry-point group registers four concise formalisms,
+The `lofi.formalism` entry point group registers four concise formalisms,
 each with a packaged example under
 `lofi/configs/data/datasets/train/dataset/grammar/`:
 
@@ -51,7 +51,7 @@ $$
      {[A,i_0,i_k]}.
 $$
 
-This is the chart-deduction presentation of the production, as developed for
+This is the chart deduction presentation of the production, as developed for
 parsing in \citealt{shieber-etal1995}. The declared plugin's accepted
 production shapes and lexical inventory delimit its supported CFG fragment.
 
@@ -76,7 +76,7 @@ join; these are the lattice conditions the validator checks.
 ## Compile each packaged formalism
 
 Compose each packaged example against `GrammarSpec`, expand it with
-`declare_grammar`, and compile it against a registered logical-form language:
+`declare_grammar`, and compile it against a registered logical form language:
 
 ```python
 from pathlib import Path
@@ -205,11 +205,11 @@ modes without a unique meet or join, is refused before the TLG is expanded.
 ## Add a formalism
 
 A plugin adds a formalism by registering a `FormalismPlugin` under the
-`lofi.formalism` entry-point group. The plugin pairs a declaration class, a
-`GrammarSpec` variant whose `formalism` literal is the entry-point name, with
+`lofi.formalism` entry point group. The plugin pairs a declaration class, a
+`GrammarSpec` variant whose `formalism` literal is the entry point name, with
 a function that expands a validated declaration to a `GrammarDecl`. The
 [plugin guide](../extending/plugins.md) covers registration, and the
-[entry-point reference](../../reference/entry-points.md) lists the group.
+[entry point reference](../../reference/entry-points.md) lists the group.
 
 ## Related
 

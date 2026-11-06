@@ -901,7 +901,7 @@ def decode_item_construction(document: str | bytes, /) -> ItemConstructionSpec:
 
 
 def decode_dynamic_range_criterion(document: JsonValue, /) -> DynamicRangeCriterion:
-    """Validate a registered dynamic-range criterion at its JSON boundary."""
+    """Validate a registered dynamic range criterion at its JSON boundary."""
     return DynamicRangeCriterion.model_validate(
         cast("Mapping[str, JsonValue]", document)
     )
@@ -921,7 +921,7 @@ def make_dynamic_range_report(
     maximum: float,
     ceiling_fraction: float,
 ) -> DynamicRangeReport:
-    """Validate a computed dynamic-range report at its publication boundary."""
+    """Validate a computed dynamic range report at its publication boundary."""
     return DynamicRangeReport(
         criterion=criterion,
         inventory=inventory,
@@ -1106,7 +1106,7 @@ class Cumulative(ResponseFamily, extra="forbid"):
     Parameters
     ----------
     family : Literal["cumulative"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     discrimination : bool
         Whether the family draws discrimination instead of fixing it at one.
     discrimination_group : str | None
@@ -1206,7 +1206,7 @@ class RankConsistent(ResponseFamily, extra="forbid"):
     Parameters
     ----------
     family : Literal["rank_consistent"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     scheme : RankConsistentScheme
         Scheme tying the binary threshold tasks together.
     """
@@ -1233,19 +1233,19 @@ class Metric(ResponseFamily, extra="forbid"):
     Parameters
     ----------
     family : Literal["metric"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     """
 
     family: Literal["metric"] = "metric"
 
 
 class Bounded(ResponseFamily, extra="forbid"):
-    """Declares a truncated-normal response on a closed interval.
+    """Declares a truncated normal response on a closed interval.
 
     Parameters
     ----------
     family : Literal["bounded"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     scale : float | None
         Fixed positive standard deviation on the normalized unit interval,
         or None to draw one global value from the declared scale prior.
@@ -1321,7 +1321,7 @@ class Choice(ResponseFamily, extra="forbid"):
     Parameters
     ----------
     family : Literal["choice"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     ties : bool
         Whether a tie between the two alternatives is a recordable level.
     discrimination : bool
@@ -1572,7 +1572,7 @@ class LinkTerm(Predictor, extra="forbid"):
     Parameters
     ----------
     kind : Literal["link"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     readout : str
         Readout column the linking takes as its argument.
     linking : LinkingSpec
@@ -1619,7 +1619,7 @@ class FactorTerm(Predictor, extra="forbid"):
     Parameters
     ----------
     kind : Literal["factor"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     name : str
         Factor whose levels the coefficients index.
     """
@@ -1660,7 +1660,7 @@ class InteractionTerm(Predictor, extra="forbid"):
     Parameters
     ----------
     kind : Literal["interaction"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     left : Predictor
         First fixed effect.
     right : Predictor
@@ -1758,7 +1758,7 @@ class RandomIntercept(Predictor, extra="forbid"):
     Parameters
     ----------
     kind : Literal["random_intercept"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     group : str
         Grouping factor the intercept varies over.
     """
@@ -1793,7 +1793,7 @@ class CorrelatedRandomSlope(Predictor, extra="forbid"):
     Parameters
     ----------
     kind : Literal["correlated_random_slope"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     group : str
         Grouping factor the intercept and slope vary over.
     term : Predictor
@@ -1863,7 +1863,7 @@ class RandomSlope(Predictor, extra="forbid"):
     Parameters
     ----------
     kind : Literal["random_slope"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     group : str
         Grouping factor the coefficients vary over.
     term : Predictor
@@ -1943,7 +1943,7 @@ class OffsetTerm(Predictor, extra="forbid"):
     Parameters
     ----------
     kind : Literal["offset"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     readout : str
         Readout column added as is.
     """
@@ -2094,7 +2094,7 @@ class FixedCutpointVariance(ScaleIdentification, extra="forbid"):
     Parameters
     ----------
     constraint : Literal["fixed_cutpoint_variance"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     value : float
         Variance the cutpoints are held at.
     """
@@ -2135,16 +2135,16 @@ class FixedCutpointVariance(ScaleIdentification, extra="forbid"):
 
 
 class IdentityLinkOnLogit(ScaleIdentification, extra="forbid"):
-    """Declares the latent scale identified as the log-odds scale itself.
+    """Declares the latent scale identified as the log odds scale itself.
 
     Every link term of the predictor enters at a slope held at one, so a
-    logit link's log-odds are the latent scale rather than a quantity
+    logit link's log odds are the latent scale rather than a quantity
     proportional to it.
 
     Parameters
     ----------
     constraint : Literal["identity_link_on_logit"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     """
 
     constraint: Literal["identity_link_on_logit"] = "identity_link_on_logit"
@@ -2162,7 +2162,7 @@ class FixedDiscrimination(ScaleIdentification, extra="forbid"):
     Parameters
     ----------
     constraint : Literal["fixed_discrimination"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     value : float
         Discrimination the response family is held at.
     """
@@ -2240,7 +2240,7 @@ class TruncatedMarginalLikelihood(LikelihoodObjective, extra="forbid"):
     Parameters
     ----------
     objective : Literal["truncated_marginal"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     group : str
         The sole grouping factor whose standardized local block is integrated.
     radius : float
@@ -2887,7 +2887,7 @@ class BoundedResponseSpec(dx.Model, extra="forbid"):
     Parameters
     ----------
     family : Bounded
-        Truncated-normal observation family.
+        Truncated normal observation family.
     predictor : tuple[Predictor, ...]
         Terms whose sum defines ``eta`` before the sigmoid location link.
     identification : ScaleIdentification
@@ -3130,7 +3130,7 @@ def _link_terms(
 
 
 def installed_linkings() -> Registry[LinkingCompiler]:
-    """Return the linking families the ``lofi.linking`` entry-point group lists.
+    """Return the linking families the ``lofi.linking`` entry point group lists.
 
     Returns
     -------
@@ -3197,7 +3197,7 @@ class ModelWeighting(enum.StrEnum):
 
 
 class ModelComparisonSpec(dx.Model, extra="forbid"):
-    """Declares a fitted-model comparison and its Pareto reliability gate."""
+    """Declares a fitted model comparison and its Pareto reliability gate."""
 
     candidates: tuple[str, ...]
     candidate: str
@@ -3659,7 +3659,7 @@ class MemorizedCells(ColumnLift, extra="forbid"):
     Parameters
     ----------
     lift : Literal["memorized"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     """
 
     lift: Literal["memorized"] = "memorized"
@@ -3675,7 +3675,7 @@ class ColumnLabels(ColumnLift, extra="forbid"):
     Parameters
     ----------
     lift : Literal["labels"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     depth : int
         Number of affine layers between the label table and the row level.
     """
@@ -3696,7 +3696,7 @@ class JointTypeTensor(ColumnLift, extra="forbid"):
     Parameters
     ----------
     lift : Literal["joint_type"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     """
 
     lift: Literal["joint_type"] = "joint_type"
@@ -3724,7 +3724,7 @@ class LexicalPossession(ColumnLift, extra="forbid"):
     Parameters
     ----------
     lift : Literal["lexical_possession"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     lexical_primitives : LexicalPrimitiveInventory
         The lexical-semantic primitives a row level may possess.
     prefix : PinnedPrefix
@@ -3782,7 +3782,7 @@ class RowClasses(ColumnLift, extra="forbid"):
     Parameters
     ----------
     lift : Literal["row_classes"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     classes : int
         Number of row classes the latent ranges over.
     prefix : PinnedPrefix
@@ -3845,7 +3845,7 @@ class PossessionAndClasses(ColumnLift, extra="forbid"):
     Parameters
     ----------
     lift : Literal["possession_and_classes"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     lexical_primitives : LexicalPrimitiveInventory
         The lexical-semantic primitives a row level may possess.
     classes : int
@@ -3910,7 +3910,7 @@ class PossessionAndClasses(ColumnLift, extra="forbid"):
 
 
 class FitSchedule(dx.Model, extra="forbid"):
-    """Declares optimization and initialization of one table-ablation rung.
+    """Declares optimization and initialization of one table ablation rung.
 
     Parameters
     ----------
@@ -4493,9 +4493,9 @@ class PseudoRSquaredRow(dx.Model, extra="forbid"):
     fit : str
         Name of the fitted specification being reported.
     reference : str
-        Name of the specification supplying the reference log-likelihood.
+        Name of the specification supplying the reference log likelihood.
     pseudo_r_squared : Measurement
-        One less the ratio of the fit's to the reference's log-likelihood.
+        One less the ratio of the fit's to the reference's log likelihood.
     """
 
     fit: str
@@ -4873,7 +4873,7 @@ def _moment(field: str, text: str) -> datetime:
 
 
 class DynamicRangeCriterion(dx.Model, extra="forbid"):
-    """Declares the pass criterion for the spread of the root log-odds.
+    """Declares the pass criterion for the spread of the root log odds.
 
     The criterion is registered before the distribution it is read against
     is observed, and the registration time is part of the declaration. A
@@ -4887,10 +4887,10 @@ class DynamicRangeCriterion(dx.Model, extra="forbid"):
         When the criterion was registered, as an ISO 8601 timestamp with a
         UTC offset.
     minimum_interquartile_range : float
-        Smallest interquartile range of the log-odds over the items that
+        Smallest interquartile range of the log odds over the items that
         passes.
     ceiling : float
-        Log-odds at or above which an item counts as at the ceiling.
+        Log odds at or above which an item counts as at the ceiling.
     maximum_ceiling_fraction : float
         Largest fraction of the items at the ceiling that passes.
     """
@@ -4947,13 +4947,13 @@ class DynamicRangeCriterion(dx.Model, extra="forbid"):
 
 
 class DynamicRangeSpec(dx.Model, extra="forbid"):
-    """Declares the dynamic-range gate a fit's launch applies to one readout.
+    """Declares the dynamic range gate a fit's launch applies to one readout.
 
     Parameters
     ----------
     readout : str
         Predictor column of a response link term whose root mass, as
-        log-odds against its complement, is read against the criterion.
+        log odds against its complement, is read against the criterion.
     criterion : DynamicRangeCriterion
         The criterion registered for the readout's distribution.
     """
@@ -4967,7 +4967,7 @@ class DynamicRangeSpec(dx.Model, extra="forbid"):
 
 
 class DynamicRangeReport(dx.Model, extra="forbid"):
-    """Declares the spread of the root log-odds over a corpus against a criterion.
+    """Declares the spread of the root log odds over a corpus against a criterion.
 
     Parameters
     ----------
@@ -4981,15 +4981,15 @@ class DynamicRangeReport(dx.Model, extra="forbid"):
     items : int
         How many items the distribution is over.
     minimum : float
-        Smallest log-odds over the items.
+        Smallest log odds over the items.
     lower_quartile : float
-        Log-odds a quarter of the items lie at or below.
+        Log odds a quarter of the items lie at or below.
     median : float
-        Log-odds half of the items lie at or below.
+        Log odds half of the items lie at or below.
     upper_quartile : float
-        Log-odds three quarters of the items lie at or below.
+        Log odds three quarters of the items lie at or below.
     maximum : float
-        Largest log-odds over the items.
+        Largest log odds over the items.
     ceiling_fraction : float
         Fraction of the items at or above the criterion's ceiling.
     """
@@ -5151,7 +5151,7 @@ class NutsInference(FitInference, extra="forbid"):
     Parameters
     ----------
     inference : Literal["nuts"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     warmup : int
         Discarded adaptation iterations per chain.
     retained : int
@@ -5186,7 +5186,7 @@ class VariationalInference(FitInference, extra="forbid"):
     Parameters
     ----------
     inference : Literal["svi"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     guide : InferenceMethod
         The structured guide, which conditions each grouped site on the
         ungrouped sites drawn before it, or the mean-field guide.
@@ -5242,7 +5242,7 @@ class MapInference(FitInference, extra="forbid"):
     Parameters
     ----------
     inference : Literal["map"]
-        Tagged-union discriminator.
+        Tagged union discriminator.
     optimizer : OptimizerSpec
         Installed optimizer and all of its settings.
     steps : int
@@ -5326,7 +5326,7 @@ class JudgmentFitCalibration(dx.Model, extra="forbid"):
     Parameters
     ----------
     replicates : int
-        Prior-predictive replicates.
+        Prior predictive replicates.
     guide_iterations : int
         Sweeps each variational guide is fit for.
     guide_learning_rate : float
@@ -5358,7 +5358,7 @@ class JudgmentFitSpec(dx.Model, extra="forbid"):
     A fit's response model compiles to a program over the installed linking
     families. NUTS and variational inference draw every site and therefore use
     the conditional likelihood. MAP may instead optimize the population
-    posterior of a truncated-marginal objective.
+    posterior of a truncated marginal objective.
 
     Parameters
     ----------
@@ -5374,12 +5374,12 @@ class JudgmentFitSpec(dx.Model, extra="forbid"):
         Simulation-based calibration of the fit, or None for a fit that is not
         calibrated.
     comparison : ComparisonSpec | None
-        Held-out and fitted-model comparison, or None for an in-sample fit.
+        Held-out and fitted model comparison, or None for an in-sample fit.
     dynamic_range : DynamicRangeSpec | None
-        Dynamic-range gate applied to a declared readout before fitting, or
+        Dynamic range gate applied to a declared readout before fitting, or
         None when no launch gate is declared.
     ablation : tuple[TableAblationSpec, ...]
-        Table-ablation rungs, empty when the fit runs no table ablation.
+        Table ablation rungs, empty when the fit runs no table ablation.
     interannotator : InterannotatorSpec | None
         Interannotator correlation ceilings reported beside the fit, or None
         when the fit reports none.
@@ -5460,7 +5460,7 @@ class JudgmentFitSpec(dx.Model, extra="forbid"):
         Raises
         ------
         ValueError
-            If a sampled fit declares the truncated-marginal objective.
+            If a sampled fit declares the truncated marginal objective.
         """
         match self.response:
             case ResponseSpec(objective=TruncatedMarginalLikelihood(group=group)):
@@ -5809,7 +5809,7 @@ class FitArtifact(dx.Model, extra="forbid"):
 
 
 class JudgmentFitManifest(dx.Model, extra="forbid"):
-    """Records the fit, design and run seed of one judgment-fit experiment point.
+    """Records the fit, design and run seed of one judgment fit experiment point.
 
     Parameters
     ----------
@@ -5873,7 +5873,7 @@ class JudgmentFitManifest(dx.Model, extra="forbid"):
 
 
 def decode_fit_manifest(data: bytes, /) -> JudgmentFitManifest:
-    """Decode a judgment-fit manifest's JSON bytes, refusing any that do not validate.
+    """Decode a judgment fit manifest's JSON bytes, refusing any that do not validate.
 
     Parameters
     ----------
@@ -5888,7 +5888,7 @@ def decode_fit_manifest(data: bytes, /) -> JudgmentFitManifest:
     Raises
     ------
     ValueError
-        If the bytes are not JSON or do not validate as a judgment-fit manifest.
+        If the bytes are not JSON or do not validate as a judgment fit manifest.
     """
     try:
         return JudgmentFitManifest.model_validate_json(data)
@@ -5899,5 +5899,5 @@ def decode_fit_manifest(data: bytes, /) -> JudgmentFitManifest:
 
 
 def encode_fit_manifest(manifest: JudgmentFitManifest, /) -> bytes:
-    """Encode one validated judgment-fit manifest for persistent storage."""
+    """Encode one validated judgment fit manifest for persistent storage."""
     return manifest.model_dump_json().encode()

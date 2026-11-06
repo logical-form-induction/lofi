@@ -1,4 +1,4 @@
-"""Logical-form prediction capabilities consumed by bead serving."""
+"""Logical form prediction capabilities consumed by bead serving."""
 
 from __future__ import annotations
 
@@ -219,7 +219,7 @@ class TrainedPointPredictor(Protocol):
     def predict_relations(
         self, pairs: Sequence[InferenceText], /
     ) -> tuple[tuple[float, ...], ...]:
-        """Return the point's inference-label probabilities."""
+        """Return the point's inference label probabilities."""
         ...
 
 

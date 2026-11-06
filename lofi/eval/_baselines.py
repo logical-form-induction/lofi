@@ -4,7 +4,7 @@ A baseline family is a named comparison class together with the metric its
 published numbers are quoted in. A system enters a family through one of two
 arms. A system whose predictions were released enters the re-scoring arm and
 its row cites the released file; a system whose predictions were not released
-is re-run here and its row cites the configuration hash the re-run ran under.
+is rerun here and its row cites the configuration hash the rerun ran under.
 The two arms answer different questions -- one asks what the published
 predictions score under these conventions, the other what the published
 description reproduces to -- so the table keeps them apart and this module
@@ -127,12 +127,12 @@ class ReleasedFile:
 
 
 class RerunConfiguration:
-    """The configuration that puts a re-run system in the re-running arm.
+    """The configuration that puts a rerun system in the re-running arm.
 
     Attributes
     ----------
     configuration : str
-        The configuration the system was re-run under, as the row cites it.
+        The configuration the system was rerun under, as the row cites it.
     config_hash : str
         The hash of that configuration.
     arm : Arm
@@ -143,7 +143,7 @@ class RerunConfiguration:
     Parameters
     ----------
     configuration : str
-        The configuration the system was re-run under.
+        The configuration the system was rerun under.
     config_hash : str
         The hash of that configuration.
 
@@ -163,7 +163,7 @@ class RerunConfiguration:
 
     @property
     def configuration(self) -> str:
-        """Return the configuration the system was re-run under."""
+        """Return the configuration the system was rerun under."""
         return self._configuration
 
     @property
@@ -173,7 +173,7 @@ class RerunConfiguration:
 
     @property
     def arm(self) -> Arm:
-        """Return the arm a re-run puts a system in."""
+        """Return the arm a rerun puts a system in."""
         return "re-running"
 
     @property
@@ -317,7 +317,7 @@ class BaselineSystem[Pred, Gold]:
     reason : str
         Why the system's evidence puts it in the arm it is in.
     evidence : ReleasedFile | RerunConfiguration
-        The released file or the re-run configuration.
+        The released file or the rerun configuration.
     arm : Arm
         The arm the evidence selects.
     cites : str
@@ -338,7 +338,7 @@ class BaselineSystem[Pred, Gold]:
     released : ReleasedFile | None
         The released prediction file, when the system released one.
     rerun : RerunConfiguration | None
-        The configuration the system was re-run under, when it released none.
+        The configuration the system was rerun under, when it released none.
 
     Raises
     ------
@@ -429,7 +429,7 @@ class BaselineSystem[Pred, Gold]:
 
     @property
     def evidence(self) -> ReleasedFile | RerunConfiguration:
-        """Return the released file or the re-run configuration."""
+        """Return the released file or the rerun configuration."""
         return self._evidence
 
     @property
@@ -474,7 +474,7 @@ class BaselineRow(NamedTuple):
     metric : str
         The metric the family reports.
     evidence : ReleasedFile | RerunConfiguration
-        The released file or the re-run configuration the score came from.
+        The released file or the rerun configuration the score came from.
     reason : str
         Why the evidence puts the system in the arm it is in.
     conventions : ConventionVector
@@ -498,7 +498,7 @@ class BaselineRow(NamedTuple):
 
     @property
     def cites(self) -> str:
-        """Return the released file, or the hash the re-run ran under."""
+        """Return the released file, or the hash the rerun ran under."""
         return self.evidence.cites
 
     def to_spec(self) -> dict[str, JsonValue]:
@@ -576,7 +576,7 @@ class BaselineTable:
 
     @property
     def rerunning(self) -> tuple[BaselineRow, ...]:
-        """Return the rows scored from re-run predictions, in harness order."""
+        """Return the rows scored from rerun predictions, in harness order."""
         return self._rerunning
 
     def arm(self, arm: Arm) -> tuple[BaselineRow, ...]:

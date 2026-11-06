@@ -27,7 +27,7 @@ _INVENTORIES: dict[tuple[EntrySource, tuple[str, ...]], tuple[EntryPoint, ...]] 
 
 
 def entry_point_group(family: str, /) -> str:
-    """Return the entry-point group a component family owns.
+    """Return the entry point group a component family owns.
 
     Parameters
     ----------
@@ -37,7 +37,7 @@ def entry_point_group(family: str, /) -> str:
     Returns
     -------
     str
-        The family's entry-point group.
+        The family's entry point group.
 
     Raises
     ------
@@ -69,7 +69,7 @@ def _claimant(point: EntryPoint, /) -> str:
 
 
 class Registry[A]:
-    """Resolves one family's components from its entry-point group.
+    """Resolves one family's components from its entry point group.
 
     Parameters
     ----------
@@ -100,7 +100,7 @@ class Registry[A]:
 
     @property
     def group(self) -> str:
-        """Return the family's entry-point group."""
+        """Return the family's entry point group."""
         return entry_point_group(self._family)
 
     def entries(self) -> tuple[EntryPoint, ...]:

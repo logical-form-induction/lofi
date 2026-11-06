@@ -2,7 +2,7 @@
 
 A run document's `evaluators` section declares the held-out evaluators a point
 is scored by once it has trained. Each entry maps a role to a declaration whose
-`kind` names a plugin in the `lofi.evaluator` entry-point group, with the
+`kind` names a plugin in the `lofi.evaluator` entry point group, with the
 bootstrap interval its values carry and the conventions it scores under. This
 guide declares an evaluator, chooses its interval and conventions, says which
 split it scores, and reads the rows it writes.
@@ -75,20 +75,20 @@ The packaged kinds, each the name of an entry in `lofi.evaluator`:
 | Kind | What it scores |
 | --- | --- |
 | `bracketing` | Unlabeled bracketing F1 over the held-out split. |
-| `held-out-likelihood` | Held-out string and normal-form derivational likelihood, and description length. |
-| `grammaticality` | The grammaticality battery over a root-mass readout. |
-| `category-side` | Category recovery, such as supertag accuracy, with primitive and constructor random-relabeling floors. |
-| `logical-form` | Logical-form matching over decoded held-out forms, with its random-relabeling floor and fiber-relative recovery. |
-| `inference` | Inference-label evaluation over held-out sentence pairs, with coverage, calibration and optional proof rows. |
+| `held-out-likelihood` | Held-out string and normal form derivational likelihood, and description length. |
+| `grammaticality` | The grammaticality battery over a root mass readout. |
+| `category-side` | Category recovery, such as supertag accuracy, with primitive and constructor random relabeling floors. |
+| `logical-form` | Logical form matching over decoded held-out forms, with its random relabeling floor and fiber-relative recovery. |
+| `inference` | Inference label evaluation over held-out sentence pairs, with coverage, calibration and optional proof rows. |
 | `expert-categories` | Agreement with expert ratings and a fixed error taxonomy over induced types. |
-| `lexical-types` | Lexical-type F1 over the held-out split. |
-| `decode` | Neural-term beams and optional supertag-factored A* parsing; see [Decode derivations](decode-derivations.md). |
+| `lexical-types` | Lexical type F1 over the held-out split. |
+| `decode` | Neural term beams and optional supertag-factored A* parsing; see [Decode derivations](decode-derivations.md). |
 | `equivalence` | Prover-decided equivalence of decoded and gold logical forms: equivalence, well-formed and timeout rates, mean proof time, and the prover calls and memo hits spent under a declared proof budget. |
 | `lexical-diagnostics` | Supertag accuracy, ambiguity and confusion, clustering scores, collapse and decode refusal over decoded term posteriors. |
 | `structural-diagnostics` | Model structure, derivation counts and three fixed bracketing baselines. |
 | `reachability` | Step and derivation reachability of the held-out gold derivations under the run grammar's label and rule inventory, with the blocking histogram by label, rule and construction. |
 | `constructor-diagnostics` | Beam, projection and reconstruction rows over constructor roles, and the predicted-minus-gold depth gap with its declared collapse warning. |
-| `coherence-diagnostics` | Objective, entropy, collapse, usage and mass-agreement rows of the coherence objective. |
+| `coherence-diagnostics` | Objective, entropy, collapse, usage and mass agreement rows of the coherence objective. |
 | `coherence-square` | Whether no, a sample of, or every decoded chart item is checked for coherence. |
 
 `lofi/configs/evaluators/` holds a packaged fragment for most kinds, such as
@@ -105,7 +105,7 @@ which asks the run's retained data for the shape it scores.
 
 A packaged fragment is selected as a group whose slot is the role, so the
 directory under `evaluators/` names the role the evaluator is added under.
-Selecting the root-mass grammaticality fragment beside the declared
+Selecting the root mass grammaticality fragment beside the declared
 bracketing evaluator:
 
 ```python
@@ -133,11 +133,11 @@ a long sentence contributes more span counts to the corpus score.
 The declared coverage rule controls missing analyses before aggregation.
 
 A likelihood row also requires a unit: mean log likelihood per sentence and
-per token have different denominators. Description-length charges must use
-compatible units before subtraction. Logical-form equivalence is relative to
+per token have different denominators. Description length charges must use
+compatible units before subtraction. Logical form equivalence is relative to
 the declared logic, theory, and proof budget; an undecided proof is not a
 negative equivalence judgment. The [evaluation reference](../../reference/eval.md)
-defines classification, calibration, and proof-reproduction metrics, including
+defines classification, calibration, and proof reproduction metrics, including
 their undefined cases.
 
 ## Set the interval
@@ -147,7 +147,7 @@ one; `interval.level` is the coverage the interval aims at and must lie
 strictly between zero and one. Each value's interval resamples the units its
 metric counts, such as sentences, and recomputes the metric on each resample,
 drawn under the run seed. A value resting on fewer than two units has no
-interval: a random-relabeling floor over a single held-out token, for instance,
+interval: a random relabeling floor over a single held-out token, for instance,
 reports its value with `n` of one and null interval columns. A level of one is
 refused when the document is composed:
 
@@ -235,7 +235,7 @@ Each row is one metric of one evaluator. Its columns are:
 | `value`, `n`, `resampling_unit`, `resampling_seed`, `seed` | The value, the number of units it was computed from, how and under which seed the interval resampled them, and the run seed. |
 | `ci_low`, `ci_high`, `ci_level` | The bootstrap interval, or nulls for a value reported without one. |
 | `budget_kind`, `budget_depth`, `budget_beam`, `budget_mass`, `residual_measured`, `residual_<source>` | The approximation the row was scored under. Every held-out row is scored under the grammar's enumeration budget, so `budget_kind` is `enumeration`, and its residual is unmeasured. |
-| `normal_form`, `specification_hash`, `fold`, `rung`, `held_out_convention`, `required_control` | The normal form, the judgment-fit identity of a cross-fitted row, and the control method a metric requires beside it, if any. |
+| `normal_form`, `specification_hash`, `fold`, `rung`, `held_out_convention`, `required_control` | The normal form, the judgment fit identity of a cross-fitted row, and the control method a metric requires beside it, if any. |
 | `point_id` | The point whose directory and manifest the row came from. |
 
 An evaluator that publishes artifacts writes them under

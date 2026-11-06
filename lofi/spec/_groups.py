@@ -23,7 +23,7 @@ __all__ = [
 ]
 
 CONFIG_DIRS_GROUP: Final = entry_point_group("config_dirs")
-"""The entry-point group a plugin distribution lists its configuration packages in."""
+"""The entry point group a plugin distribution lists its configuration packages in."""
 
 PACKAGED_CONFIG_ROOT: Final = Path(__file__).parent.parent / "configs"
 """The root of the configuration groups packaged with LoFI."""
@@ -66,7 +66,7 @@ def plugin_config_dirs() -> tuple[Path, ...]:
     Returns
     -------
     tuple[Path, ...]
-        One directory per package location, in entry-point order.
+        One directory per package location, in entry point order.
 
     Raises
     ------

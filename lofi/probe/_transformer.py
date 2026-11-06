@@ -583,7 +583,7 @@ def _checked_grouping(
     Parameters
     ----------
     site : Site
-        The feed-forward site.
+        The feedforward site.
     reading : Observation
         Its preactivations.
     grouping : ObservationGrouping
@@ -625,7 +625,7 @@ def _checked_grouping(
 
 
 class FeedForwardSpecialization:
-    """Measures feature sparsity and declared-group effects in FFN preactivations."""
+    """Measures feature sparsity and declared group effects in FFN preactivations."""
 
     __slots__ = ()
 
@@ -816,7 +816,7 @@ class ResidualContributions:
     scores: ClassVar[frozenset[str]] = frozenset({_RESULTANT_SHARE, _SKIP_SHARE})
 
     def run(self, trace: Trace, /, *, context: DiagnosticContext) -> DiagnosticResult:
-        """Return both norm shares for attention and feed-forward additions."""
+        """Return both norm shares for attention and feedforward additions."""
         taken = dict(context.readings(trace))
         readings = _observed(context, taken, Role.RESIDUAL_STREAM)
         measured: list[Measurement] = []

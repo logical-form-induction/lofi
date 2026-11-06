@@ -1,4 +1,4 @@
-"""Declarations of the collectors that answer one active-learning batch.
+"""Declarations of the collectors that answer one active learning batch.
 
 A run's collector either fields each batch through bead or answers it from a
 simulated rating design over the whole candidate pool, drawn once from the
@@ -130,14 +130,14 @@ class ActiveCollectorSpec(
 
     @classmethod
     def family(cls) -> str:
-        """Return the family whose entry-point group lists the collectors."""
+        """Return the family whose entry point group lists the collectors."""
         return "active_collector"
 
     def reads_bead_responses(self) -> bool:
         """Return whether the collector reads bead responses.
 
         A collector that does reads them through the response encoding the
-        active-learning document declares.
+        active learning document declares.
         """
         return False
 
@@ -147,7 +147,7 @@ class BeadCollectorSpec(ActiveCollectorSpec):
 
     The collector writes a round's batch as bead items and stops the run until
     the responses to that batch are placed beside it, then reads them through
-    the bead judgment source under the response encoding the active-learning
+    the bead judgment source under the response encoding the active learning
     document declares.
     """
 
@@ -222,7 +222,7 @@ class RegisteredDesignCollectorSpec(ActiveCollectorSpec):
     Parameters
     ----------
     design : str
-        Tag of a design in the ``lofi.judgment_design`` entry-point group.
+        Tag of a design in the ``lofi.judgment_design`` entry point group.
     join : str | None
         A bead expression over each candidate's attributes naming the design
         item it is joined to, or None to join it to the design item sharing

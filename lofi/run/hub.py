@@ -204,7 +204,7 @@ class ModelRelease(FrozenValue):
 
     @property
     def action_set_identity(self) -> str:
-        """Return the exact action-set identity."""
+        """Return the exact action set identity."""
         return self._action_set_identity
 
     @property

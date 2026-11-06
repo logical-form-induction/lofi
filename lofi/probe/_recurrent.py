@@ -199,7 +199,7 @@ def _count(site: Site, name: str, values: Tensor, /) -> Measurement:
 
 
 class HiddenStateEvolution(_TreeParents):
-    """Measures normalized hidden-state displacement from each child to its parent."""
+    """Measures normalized hidden state displacement from each child to its parent."""
 
     __slots__ = ()
 
@@ -208,7 +208,7 @@ class HiddenStateEvolution(_TreeParents):
     scores: ClassVar[frozenset[str]] = frozenset({_DISPLACEMENT})
 
     def run(self, trace: Trace, /, *, context: DiagnosticContext) -> DiagnosticResult:
-        """Return mean live child-to-parent hidden-state displacement by site."""
+        """Return mean live child-to-parent hidden state displacement by site."""
         taken = dict(context.readings(trace))
 
         if not self.requires <= context.roles:
@@ -266,7 +266,7 @@ class GatePatterns:
 
 
 class MemoryCellDynamics(_TreeParents):
-    """Measures displacement and directional retention across memory-cell edges."""
+    """Measures displacement and directional retention across memory cell edges."""
 
     __slots__ = ()
 
@@ -277,7 +277,7 @@ class MemoryCellDynamics(_TreeParents):
     scores: ClassVar[frozenset[str]] = frozenset({_DISPLACEMENT})
 
     def run(self, trace: Trace, /, *, context: DiagnosticContext) -> DiagnosticResult:
-        """Return memory-cell movement and cosine retention by cell site."""
+        """Return memory cell movement and cosine retention by cell site."""
         taken = dict(context.readings(trace))
 
         if not self.requires <= context.roles:
@@ -320,7 +320,7 @@ class RecurrentConnectionAnalysis(_TreeParents):
     scores: ClassVar[frozenset[str]] = frozenset()
 
     def run(self, trace: Trace, /, *, context: DiagnosticContext) -> DiagnosticResult:
-        """Return mean child-to-parent directional alignment by hidden-state site."""
+        """Return mean child-to-parent directional alignment by hidden state site."""
         taken = dict(context.readings(trace))
 
         if not self.requires <= context.roles:

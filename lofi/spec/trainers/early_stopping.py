@@ -1,4 +1,4 @@
-"""Early-stopping declaration."""
+"""Early stopping declaration."""
 
 from typing import Literal
 
@@ -61,7 +61,7 @@ class EarlyStoppingSpec(dx.Model, extra="forbid"):
     mode : Literal["min", "max"]
         Whether smaller or larger metric values improve on the best.
     patience : int
-        Consecutive non-improving completed epochs permitted before stopping.
+        Consecutive nonimproving completed epochs permitted before stopping.
     minimum_delta : float
         Absolute change a candidate must exceed to improve on the best.
     keep_best : int

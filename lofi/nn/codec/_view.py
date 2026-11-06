@@ -716,7 +716,7 @@ class NeuralCodecView[C: CodecMetadata = TermCoding]:
         Parameters
         ----------
         distribution : LogDistribution
-            The log-space distribution over symbols, normalized over its innermost axis.
+            The log space distribution over symbols, normalized over its innermost axis.
         table : Tensor
             The embedding table, of rank two over the symbol and the width.
 

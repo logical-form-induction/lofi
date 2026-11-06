@@ -1,4 +1,4 @@
-"""Declared neural-term decoding and supertag-factored A* evaluation."""
+"""Declared neural term decoding and supertag-factored A* evaluation."""
 
 from math import fsum, inf
 from types import MappingProxyType
@@ -512,7 +512,7 @@ def astar_parse_refusal(
     -------
     DeclarationError | None
         The refusal, or None when the parse serves the search. A semiring
-        without the float log-probability weights A* ranks by, or without the
+        without the float log probability weights A* ranks by, or without the
         marginals the consumer reads, is refused with a
         ``SemiringCapabilityError``.
     """
@@ -586,7 +586,7 @@ def _viterbi(declaration: ViterbiDecodeSpec, /) -> DerivationDecision:
 
 
 def _mbr(declaration: MbrDecodeSpec, /) -> DerivationDecision:
-    """Build minimum-Bayes-risk selection under the declared utility."""
+    """Build minimum Bayes risk selection under the declared utility."""
     return MbrDecision(
         cast(
             "MbrUtility",
@@ -632,7 +632,7 @@ class DecodeEvaluatorSettings(NamedTuple):
 
 
 class DecodeEvaluatorSpec(EvaluatorSpec):
-    """Declare held-out neural-term beams and optional A* parsing."""
+    """Declare held-out neural term beams and optional A* parsing."""
 
     kind: Literal["decode"] = "decode"
     readout: str
@@ -644,7 +644,7 @@ class DecodeEvaluatorSpec(EvaluatorSpec):
     @dx.validates("readout")
     @classmethod
     def _readout_is_named(cls, value: str) -> str:
-        """Return a nonempty complete-term readout role."""
+        """Return a nonempty complete term readout role."""
         return ensure_name("a decode evaluator's term-readout role", value)
 
     @dx.model_validator()
@@ -672,7 +672,7 @@ class DecodeEvaluatorSpec(EvaluatorSpec):
 
     @override
     def dependencies(self) -> tuple[Dependency, ...]:
-        """Return the declared complete-term readout dependency."""
+        """Return the declared complete term readout dependency."""
         return (Dependency(self.readout, "terms-readout"),)
 
     @override

@@ -1,14 +1,14 @@
-"""The MAP refit an active-learning run scores its candidates by.
+"""The MAP refit an active learning run scores its candidates by.
 
-Each round refits the response model of the run's judgment-fit document by MAP
+Each round refits the response model of the run's judgment fit document by MAP
 to every judgment collected so far. An item's predictor columns are the
 readouts a trained point published for it, and its factors are the attributes
-the active-learning document declares, read from the item's ``item_metadata``.
+the active learning document declares, read from the item's ``item_metadata``.
 The refitted point scores each unjudged candidate by its expected response for
 a participant the fit never saw, under the declared unseen-participant rule or,
 where none is declared, at the population mean.
 
-Performance is read from the cross-validation the active-learning document
+Performance is read from the cross-validation the active learning document
 declares. Every fold is refitted by MAP on its retained rows and predicts its
 held-out rows, so each judged row receives one cross-validated expected
 response. An item's observed
@@ -185,7 +185,7 @@ class MapActiveFitter:
     Parameters
     ----------
     program : ResponseProgram
-        The compiled response model of the judgment-fit document.
+        The compiled response model of the judgment fit document.
     plan : MapInference
         The document's MAP settings.
     levels : int

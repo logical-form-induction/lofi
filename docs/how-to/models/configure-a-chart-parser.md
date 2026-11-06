@@ -54,7 +54,7 @@ choice of chart changes them.
 
 ## Choose the chart family
 
-Charts register under the `lofi.chart` entry-point group:
+Charts register under the `lofi.chart` entry point group:
 
 | `kind` | What it is | Own fields |
 | --- | --- | --- |
@@ -132,7 +132,7 @@ of the potentials \citep{kim-etal2017}. The entropy is
 $h(T\mid\mathbf{w})=-\sum_t p(t\mid\mathbf{w})\log p(t\mid\mathbf{w})$.
 An inside score is an unnormalized log weight; neither it nor $\log z$ is
 itself a log probability. See [Charts and approximation](../../explanation/charts-and-approximation.md)
-for the recurrences and minimum-Bayes-risk decoding.
+for the recurrences and minimum Bayes risk decoding.
 
 ## Compose spans and weigh splits
 
@@ -141,7 +141,7 @@ The neural charts share four declared parts:
 | Field | What it declares |
 | --- | --- |
 | `composition` | How leaves enter the chart and two child cells make a parent, from the `lofi.chart_composition` group. `mean-field` (the default) composes each child pair directly before mixing over splits, with `leaf` and `cell` functions. `gated-residual` gates a composed `candidate` against the mean of the two children with a `gate` function. |
-| `attend` | How a span's candidate splits are mixed, from the `lofi.split_weigher` group. `marginal` (the default) uses each split's exact conditional posterior under the chart. `attend` uses learned child-pair scores alone, from its `score` function. |
+| `attend` | How a span's candidate splits are mixed, from the `lofi.split_weigher` group. `marginal` (the default) uses each split's exact conditional posterior under the chart. `attend` uses learned child pair scores alone, from its `score` function. |
 | `reduction` | How alternative derivations combine: `log-sum-exp` (the default) sums their nonnegative weights in log space, and `maximum` keeps the largest. |
 | `split_left`, `split_right`, `share_splits` | The functions that project the left and right children of a split, and whether one projection serves both. Shared slots must declare the same function. |
 
@@ -242,11 +242,11 @@ ParseSpec(retain='forest', reachability='all', strategy=CkyStrategySpec(kind='ck
 | --- | --- |
 | `retain` | `forest` keeps the packed derivation steps; `inside` keeps only the inside weights. Required. |
 | `reachability` | `all` constructs every chart item; `roots` constructs only items that reach a root. Required. |
-| `refinement_pairs` | Under `reachability: roots`, the most binding-and-candidate pairs the reachability plan enumerates when it narrows one rule's demands on its one-token children (default 65536). A rule past the bound keeps its wider demands, so a lower bound plans faster and prunes less, without losing an item that reaches a root; `0` never narrows. Another value under `reachability: all` is refused. |
+| `refinement_pairs` | Under `reachability: roots`, the maximum number of pairs of bindings and candidates the reachability plan enumerates when it narrows one rule's demands on its one-token children (default 65536). A rule past the bound keeps its wider demands, so a lower bound plans faster and prunes less, without losing an item that reaches a root; `0` never narrows. Another value under `reachability: all` is refused. |
 | `semiring` | From the `lofi.semiring` group; the table below lists the packaged ones. `log-inside` is the default. |
 | `pruner` | From the `lofi.cell_pruner` group: `null` (the default), or `top-k`, which keeps the `width` heaviest items of each cell and prunes lexical cells only under `prune_lexical: true`. |
 | `measure_pruned_mass` | `false` (the default), or `true` to repeat each pruned parse without its pruner and report the goal probability mass the pruner removed. It needs a pruner and a semiring with posterior marginals. |
-| `strategy`, `span_index`, `chart_store` | The traversal, region index and storage, from the `lofi.parse_strategy`, `lofi.span_index` and `lofi.chart_store` groups. Each has one packaged variant: `cky`, `contiguous` (half-open spans) and `native` (packed-forest and inside-table storage). |
+| `strategy`, `span_index`, `chart_store` | The traversal, region index and storage, from the `lofi.parse_strategy`, `lofi.span_index` and `lofi.chart_store` groups. Each has one packaged variant: `cky`, `contiguous` (half-open spans) and `native` (packed forest and inside table storage). |
 
 The packaged fragments under `lofi/configs/parse/` are `exhaustive`, which
 spells out the defaults, and `viterbi-beam`, which selects the Viterbi
@@ -282,7 +282,7 @@ declared semiring lacks is refused when the run is composed:
 
 The `log-probability` capability supplies floating-point log weights, which the `top-k`
 pruner ranks and A* decoding bounds. `marginals` weights sum over every
-derivation, which a minimum-Bayes-risk decode and `measure_pruned_mass` read.
+derivation, which a minimum Bayes risk decode and `measure_pruned_mass` read.
 The Bisk--Hockenmaier baseline's own parse needs `log-probability` weights.
 A semiring without them is accepted when nothing reads them:
 
@@ -375,7 +375,7 @@ metrics as `approximation-residual-mass` and `approximation-overrides`.
 - [Charts and semirings](../../tutorials/07-charts-and-semirings.md) for a
   chart sweep run by hand.
 - The [model configuration reference](../../reference/configuration/model.md)
-  for every chart and span-function field.
+  for every chart and span function field.
 
 ## References
 

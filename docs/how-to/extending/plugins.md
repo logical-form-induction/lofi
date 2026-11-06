@@ -18,7 +18,7 @@ in three passes, each in stable name order:
    "lofi.spec.components.model:TermEncoderSpec"`;
 2. the declaration families that have no built component (rules, matching,
    normal forms, goals, formalisms, semirings, A* choices, fuzzy logics,
-   knowledge-base readers, reducers, corrections, launchers, sweep designs and
+   knowledge base readers, reducers, corrections, launchers, sweep designs and
    the others listed in `lofi.spec._plugins`), whose entries name declaration
    classes;
 3. the group of every component family named in the first pass, whose entries
@@ -237,7 +237,7 @@ lukasiewicz = "lofi.lf.models:LUKASIEWICZ"
 ```
 
 These groups load before any document is validated, so a third-party
-tagged-union variant is available at the boundary that names it.
+tagged union variant is available at the boundary that names it.
 
 A new fuzzy logic needs no more than its t-norm. A
 [`TNorm`](../../reference/lf.md) writes its conjunction, dual t-conorm and
@@ -336,14 +336,14 @@ ComponentPlugin(spec=HrrTermEncoderSpec)
 ```
 
 Every family resolves its tags the same way, through
-[`Registry`](../../reference/registry.md) over the family's entry-point group:
+[`Registry`](../../reference/registry.md) over the family's entry point group:
 `Registry("matching").get("alpha")` returns the object the `alpha` entry of
 `lofi.matching` names. An entry point is the only way to register a component;
 there is no in-process registration.
 
 Building a changed declaration with the plugin's `construct` and checking that
 the component reflects the change catches an entry point that names
-source-tree code, stale build output or the wrong callable. Two entries under
+source tree code, stale build output or the wrong callable. Two entries under
 one tag raise `TagCollisionError` for the whole family and an unregistered tag
 raises `UnknownTagError`; neither is resolved by installation order. Run the exported
 [law suites](laws.md) for every protocol the plugin implements.

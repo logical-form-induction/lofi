@@ -134,7 +134,7 @@ def _measurement_row(
 
 @final
 class BaselineExecutor:
-    """Execute baseline-fit points serially through an experiment store."""
+    """Execute baseline fit points serially through an experiment store."""
 
     __slots__ = (
         "_checked",

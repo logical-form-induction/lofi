@@ -1,7 +1,7 @@
 """Gold constraint sources over a synthetic corpus and its interpretation.
 
 Each source has one label domain. Gold derivations and the gold lexicon emit
-syntactic categories. The logical-form source emits the unique meaning of a
+syntactic categories. The logical form source emits the unique meaning of a
 surface form and classifies it by the logical constants it contains.
 """
 
@@ -294,7 +294,7 @@ def _build_gold_logical_form(
 GOLD_DERIVATION_PLUGIN: Final = ComponentPlugin(
     spec=GoldDerivationConstraintSourceSpec, build=_build_gold_derivation
 )
-"""The gold-derivation constraint source's plugin."""
+"""The gold derivation constraint source's plugin."""
 
 GOLD_LEXICON_PLUGIN: Final = ComponentPlugin(
     spec=GoldLexiconConstraintSourceSpec, build=_build_gold_lexicon
