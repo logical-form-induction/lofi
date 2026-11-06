@@ -47,7 +47,7 @@ class AdamOptimizerSpec(OptimizerSpec):
     learning_rate : float
         Positive finite step size.
     betas : tuple[float, ...]
-        Two finite exponential-decay rates in ``[0, 1)``.
+        Two finite exponential-decay rates in $[0, 1)$.
     epsilon : float
         Positive finite numerical-stability term.
     weight_decay : float

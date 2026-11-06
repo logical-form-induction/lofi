@@ -304,19 +304,116 @@ its share. If no stratum's performance is positive, the batch is split evenly
 over the strata. Each round's `stratum-share` rows record every stratum's
 performance and whether it was floored.
 
+For remaining candidate $i$, let $p_i(k)$ be the fitted PMF over numeric
+response levels $r_1,\ldots,r_m$. Its predicted response is
+$\mu_i=\mathbb E[Y_i]=\sum_{k=1}^m r_kp_i(k)$. With remaining pool
+$\mathcal U$, the acquisition score is
+
+$$
+a_i=(\mu_i-\bar\mu)^2,\qquad
+\bar\mu=\frac1{|\mathcal U|}\sum_{j\in\mathcal U}\mu_j.
+$$
+
+This score measures extremity of the predicted mean within the pool; it is
+not posterior predictive variance or entropy. Candidates are ordered by
+$a_i$ decreasing, with identifier order breaking ties. Constraints can require
+an item to be considered in a preliminary pass before the remaining ranked
+items, and the procedure is greedy rather than a proof of global optimality.
+
+Within stratum $s$, write $u_i$ and $v_i$ for the average ranks of item
+$i$'s observed mean and cross-validated predicted mean, including average
+ranks for ties. Its performance is Spearman's correlation
+\citep{spearman1904}:
+
+$$
+\rho_s=\frac{\sum_i(u_i-\bar u)(v_i-\bar v)}
+{\sqrt{\sum_i(u_i-\bar u)^2\sum_i(v_i-\bar v)^2}}.
+$$
+
+The sums range over judged items in stratum $s$. For $q$ strata, the target
+batch shares are
+
+$$
+\pi_s=
+\begin{cases}
+\dfrac{\max\{\rho_s,0\}}{\sum_{h=1}^q\max\{\rho_h,0\}},
+&\sum_h\max\{\rho_h,0\}>0,\\[6pt]
+1/q,&\text{otherwise}.
+\end{cases}
+$$
+
+For batch size $b$, quotas begin at $\lfloor b\pi_s\rfloor$; the remaining
+places go to the largest fractional remainders, with stratum-name order
+breaking ties. The completed batch must satisfy
+$|n_s/b-\pi_s|\leq\epsilon$, where $n_s$ is its stratum count and
+$\epsilon$ is `share_tolerance`. The reported batch variance is the
+population-denominator statistic
+$b^{-1}\sum_{i\in\mathcal B}(\mu_i-\bar\mu_{\mathcal B})^2$,
+computed after selection.
+
 ## Choose the stopping condition
 
 `stopping.kind` selects one of three conditions:
 
 | `kind` | Stops when | Fields |
 | --- | --- | --- |
-| `agreement` | Krippendorff's alpha over the items judged more than once reaches `threshold`. | `threshold` in [0, 1]; `basis` |
+| `agreement` | The implemented squared-distance agreement coefficient over multiply judged items reaches `threshold`. | `threshold` in [0, 1]; `basis` |
 | `rank-correlation` | The Spearman correlation between every judged item's mean response and its mean cross-validated prediction reaches `threshold`. | `threshold` in [-1, 1]; `basis` |
 | `asymptote` | The rank correlations of the last `window` rounds lie within `maximum_gain` of one another. | `window` of at least 2; `maximum_gain` of at least 0 |
 
 `basis` is `lower-bound` by default, which compares the lower end of the
 interval at `confidence` with the threshold; `estimate` compares the point
 estimate.
+
+The agreement implementation uses squared differences between numeric
+response levels. Let $\mathcal J$ contain items with at least two responses,
+let item $j$ have responses $y_{j1},\ldots,y_{jm_j}$, and let
+$z_1,\ldots,z_n$ pool all those responses. It computes
+
+$$
+\begin{aligned}
+d_o&=\frac{\sum_{j\in\mathcal J}\sum_{a<b}(y_{ja}-y_{jb})^2}
+{\sum_{j\in\mathcal J}\binom{m_j}{2}},\\
+d_e&=\frac{\sum_{a<b}(z_a-z_b)^2}{\binom n2},\\
+\alpha_{\mathrm{impl}}&=1-d_o/d_e.
+\end{aligned}
+$$
+
+When $d_e=0$, it returns one by convention; with no multiply judged item,
+it refuses the calculation. Every within-item pair receives the same weight,
+so items with more responses contribute more pairs. This is not the standard
+ordinal-distance version of Krippendorff's alpha, and for unequal response
+counts its weighting also differs from the usual coincidence-matrix
+calculation \citep{krippendorff2004,hayes-krippendorff2007}. The displayed formula specifies the
+quantity currently exposed by `agreement`.
+
+The agreement interval resamples items, retaining all their responses, and
+takes percentile bounds at $(1-c)/2$ and $(1+c)/2$ for declared confidence
+level $c$. The rank-correlation interval instead uses the Fisher transform:
+
+$$
+\tanh\!\left(\operatorname{arctanh}(\widehat\rho)
+\ \pm\ \frac{\Phi^{-1}((1+c)/2)}{\sqrt{n-3}}\right),
+$$
+
+for $n\geq4$ paired items and $|\widehat\rho|<1$, where $\Phi$ is the
+standard normal CDF. At correlations $\pm1$ the implementation returns a
+point interval. This transform is an approximation for the reported rank
+correlation, not an exact finite-sample coverage guarantee.
+
+For threshold $\tau$, `estimate` stops when the current statistic is at
+least $\tau$, whereas `lower-bound` compares the interval's lower endpoint.
+For window size $w$ and allowed gain $\delta$, `asymptote` stops when
+
+$$
+\max_{t-w+1\leq j\leq t}\widehat\rho_j
+-\min_{t-w+1\leq j\leq t}\widehat\rho_j\leq\delta.
+$$
+
+This detects a small recent range, not convergence to a population limit.
+The intervals are recomputed after adaptively selected batches; their
+pointwise construction does not establish simultaneous coverage over every
+possible stopping round.
 
 ## Run the document and field each batch
 
@@ -398,8 +495,9 @@ and the responses through the generating model of the registered synthetic
 designs, on the fit's response levels, with the declared number of
 participants. Its population cutpoints divide `latent_range`, given as
 `{lower, upper}` with `upper` above `lower`, into as many equal intervals as
-the fit has levels: on `L` levels cutpoint `k` lies at
-`lower + k * (upper - lower) / L`. A range wide enough for the item scores
+the fit has levels: on $m$ levels, cutpoint $k$ lies at
+$\kappa_k=a+k(b-a)/m$, for $k\in\{1,\ldots,m-1\}$, where $a$
+and $b$ are `lower` and `upper`. A range wide enough for the item scores
 places responses on every level whatever the fit's number of levels; on three
 levels, `{lower: -3.0, upper: 3.0}` puts the cutpoints at -1 and 1. For
 instance, a run whose true item effects are the trained point's root log mass:
@@ -434,7 +532,7 @@ the initial judgments and contributes no row.
 
 | `metric` | `value` | Further columns |
 | --- | --- | --- |
-| `agreement` | Krippendorff's ordinal alpha over every judgment so far | `lower`, `upper`; `n`, the judgments so far |
+| `agreement` | The implemented squared-distance agreement coefficient over multiply judged items so far | `lower`, `upper`; `n`, the judgments so far |
 | `rank-correlation` | The cross-validated Spearman correlation | `lower`, `upper`; `n` |
 | `batch-variance` | The variance of the batch's predicted responses | `n`, the batch size |
 | `stratum-share` | One stratum's share of the batch | `stratum`; `performance`, the stratum's performance the batch was allocated by; `floored`, whether that performance was negative and floored at zero; `n`, the batch size |
@@ -473,3 +571,7 @@ resumes it.
   point that predicts the items a batch holds.
 - [Run and price a sweep](../experiments/sweeps.md) launches an experiment and
   ingests its results.
+
+## References
+
+\bibliography

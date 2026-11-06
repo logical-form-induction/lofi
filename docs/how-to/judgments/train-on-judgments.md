@@ -49,6 +49,26 @@ summing the instrument's rows under the grounded label distribution, then
 scores the observed level. A level outside the instrument's width is refused
 when the batch is scored.
 
+Write $Z$ for the latent inference label and $Y$ for the response level.
+The instrument is a row-stochastic matrix $\mathbf{A}$ with
+$a_{zk}=\mathbb{P}(Y=k\mid Z=z)$ and $\sum_k a_{zk}=1$.
+Given grounded label PMF $p_Z(z\mid x)$ for pair $x$, it induces
+
+$$
+p_Y(k\mid x)=\sum_z a_{zk}p_Z(z\mid x),\qquad
+\ell_{\mathrm{response}}=-\frac1n\sum_{i=1}^{n}\log p_Y(y_i\mid x_i).
+$$
+
+Here $n$ counts observed responses whose grounding is decided; abstained
+pairs do not contribute to this average. The instrument is fixed by the
+declaration. Different label PMFs that map
+to the same response PMF cannot be distinguished by these responses alone.
+The reward route uses the observed response probability as its credit; it
+is not the same objective as negative log likelihood. See
+[Induction objectives](../../explanation/induction-objectives.md) for the
+estimator and gradient conventions, and [Judgment models](../../explanation/judgment-models.md)
+for fitted response models.
+
 ## Train it
 
 Apply the overlay with `--extra`:

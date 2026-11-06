@@ -68,7 +68,7 @@ Reading the interpretation line by line:
 | Line | What it says |
 |---|---|
 | `meaning` on each entry | The lexical logical form of that form and category, in the language's term syntax. |
-| `erasure` | The image of each category atom as a semantic type. Functor images are derived from the signature's functor views, so `S\NP` erases to `e -> t`. |
+| `erasure` | The image of each category atom as a semantic type. Functor images are derived from the signature's functor views, so $\mathrm S\backslash\mathrm{NP}$ erases to $e\to t$. |
 | `constants` | The non-logical constants the meanings use, each typed and given at least one `classes` role for the symbol inventory. They are added to the language's own constants. |
 | `meanings` | Read the meanings from the lexical entries. |
 
@@ -97,6 +97,36 @@ signature-morphism {'S': 't', 'NP': 'e', 'conj': 'e'}
 [('a', 'e'), ('p', 'e -> t'), ('r', 'e -> e -> t')]
 lexical unique
 ```
+
+Write $E(A)$ for the semantic type assigned to category $A$. A lexical
+meaning $t$ for an entry of category $A$ must satisfy the typing judgment
+$\vdash t:E(A)$ in the declared logical-form language. For a rule
+$A_1,\ldots,A_k\Rightarrow B$, its closed semantic action must have type
+
+$$
+\vdash a:E(A_1)\to\cdots\to E(A_k)\to E(B).
+$$
+
+Internally, an action is represented with open premise hypotheses. If its
+body is $s$ and derivations $d_i$ have meanings $t_i$, first substitute the
+children capture-avoidantly to obtain $u=s[t_1/x_1,\ldots,t_k/x_k]$. The
+meaning reading then follows the derivation policy:
+
+$$
+\llbracket r(d_1,\ldots,d_k)\rrbracket=
+\begin{cases}
+\operatorname{nf}(u),&\text{eager normalization},\\
+u,&\text{lazy substitution}.
+\end{cases}
+$$
+
+The lazy policy leaves redexes in the substituted term. In the eager case,
+$\operatorname{nf}$ denotes successful normalization under the declared
+equations and budget, not an assertion that every term normalizes within
+that budget. This realizes the compositional correspondence between
+syntactic combination and semantic interpretation \citep{montague1970};
+[Category-to-type interpretation](../../explanation/logical-forms-as-types.md#category-to-type-interpretation)
+defines the erasure and proof-term correspondence in detail.
 
 ## Lower the interpretation
 
@@ -154,6 +184,19 @@ none if there are several, `first` takes the first in proof-search order,
 collects. A rule with no unique derived action needs one in
 `actions`, a closed term keyed by the rule's name and applied to its premises
 in order; a listed action also overrides a derived one.
+
+The action search asks for inhabitants of
+$x_1:E(A_1),\ldots,x_k:E(A_k)\vdash t:E(B)$ and abstracts over the premises.
+Its resource discipline constrains premise use: linear search uses each
+premise once, affine search at most once, relevant search at least once,
+and intuitionistic search permits unused or repeated premises. The latter
+two still obey `max_uses`; all four obey the search budget.
+
+Consequently, `unique` means unique among the inhabitants returned by this
+search. An empty result or an exhausted bound does not establish
+uninhabitability in the unbounded calculus, and one returned inhabitant does
+not establish global uniqueness. The report's `bound-exhausted` field must
+be read together with its coverage and ambiguity fields.
 
 The other fields:
 
@@ -215,5 +258,9 @@ validated.
   language the meanings are written in.
 - [Map between signatures](map-between-signatures.md) for the erasure in
   detail.
-- [Logical forms as types](../../explanation/logical-forms-as-types.md) for
+- [Categories, semantic types, and logical forms](../../explanation/logical-forms-as-types.md) for
   why a rule's action is a proof term.
+
+## References
+
+\bibliography

@@ -11,6 +11,23 @@ The [`SignatureSpec`](../../reference/configuration/grammar.md) class is the
 declaration; every grammar section of a run document holds one under
 `signature`.
 
+Write $\Sigma$ for the declared many-sorted signature and
+$\mathcal T_\Sigma(\mathrm{Cat})$ for its ground category terms. A primitive
+is a nullary symbol of sort $\mathrm{Cat}$; a constructor of arity $k$ has
+profile
+
+$$
+c:\underbrace{\mathrm{Cat}\times\cdots\times\mathrm{Cat}}_{k\text{ arguments}}
+\longrightarrow\mathrm{Cat}.
+$$
+
+The formation condition is recursive: if $A_1,\ldots,A_k$ are category
+terms, then $c(A_1,\ldots,A_k)$ is a category term. This is a term algebra
+\citep{meinke-tucker1992}; the configuration's `functors` adds operational
+information about argument direction and constructor slots. It does not
+supply a category-theoretic functor. See [Signatures and terms](../../explanation/logical-forms-as-types.md#signatures-and-terms)
+for the general sorted and binding-aware definition.
+
 ## A complete signature
 
 The example
@@ -42,7 +59,7 @@ Reading the signature line by line:
 | Line | What it says |
 |---|---|
 | `primitives` | The atomic categories. Each is a constant of the category sort, `Cat` by default. |
-| `constructors` | Two binary constructors of kind `Cat × Cat → Cat`, written infix as `/` and `\`. The notation fixes how category text is read and printed. |
+| `constructors` | Two binary constructors of kind $\mathrm{Cat}\times\mathrm{Cat}\to\mathrm{Cat}$, written infix as `/` and `\`. The notation fixes how category text is read and printed. |
 | `functors` | The two constructors as functor views. `/` takes its argument on the right and `\` on the left; each names the other as its `opposite`. Both default to result slot `0` and argument slot `1`. |
 | `operators` | Featured categories. `S[dcl]` is `S` with the feature `dcl`; it takes every other property from `S`. |
 | `conjunctions` | The marker `conj` and the pair relating `NP` to its marked form `NP[conj]`, which coordination rules produce and consume. |
@@ -54,8 +71,8 @@ from them with the declared `constructors`, and each constructor declares its
 `kind` (its argument sorts followed by its result sort) and a `notation`:
 `infix` with a spelling, precedence and associativity, `prefix` with a
 spelling, or `mixfix` with one more part than it has arguments. An infix
-constructor must be binary, and every constructor must be an endofunctor over
-the category sort. Category text is read by the same notation reader that reads
+constructor must be binary, and every category constructor must take category arguments and return
+a category. Category text is read by the same notation reader that reads
 a logical-form language's semantic types: prefix and mixfix tokens are tried
 longest first, and infix constructors bind by precedence and associativity. In
 category text a constructor token also ends the atom before it, so `S\NP` needs
@@ -214,3 +231,7 @@ category inventory.
   mapping categories onto semantic types.
 - [Derivations as proofs](../../explanation/derivations-as-proofs.md) for what
   a category and its constructors stand for.
+
+## References
+
+\bibliography

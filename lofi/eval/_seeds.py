@@ -60,7 +60,7 @@ def _coverage(level: float) -> float:
     TypeError
         If ``level`` is not numeric.
     ValueError
-        If ``level`` is not finite or is outside ``(0, 1)``.
+        If ``level`` is not finite or is outside $(0, 1)$.
     """
     coverage = ensure_finite("a coverage level", level)
 

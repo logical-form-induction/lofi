@@ -68,7 +68,7 @@ Each term has four fields:
 ## Add a term with a warm-up
 
 Append a term from the command line with `loss.terms+=[...]` rather than
-restating the list. This override adds a simplicity prior whose weight ramps
+restating the list. This override adds a simplicity regularizer whose weight ramps
 from zero to `0.01` over the first hundred optimizer steps:
 
 ```python
@@ -89,7 +89,7 @@ simplicity 0.01 WeightScheduleSpec(start=0.0, steps=100)
 SimplicityLossSpec(kind='simplicity', readout='category-terms', scope=<SimplicityScope.LEXICON: 'lexicon'>, symbol_cost=UniformSymbolCostSpec(kind='uniform', cost=1.0))
 ```
 
-The printed objective shows the defaults the schema filled in: the prior
+The printed objective shows the defaults the schema filled in: the regularizer
 prices lexical cells only, at a uniform cost of one per constructor. On the
 command line the same override is
 `--set 'loss.terms+=[{"objective": ...}]'`; the
@@ -102,6 +102,12 @@ objective (`null` or `0` turns it off, and the default is `1000`), and a
 token-warm-up training step is declared on the trainer rather than in the loss
 section. See [Configure a trainer](configure-a-trainer.md) for the latter.
 
+The [objective definitions](../../explanation/induction-objectives.md) give
+an equation for each family, including masks, averaging denominators,
+normalization, and gradient detachment. In particular, a weighted sum of losses
+does not imply that all terms share the same observation unit or form one
+normalized joint likelihood.
+
 ## Choose objectives
 
 The packaged `lofi.loss` group registers thirteen objectives. Each reads a
@@ -113,7 +119,7 @@ must exist under `model.readouts`, `model.spaces` or `model.decoders`.
 | `grammaticality` | Binary grammaticality of each string against a published root mass. | `readout` | `noise` (default `0.0`) is the probability that an observed label was flipped, in `[0, 0.5)`. |
 | `coherence` | The divergence between a parent cell's term distribution and the distribution its combinators compose. | `readout`, `space` | `estimator`: `exact` (default) or `truncated`; `residual_mass` overrides the truncation bound; `divergence`: `kl` (default), `cross-entropy`, or `fenchel-young` with `alpha` at least one (default `1.5`); `warmup` (default `1000`). |
 | `chart-scale` | A penalty on chart cells whose Euclidean norm departs from a target. | none | `target` (default `1.0`, positive); `penalty`: `squared-ratio` (default), `squared-distance` or `absolute-distance`. |
-| `simplicity` | The expected description length of a term readout's terms. | `readout` | `scope`: `lexicon` (default) or `all-cells`; `symbol_cost`: `uniform` with `cost` (default `1.0`), `log-alphabet`, or `per-constructor` with a `costs` map. |
+| `simplicity` | Expected declared constructor cost under the readout. | `readout` | `scope`: `lexicon` (default) or `all-cells`; `symbol_cost`: `uniform` with `cost` (default `1.0`), `log-alphabet`, or `per-constructor` with a `costs` map. |
 | `derivation-entropy` | The entropy of the parser's tree distribution. | `direction`: `minimize` or `maximize` | none |
 | `span-reconstruction` | Reconstruction of each span's words from its inside cell. | `decoder` | `weighting`: `uniform` (default) or `marginal`; `max_span_length` (default `null`, every length); `normalization`: `span` (default) or `token`. |
 | `outside-reconstruction` | Reconstruction of each word from its outside vector, the context outside its own leaf span. | `decoder` | none |

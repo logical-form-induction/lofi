@@ -27,8 +27,9 @@ from `generating_spec(levels)`: a cumulative family over a linear link on
 `score` plus a participant random intercept. The population cutpoints divide the
 design's declared `latent_range` into as many equal intervals as it has levels,
 one cutpoint at each interior boundary, so a design over `levels` levels on
-`latent_range=(lower, upper)` places cutpoint `k` at
-`lower + k * (upper - lower) / levels`. Both packaged designs declare
+`latent_range=(lower, upper)` places cutpoint $k$ at
+$\kappa_k=a+k(b-a)/m$, for $k\in\{1,\ldots,m-1\}$, where
+$m$ is `levels`, $a$ is `lower`, and $b$ is `upper`. Both packaged designs declare
 `(-2.5, 4.5)`, one unit between consecutive cutpoints.
 
 Draw one and read what its provenance records:

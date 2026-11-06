@@ -62,6 +62,45 @@ The logical classes are the `lofi.lf_class` entries: `quantifier`,
 loaded by name with `preset`, which reads `semantic_lexicons/<name>.json` from
 the configuration search path; LoFI ships `natural`.
 
+For a parametric joint, let class $c$ contain $n_c>0$ symbols and let
+$\kappa$ be `coupling`. Before category-specific assignment restrictions,
+its normalized token share is
+
+$$
+p_C(c)=\frac{n_c^{1-\kappa}}{\sum_{d\in\mathcal C}n_d^{1-\kappa}},
+\qquad
+\frac{p_C(c)}{n_c}
+=\frac{n_c^{-\kappa}}{\sum_{d\in\mathcal C}n_d^{1-\kappa}}.
+$$
+
+The second expression is the class's mean share per symbol. Thus
+$\kappa=0$ equalizes that mean, while $\kappa=1$ equalizes class shares.
+Within-class frequency need not be uniform: a power law with exponent
+$\alpha$ assigns symbol rank $r$ probability proportional to $r^{-\alpha}$
+within its eligible inventory.
+
+A category $A$ draws an assignment row $j$ with declared weight $a_{Aj}$ and
+class $c_j$. Its first row draw has PMF
+
+$$
+p_J(j\mid A)
+=\frac{a_{Aj}p_C(c_j)}{\sum_{h\in\mathcal J_A}a_{Ah}p_C(c_h)}.
+$$
+
+It then draws a symbol from that row's class, restricting to the required
+arity if one is declared, and renormalizes the eligible symbol weights.
+The `independent` assignment supplies one unit-weight row per class, giving
+$p_C(c\mid A)=p_C(c)$. With polysemy, meanings are drawn without replacement:
+already selected symbols are excluded and exhausted assignment rows are
+removed before subsequent draws. Thus the displayed PMFs describe the
+initial draw, not independent repeated draws of every meaning.
+
+The requested class shares, conditional assignment laws, realized lexical
+assignment, and corpus frequencies are separate objects. Restricting a
+category to one class can change the realized marginal, and finite draws
+need not reproduce its expectation. The `polysemy` count law uses the same
+bounded mixture construction as [lexical ambiguity](../grammars/declare-a-lexicon.md#draw-a-structured-lexicon).
+
 ## Compare semantic profiles
 
 `experiments/l3/distribution.yaml` sweeps the joint over twelve profiles
@@ -111,11 +150,36 @@ The report separates what was declared from what the corpus used.
 `lexicon.sizes` is the drawn inventory per class, `symbols_used` counts the
 inventory symbols that occur in the corpus, and `concordance` is the
 normalized mutual information of category and class, which is one here
-because the tabular assignment fixes the class of each category. At the 12
-pairs this run draws, both profiles use the same number of symbols, so an
-inventory-size effect can only show at a larger `size`. The report also gives
+because the tabular assignment fixes the class of each category and both
+variables vary. At the 12 pairs this run draws, both profiles use the same
+number of symbols. Equal support counts do not show that inventory size has
+no effect: the identities, frequencies, assignments, or inference labels may
+already differ. The report also gives
 the per-class frequency histograms, the item shares and the meanings per form,
 which is what L3 reads to separate inventory size from frequency.
+
+Let $n_{ac}$ count the report's category-class occurrences, let
+$n=\sum_{a,c}n_{ac}>0$, and set $\widehat p_{AC}(a,c)=n_{ac}/n$.
+The empirical marginal PMFs follow by summation. Using natural logarithms,
+the report computes
+
+$$
+\begin{aligned}
+H(A)&=-\sum_a\widehat p_A(a)\log\widehat p_A(a),\\
+H(C)&=-\sum_c\widehat p_C(c)\log\widehat p_C(c),\\
+I(A;C)&=\sum_{a,c:\,n_{ac}>0}\widehat p_{AC}(a,c)
+\log\frac{\widehat p_{AC}(a,c)}{\widehat p_A(a)\widehat p_C(c)},\\
+\operatorname{concordance}(A,C)&=\frac{I(A;C)}{\min\{H(A),H(C)\}}.
+\end{aligned}
+$$
+
+Entropy and mutual information have their standard information-theoretic
+meaning \citep{shannon1948}; division by the smaller entropy is this
+report's specified normalization. Concordance is undefined, reported as
+`None`, when there are no observations or either variable has zero entropy.
+When both entropies are positive, a deterministic mapping in either
+direction gives concordance one. This statistic describes the recorded
+category-class counts, not the size of the declared symbol inventory.
 
 ## Aim at a complexity band
 
@@ -158,10 +222,19 @@ hypothesis side, which is not controlled, is reported but not banded. The
 report counts the candidate pairs rejected to meet the bands, so a band that
 is expensive to meet is visible before training.
 
+For a complexity measurement $c(t)$ with target $v$ and tolerance
+$\epsilon\geq0$, acceptance requires $|c(t)-v|\leq\epsilon$.
+If $S(t)$ is the set of predicate symbols in $t$, the overlap measurement is
+$|S(\varphi)\cap S(\psi)|$. All declared bands must hold together.
+Conditioning on these acceptances changes the distribution of sampled pairs;
+it does not merely annotate an otherwise unchanged draw. The
+[synthetic-design definition](../../explanation/synthetic-designs.md)
+formalizes the resulting rejection-sampling law.
+
 ## Count scope readings
 
 A `synthetic` or `synthetic-inference` declaration's `scope` block measures
-how many logically distinct forms each string's derivations yield:
+how many readings its bounded equivalence procedure distinguishes:
 
 | Field | What it says |
 | --- | --- |
@@ -175,6 +248,25 @@ equivalence decision runs under the interpretation's clock. The
 corpus's `scope` report lists the derivations and readings counted for each
 item. `experiments/l3/ambiguity.yaml` crosses a scope-reading target with
 lexical polysemy.
+
+The ideal equivalence relation is
+
+$$
+\varphi\equiv_\Gamma\psi
+\quad\Longleftrightarrow\quad
+\Gamma,\varphi\vdash\psi\ \text{and}\ \Gamma,\psi\vdash\varphi.
+$$
+
+With exhaustive derivations and a complete decision procedure, counting
+readings would count the quotient of the derived forms by this relation.
+The implementation instead compares each new form with previously retained
+representatives under one shared per-string prover budget. It joins a form
+when both entailments are proved; undecided comparisons follow `undecided`.
+Thus `distinct` can split a true equivalence class, whereas `equivalent` can
+merge logically distinct forms. Enumeration bounds, abstentions, and
+representative order can affect the reported count. Read it together with
+the number of interpreted derivations and undecided comparisons, rather than
+as an unconditional count of semantic equivalence classes.
 
 ## Refusals
 
@@ -207,3 +299,7 @@ data.datasets.train.dataset.complexity.premise.controls was refused: complexity 
 
 [Source and learner declarations](../../explanation/synthetic-designs.md)
 explains how these controls become factors of an experiment.
+
+## References
+
+\bibliography

@@ -15,7 +15,7 @@ entries declare several of them at once:
 
 | `rule` | Declares | Required fields |
 |---|---|---|
-| `application` | `X/Y Y ⇒ X` through one functor view. | `view` |
+| `application` | $\frac{X/Y\quad Y}{X}$ through one functor view. | `view` |
 | `composition` | Generalized composition through a view, of one `order` or, with `order: null`, of every finite order above zero. `crossed: true` declares the crossed variant. | `view`, `order`, `direction` |
 | `substitution` | Generalized substitution through a view, harmonic or `crossed`. | `view`, `order` |
 | `type-raising` | Raising through a view of the listed `arguments`, by default `N` and `S`, optionally only to the listed `targets`; `arguments: null` raises every category. | `view` |
@@ -25,7 +25,7 @@ entries declare several of them at once:
 | `pattern` | Any rule written as premise patterns and a conclusion pattern. | `name`, `premises`, `conclusion` |
 | `coercion` | One ground unary coercion, normally expanded from a `coercions` set. | `label`, `member`, `source`, `target` |
 | `combinators` | An application, composition, substitution and type-raising inventory expanded over every functor view. | none |
-| `coercions` | Ground unary coercions sharing one `label`, one `coercion` rule per `source => target` entry. | `label`, `entries` |
+| `coercions` | Ground unary coercions sharing one `label`, one `coercion` rule per declared transition $X\Rightarrow Y$. | `label`, `entries` |
 
 The composition `direction` restriction fixes which slashes the composed
 spine may use. Under `steedman` every spine slash is the one the rule's view
@@ -46,8 +46,32 @@ is refused when the grammar compiles, since the chart could not enforce it. An e
 these to every rule it expands into. The `head_policy`, which selects the
 lexical head a derivation step passes up, is fixed by the family for
 application, composition, substitution, type raising, clausal adjuncts and
-coercions, which therefore declare none; `pattern` and `absorption` rules
+coercions, which thus declare none; `pattern` and `absorption` rules
 declare it with a default, and coordination declares it with its phase.
+
+A rule with $k$ premises denotes a relation
+$R\subseteq\mathcal C^k\times\mathcal C$, where $\mathcal C$ is the category
+term algebra. A pattern declaration with premises $P_1,\ldots,P_k$ and
+conclusion $Q$ licenses the instances
+
+$$
+\frac{\theta P_1\quad\cdots\quad\theta P_k}{\theta Q},
+$$
+
+where $\theta$ is one sort-preserving substitution shared by all patterns,
+and the declared matching and restriction predicates must hold. This shared
+substitution is what makes repeated pattern variables impose equality
+constraints under the declared matching relation, rather than necessarily
+identity of the original terms. The displayed unary identity declaration below is the schema
+$X\Rightarrow X$.
+
+For the standard CCG application, composition, substitution, and raising
+schemas, see [Categories, productions, and lexical axioms](../../explanation/derivations-as-proofs.md#categories-productions-and-lexical-axioms)
+\citep{steedman2000}. An `order: null` declaration permits every positive
+composition degree in the rule relation; the compiler and parser still apply
+their declared bounds. Generalized-composition results depend on these rule
+restrictions and cannot be inferred from the plugin name alone
+\citep{kuhlmann-etal2010,kuhlmann-etal2015}.
 
 ## Select a packaged rule set
 
@@ -173,7 +197,7 @@ print([name for name in names if not name.startswith(("composition", "applicatio
 ```
 
 A `coercions` entry declares ground unary coercions that share one label, each
-entry written `source => target`. The packaged PMB grammars under
+entry declaring a source-to-target transition $X\Rightarrow Y$. The packaged PMB grammars under
 `grammar/pmb/` append their lexical coercions to the shared PMB rules with
 `rules+` this way.
 
@@ -246,3 +270,7 @@ suites are run.
   for the filters a rule set compiles under.
 - [Derivations as proofs](../../explanation/derivations-as-proofs.md) for what
   a rule licenses.
+
+## References
+
+\bibliography

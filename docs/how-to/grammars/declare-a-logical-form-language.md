@@ -112,6 +112,130 @@ postulates the prover assumes. It names the shared pieces in its
 guide](../setup/configuration.md#extend-a-list-without-restating-it)
 describes.
 
+## Semantics of the specialized fragments
+
+The [type and term rules](../../explanation/logical-forms-as-types.md) give
+these declarations their shared syntax. The following equations specify
+additional interpretations or postulates; a fragment name alone does not
+supply every assumption used in the associated linguistic literature.
+
+### Choice
+
+For each instantiated type $\alpha$, the choice constant has type
+$\varepsilon_\alpha:(\alpha\to t)\to\alpha$. On a nonempty domain
+$D_\alpha$, its defining condition is
+
+$$
+(\exists x\in D_\alpha\;P(x))\;\Longrightarrow\;
+P(\varepsilon_\alpha(P)).
+$$
+
+Thus a nonempty predicate extension supplies a witness. For the empty
+extension, the condition imposes no restriction beyond membership in
+$D_\alpha$. This is Hilbert's choice condition \citep{hilbert-bernays1970}.
+LoFI’s finite choice resource requires known crisp predicate facts, validates
+explicitly supplied choices and
+otherwise selects the first satisfying member in domain order, or the first
+domain member when there is none. This deterministic completion is not a
+uniform draw from the predicate extension. The prover translation uses the
+higher-order choice binder; not every first-order backend supports it.
+
+### Dynamic meanings
+
+Let $D_s$ be the state domain. A dynamic proposition has type
+$s\to s\to t$ and denotes a relation on $D_s$. The packaged `d_and` is
+relational composition, and `d_exists` quantifies an individual argument:
+
+$$
+\begin{aligned}
+(P;Q)(i,o)&\;\Longleftrightarrow\;
+\exists m\in D_s\,[P(i,m)\land Q(m,o)],\\
+(\exists^{\mathrm{dyn}}x\,P)(i,o)&\;\Longleftrightarrow\;
+\exists x\in D_e\,P(x,i,o).
+\end{aligned}
+$$
+
+Here $i,m,o$ denote input, intermediate, and output states; $P,Q$ denote
+relations, not probability distributions. Relational update semantics is
+central to dynamic predicate logic \citep{groenendijk-stokhof1991}.
+LoFI's fragment uses a single retrievable referent, with functions
+$\operatorname{assign}:D_e\times D_s\to D_s$ and
+$\operatorname{referent}:D_s\to D_e$ constrained by
+$\operatorname{referent}(\operatorname{assign}(x,i))=x$.
+For unary individual predicates $R,U$ and a binary state relation $P$,
+its remaining definitions are
+
+$$
+\begin{aligned}
+\operatorname{introduce}(R,U)(i,o)
+&\Longleftrightarrow\exists x\,[R(x)\land U(x)\land
+ o=\operatorname{assign}(x,i)],\\
+\operatorname{pronoun}(U)(i,o)
+&\Longleftrightarrow U(\operatorname{referent}(i))\land o=i,\\
+\operatorname{close}(P)&\Longleftrightarrow\exists i\,\exists o\,P(i,o).
+\end{aligned}
+$$
+
+These definitions do not provide an arbitrary variable-indexed assignment
+store. The packaged finite domains each have two members; their sizes are
+model-search resources, not a claim about all possible discourse states.
+
+### Plural individuals
+
+The plural fragment supplies a join-semilattice $(D_e,\oplus)$, with
+commutativity, associativity, and idempotence:
+
+$$
+x\oplus y=y\oplus x,\qquad
+(x\oplus y)\oplus z=x\oplus(y\oplus z),\qquad x\oplus x=x.
+$$
+
+Its parthood and atomicity predicates are
+
+$$
+x\leq y\;\Longleftrightarrow\;x\oplus y=y,\qquad
+\operatorname{atom}(x)\;\Longleftrightarrow\;
+\forall y\,[y\leq x\Rightarrow y=x].
+$$
+
+The atomicity definition uses minimal elements of the nonempty-individual
+domain; it does not add a null individual beneath every atom. This algebraic
+approach to plurality follows \citet{link1983}. The finite runtime realizes this as $\mathcal{P}(A)\setminus\{\varnothing\}$
+for an atomic set $A$, with union as join, inclusion as parthood, and singleton
+sets as atoms. Thus its domain size is $2^{|A|}-1$; the packaged size of
+three represents two atoms and their sum. It is more specific than an
+arbitrary finite join-semilattice. LoFI separately postulates
+$\operatorname{laughed}(x\oplus y)\Longleftrightarrow
+\operatorname{laughed}(x)\land\operatorname{laughed}(y)$.
+That distributivity is a lexical postulate for this predicate, not a law
+that every plural predicate satisfies. The fragment imposes no analogous
+axiom on its collective predicate `gathered`. Its finite domain bound of
+three does not establish completeness for unbounded plural models.
+
+### Events and generalized quantifiers
+
+The registered `neo-davidsonian` language has an event sort $v$ in addition
+to $e$ and $t$. An event analysis can represent a sentence with a formula such
+as $\exists v\,[\operatorname{sleep}(v)\land\operatorname{agent}(v,a)]$,
+provided its lexical declaration supplies those typed predicates
+\citep{parsons1990}. The sort alone supplies neither thematic-role axioms
+nor tense or aspect. The similarly named packaged YAML fragment currently
+inherits only the shared individual and truth sorts; inspect the resolved
+declaration rather than inferring its inventory from the name.
+
+For a finite individual domain and restrictor and scope extensions
+$A,B\subseteq D_e$, the inline `most` semantics is strict majority:
+
+$$
+\operatorname{most}(A,B)\;\Longleftrightarrow\;
+|A\cap B|>|A\setminus B|.
+$$
+
+This is a generalized quantifier of type $(e\to t)\to(e\to t)\to t$
+\citep{barwise-cooper1981}. An empty restrictor makes it false. The finite
+plugin requires known crisp facts on the same domain; it does not silently
+extend majority to arbitrary graded predicates or infinite cardinalities.
+
 ## Declare a language inline
 
 Declare a language with a generalized quantifier whose semantics come from the
@@ -177,7 +301,7 @@ The parts of the declaration:
 
 | Field | What it declares |
 |---|---|
-| `atomic_types` | Each atomic type's `name` and resource `kind`, `individual` by default. The packaged languages give `t` the kind `proposition` and `v` the kind `event`. |
+| `atomic_types` | Each atomic type's `name` and resource `kind`, `individual` by default. The registered neo-Davidsonian language declares `v` with kind `event`; its packaged shared YAML declares `e` and `t`, with `t` of kind `proposition`. |
 | `constructors` | Type constructors over the type sort, read in their declared notation by the same reader as category text. A token ending in a letter, digit or underscore matches only as a whole word, so a type named `toe` is not read as the token `to`. The one named by `function_type` (`->` by default) must be binary and infix. |
 | `constants` | Each constant's `name`, `type` (or `infer`, to infer it from its uses), the type variables it `quantifies`, its `classes`, a surface `notation` (`prefix`, `infix` or `binder`, each with an ASCII and a Unicode token), and either a `definition` as a closed term or a postulated `semantics` plugin. |
 | `leaf_lexicon` | A source of further non-logical constants, read once when the language is compiled. |
@@ -259,5 +383,9 @@ lists the groups.
 
 - [Declare an interpretation](declare-an-interpretation.md) to map a grammar's
   derivations into this language.
-- [Logical forms as types](../../explanation/logical-forms-as-types.md) for
-  how categories, types and terms share one store.
+- [Categories, semantic types, and logical forms](../../explanation/logical-forms-as-types.md) for
+  how categories, semantic types, and logical forms share a term representation.
+
+## References
+
+\bibliography

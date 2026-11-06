@@ -40,6 +40,15 @@ The [import-linter](https://import-linter.readthedocs.io/) layers contract in
 fails the check until it is placed. In import-linter's own syntax a colon joins
 siblings that *may* import each other, the opposite of a pipe.
 
+Let $V$ be the set of top-level packages, and let $(u,v)\in E$ mean that
+package $u$ imports package $v$. A layer assignment
+$\lambda:V\to\{0,\ldots,18\}$ numbers layers from bottom to top. The stated
+order requires $\lambda(v)<\lambda(u)$ for an edge between distinct
+packages; same-layer siblings in this contract have no edges between them.
+Narrower contracts remove additional edges from this permitted set. This
+constraint makes the package-level import graph acyclic, but establishes no
+claim about the statistical independence of two components' outputs.
+
 ## Narrower contracts
 
 Further contracts forbid specific imports the layer order would otherwise
@@ -56,7 +65,7 @@ likewise import no grammar pack; a derivation style reads a rule's name and an
 injected symbol table rather than dispatching on a combinator's identity.
 
 **The induction half does not import the logical-form half.** The layer order
-would permit `lofi.formalism -> lofi.typecheck`; a narrower contract forbids
+would permit an import of `lofi.typecheck` by `lofi.formalism`; a narrower contract forbids
 terms, rules, the lexicon, the engine, formalisms, grammar packs and
 interpretation from importing `lofi.typecheck` or `lofi.lf`. The one exception
 is the meaning reading, `lofi.interpret._meaning`, which a separate contract

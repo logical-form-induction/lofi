@@ -69,7 +69,7 @@ class MultilayerOptions(FrozenValue):
     TypeError
         If a width or a depth is not an integer, or the rate is not a number.
     ValueError
-        If a width or a depth is not positive, or the rate is outside ``[0, 1)``.
+        If a width or a depth is not positive, or the rate is outside $[0, 1)$.
     """
 
     _noun = "space-map layers"

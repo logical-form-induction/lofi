@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - "docs/**"
+      - "scripts/docs/**"
       - "mkdocs.yml"
       - "lofi/**"
       - "pyproject.toml"
@@ -43,6 +44,11 @@ jobs:
 
       - name: Install
         run: uv sync --locked
+
+      - name: Check citation rendering
+        run: >
+          uv run --with-requirements docs/requirements.txt
+          python -m unittest discover -s scripts/docs -p 'test_*.py'
 
       - name: Build
         # `--strict` is the gate: a link to a page that does not exist, a page

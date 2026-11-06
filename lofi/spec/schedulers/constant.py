@@ -40,7 +40,7 @@ class ConstantSchedulerSpec(SchedulerSpec):
     warmup_steps : int
         Number of optimizer steps spent warming the learning rate.
     warmup_start_factor : float
-        The fraction of the learning rate the warmup starts from, in ``(0, 1]``.
+        The fraction of the learning rate the warmup starts from, in $(0, 1]$.
     """
 
     kind: Literal["constant"] = "constant"

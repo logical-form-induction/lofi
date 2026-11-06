@@ -8,8 +8,8 @@ rest, and the experimental-design pages read best after the induction pages.
 
 ## Foundations
 
-1. [Logical forms as types](logical-forms-as-types.md). A category is a type, a
-   derivation is a proof, and a logical form is the proof term.
+1. [Categories, semantic types, and logical forms](logical-forms-as-types.md).
+   Term formation, semantic typing, and the interpretation of derivations.
 2. [Grammars as deductive systems](derivations-as-proofs.md). How a signature,
    a rule inventory, a normal form and a goal compile into one deductive system.
 3. [Charts and approximation](charts-and-approximation.md). Chart parsing over

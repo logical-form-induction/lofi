@@ -56,7 +56,7 @@ Reading the new parts line by line:
 |---|---|
 | `language: propositional` | The packaged logical-form language: the types `e`, `v` and `t`, the function-type constructor `->`, and the connectives `not`, `and`, `or`, `if` and `iff`, decided by a truth-table prover. |
 | `meaning` | Each lexical entry's logical form, written in the language's surface syntax. `\x.` binds a variable, and application is curried, so `see(x)(y)` applies `see` to the subject and then the object. |
-| `erasure` | The semantic type of each primitive category. `S` erases to a truth value, `NP` to an individual and `N` to a property, written in angle-bracket type syntax. The image of a slash category follows from its functor: `S\NP` erases to `e -> t`. |
+| `erasure` | The semantic type of each primitive category. `S` erases to a truth value, `NP` to an individual and `N` to a property, written in angle-bracket type syntax. The image of a slash category follows from its functor: $\mathrm{S}\backslash\mathrm{NP}$ erases to $e\to t$. |
 | `constants` | The non-logical constants the meanings are built from, each with a type and a role class. |
 | `meanings: {source: {kind: lexical}}` | Read the meanings from the lexical entries themselves, rather than generating them from a semantic structure. |
 
@@ -123,7 +123,7 @@ The corpus holds forty sentences, chapter 3's size, and the same seed draws
 the same first sentences as chapter 2. Each form is the derivation's meaning
 after the actions have been applied and the result normalized: in
 *the dog chases mary*, `chases` takes `mary` as its object and then `the dog`
-as its subject, which `\y. \x. chase(x)(y)` places first. The printed form
+as its subject, which $\lambda y.\lambda x.\operatorname{chase}(x)(y)$ places first. The printed form
 names the bound variable of *dog*'s meaning `x0`.
 
 ## A refused meaning
@@ -164,7 +164,7 @@ derivation's category.
   under `constants`.
 - Change the erasure of `N` to `e` and read the refusal: every `N` meaning is
   now ill-typed.
-- Swap the bound variables in the meaning of *sees* to `\y. \x. see(y)(x)`
+- Swap the bound variables in the meaning of *sees* to $\lambda y.\lambda x.\operatorname{see}(y)(x)$
   and read how the drawn forms change.
 
 ## Next

@@ -55,12 +55,13 @@ class _SpanContextPatch:
 
 
 class SpanTransition(nn.Module):
-    """Project one completed span tensor into the next chart layer.
+    r"""Project one completed span tensor into the next chart layer.
 
     The one-token rows become the next layer's leaves. Every wider target span
     supplies a contextual input to both receiver edges that construct it. Both
-    projections therefore read only the fully completed ``inside ⊕ outside``
-    tensor returned by the preceding layer.
+    projections thus read only the fully completed concatenation
+    $[\mathbf{h}^{\mathrm{in}};\mathbf{h}^{\mathrm{out}}]$
+    returned by the preceding layer.
     """
 
     def __init__(

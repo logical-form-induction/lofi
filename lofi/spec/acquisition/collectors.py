@@ -85,10 +85,11 @@ type CollectorSettings = (
 
 
 class LatentRangeSpec(dx.Model, extra="forbid"):
-    """Declare the latent interval a drawn design's cutpoints divide evenly.
+    r"""Declare the latent interval a drawn design's cutpoints divide evenly.
 
-    For ``L`` response levels the cutpoints lie at
-    ``lower + k * (upper - lower) / L`` for ``k = 1, ..., L - 1``.
+    For $m$ response levels the cutpoints lie at
+    $\kappa_k=a+k(b-a)/m$, for $k\in\{1,\ldots,m-1\}$,
+    where $a$ and $b$ are `lower` and `upper`.
 
     Parameters
     ----------

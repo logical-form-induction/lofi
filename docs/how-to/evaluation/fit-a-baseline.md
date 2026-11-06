@@ -87,8 +87,7 @@ repeated one.
 
 ## The Bisk-Hockenmaier system
 
-`kind: bisk-hockenmaier` re-runs the CCG induction system of Bisk and
-Hockenmaier (2012) on CCGbank, since no prediction file was released for it,
+`kind: bisk-hockenmaier` re-runs the CCG induction system of \citet{bisk-hockenmaier2012} on CCGbank, since no prediction file was released for it,
 and scores supertagging and unlabeled directed attachment on the evaluation
 section. Its declaration states every treatment the published description
 fixes:
@@ -105,7 +104,7 @@ fixes:
 | `gold_sentence_atom`, `gold_coordination_atom` | The two distinct gold-corpus atoms (`S` and `conj` in CCGbank) whose feature-erased occurrences score as the sentence and coordination categories; every other gold atom scores as the nominal category. |
 | `nominal_tags`, `verbal_tags`, `coordination_tags`, `other_tags`, `punctuation_tags`, `gerund_tag` | The part-of-speech classes that seed the lexicon. |
 | `headed_or_modifier_arguments`, `sentence_arguments`, `max_arity`, `second_order_modifiers`, `category_induction_steps` | How categories are induced from the seed lexicon. |
-| `em_max_iterations`, `convergence_tolerance`, `probability_floor` | The EM horizon, its convergence test and the probability floor (default `exp(-6)`). |
+| `em_max_iterations`, `convergence_tolerance`, `probability_floor` | The EM horizon, its convergence test and the probability floor (default $\exp(-6)$). |
 | `parse`, `threads` | The chart parse each sentence's packed forest is built with (default `{retain: forest, reachability: roots}`), and how many chart cells of one width it may fill concurrently (default 1, positive). The thread count does not change a score, so it is not one of the system's conventions. |
 
 The remaining fields, such as `k: 100` and
@@ -120,6 +119,90 @@ goal must be one root category; every type-raising rule must declare finite
 targets and arguments; and the grammar budget's `threads` must stay
 1, since the parse takes its thread count from the system's own `threads`.
 
+### Factorization and estimation
+
+The implementation associates each derivation node with categorical events.
+For parent category $A$, head category $H$, sister category $S$, direction
+$d\in\{\mathrm{left},\mathrm{right}\}$, and part-of-speech tag $t$, its local
+weight is
+
+$$
+w_{\boldsymbol{\theta}}(v)=
+\begin{cases}
+p_{\boldsymbol{\theta}}(\mathrm{lexical}\mid A)
+ p_{\boldsymbol{\theta}}(t\mid A,\mathrm{lexical}),&v\text{ lexical},\\
+p_{\boldsymbol{\theta}}(\mathrm{unary}\mid A)
+ p_{\boldsymbol{\theta}}(H\mid A,\mathrm{unary}),&v\text{ unary},\\
+p_{\boldsymbol{\theta}}(d\mid A)
+ p_{\boldsymbol{\theta}}(H\mid A,d)
+ p_{\boldsymbol{\theta}}(S\mid A,H,d),&v\text{ binary}.
+\end{cases}
+$$
+
+The lexical outcome is a POS tag, not the observed word. The factors belong
+to separate categorical families, each normalized within its conditioning
+context. A derivation $T$ has weight
+$w_{\boldsymbol{\theta}}(T)=\prod_{v\in T}w_{\boldsymbol{\theta}}(v)$.
+For sentence $x$, let $\mathcal{F}_x$ be the set of complete derivations
+represented by its retained packed forest and
+$\mathcal{K}_x\subseteq\mathcal{F}_x$ its current top-$k$ derivations. The
+conditional PMF on either nonempty set $\mathcal{A}$ is
+
+$$
+q_{\boldsymbol{\theta}}(T\mid x,\mathcal{A})=
+\frac{w_{\boldsymbol{\theta}}(T)}
+{\sum_{T'\in\mathcal{A}}w_{\boldsymbol{\theta}}(T')}.
+$$
+
+Write $n_e(T)$ for the number of occurrences of event $e$ in $T$. The
+expectation step computes both restricted and full-forest expected counts:
+
+$$
+a_e=\sum_x\mathbb{E}_{T\sim q_{\boldsymbol{\theta}}(\cdot\mid x,\mathcal{K}_x)}[n_e(T)],
+\qquad
+b_e=\sum_x\mathbb{E}_{T\sim q_{\boldsymbol{\theta}}(\cdot\mid x,\mathcal{F}_x)}[n_e(T)].
+$$
+
+Training sentences with no complete derivation under the induced lexicon
+are excluded from these sums; if none remain, fitting is refused. Event
+support is fixed from the complete training forests. Full-forest counts
+come from inside–outside rule marginals. For context $c$,
+let $E_c$ be its event support, $a_c=\sum_{e\in E_c}a_e$, and
+$b_c=\sum_{e\in E_c}b_e$. The update combines these estimates as
+
+$$
+\lambda_c=\frac{a_c}{a_c+b_c},\qquad
+m_e=\lambda_c\frac{a_e}{a_c}+(1-\lambda_c)\frac{b_e}{b_c}.
+$$
+
+A component with zero total contributes zero, and $\lambda_c=0$ when both
+totals vanish. For a supported context with $|E_c|\varepsilon\leq1$, the
+probability-floor update is the constrained categorical maximization
+
+$$
+\underset{\{p_e:e\in E_c\}}{\operatorname{maximize}}\quad
+\sum_{e\in E_c}m_e\log p_e
+\quad\text{subject to}\quad
+\sum_{e\in E_c}p_e=1,\qquad p_e\geq\varepsilon.
+$$
+
+The implementation fixes outcomes below the floor at $\varepsilon$ and
+redistributes the remaining mass proportionally among the others. A context
+with no expected counts receives a uniform row. An infeasible floor is
+refused. Initialization is uniform over each context's supported outcomes.
+Iteration stops when
+
+$$
+\max_e\left|p_e^{(r+1)}-p_e^{(r)}\right|\leq\tau
+$$
+
+or `em_max_iterations` is reached; $\tau$ is `convergence_tolerance`.
+This is parameter convergence under the implemented full-forest/top-$k$
+mixture and floor. It does not establish a global optimum or monotonicity of
+an unrestricted observed-data likelihood. The published induction system
+provides the methodological reference \citep{bisk-hockenmaier2012}; these
+equations specify the procedure implemented here.
+
 ### The grammar
 
 The packaged grammar declares the published system's choices:
@@ -127,8 +210,8 @@ The packaged grammar declares the published system's choices:
 | Part | Packaged value |
 | --- | --- |
 | `signature` | Primitives `N`, `S`, `conj` and `TOP`; the slash constructors `/` and `\` with their functor views; a unary marking constructor `@conj`; and a conjunction inventory with marker `conj`. |
-| `rules.combinators` | Forward and backward application, harmonic and crossed composition of order 1 under Steedman's direction restriction, and type raising of the argument atoms, `X => T/(T\X)` and `X => T\(T/X)` for `X` and `T` each `N` or `S`, declared by `raising_arguments` and `raising_targets`. |
-| `rules.rules` | The binarized coordination rule as the two phases `conj X => @conj(X)` and `X @conj(X) => X`, and the unary rules `N => TOP` and `S => TOP`. |
+| `rules.combinators` | Forward and backward application, harmonic and crossed composition of order 1 under Steedman's direction restriction, and type raising of the argument atoms, $X\Rightarrow T/(T\backslash X)$ and $X\Rightarrow T\backslash(T/X)$ for $X,T\in\{\mathrm{N},\mathrm{S}\}$, declared by `raising_arguments` and `raising_targets`. |
+| `rules.rules` | The binarized coordination rule as the two phases $\mathrm{conj}\;X\Rightarrow C(X)$ and $X\;C(X)\Rightarrow X$, where $C(X)$ is the intermediate category written `@conj(X)` in the declaration, and the unary rules $\mathrm{N}\Rightarrow\mathrm{TOP}$ and $\mathrm{S}\Rightarrow\mathrm{TOP}$. |
 | `goal`, `matching` | The root `TOP`, matched by identity. |
 | `normal_form` | `hockenmaier-bisk` with `order_bound: 1`, `raised_application: true` and `coordination_raising: true`. |
 | `budget` | One unary step per cell and categories of at most five arguments. |
@@ -139,7 +222,7 @@ is bounded. Every type-raising declaration must state finite targets and
 finite arguments, and a grammar that raises to or from every category is
 refused. Finite targets alone bound only the result `T`: a declaration that
 raises every category `X` still raises composed categories, composes the
-results, and raises those again. The packaged grammar therefore raises only
+results, and raises those again. The packaged grammar thus raises only
 the argument atoms, which a fit document may change through
 `raising_arguments`. Coordination covers every category: the
 packaged grammar's conjunction inventory declares `marking: '@[conj]'`, the
@@ -239,8 +322,10 @@ expects licensed CCGbank AUTO files and the dependency reference under
 `experiments/s1/data/bisk-hockenmaier/`;
 `experiments/s1/bisk-hockenmaier-reduced.yaml` runs the same fit on a
 one-sentence repository fixture. The LM-plus-prover experiments are
-`experiments/l1/lm-prover.yaml` (LINC) and `experiments/l1/logic-lm.yaml`
-(Logic-LM), each with a reduced twin.
+`experiments/l1/lm-prover.yaml` (LINC; \citealt{olausson-etal2023}) and
+`experiments/l1/logic-lm.yaml` (Logic-LM; \citealt{pan-etal2023}), each with a
+reduced twin. These declarations instantiate the method families; they do not
+by themselves reproduce the papers’ experimental results.
 
 Launch the experiment from the checkout its freeze tags, like any other. The
 following is a template command:
@@ -288,6 +373,4 @@ declares the tables an experiment renders from its rows.
 
 ## References
 
-Bisk, Y., and Hockenmaier, J. (2012). Simple robust grammar induction with
-combinatory categorial grammars. In *Proceedings of the Twenty-Sixth AAAI
-Conference on Artificial Intelligence*.
+\bibliography

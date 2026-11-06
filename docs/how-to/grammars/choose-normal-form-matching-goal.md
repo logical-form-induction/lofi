@@ -51,6 +51,20 @@ The `lofi.normal_form` group registers five variants:
 | `hockenmaier-bisk` | `order_bound` (1), `track_child_order`, `composition_primary`, `unit_primary`, `raised_secondary`, `raised_application`, `coordination_raising` | Steps allowed by the Hockenmaier and Bisk normal form over every composition order up to the bound. |
 | `all-of` | `normal_forms` | Steps every listed normal form admits. |
 
+Write $\nu(s)\in\{0,1\}$ for the filter's decision on a derivation step
+$s$, including the structural tags inherited from its children. A derivation
+$d$ is retained exactly when $\nu(s)=1$ for each of its steps. For `all-of`,
+
+$$
+\nu(s)=\bigwedge_{j=1}^{m}\nu_j(s).
+$$
+
+Removing spurious ambiguity requires preservation of semantic readings as
+well as elimination of duplicate derivations. Those guarantees depend on the
+rule fragment: see [Normal forms](../../explanation/derivations-as-proofs.md#normal-forms)
+and the original results \citep{eisner1996,hockenmaier-bisk2010}. Selecting a
+filter does not prove those properties for arbitrary added pattern rules.
+
 Compile each:
 
 ```python
@@ -117,6 +131,14 @@ feature-erasure ccg-feature-erasure
 product product(feature-erasure,alpha)
 ```
 
+Each matching choice supplies a relation $\sim$ over category terms. The
+`product` relation is intersection:
+$A\sim B$ if and only if $A\sim_1 B$ and $A\sim_2 B$.
+Feature-erasure matching is equality of erased images; alpha matching is
+equality up to consistent renaming of bound variables. The
+[matching definitions](../../explanation/logical-forms-as-types.md#substitution-equality-and-matching)
+separate these relations from substitution and type checking.
+
 Over a signature with a conjunction inventory, feature erasure is compiled
 together with that inventory, and its compiled name carries the inventory's
 name and fingerprint.
@@ -147,6 +169,20 @@ root RootGoal
 root RootGoal
 cover CoverGoal
 ```
+
+For a sentence of length $n$, a root goal accepts an item
+$[A,0,n]$ exactly when $A$ matches a declared root category. Its root log
+weight $\omega_A$ contributes additively to a derivation's log weight, or as
+$\exp(\omega_A)$ in ordinary weight space. Root weights are finite scores;
+they need not form a normalized PMF.
+
+A cover with $m$ fragments partitions the sentence into contiguous spans
+$[i_{j-1},i_j)$, where
+$0=i_0<i_1<\cdots<i_m=n$, subject to the fragment bound. For nonnegative
+penalty $\lambda$, `after-first` charges $\lambda(m-1)$ and `each-fragment`
+charges $\lambda m$. The admitted fragments and tiling policy are part of
+the goal definition; [Goals](../../explanation/derivations-as-proofs.md#goals)
+describes the distinction from a single complete parse.
 
 The `cfg` and `tlg` formalisms take their goal as one category name and build
 the root goal themselves.
@@ -201,6 +237,15 @@ and `closure-category-set` says whether the reached set is `finite`. The
 packaged `ccgbank` grammar declares `closure_rounds: 0` with a goal that its
 lexicon supplies directly.
 
+A finite closure computes a reached set $\mathcal C_b$ under budget $b$.
+If $\mathcal C_\infty$ denotes unbounded reachability under the same rules,
+then $\mathcal C_b\subseteq\mathcal C_\infty$. Membership in the reached
+set supplies a derivation witness; absence from an unsaturated set is not a
+proof of unreachability. Likewise, a mass target or beam bound controls the
+search procedure and does not by itself certify the probability of omitted
+analyses. See [Charts and approximation](../../explanation/charts-and-approximation.md)
+for the relevant normalization and residual-mass conditions.
+
 ## How these sections are refused
 
 Each variant checks its own fields at validation:
@@ -236,3 +281,7 @@ exactly as the packaged ones are.
   for what the budget's bounds trade.
 - [Map between signatures](map-between-signatures.md) for feature erasure in
   detail.
+
+## References
+
+\bibliography

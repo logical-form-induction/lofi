@@ -37,6 +37,42 @@ or writes the declaration under `data.datasets.train.dataset.grammar` with its
 `formalism` field set. Fields the document writes beside a selected fragment
 are merged over the fragment's own.
 
+## Relate the declaration to the mathematical grammar
+
+For a context-free grammar $G=(N,\Sigma,P,S)$, $N$ is the nonterminal
+inventory, $\Sigma$ the terminal inventory, $P$ the productions, and $S\in N$
+the start symbol. Here `nonterminals` supplies $N$, `goal` supplies $S$,
+`productions` supplies nonlexical productions
+$A\to B_1\cdots B_k$, and lexical entries supply $A\to w$. The compiled
+rule runs from the children to the parent:
+
+$$
+\frac{[B_1,i_0,i_1]\quad\cdots\quad[B_k,i_{k-1},i_k]}
+     {[A,i_0,i_k]}.
+$$
+
+This is the chart-deduction presentation of the production, as developed for
+parsing in \citealt{shieber-etal1995}. The declared plugin's accepted
+production shapes and lexical inventory delimit its supported CFG fragment.
+
+For AB grammars, categories are generated recursively from the atomic
+inventory $\mathcal A$ by
+$A,B::=a\mid A/B\mid A\backslash B$, with $a\in\mathcal A$; derivations use
+forward and backward application. CCG adds declared combinators to this
+category algebra \citep{steedman2000}. The undirected plugin instead uses a
+single binary constructor and licenses its application with the argument on
+either side. This identification changes the declaration's directions; it
+does not itself establish equivalence to a directed grammar.
+
+The `tlg` plugin expands the listed elimination, product, and modal rules of
+its declared nonassociative fragment. It does not expose every inference rule
+of the Lambek calculus merely by selecting the plugin. See
+[Categories, productions, and lexical axioms](../../explanation/derivations-as-proofs.md#categories-productions-and-lexical-axioms)
+for the sequent notation and the distinction between Lambek and CCG slash
+conventions \citep{lambek1958,steedman2000}. A mode declaration is a finite
+partially ordered set $(M,\leq)$ in which every pair has a unique meet and
+join; these are the lattice conditions the validator checks.
+
 ## Compile each packaged formalism
 
 Compose each packaged example against `GrammarSpec`, expand it with
@@ -182,3 +218,7 @@ a function that expands a validated declaration to a `GrammarDecl`. The
 - [Choose combinatory rules](choose-combinatory-rules.md) for the rule set.
 - [Swappable assumptions](../../explanation/swappable-assumptions.md) for why
   each formalism lowers to one generic declaration.
+
+## References
+
+\bibliography

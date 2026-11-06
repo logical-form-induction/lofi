@@ -114,7 +114,7 @@ def ensure_fraction(field: str, value: float) -> float:
     TypeError
         If ``value`` is not numeric or is a boolean.
     ValueError
-        If ``value`` is not finite or lies outside ``[0, 1]``.
+        If ``value`` is not finite or lies outside $[0, 1]$.
     """
     share = ensure_finite(field, value)
 

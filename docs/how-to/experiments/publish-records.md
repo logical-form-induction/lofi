@@ -105,8 +105,10 @@ db61f72dc0e5:5:0 3f6c2a0e-8d7b-4f1e-9c55-2b8d1f0a7e41 lofi 0.1.0
 ```
 
 The labels are the categories the trained point derived, not the gold ones: a
-point trained for two epochs on three sentences derives `NP NP\NP S\NP` where
-the gold derivation reads `NP/NP NP S\NP`.
+point trained for two epochs on three sentences derives the category sequence
+$\mathrm{NP},\mathrm{NP}\backslash\mathrm{NP},\mathrm S\backslash\mathrm{NP}$
+where the gold derivation reads
+$\mathrm{NP}/\mathrm{NP},\mathrm{NP},\mathrm S\backslash\mathrm{NP}$.
 
 Each record carries the item id as its `expression`, the joined tokenization,
 the declared formalism, `lofi <version>` as its tool and the terms the item's

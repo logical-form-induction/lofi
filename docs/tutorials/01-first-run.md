@@ -94,7 +94,7 @@ Reading the grammar line by line:
 | `formalism: declared` | The grammar is declared here, by its parts, rather than selected from a packaged formalism. |
 | `primitives: [S, NP, conj]` | The atomic categories. Every other category is built from these by the signature's constructors. |
 | `operators`, `conjunctions` | A featured category `NP[conj]` that erases to `NP`, and the marker that coordination would use. No coordination rule is declared, so neither takes part in a derivation here. |
-| `rules` | Forward and backward application, the two views of one rule. `X/Y Y ⇒ X` and `Y X\Y ⇒ X`. |
+| `rules` | Forward and backward application, the two views of one rule. $\frac{X/Y\quad Y}{X}$ and $\frac{Y\quad X\backslash Y}{X}$. |
 | `lexicon` | Eight forms, each with one category. A form's category is what a learner has to recover. |
 | `goal` | A derivation of a whole sentence must end in `S`. |
 

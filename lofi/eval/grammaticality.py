@@ -127,7 +127,7 @@ def _flip_rate(value: float) -> float:
 
 
 def noise_adjusted_auc(roc_auc: float, *, flip_rate: float) -> float:
-    """Adjust ROC-AUC for a declared symmetric label-flip rate.
+    r"""Adjust ROC-AUC for a declared symmetric label-flip rate.
 
     The specified attenuation assumes balanced latent class prevalence.
 
@@ -136,14 +136,15 @@ def noise_adjusted_auc(roc_auc: float, *, flip_rate: float) -> float:
     roc_auc : float
         Observed ROC-AUC in the unit interval.
     flip_rate : float
-        Finite symmetric label-flip rate in ``[0, 0.5)``. This argument is
+        Finite symmetric label-flip rate in $[0,\tfrac12)$. This argument is
         required because the adjustment is undefined at one half and cannot infer
         an experimental noise rate from predictions.
 
     Returns
     -------
     float
-        ``0.5 + (roc_auc - 0.5) / (1 - 2 * flip_rate)``.
+        $a_{\mathrm{adjusted}}=\tfrac12+(a-\tfrac12)/(1-2\eta)$,
+        where $a$ is `roc_auc` and $\eta$ is `flip_rate`.
 
     Raises
     ------
@@ -151,7 +152,7 @@ def noise_adjusted_auc(roc_auc: float, *, flip_rate: float) -> float:
         If an argument is not numeric or is a boolean.
     ValueError
         If an argument is not finite, ROC-AUC is outside the unit interval, or the
-        flip rate is outside ``[0, 0.5)``.
+        flip rate is outside $[0,\tfrac12)$.
     """
     area = ensure_finite("a grammaticality ROC-AUC", roc_auc)
 
@@ -295,7 +296,7 @@ def grammaticality_report(
     *,
     flip_rate: float,
 ) -> GrammaticalityReport:
-    """Compute binary grammaticality-prediction metrics.
+    r"""Compute binary grammaticality-prediction metrics.
 
     Parameters
     ----------
@@ -304,7 +305,7 @@ def grammaticality_report(
     p_gram : Iterable[float]
         Predicted grammaticality probabilities in the unit interval.
     flip_rate : float
-        Finite symmetric label-flip rate in ``[0, 0.5)``.
+        Finite symmetric label-flip rate in $[0,\tfrac12)$.
 
     Returns
     -------

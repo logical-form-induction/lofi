@@ -550,9 +550,9 @@ class SubstitutionSpec(RuleSpec, extra="forbid"):
 class TypeRaisingSpec(RuleSpec, extra="forbid"):
     r"""A type-raising declaration.
 
-    ``targets`` are the categories ``T`` a premise raises to, and
-    ``arguments`` the categories ``X`` that may raise to ``T/(T\X)`` or
-    ``T\(T/X)``, each compared under the rule's matching. Either is ``None``
+    ``targets`` are the categories $T$ a premise raises to, and
+    ``arguments`` the categories $X$ that may raise to $T/(T\backslash X)$ or
+    $T\backslash(T/X)$, each compared under the rule's matching. Either is ``None``
     for every category; the arguments default to the atoms ``N`` and ``S``.
     """
 
@@ -744,9 +744,10 @@ class CoercionSpec(RuleSpec, extra="forbid"):
 
 
 class CoercionSetSpec(RuleSpec, extra="forbid"):
-    """Ground unary coercions sharing one scoring and grouping label.
+    r"""Ground unary coercions sharing one scoring and grouping label.
 
-    Each entry ``source => target`` expands into one ``coercion`` rule. Every
+    Each entry declaring a category transition $X\Rightarrow Y$ expands into
+    one ``coercion`` rule, with $X$ the source and $Y$ the target. Every
     member matches its premise under the set's ``matching``, or under the
     grammar's congruence when the set declares none.
     """

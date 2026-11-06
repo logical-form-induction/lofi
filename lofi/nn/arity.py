@@ -308,12 +308,15 @@ def _checked_children(
 
 
 class RoleFillerScheme(nn.Module):
-    """Holographic factoring and combination by role-filler binding.
+    r"""Holographic factoring and combination by role-filler binding.
 
-    A combination of rank ``r`` is the bundle ``sum_i bind(role_i, child_i)`` scaled by
-    the reciprocal square root of ``r``, which holds the bundle's norm steady as the
-    rank grows. Factoring unbinds each role from the parent and undoes that scaling, so
-    a rank-one round trip returns the child it started from.
+    A combination of positive rank $r$ is the bundle
+    $\mathbf{h}=r^{-1/2}\sum_{i=1}^{r}\mathbf{r}_i\odot\mathbf{h}_i$,
+    where $\mathbf{r}_i$ and $\mathbf{h}_i$ are role and child vectors and
+    $\odot$ denotes coordinatewise multiplication. The scaling normalizes the
+    accumulation across roles; it does not guarantee a fixed norm for arbitrary
+    learned vectors. Factoring divides by each nonzero role coordinate and undoes
+    the scaling, so a rank-one round trip returns the original child.
 
     Parameters
     ----------

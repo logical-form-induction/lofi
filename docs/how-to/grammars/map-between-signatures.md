@@ -47,13 +47,26 @@ override the grammar's choice with its own `matching`.
 [Choose a normal form, matching relation and goal](choose-normal-form-matching-goal.md#declare-a-matching-relation)
 lists the relations.
 
+Writing $F$ for feature erasure, matching compares
+
+$$
+A\sim_F B\quad\Longleftrightarrow\quad F(A)=F(B).
+$$
+
+Erasure acts recursively on category terms: it replaces featured atoms by
+their declared cores and applies the same constructor to the erased
+arguments. Thus $F(\mathrm S[\mathrm{dcl}]\backslash\mathrm{NP})
+=\mathrm S\backslash\mathrm{NP}$. The equality on the right is equality
+in the target term algebra. This definition explains why removing features
+can admit rule instances that identity matching rejects.
+
 ## Map categories onto semantic types
 
 A [`SignatureMorphismErasureSpec`](../../reference/configuration/grammar.md)
 declares the image of each category atom as a type, and the image of each
 category constructor that is not a functor view. A functor view's image is
-derived: a category whose functor has result `X` and argument `Y` erases to
-the function type from the image of `Y` to the image of `X`. Declare atom
+derived: a category whose functor has result $X$ and argument $Y$ erases to
+the function type $E(Y)\to E(X)$. Declare atom
 images for the featured grammar and erase three categories:
 
 ```python
@@ -76,8 +89,8 @@ NP/N             (e -> t) -> e
 ```
 
 A featured category erases as its core does. Under `type_syntax: angle` an
-image is written with angle brackets over the function type, so `⟨e,t⟩` is
-`e -> t`; under `s-expression` it is written as a canonical term of the language's
+image is written with angle brackets over the function type, so `⟨e,t⟩` denotes
+$e\to t$; under `s-expression` it is written as a canonical term of the language's
 signature. In a dataset this declaration is the `erasure` of the
 [interpretation](declare-an-interpretation.md), and a learner grammar's
 interpretation under `model.language` declares one of its own.
@@ -101,6 +114,20 @@ except DeclarationError as refused:
 ```text
 the erasure restates the functor constructors ('/',) of 'featured', whose images are derived from their functor roles
 ```
+
+More generally, a constructor image $\tau_c(\alpha_1,\ldots,\alpha_k)$
+extends the atom map recursively:
+
+$$
+E\bigl(c(A_1,\ldots,A_k)\bigr)
+=\tau_c\bigl[E(A_1)/\alpha_1,\ldots,E(A_k)/\alpha_k\bigr].
+$$
+
+The configuration writes the positional metavariables $\alpha_i$ as `a0`,
+`a1`, and so on. A category's depth thus determines a finite recursive
+calculation of its image. This is the term-level extension of the declared
+signature mapping \citep{meinke-tucker1992}; it does not require the mapping
+to be injective.
 
 ### Declare constructor images
 
@@ -153,6 +180,12 @@ factor; a language with a product constructor would map it to that. An image
 for a constructor the signature does not declare is reported as `extra` and
 refused the same way.
 
+The product projection in this example deliberately loses the second
+factor: $E(A\mathbin{\cdot}B)=E(A)$. It demonstrates a well-formed type map,
+not a faithful interpretation of product types. Whether a rule's premises
+and conclusion admit an appropriate semantic action is checked separately
+when the interpretation lowers.
+
 ## Score a learner grammar against a source grammar
 
 A learner declares its own grammar under `model.language`, either taken from
@@ -184,6 +217,22 @@ alignment:
 | `many-to-one` | Each induced label is mapped to the gold label it co-occurs with most, independently. |
 | `one-to-one` | An injective assignment between the two inventories with the largest total count. |
 
+Let $\mathbf N$ be the contingency matrix on `fit_on`, with scalar entry
+$n_{ab}$ counting co-occurrences of induced label $a$ and gold label $b$.
+Many-to-one fitting chooses
+$\pi(a)\in\operatorname*{arg\,max}_b n_{ab}$ independently for each $a$.
+One-to-one fitting instead maximizes
+
+$$
+\sum_{a\in\operatorname{dom}(\pi)}n_{a,\pi(a)}
+$$
+
+over injective assignments between the inventories, using a partial
+assignment if their sizes differ. Ties follow the declared policy. These
+are label assignments estimated from data; they do not establish
+preservation of category constructors or derivability under a signature
+morphism.
+
 `fit_on` and `score_on` must differ, so the alignment is never scored on the
 split it was fitted on. The evaluator reports the aligned accuracy of
 primitives and constructors beside a random-relabeling floor computed over
@@ -197,3 +246,7 @@ covers the evaluators.
   place in a dataset.
 - [Swappable assumptions](../../explanation/swappable-assumptions.md) for what
   a comparison between a learner and a source grammar licenses.
+
+## References
+
+\bibliography

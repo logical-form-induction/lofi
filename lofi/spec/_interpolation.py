@@ -114,7 +114,7 @@ def derive_seed(seed: int, name: str, /) -> int:
     Returns
     -------
     int
-        A seed below ``2 ** 32``, determined by the run's seed and the name.
+        A seed below $2^{32}$, determined by the run's seed and the name.
 
     Raises
     ------

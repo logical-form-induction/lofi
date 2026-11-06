@@ -9,6 +9,10 @@ and the cumulative family and ordinal head.
 [Fit a judgment model](../how-to/judgments/fit-a-judgment-model.md) shows them
 in use.
 
+[Judgment models](../explanation/judgment-models.md) defines the ordinal,
+choice, and bounded-response likelihoods, links, identification constraints,
+marginalization, and posterior objectives used by these interfaces.
+
 ::: lofi.judgment
 
 ## The cumulative family

@@ -2,7 +2,7 @@
 
 A grammar's `lexicon` assigns categories to surface forms, and its `kind`
 selects how. An `inline` lexicon lists every entry. A `structured` lexicon
-draws entries over named categories from three independent laws: a category
+draws entries over named categories from three separately declared laws: a category
 marginal, an ambiguity law and a rank law over form frequency. A `generated`
 lexicon draws the same way over categories it grows from the grammar's goal
 and rules, so that no category is named. This guide declares each kind,
@@ -55,6 +55,23 @@ def show(lexicon):
 The compiled lexicon normalizes each form's entry weights into a distribution
 over its categories; `log_mass` returns the total the form's entries were
 declared or drawn with.
+
+For a surface form $w$, let $\mathcal E_w$ be its entries and $\ell_e$ an
+entry's declared log weight. Compilation computes
+
+$$
+z_w=\sum_{e\in\mathcal E_w}\exp(\ell_e),\qquad
+\operatorname{log\_mass}(w)=\log z_w,\qquad
+p(e\mid w)=\frac{\exp(\ell_e)}{z_w}.
+$$
+
+Thus `log_mass` is a log mass, not necessarily the logarithm of a normalized
+form PMF: the inline example assigns mass two to each ambiguous form.
+Normalizing over the finite vocabulary $\mathcal V$ would give
+$p(w)=z_w/\sum_{v\in\mathcal V}z_v$. Entries with the same category and
+meaning are merged by summing their masses before normalization. If several
+meanings share a category $A$, its conditional probability is the sum
+$p(A\mid w)=\sum_{e:\operatorname{category}(e)=A}p(e\mid w)$.
 
 ## List entries inline
 
@@ -124,24 +141,69 @@ w5 0.068 [('NP', 1.0)]
 ```
 
 The histogram gives one form in three two categories, the power law gives
-the form of rank `r` mass in proportion to `1/r`, and the cells are fitted so
-that the token mass of `NP`, `S\NP` and `S\NP/NP` is in the ratio 3 : 2 : 1.
+the form of rank $r$ mass in proportion to $r^{-1}$, and the cells are fitted so
+that the target token masses of $\mathrm{NP}$, $\mathrm S\backslash\mathrm{NP}$,
+and $(\mathrm S\backslash\mathrm{NP})/\mathrm{NP}$ have ratio $3:2:1$.
 The three laws have these spellings:
 
 | Law | Spelling | Fields |
 |---|---|---|
 | `joint` | `tabular` | `rows` of `category` and relative `share`. |
 | `joint` | `parametric` | `categories` and a `category_shares` rank law over them. |
-| `ambiguity` | `parametric` | `mean` and `dispersion` in [0, 1]: at zero the mass sits on the integers bracketing the mean, at one on 1 and `maximum`, with the same mean. |
+| `ambiguity` | `parametric` | `mean` $\mu\in[1,m]$ and `dispersion` $\delta\in[0,1]$, with $m$ the `maximum`: at zero dispersion the mass sits on the integers bracketing the mean, at one on 1 and `maximum`, with the same mean. |
 | `ambiguity` | `histogram` | `buckets` of `categories` per form and relative `share` of forms. |
 | `rank_law` | `uniform` | None. Every rank weighs alike. |
-| `rank_law` | `power-law` | `exponent`: rank `r` weighs in proportion to `r` to the negative exponent. |
+| `rank_law` | `power-law` | `exponent` $\alpha$: rank $r$ weighs in proportion to $r^{-\alpha}$. |
 
 Both ambiguity spellings also take `maximum`, a hard bound on categories per
 form, and `placement` in [-1, 1], the signed association between a form's
 ambiguity and its frequency rank: negative values put ambiguous forms lower in
 the frequency order, zero places them independently, and positive values put
 them higher.
+
+For $n$ ranks and exponent $\alpha$, the normalized rank PMF is
+
+$$
+p_R(r)=\frac{r^{-\alpha}}{\sum_{j=1}^{n}j^{-\alpha}},
+\qquad r\in\{1,\ldots,n\}.
+$$
+
+Uniform ranks have $p_R(r)=1/n$. The helper returns weights with mean one;
+the draw divides by $n$ to obtain this PMF before assigning ranks to forms.
+
+For parametric ambiguity, let $K\in\{1,\ldots,m\}$ count a form's
+categories, with requested mean $\mu$ and dispersion $\delta$. Write
+$a=\lfloor\mu\rfloor$ and $b=\lceil\mu\rceil$. When $a<b$, the
+minimum-variance PMF has $q(a)=b-\mu$ and $q(b)=\mu-a$; when $a=b$, it
+places all mass at $a$. For $m>1$, the endpoint PMF has
+$r(1)=(m-\mu)/(m-1)$ and $r(m)=(\mu-1)/(m-1)$. All unlisted probabilities
+are zero. The declared law is
+
+$$
+p_K(k)=(1-\delta)q(k)+\delta r(k),\qquad
+\mathbb{E}[K]=\mu.
+$$
+
+When $m=1$, both component PMFs put all mass at one. The implementation
+apportions finitely many forms to these probabilities and adjusts the total
+category-slot count toward $\operatorname{round}(n\mu)$; rounding and the
+available support can prevent exact realization of the target mean.
+`placement` controls the assignment of frequency ranks to those realized
+ambiguity counts, rather than changing $p_K$.
+
+The target joint masses $q_{wA}$ form a nonnegative matrix $\mathbf Q$ whose
+row and column marginals are the requested form masses and category shares:
+
+$$
+\sum_A q_{wA}=p(w),\qquad \sum_w q_{wA}=p(A),\qquad
+\bigl|\{A:q_{wA}>0\}\bigr|=k_w.
+$$
+
+The support is selected subject to each realized ambiguity $k_w$, and cell
+masses are fitted on that support. These equations state fitting targets;
+the finite alternating-scaling procedure need not satisfy both marginals
+exactly after its last update. Inspect the compiled and sampled reports
+rather than treating requested marginals as measured ones.
 
 ## Generate the categories
 
@@ -181,6 +243,14 @@ w3 0.167 [('S/(S/N)', 1.0)]
 w4 0.167 [('S/N', 1.0)]
 w5 0.167 [('N', 1.0)]
 ```
+
+With category shares $p(A)$ held fixed, generated-lexicon coupling
+$\kappa\ne1$ targets class sizes proportional to
+$p(A)^{1/(1-\kappa)}$. These targets are apportioned to integers, bounded by
+one and the number of forms, and constrained by available form masses. At
+$\kappa=1$ the implementation uses the finite exponent equal to the number
+of forms times the number of categories. This is an allocation convention;
+the realized association remains a reported property of the built lexicon.
 
 Every generated category is a leaf of a derivation of the goal whose other
 leaves are lexical too, so a corpus drawn from the grammar can use each one.

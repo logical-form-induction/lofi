@@ -1,7 +1,7 @@
 # Corrupt strings and their labels
 
 A synthetic corpus's `corruption` block replaces a declared share of its items
-with strings the generating grammar does not derive, and its `noise` block
+with strings for which the configured parser finds no derivation, and its `noise` block
 flips the grammaticality label an item is observed with. Together they spell
 the three string-supervision regimes: positive-only data, labeled strings, and
 certified negatives. This guide declares the corruption operators and
@@ -43,10 +43,31 @@ Each operator is one entry in the `lofi.corruption` group and applies its edit
 | `insertion` | Insert one lexicon form, up to the corpus's longest length. |
 | `substitution` | Replace one token by a form that shares no category with it under the grammar's matching relation. |
 
-A candidate is kept only when the parser certifies that the grammar does not
-derive it, so every corrupted item is a certified negative. A candidate the
+A candidate is kept only when the configured parser finds no root derivation,
+so every corrupted item carries a non-derivability certificate for that
+grammar and parse configuration. A candidate the
 grammar still derives is counted as rejected, and an operator that cannot edit
 a string, e.g. a swap over identical tokens, is counted as inapplicable.
+
+For corpus size $n$ and declared corruption share $\rho$, `exact` selects
+$k=\lfloor n\rho+\tfrac12\rfloor$ corrupted items, rounding halves upward.
+For `bernoulli`, the count is $K=\sum_{i=1}^n B_i$ with independent
+$B_i\sim\operatorname{Bernoulli}(\rho)$, hence
+$K\sim\operatorname{Binomial}(n,\rho)$.
+
+If operator $j$ has positive weight $a_j$, its draw probability is
+$p_J(j)=a_j/\sum_h a_h$. Applying the operator induces a conditional
+candidate law $q_j(w'\mid w)$, including the possibility that the edit is
+inapplicable. Retaining only candidates that receive certificates conditions
+this proposal on acceptance, so accepted operator frequencies need not equal
+$p_J$: operators can have different rejection and inapplicability rates.
+
+A certificate records the grammar, theory, and unary-closure budget. Writing
+$\mathcal D_b(w')$ for the root derivations found with that configuration,
+its acceptance condition is $|\mathcal D_b(w')|=0$. This establishes
+unbounded nonmembership only when the configured search is complete for the
+grammar. See [Charts and approximation](../../explanation/charts-and-approximation.md)
+for that distinction.
 
 The packaged fragments under `data.datasets.train.dataset.corruption` are
 `operators: swap-deletion` and `operators: standard` (all four operators), and
@@ -140,6 +161,34 @@ The report counts the items under each true label and how many were flipped,
 so the achieved rate is read from the draw rather than assumed from the
 declaration. `corpus.labels` holds one observed label per item, with its true
 label and whether it was flipped.
+
+Let $Y\in\{0,1\}$ be the true grammaticality label and
+$\widetilde Y$ the observed label, with one denoting grammatical. Write
+$\eta_1$ for `grammatical.rate` and $\eta_0$ for `ungrammatical.rate`.
+The row-stochastic label-transition matrix is
+
+$$
+\mathbf C=
+\begin{pmatrix}
+1-\eta_0&\eta_0\\
+\eta_1&1-\eta_1
+\end{pmatrix},\qquad
+c_{ab}=\mathbb P(\widetilde Y=b\mid Y=a),
+$$
+
+with rows and columns ordered $(0,1)$. Thus, if a learner assigns
+$p_Y(1\mid w)=m$, the noisy-label PMF is
+
+$$
+p_{\widetilde Y}(1\mid w)
+=\eta_0+(1-\eta_0-\eta_1)m.
+$$
+
+Under symmetric flips $\eta_0=\eta_1=\eta$, this becomes
+$\eta+(1-2\eta)m$. At $\eta=\tfrac12$, the observed label carries no
+information about $Y$ through this channel. Positive-only contamination
+sets $\eta_0=1$ and $\eta_1=0$: every observed label is one, though some
+underlying strings are certified negative.
 
 ## Choose a regime
 

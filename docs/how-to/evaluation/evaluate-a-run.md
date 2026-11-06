@@ -121,6 +121,25 @@ In a document's `defaults` list the same selection is
 `- evaluators.grammaticality: root-mass`. A kind no installed plugin registers
 is refused, and the refusal lists the kinds that are registered.
 
+## Metric denominators
+
+After the declared span conventions have been applied, let $G_i$ and $P_i$
+be gold and predicted span multisets for sentence $i$. Let $g_i$, $p_i$,
+and $t_i$ count gold spans, predicted spans, and their multiset intersection.
+For a nonzero denominator, sentence F1 is $2t_i/(g_i+p_i)$.
+Sentence aggregation averages the sentence scores; corpus aggregation uses
+$2\sum_i t_i/(\sum_i g_i+\sum_i p_i)$. These are different estimands:
+a long sentence contributes more span counts to the corpus score.
+The declared coverage rule controls missing analyses before aggregation.
+
+A likelihood row also requires a unit: mean log likelihood per sentence and
+per token have different denominators. Description-length charges must use
+compatible units before subtraction. Logical-form equivalence is relative to
+the declared logic, theory, and proof budget; an undecided proof is not a
+negative equivalence judgment. The [evaluation reference](../../reference/eval.md)
+defines classification, calibration, and proof-reproduction metrics, including
+their undefined cases.
+
 ## Set the interval
 
 `interval.replicates` is the number of bootstrap resamples and must be at least
@@ -142,6 +161,11 @@ except Exception as refused:
 ```text
 ConfigValueError evaluators.held-out.interval.level was refused: an interval coverage is not a proportion: 1.0
 ```
+
+The [statistics reference](../../reference/stats.md) defines the percentile
+and BCa interval calculations, including fallback cases. Replicates resample
+the declared units, so resampling individual rows does not account for a
+shared participant or sentence unless that grouping is the resampling unit.
 
 ## Declare the conventions
 

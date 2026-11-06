@@ -64,7 +64,19 @@ jobs:
 
       - name: Types
         if: ${{ !cancelled() }}
-        run: uv run ty check --error-on-warning
+        # Documentation hooks have a separate dependency environment. Make its
+        # packages visible to ty without adding them to LoFI's dependencies.
+        run: |
+          uv run --with-requirements docs/requirements.txt python - <<'PY'
+          from pathlib import Path
+          import subprocess
+          import markdown
+
+          subprocess.run([
+              "ty", "check", "--error-on-warning", "--extra-search-path",
+              str(Path(markdown.__file__).parent.parent),
+          ], check=True)
+          PY
 
       - name: Layering
         if: ${{ !cancelled() }}

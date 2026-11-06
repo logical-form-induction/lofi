@@ -159,16 +159,14 @@ flowchart LR
 ## Foundations
 
 The categorial machinery follows the type-logical tradition, in which
-categories are formulas and derivations are proofs ([Lambek,
-1958](https://doi.org/10.1080/00029890.1958.11989160); [Moortgat,
-1997](https://doi.org/10.1016/B978-044481714-3/50005-9)), and the combinatory
-rules follow CCG ([Steedman,
-2000](https://doi.org/10.7551/mitpress/6591.001.0001)). Logical
-forms are proof terms in the sense of the formulae-as-types correspondence
-(Howard, 1980, in *To H. B. Curry: Essays on Combinatory Logic,
-Lambda Calculus and Formalism*, Academic Press). Parsing
-is weighted deduction over a chart ([Shieber, Schabes, and Pereira,
-1995](https://doi.org/10.1016/0743-1066(95)00035-I)), evaluated under a
-semiring ([Goodman, 1999](https://aclanthology.org/J99-4004/)).
+categories are formulas and derivations are proofs \citep{lambek1958,moortgat1997},
+and the combinatory rules follow CCG \citep{steedman2000}. Logical forms are
+proof terms in the sense of the formulae-as-types correspondence
+\citep{howard1980}. Parsing is weighted deduction over a chart
+\citep{shieber-etal1995}, evaluated under a semiring \citep{goodman1999}.
 
 </div>
+
+## References
+
+\bibliography

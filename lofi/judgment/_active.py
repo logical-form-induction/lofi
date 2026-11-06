@@ -648,8 +648,9 @@ def run_active_learning(
     """Fit, acquire one batch, ingest, and refit once per round until stopping.
 
     The candidates an initial judgment names are already judged, so only the
-    others are offered to the first round. Round ``r`` resamples agreement
-    under ``bootstrap_seed + r``. Collection ends with the first round at which
+    others are offered to the first round. Round $r$ resamples agreement
+    under seed $s+r$, where $s$ is ``bootstrap_seed``. Collection ends with the
+    first round at which
     the stopping rule holds; failing that, with the round after which the
     remaining candidates cannot fill a batch, recorded as ``pool-exhausted``;
     failing that, with round ``max_rounds``, recorded as ``max-rounds``. A

@@ -19,7 +19,7 @@ A family's root is a tagged union. A variant is selected by its discriminator,
 usually `kind` (`formalism` for grammars), and validated against that
 variant's own declaration class, which forbids unknown fields. The slot in the
 run document is typed by the root, so any variant of the family fills it and
-nothing outside the family does. Two variants of one family therefore differ
+nothing outside the family does. Two variants of one family thus differ
 in what they compute, not in where they plug in or how they are configured.
 
 The reason for this design is the research question LoFI is built for: whether
@@ -66,14 +66,16 @@ variant.
 
 Two points compare one choice when their resolved documents differ only in the
 declarations that express it. Composition makes that condition checkable: a
-point's identity is a hash of its resolved document and seed, so two points
-that differ in one leaf have different identifiers and identical values
-everywhere else, and the provenance record names the source of every leaf. An
+resolved scientific document and seed can be compared field by field, and
+the provenance record names the source of every leaf. The truncated point
+hash is a compact identifier, subject to collisions. An
 experiment's sweep expresses the choice as an axis, and every other section is
 shared by construction.
 
-That condition is necessary but not sufficient. A difference in results is
-attributable to the choice only when four further things hold.
+A controlled comparison also requires stating the estimand and the sources
+of variation. LoFI’s source-comparison workflow imposes four further policies;
+capacity matching and complexity charging are policies of that workflow,
+not universal requirements for every scientific comparison.
 
 1. **The consumers accept both choices.** A component that serves only some
    deduction profiles declares a `ProfileBound`, and a grammar outside it is
@@ -96,12 +98,29 @@ attributable to the choice only when four further things hold.
    different budgets differ in their approximation too. [Charts and
    approximation](charts-and-approximation.md) describes what each
    approximation costs.
-4. **The selection criterion charges for complexity.** A richer grammar can fit
-   held-out data at least as well as a poorer one that it contains. The
-   source-comparison reducer therefore scores each candidate by held-out fit
+4. **The selection criterion charges for complexity.** Language inclusion
+   does not guarantee better held-out fit. Even nested statistical models
+   imply a training-optimum inequality only for a common objective and global
+   optimization. The source-comparison reducer scores each candidate by held-out fit
    minus a description-length charge, so that recovering the source grammar is
    not decided by inclusion alone. [Source and learner
    declarations](synthetic-designs.md) describes that comparison.
+
+For statistical families $\mathcal{P}_0\subseteq\mathcal{P}_1$ and a common
+training log likelihood $\ell_{\mathrm{train}}$,
+
+$$
+\sup_{p\in\mathcal{P}_0}\ell_{\mathrm{train}}(p)
+\leq\sup_{p\in\mathcal{P}_1}\ell_{\mathrm{train}}(p).
+$$
+
+This says nothing by itself about optimizer convergence, regularized fits,
+or held-out likelihood. Equal parameter counts likewise do not establish
+equal effective capacity. With seed $j$ shared across arms $a$ and $b$,
+the paired difference is $d_j=s_{a,j}-s_{b,j}$ and its mean is
+$\overline d=m^{-1}\sum_{j=1}^{m}d_j$. Pairing makes the comparison unit
+explicit; seeds from different data-generation procedures are not necessarily
+matched observations.
 
 What a comparison licenses is a statement about the declared alternatives
 under the declared conditions. It does not license a claim about an

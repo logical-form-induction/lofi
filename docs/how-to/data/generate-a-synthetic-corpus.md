@@ -81,8 +81,10 @@ rule that built it. Equal declarations, seed included, draw equal corpora.
 | `retained` | Named splits and the fraction of the draw each holds. The remainder trains. |
 | `training_split` | The name the training remainder is assigned, `train` by default. No retained split may share it. |
 
-`retained` is exact: a fraction of `0.1` of 200 items holds 20 of them in that
-split. The run document's trainer is checked against the training remainder,
+For a retained split with fraction $f_s$ and corpus size $n$, the generator
+assigns $n_s=\lfloor nf_s\rfloor$ items to that split after shuffling
+positions. The training remainder has $n-\sum_s n_s$ items. Thus a fraction
+of `0.1` of 200 items holds 20, while a noninteger requested count rounds down. The run document's trainer is checked against the training remainder,
 so a size whose remainder does not fill the declared accumulation windows is
 refused when the run document is composed.
 
@@ -101,6 +103,24 @@ three kinds:
 `max_length`: `resample` (the default) draws again, `clip` takes the bound,
 and `error` refuses the draw. The packaged `synthetic` option uses a negative
 binomial with `r: 4.0` and `p: 0.6` between 2 and 24 tokens.
+
+Writing $N$ for token count, the uniform and tabular PMFs are
+
+$$
+p_N(n)=\frac{\mathbf1\{a\leq n\leq b\}}{b-a+1},
+\qquad
+p_N(n)=\frac{w_n}{\sum_{j\in\mathcal S}w_j}\quad(n\in\mathcal S),
+$$
+
+respectively, where $a,b$ are integer length bounds and $\mathcal S$ is the
+finite tabular support. A tabular entry may have zero mass, but the total
+must be positive. The negative-binomial parameterization and the distinct
+resampling and clipping laws are defined in
+[Source and learner declarations](../../explanation/synthetic-designs.md).
+
+Lengths for which no goal derivation can be generated are also rejected.
+Consequently, the realized length histogram reflects grammar support and
+any later rejection targets as well as the declared length PMF.
 
 ## Weight the rules
 
@@ -151,6 +171,26 @@ the support and were drawn again. The weights are local factors on rule
 applications, not target proportions: the achieved rule counts also depend on
 which derivations the lexicon admits at each length.
 
+For an admitted length $n$, let $\mathcal D_n$ be the derivations in the
+generator's bounded construction. If lexical leaf $e$ has unnormalized mass
+$z_e$ and rule $r$ has local weight $a_r>0$, a derivation $d$ has weight
+
+$$
+u(d)=\prod_{e\in\operatorname{leaves}(d)}z_e
+\prod_{v\in\operatorname{internal}(d)}a_{r_v},\qquad
+p_D(d\mid N=n)=\frac{u(d)}{\sum_{d'\in\mathcal D_n}u(d')}.
+$$
+
+Here $u$ is a nonnegative weight function and $p_D$ a normalized PMF.
+`uniform` sets each rule factor to one; lexical masses and the number of
+derivations still affect string frequency. The string PMF sums derivation
+probabilities over a common yield,
+$p_W(w\mid N=n)=\sum_{d:\operatorname{yield}(d)=w}p_D(d\mid N=n)$.
+This is the weighted-deduction interpretation of the sampler
+\citep{goodman1999}. Increasing one rule's weight multiplies a derivation's
+weight once per occurrence of that rule, rather than fixing its observed
+frequency directly.
+
 On the command line the same changes are `--set` overrides, e.g.
 `--set data.datasets.train.dataset.size=200`.
 
@@ -169,6 +209,16 @@ target is declared unreachable.
 
 A `shape` schedule without a `default` needs a target for every declared
 split, `train` included.
+
+For a target measurement $c(d)$, value $v$, and tolerance
+$\epsilon\geq0$, acceptance requires $|c(d)-v|\leq\epsilon$.
+Lexical ambiguity for a string $w_1\cdots w_n$ is
+$n^{-1}\sum_{i=1}^n|\operatorname{Lex}(w_i)|$; derivational ambiguity counts
+its retained root derivations. Multiple bands are conjoined, and a
+split-specific shape schedule conditions on the item's assigned split.
+The resulting accepted distribution is the proposal conditioned on these
+constraints, subject to the finite attempt limit; it can differ across
+splits even under the same source grammar.
 
 ## Refusals
 
@@ -208,3 +258,7 @@ The other controls are refused when the document is validated:
 [Source and learner declarations](../../explanation/synthetic-designs.md)
 explains why the corpus carries its own grammar and how each control becomes
 a factor of an experiment.
+
+## References
+
+\bibliography

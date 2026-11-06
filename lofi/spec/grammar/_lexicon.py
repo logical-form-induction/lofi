@@ -848,12 +848,13 @@ def _coupled_class_sizes(
     forms: int,
     coupling: float,
 ) -> tuple[int, ...]:
-    """Return class-size targets for a category-frequency coupling.
+    r"""Return class-size targets for a category-frequency coupling.
 
     With category token shares held fixed, coupling zero assigns class sizes in
     proportion to those shares, so mean token mass per form does not depend on
-    category. Away from zero, the exponent ``1 / (1 - coupling)`` changes the
-    association while leaving both the category-share and form-frequency
+    category. Away from zero, the exponent $(1-\kappa)^{-1}$, where $\kappa$
+    is ``coupling``,
+    changes the association while leaving both the category-share and form-frequency
     marginals untouched. Integer targets are bounded by one and the number of
     forms; the built and sampled lexicon reports the coupling it actually
     achieves rather than treating this finite target as an observation.

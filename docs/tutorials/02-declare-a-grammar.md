@@ -60,7 +60,7 @@ Reading the grammar line by line:
 | `primitives` | The atomic categories: sentences, noun phrases and nouns. |
 | `constructors` | Two binary constructors over the category sort `Cat`, spelled infix and left-associative, so `S\NP/NP` reads as `(S\NP)/NP`. |
 | `functors` | Each constructor builds a function category. `/` takes its argument on the right and `\` on the left, and each names the other as its opposite. |
-| `rules` | Forward and backward application, `X/Y Y ⇒ X` and `Y X\Y ⇒ X`, as two views of one rule. |
+| `rules` | Forward and backward application, $\frac{X/Y\quad Y}{X}$ and $\frac{Y\quad X\backslash Y}{X}$, as two views of one rule. |
 | `lexicon` | Eight forms, each with one category. A form may be listed more than once with different categories; none is here. |
 | `goal` | A derivation of a whole sentence must end in `S`. |
 | `matching`, `budget` | Categories match after erasing features, and the chart closes unary rules for at most one round. |

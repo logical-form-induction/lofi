@@ -56,7 +56,7 @@ def nonnegative(field: str, value: float, /) -> float:
 
 
 def moment_decays(values: tuple[float, ...], /) -> tuple[float, ...]:
-    """Return two finite moment-decay rates in ``[0, 1)``.
+    """Return two finite moment-decay rates in $[0, 1)$.
 
     Parameters
     ----------
@@ -67,7 +67,7 @@ def moment_decays(values: tuple[float, ...], /) -> tuple[float, ...]:
     ------
     ValueError
         If there are not exactly two rates, or a rate is not finite or lies
-        outside ``[0, 1)``.
+        outside $[0, 1)$.
     """
     if len(values) != 2:
         msg = f"betas has length {len(values)}, not 2: {values!r}"

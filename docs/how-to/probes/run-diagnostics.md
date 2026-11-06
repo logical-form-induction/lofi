@@ -148,6 +148,213 @@ split-posterior-kl ['INSIDE_SCORE', 'OUTSIDE_SCORE', 'SPLIT_DISTRIBUTION']
 superposition-interference ['TERM_ENCODING']
 ```
 
+## Mathematical definitions
+
+These equations describe the packaged measurements. They do not identify a
+linguistic property without the inputs, comparisons, and interventions
+specified in [Probing through sites](../../explanation/probing-through-sites.md).
+All logarithms below are natural. A live position is one admitted by the
+observation mask; missing positions are excluded from the relevant sums.
+
+### Normalization and aggregation
+
+For live alternatives $J$ and real logits $z_j$, distributional diagnostics
+use $p(j)=\exp(z_j)/\sum_{k\in J}\exp(z_k)$. A point declared as probabilities
+or log probabilities supplies $p(j)$ or $\log p(j)$ directly. These generic
+helpers check numeric ranges and masks, but do not check that rows sum to one
+or renormalize them. The PMF interpretation assumes unit row sums; attention
+diagnostics normalize their observed weights separately below. Normalized entropy
+\citep{shannon1948}, confidence, and the probability margin are
+
+$$
+h(p)=\frac{-\sum_{j\in J}p(j)\log p(j)}{\log|J|},
+\qquad c(p)=\max_{j\in J}p(j),
+\qquad m(p)=p_{(1)}-p_{(2)},
+$$
+
+where $p_{(1)}\geq p_{(2)}$ are the two largest probabilities and
+$0\log0=0$. The implementation clips normalized entropy to $[0,1]$;
+this does not alter the formula for a PMF but can affect nonunit rows.
+A single live alternative has entropy zero. A margin requires
+two stored action columns. The probability margin orders the zero-padded
+columns, so a single live action and a masked column give $p_{(1)}-0$.
+`controller-choice` reports these three quantities.
+`action-margin` instead subtracts the two largest **observed weights**,
+$z_{(1)}-z_{(2)}$, so a log-probability declaration yields a log-ratio margin.
+Log-probability rows with at most one possible action are counted as
+`certain` and excluded from the mean gap.
+
+For eligible spans $S$, values $v_s$, and constituent marginals $\mu_s$,
+the two within-pass aggregates are
+
+$$
+\bar v_{\mathrm{uniform}}=\frac{1}{|S|}\sum_{s\in S}v_s,
+\qquad
+\bar v_{\mathrm{weighted}}=\frac{\sum_{s\in S}\mu_s v_s}
+{\sum_{s\in S}\mu_s}.
+$$
+
+Empty eligible sets or zero total weighting are refused where the diagnostic
+requires them. Reported means then average measurements across passes; they
+do not pool every span across passes into one denominator.
+
+### Chart and controller diagnostics
+
+`finite-readings` counts live entries, nonfinite entries, and their ratio.
+For log-probability observations, $-\infty$ denotes zero mass and has its own
+`log-zero` count; it is not a malformed nonfinite reading.
+`span-length-bias` sets $v_s=(j-i)/n$ for proper internal spans $[i,j)$ of an
+$n$-token sentence, excluding leaves and the root.
+`cutpoint-entropy` applies $h$ to split probabilities only at non-root spans
+with at least two admitted split choices.
+
+For DIORA attention $p_s(k)$ at span $s=[i,j)$ and child inside log scores
+$a_{i,k},a_{k,j}$, `split-posterior-kl` forms
+
+$$
+q_s(k)=\frac{p_s(k)\exp(a_{i,k}+a_{k,j})}
+{\sum_{u}p_s(u)\exp(a_{i,u}+a_{u,j})},
+\qquad
+D_{\mathrm{KL}}(p_s\|q_s)=\sum_kp_s(k)\log\frac{p_s(k)}{q_s(k)}.
+$$
+
+The outside score is shared across a span's alternatives and cancels in this
+conditional distribution. The diagnostic reports raw KL divergence, averaged
+over live split rows separately for each sentence length; it refuses positive
+attention with no finite posterior mass. This compares two distributions in
+the implemented DIORA computation \citep{drozdov-etal2019,kullback-leibler1951}.
+
+For a declared sequence of controller distributions $p_t$, consistency and
+smoothness are
+
+$$
+c_{\mathrm{sequence}}=
+\exp\!\left(-\frac1{|J|}\sum_{j\in J}\operatorname{Var}_t[p_t(j)]\right),
+\qquad
+s_{\mathrm{sequence}}=
+\exp\!\left(-\operatorname{mean}_{t,j}|p_t(j)-p_{t-1}(j)|\right).
+$$
+
+Variance uses its population denominator over the live steps for each
+outcome; smoothness averages only adjacent pairs where both positions are
+live. No live transition gives smoothness one. `controller-relations`
+averages these scores over declared sequences and applies the same
+consistency equation to declared similar-input groups. An empty family of
+relations receives one. Thus the result depends on supplied relations, not
+on an inferred clustering of inputs.
+
+### Term-representation diagnostics
+
+For nonzero vectors define
+$\operatorname{cos}(\mathbf{u},\mathbf{v})=
+\mathbf{u}^{\mathsf T}\mathbf{v}/(\|\mathbf{u}\|_2\|\mathbf{v}\|_2)$.
+The node diagnostics assign zero cosine when either vector is zero. Their
+Pearson correlation is
+
+$$
+\rho(\mathbf{x},\mathbf{y})=
+\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}
+{\sqrt{\sum_i(x_i-\bar x)^2\sum_i(y_i-\bar y)^2}},
+$$
+
+with zero returned for a constant or empty series. This last value is an
+implementation convention for an undefined correlation.
+
+| Diagnostic | Defined measurement |
+| --- | --- |
+| `atomic-complex-differentiation` | $(1-\operatorname{cos}(\bar{\mathbf{h}}_{\mathrm{atomic}},\bar{\mathbf{h}}_{\mathrm{complex}}))/2$, using the two groups' mean node vectors. A missing group yields counts without a separation score. |
+| `constructor-embedding` | For every within-constructor pair cosine $a$ and between-constructor pair cosine $b$, average $\mathbf{1}[a>b]+\tfrac12\mathbf{1}[a=b]$ over their Cartesian product. Both pair sets must be nonempty. |
+| `depth-graded-encoding` | Pearson correlation of node depth with cosine similarity to that term's root; the unit-interval grading score is its absolute value. |
+| `recursion-spread` | For a term with $n\geq2$ live nodes, average $(1-\operatorname{cos}(\mathbf{h}_i,\mathbf{h}_j))/2$ over $i<j$. Report mean spread, its correlation with node count across terms, and the absolute correlation. |
+| `superposition-interference` | For successive prefixes of the first at most five term vectors, let $\mathbf{s}_m=\sum_{i=1}^m\mathbf{h}_i$. Report $(1-m^{-1}\sum_{i=1}^m\operatorname{cos}(\mathbf{h}_i,\mathbf{s}_m))/2$. Zero input vectors are refused; zero resultant sums are omitted. The measurement depends on row order. |
+
+These angular and correlation measurements describe observed encodings.
+They do not establish that a decoder can recover a constructor or that an
+encoding respects a compositional semantics.
+
+### Recurrent-state diagnostics
+
+On each live child–parent edge with vectors $\mathbf{u},\mathbf{v}$, define
+
+$$
+d(\mathbf{u},\mathbf{v})=
+\frac{\|\mathbf{v}-\mathbf{u}\|_2}{\|\mathbf{u}\|_2+\|\mathbf{v}\|_2}.
+$$
+
+`hidden-state-evolution` averages this displacement for hidden states.
+`memory-cell-dynamics` reports it for cell states together with their mean
+child–parent cosine. `recurrent-connection-analysis` reports mean hidden-state
+child–parent cosine. Displacement omits edges with two zero vectors; cosine
+omits edges with either vector zero. These are state comparisons, not causal
+effects or eigenvalues of recurrent weight matrices.
+
+For $n$ live scalar gate activations $g_i$, `gate-patterns` reports
+$\bar g=n^{-1}\sum_i g_i$ and population variance
+$n^{-1}\sum_i(g_i-\bar g)^2$ separately for each gate site.
+
+### Attention, feed-forward, and residual diagnostics
+
+For each query $i$, `attention-patterns` reads the **observed** nonnegative
+attention weights $a_{ij}$, using finite logits to check their support $J_i$.
+For each live row it normalizes
+
+$$
+p_i(j)=\frac{a_{ij}}{\sum_{k\in J_i}a_{ik}},\qquad j\in J_i.
+$$
+
+Live rows with zero total weight are refused.
+
+It reports normalized
+entropy, maximum mass, self mass $p_i(i)$, local mass
+$\sum_{j:|j-i|\leq1}p_i(j)$, and significant-mass coverage
+$\sum_{j:p_i(j)\geq0.1}p_i(j)$. These quantities are averaged over live queries.
+Cross-head consistency is one minus mean normalized Jensen–Shannon divergence
+between pairs of heads in the same layer \citep{lin1991}:
+
+$$
+\operatorname{JS}(p,q)=\tfrac12D_{\mathrm{KL}}(p\|r)
++\tfrac12D_{\mathrm{KL}}(q\|r),\qquad r=\tfrac12(p+q),
+\qquad c_{\mathrm{heads}}=1-\operatorname{mean}\frac{\operatorname{JS}(p,q)}{\log2}.
+$$
+
+With natural logarithms, $0\leq\operatorname{JS}(p,q)\leq\log 2$. Compared heads must have matching shapes and masks; only live query rows
+contribute. No pair yields no cross-head score. These summaries do not
+label a head's function.
+
+For a live feed-forward preactivation vector $\mathbf{x}$ with feature set
+$J$, the sparsity score is
+
+$$
+s(\mathbf{x})=\frac1{|J|}\sum_{j\in J}
+\mathbf{1}\!\left[|x_j|\leq0.01\max_{k\in J}|x_k|\right].
+$$
+
+An all-zero vector scores one. For caller-declared groups $G_g$ of complete
+rows, the feature-specific group effect is
+
+$$
+\eta_j^2=\frac{\sum_g |G_g|(\bar x_{g,j}-\bar x_j)^2}
+{\sum_g\sum_{i\in G_g}(x_{ij}-\bar x_j)^2},
+$$
+
+where the grand mean is over grouped rows. A zero denominator yields zero;
+`feed-forward-specialization` reports the mean and maximum effect over
+features. These effects depend on the declared grouping.
+
+For a paired residual stage with skip vector $\mathbf{x}$ and observed output
+$\mathbf{y}$, let $\mathbf{u}=\mathbf{y}-\mathbf{x}$. The update and skip norm
+shares are
+
+$$
+r_{\mathrm{update}}=\frac{\|\mathbf{u}\|_2}{\|\mathbf{u}\|_2+\|\mathbf{x}\|_2},
+\qquad
+r_{\mathrm{skip}}=\frac{\|\mathbf{x}\|_2}{\|\mathbf{u}\|_2+\|\mathbf{x}\|_2}.
+$$
+
+Both shares are one half when both norms vanish. They sum to one, but they
+are not additive fractions of output energy: cancellation between update
+and skip vectors can change the output norm.
+
 ## Add a diagnostic
 
 A diagnostic is a class with a `tag`, a frozen set of required `Role`s, a frozen
@@ -156,3 +363,7 @@ set of `scores`, and a `run(trace, *, context)` method returning a
 `lofi.diagnostic` entry-point group under its tag; a class listed under another
 tag than the one it declares is refused when the catalog is read.
 [Publish plugins](../extending/plugins.md) covers entry points.
+
+## References
+
+\bibliography

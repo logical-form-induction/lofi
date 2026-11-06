@@ -25,6 +25,52 @@ codec = RunSpecCodec(search_path=config_search_path(Path.cwd()))
 document = Path("docs/examples/synthetic-parser.yaml")
 ```
 
+## The mathematical interface
+
+For a sort $S$, let $\mathcal{T}_S$ be the well-formed terms admitted by the
+selected [layout](../../explanation/term-layout-capabilities.md). An encoder
+is a learned map $e_{\boldsymbol{\theta}}:\mathcal{T}_S\to\mathbb{R}^{d}$.
+A decoder assigns locally normalized choice probabilities and an induced
+complete-term weight $w_{\boldsymbol{\phi}}(t\mid\mathbf{h})$. Calling a decoder `identity` names its
+reconstruction role; it does not assert
+$w_{\boldsymbol{\phi}}(t\mid e_{\boldsymbol{\theta}}(t))=1$.
+A binary action decoder conditions on a declared merge
+$m(\mathbf{h}_l,\mathbf{h}_r)$, whose domain and output width must match it.
+
+Let $c_1,\ldots,c_m$ be the payload-aware choices in a term's canonical
+linearization. For a sequential decoder,
+
+$$
+w_{\boldsymbol{\phi}}(t\mid\mathbf{h})
+=\prod_{i\in J(t)}p_{\boldsymbol{\phi}}
+(c_i\mid c_{<i},\mathbf{h}),
+$$
+
+where $J(t)$ contains occupied choices; padding is not scored. A term is
+complete when no holes remain. These weights sum to one over admitted terms
+only if every positive-weight path completes in an admitted term. Dead ends
+and final admission failures can leave missing mass; explicit normalization
+over a retained support defines a conditional PMF. The legal alternatives at each step depend on the
+partial term and the selected type constraints. A factored choice head uses
+$p(c_i\mid\cdot)=p(a_i\mid\cdot)p(c_i\mid a_i,\cdot)$, where $a_i$ is its
+operator family. This is a factorization of a choice distribution, not an
+additional independence assumption about terms.
+
+Tree decoders pass a parent state to child slots; linear decoders pass the
+prefix state; transformers attend to the slots allowed by `structure`.
+Thus the conditioning information differs even when these decoders share a
+codec. The masked diffusion decoder also exposes canonical-order frontier
+and teacher-forced probabilities. Its separately sampled denoising bound is
+not interchangeable with that complete-term weight.
+
+A tree encoder recursively computes
+$\mathbf{h}_v=f_{\boldsymbol{\theta}}(\mathbf{e}_{c_v},
+\mathbf{h}_{v_1},\ldots,\mathbf{h}_{v_k})$ over ordered children.
+A linear encoder instead iterates a recurrent cell over the codec order.
+A bidirectional encoder combines forward and reverse states by the declared
+sum, mean, or concatenation. These operations retain different structural
+information; equal widths do not make their maps equivalent.
+
 ## Declare a space
 
 The synthetic parser declares one encoder role, `terms`, two decoder roles,
@@ -137,6 +183,16 @@ attends over every slot at once, so it refuses `parent-recurrence` when it is
 built. An installed package adds a structure by registering a
 `TransformerStructurePlugin` from `lofi.nn.transformer` under that group.
 
+Recurrent encoders use Elman, GRU, or LSTM cells
+\citep{elman1990,cho-etal2014,hochreiter-schmidhuber1997}; the modern LSTM
+cell includes the forget gate introduced by \citet{gers-etal2000}.
+Tree-structured recurrence is a broader family \citep{tai-etal2015};
+selecting a tree encoder here does not assert architectural identity with
+that paper's Tree-LSTM. The transformer uses attention
+\citep{vaswani-etal2017} with the selected structural restrictions.
+The HRR equations and their distinction from the original circular binding
+are given in [Term-layout capabilities](../../explanation/term-layout-capabilities.md).
+
 Select the packaged transformer for the synthetic parser's `terms` role. The
 document's own width of 4 still applies, and the fragment's eight heads do not
 divide it:
@@ -188,6 +244,15 @@ the packaged library holds the same five fragments under both
 | `hrr` | `hrr` | By unbinding each slot against the encoder's codebook. | `choice_heads`; it takes its width and codes from the encoder it is wired to. |
 | `transformer` | `transformer` | With attention over the slots it fills. | `width`, `heads`, `layers`, `feedforward_width`, `structure`, `activation` (default `gelu`). |
 | `diffusion` | `diffusion` | By denoising every slot at once over a masking schedule. | `width`, `layers`, `feedforward_width`, `noise_steps`, `first_masking` (the fraction the first step masks, rising evenly to one), `activation` (default `gelu`). |
+
+For the masked denoising family, let $\beta_t\in(0,1]$ be the probability
+that a slot is masked at step $t$. With $T$ the sampled step, a corruption
+mask $\mathbf{M}$ satisfies
+$\mathbb{P}(M_i=1\mid T=t)=\beta_t$ independently across slots.
+The denoiser conditions on the revealed choices, mask, step, position, and
+encoded term. This uses the absorbing-mask idea from discrete diffusion
+\citep{austin-etal2021}; LoFI's canonical-order complete-term decoding and
+its time-sampled denoising-bound API are distinct scoring operations.
 
 Every decoder declares `choice_heads`: `flat` (the default) reads each slot as
 one categorical over the language's choices, and `factored` as a choice of
@@ -258,9 +323,27 @@ semantic-space Ty semantic-types type-identity concatenate None
 
 | `via` | What it says |
 | --- | --- |
-| `consistency` | The category space and the related space are compared directly on vectors, so their encoders must have equal widths. The relation holds the interpretation's term erasure. |
+| `consistency` | The same vector is read by both identity decoders, so the spaces require equal widths. The decoded distributions are compared through the interpretation’s erasure. |
 | `erase-then-decode` | The relation holds between decoded terms: a category term is carried into the related language by the erasure. It has no vector projection. |
 | `mapped` | A learned map sends a vector of this space to a vector of the related one. It requires a `mapping` and holds no erasure. |
+
+For a declared category-to-type erasure $\epsilon$, consistency decodes the
+same vector $\mathbf{h}$ in both spaces, pushes the source distribution through
+erasure, and compares the resulting term distributions:
+
+$$
+q(\tau\mid\mathbf{h})=\sum_{C:\epsilon(C)=\tau}p_{\mathrm{Cat}}(C\mid\mathbf{h}),
+\qquad
+\ell_{\mathrm{consistency}}=
+D\!\left(q(\cdot\mid\mathbf{h}),p_{\mathrm{Ty}}(\cdot\mid\mathbf{h})\right).
+$$
+
+Here $D$ is the configured coherence kernel, with the support and residual
+policies described in [Induction objectives](../../explanation/induction-objectives.md).
+This does not compare two encoder vectors directly. A learned mapping
+$f:\mathbb{R}^{d_1}\to\mathbb{R}^{d_2}$ instead projects the source vector
+before the target decoder reads it; its existence does not establish
+preservation of symbolic typing.
 
 A `mapping` declares `form: linear`, or `form: multilayer` with `hidden`,
 `depth` and `dropout`. The packaged
@@ -303,3 +386,7 @@ model.spaces.categories.relation was refused: only a mapped space relation decla
   for what each encoder and decoder assumes of a term codec.
 - The [model configuration reference](../../reference/configuration/model.md)
   for every encoder and decoder field.
+
+## References
+
+\bibliography

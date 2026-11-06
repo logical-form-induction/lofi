@@ -184,12 +184,13 @@ class CrossedScales:
 
 @final
 class CrossedModel:
-    """A Gaussian crossed random-effects model over recorded rows.
+    r"""A Gaussian crossed random-effects model over recorded rows.
 
     A row's linear predictor is its fixed-effect row against the coefficients
     plus one effect of every grouping factor. The parameter layout puts the
     fixed-effect coefficients first and then each factor's levels in factor
-    order, so a parameter vector has ``n_fixed + n_effects`` entries.
+    order, so a parameter vector has $n_{\mathrm{fixed}}+n_{\mathrm{effects}}$ entries,
+    where the two counts are `n_fixed` and `n_effects`.
 
     Parameters
     ----------

@@ -943,7 +943,7 @@ def js_divergence_score(
 def js_divergence(
     left: Observation, right: Observation, declared: DTypeClass, *, over: str
 ) -> Observation:
-    """Return the Jensen-Shannon divergence between pairs of distributions.
+    r"""Return the Jensen-Shannon divergence between pairs of distributions.
 
     Parameters
     ----------
@@ -961,7 +961,7 @@ def js_divergence(
     Observation
         At the point the left reading was taken, over the readings' other axes, the
         Jensen-Shannon divergence in natural-log units, from zero where the two
-        distributions agree to ``log(2)`` where their supports are disjoint.
+        distributions agree to $\log 2$ where their supports are disjoint.
 
     Raises
     ------
@@ -1014,7 +1014,7 @@ def _js_divergence(
 def normalized_js_divergence(
     left: Observation, right: Observation, declared: DTypeClass, *, over: str
 ) -> Observation:
-    """Return Jensen-Shannon divergence as a fraction of its maximum.
+    r"""Return Jensen-Shannon divergence as a fraction of its maximum.
 
     Parameters
     ----------
@@ -1031,7 +1031,7 @@ def normalized_js_divergence(
     -------
     Observation
         At the left point and over the remaining axes, Jensen-Shannon divergence in
-        nats divided by ``log(2)``, from zero for identical distributions to one for
+        nats divided by $\log 2$, from zero for identical distributions to one for
         distributions with disjoint support.
 
     Raises

@@ -12,6 +12,9 @@ copyright: LoFI is open source under the MIT License.
 # the command line sets the same thing; this makes a local `mkdocs serve` agree.
 strict: true
 
+hooks:
+  - scripts/docs/citations.py
+
 # The contributor writing guide is kept with the documentation source.
 exclude_docs: |
   STYLE.md
@@ -218,7 +221,7 @@ nav:
   - Explanation:
       - explanation/index.md
       - Foundations:
-          - Logical forms as types: explanation/logical-forms-as-types.md
+          - Categories, semantic types, and logical forms: explanation/logical-forms-as-types.md
           - Grammars as deductive systems: explanation/derivations-as-proofs.md
           - Charts and approximation: explanation/charts-and-approximation.md
           - Term-layout capabilities: explanation/term-layout-capabilities.md
@@ -280,5 +283,6 @@ nav:
       - development/index.md
       - Testing: development/testing.md
       - Documentation: development/documentation.md
+      - Formalization audit: development/formalization-audit.md
       - Public-release preflight: development/public-release.md
       - Stability: project/stability.md

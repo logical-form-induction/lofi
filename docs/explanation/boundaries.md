@@ -14,6 +14,14 @@ blur which layer is responsible for a refusal. A refusal raised at the
 boundary names the leaf of the document that caused it; the same failure
 discovered deep inside a training step would name a tensor.
 
+If $X$ is the input domain and $I:X\to\{0,1\}$ is a checked invariant,
+validation admits values in $X_I=\{x\in X:I(x)=1\}$. An interior operation
+$f:X_I\to Y_J$ may rely on $I$ and must preserve its promised output
+invariant $J$, that is, $J(f(x))=1$ for admitted inputs. This is the intended
+contract; schema validation and a finite test suite do not constitute a
+proof of that universal property. Conditional debug checks observe particular
+executions and can expose a violation.
+
 ## Where declared values enter
 
 [`lofi.spec`](../reference/spec.md) holds the run specification, component

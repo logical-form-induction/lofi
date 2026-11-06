@@ -343,7 +343,7 @@ class TypeDistribution(FrozenValue):
         or a constructor name is not text.
     ValueError
         If a depth is nonpositive, ``target_depth`` exceeds ``max_depth``, a
-        probability is outside ``[0, 1]``, a weight is negative or nonfinite,
+        probability is outside $[0, 1]$, a weight is negative or nonfinite,
         or positive ``bias_mass`` has no bias type.
     """
 

@@ -369,7 +369,7 @@ class EisnerNormalForm[T]:
 
 @final
 class HockenmaierBiskNormalForm[T]:
-    """Hockenmaier and Bisk's derivation-step filter for bounded composition.
+    r"""Hockenmaier and Bisk's derivation-step filter for bounded composition.
 
     A composition result is tagged with its direction and its degree: one, more
     than one, or unread when its rule admits every degree, so that the degree is
@@ -378,14 +378,14 @@ class HockenmaierBiskNormalForm[T]:
     other kind, such as coercions, reset the tag, so the step after a coercion is
     never compared with the step before it.
 
-    With ``n`` the degree of the step under test and ``m`` the degree of a
+    With $n$ the degree of the step under test and $m$ the degree of a
     child, in one direction:
 
-    1. A composition result is never the primary input of a step with ``n <= 1``.
-    2. A result of degree one is never the primary input of a step with ``n >= 1``.
+    1. A composition result is never the primary input of a step with $n\leq1$.
+    2. A result of degree one is never the primary input of a step with $n\geq1$.
     3. A type-raising result is never the primary input of a composition when the
        secondary input is an opposite-direction composition result with
-       ``m > n``.
+       $m>n$.
     4. A type-raising result is never the functor of an application.
     5. A coordination result is never type-raised.
 
@@ -398,7 +398,7 @@ class HockenmaierBiskNormalForm[T]:
     Constraints 1 and 2 presuppose, as the published form does, that each
     direction declares every composition degree up to its largest. Degrees above
     one share a tag, so constraint 3 refuses only steps of degree one. The
-    published constraint on a secondary input of degree ``1 < m < n`` compares
+    published constraint on a secondary input of degree $1<m<n$ compares
     two degrees above one, which the tags do not tell apart, so it is not
     applied; no grammar whose degrees are at most two has such a step. A step
     whose degree cannot be read is admitted.

@@ -95,8 +95,18 @@ title and one sentence per page, as in the Quivers semantics index.
   the how-to guide for doing it. Neither repeats the other.
 - End a tutorial chapter with `## Try this` (two or three concrete variations)
   and `## Next` (one sentence and a link to the next chapter).
-- Cite literature on explanation pages in a closing `## References` section,
-  with full entries.
+- Cite literature with BibTeX keys from `docs/references/references.bib`:
+  `\citep{lambek1958}` → (Lambek 1958), `\citet{lambek1958}` → Lambek (1958),
+  `\citeauthor{lambek1958}'s (\citeyear{lambek1958})` → Lambek's (1958),
+  and `\citealt{lambek1958}` → Lambek 1958. Use the first for parenthetical
+  citations, the second for attribution, the third for possessives, and the
+  fourth for references to papers themselves. Parenthetical citations have
+  no comma between author and year and no numbered markers. Group works with
+  `\citep{lambek1958,howard1980}`. The parenthetical aliases `[@lambek1958]`
+  and `[@lambek1958; @howard1980]` are accepted; bare `@key` remains literal.
+  End cited pages with `## References` followed by `\bibliography` on its
+  own line. MkDocs generates the bibliography; do not type reference entries
+  or author–year citations by hand.
 
 ## Admonitions
 
@@ -117,6 +127,43 @@ Never use an admonition for emphasis or a summary.
 | How-to guides (`how-to/`) | One task per page: the declaration or command, its fields, the variants worth knowing and how each is refused. | Teaching from zero and history. |
 | Explanation (`explanation/`) | Why the design is so, the assumptions behind each family, and what a comparison does and does not license. | Step-by-step instructions and field lists. |
 | Reference (`reference/`) | mkdocstrings pages for public packages, the configuration-document classes, the command line and the entry-point groups. Only what exists. | Prose beyond a one-paragraph lede and its sections. |
+
+## Mathematical notation and definitions
+
+Use established terminology and the conventions of the relevant field. Do
+not coin a replacement for an existing term or abbreviation.
+
+- Probability measures are $\mathbb{P}$ and expectation is $\mathbb{E}$.
+  Probability mass functions are lowercase $p,q,r$; probability density
+  functions are lowercase $f,g,h$. State events, supports, and reference
+  measures where needed.
+- Numeric scalars are lowercase italic, vectors lowercase bold, and matrices
+  and higher-order arrays uppercase bold. Use `\boldsymbol` for Greek vectors
+  and `\mathbf` for Latin vectors and arrays. Distinguish random variables
+  from realizations: $X$ and $x$, or $\mathbf{X}$ and $\mathbf{x}$.
+- Retain standard notation for nonnumeric objects: category metavariables
+  $A,B$, contexts $\Gamma,\Delta$, signatures $\Sigma$, structures
+  $\mathcal{M}$, and typing and consequence judgments. Uppercase category
+  and random-variable symbols do not denote numeric scalars or matrices.
+- State the slash convention. CCG's $A\backslash B$ takes a $B$ on the left
+  and returns $A$; Lambek's corresponding left residual is $B\backslash A$.
+- Define every symbol before use. Distinguish sorts from semantic types,
+  scores from probabilities, probabilities from log probabilities, and
+  omitted-mass bounds from error bounds on objectives.
+- Give mathematical components their domains, codomains, equations or rules,
+  assumptions, and configuration/API correspondences. State objective
+  denominators, masks, empty cases, and gradient detachment. Include worked
+  examples where they clarify the operation.
+- Cite the relevant primary literature for definitions, algorithms, and
+  substantive claims. Verify bibliographic entries against publisher pages;
+  distinguish a verified entry from a verified theorem attribution. Record
+  any verification limitation instead of guessing. Do not claim exhaustive
+  coverage without a systematic literature search.
+- Distinguish implemented checks, tested properties, and proved results.
+  State the hypotheses of each theorem or identity.
+- Use `$...$` and `$$...$$` for inline and display math. Use
+  `\operatorname` for named operators. Check the browser rendering as well
+  as the strict documentation build.
 
 ## Mechanics
 

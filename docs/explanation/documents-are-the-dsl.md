@@ -36,6 +36,19 @@ against the schema before they are applied, so `trainer.epochs=2` sets an
 integer and a group override such as `model/encoders/terms=transformer`
 selects a fragment rather than setting a string.
 
+Writing $\oplus$ for the loader's precedence-aware merge, composition has
+the schematic form
+
+$$
+\operatorname{validate}\!\left(d_0\oplus d_1\oplus\cdots\oplus d_k\right).
+$$
+
+The ordered $d_i$ are the selected declaration layers. This is a partial
+operation: invalid paths, incompatible variants, or failed invariants cause
+refusal. The equation does not treat merge as commutative; exchanging two
+layers can change the resolved value. Provenance records the winning source
+and overridden sources at each path.
+
 The [configuration guide](../how-to/setup/configuration.md) describes each
 layer and how to write it.
 
@@ -70,9 +83,10 @@ Identifying a point by its resolved document has three consequences.
    override yields the same point as the same value written in the document.
    Refactoring a configuration library without changing any resolved value
    leaves every point identifier unchanged.
-2. **Every difference matters.** Two points that differ in any scientific leaf,
-   a default included, have different identifiers. A changed packaged default
-   therefore produces new points instead of silently relabeling old ones.
+2. **Scientific differences enter the hash.** A difference in any scientific
+   leaf, a default included, changes the serialized input. The identifier is
+   a truncated hash, so distinct inputs can collide; it is not an injective
+   encoding of configurations.
 3. **Records can be checked.** An experiment's ingestion recomputes each
    manifest's point identifier from its resolved document and refuses a
    manifest whose directory name disagrees, or whose point lies outside the
@@ -113,7 +127,8 @@ them.
 
 ## What this does not establish
 
-A point identifier says that two runs were declared identically. It does not
+Matching point identifiers are a check on declarations, subject to hash
+collisions. Comparing the resolved scientific documents establishes equality. It does not
 say that they computed identical numbers: floating-point reductions on an
 accelerator, nondeterministic kernels and differing hardware can produce
 different results from one declaration. A run directory records the

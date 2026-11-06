@@ -1,8 +1,8 @@
-"""Links over a published mass and its complement.
+r"""Links over a published mass and its complement.
 
-The logit link computes ``log m - log(1 - m)`` from the two stored log
+The logit link computes $\log m-\log(1-m)$ from the two stored log
 probabilities, preserving precision near unit mass. The probability link
-returns ``exp(log m)``.
+returns $\exp(\log m)=m$.
 """
 
 from types import MappingProxyType
@@ -123,10 +123,11 @@ def _ensure_family(term: LinkTerm, family: str) -> None:
 
 @final
 class LogitLinking:
-    """The log-odds of a published mass pair, times a slope.
+    r"""The log-odds of a published mass pair, times a slope.
 
-    Each row contributes ``slope * (log m - log(1 - m))``. The slope is fitted
-    unless pinned by the term or held at one by scale identification.
+    Each row contributes $a[\log m-\log(1-m)]$, where $a$ is the slope.
+    The slope is fitted unless pinned by the term or held at one by scale
+    identification.
 
     Parameters
     ----------
@@ -291,9 +292,9 @@ class LogitLinking:
 
 @final
 class ProbabilityLinking:
-    """The mass of a published mass pair, read from its log.
+    r"""The mass of a published mass pair, read from its log.
 
-    The contribution of a row is ``exp(log m)``, with ``log m`` the argument
+    The contribution of a row is $\exp(\log m)=m$, with $\log m$ the argument
     column. Nothing is fitted, and the linking has one case, itself.
 
     Parameters

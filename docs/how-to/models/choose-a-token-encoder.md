@@ -23,6 +23,27 @@ codec = RunSpecCodec(search_path=config_search_path(Path.cwd()))
 document = Path("docs/examples/synthetic-parser.yaml")
 ```
 
+## Token and word representations
+
+For vocabulary $\mathcal{V}$ and width $d$, a lookup encoder stores
+$\mathbf{E}\in\mathbb{R}^{|\mathcal{V}|\times d}$ and returns row
+$\mathbf{e}_{w_i}$ for token $w_i$. A contextual encoder instead returns
+$\mathbf{H}=f_{\boldsymbol{\theta}}(w_1,\ldots,w_n)\in\mathbb{R}^{m\times d}$,
+where $m$ is the number of subword positions. The tokenizer alignment assigns
+a nonempty subword index set $I_i$ to each retained word. First and mean
+pooling return $\mathbf{h}_{\min I_i}$ and
+$|I_i|^{-1}\sum_{j\in I_i}\mathbf{h}_j$, respectively. Attention pooling uses
+
+$$
+a_{ij}=\frac{\exp s_j}{\sum_{k\in I_i}\exp s_k},\qquad
+\mathbf{x}_i=\sum_{j\in I_i}a_{ij}\mathbf{h}_j,
+$$
+
+where $s_j$ is the learned scorer's output, after any declared recurrent
+context. All alternatives normalize within one word, excluding masked
+subword positions. A missing or incompatible alignment is not repaired by
+averaging unrelated rows.
+
 ## The four encoders
 
 Each encoder registers under the `lofi.token_encoder` entry-point group, and
@@ -80,7 +101,7 @@ static glove True zeros
 ## Learn rows from scratch
 
 A `learned` encoder declares only its width and, optionally, the standard
-deviation of its initial rows, which defaults to `width ** -0.5`. Replace the
+deviation of its initial rows, which defaults to $d^{-1/2}$ for width $d$. Replace the
 document's encoder with a whole mapping:
 
 ```python
@@ -234,6 +255,28 @@ mixed 0.2 5e-05
 | `steps`, `batch_size`, `optimizer`, `seed` | The adaptation run's length, lines per step, optimizer (AdamW at `5e-5` by default) and seed. |
 | `parameterization`, `rank`, `alpha` | From the `lofi.adaptation` group: `full` adapts every parameter, and `lora` adapts low-rank updates of rank `rank` scaled by `alpha`. |
 
+With selected target positions $J$ and corrupted subword sequence
+$\widetilde{\mathbf{w}}$, masked next-token adaptation minimizes
+
+$$
+\ell_{\mathrm{adapt}}=-\frac1{|J|}\sum_{j\in J}
+\log p_{\boldsymbol{\theta}}(w_j\mid\widetilde{\mathbf{w}};
+\text{output position }j-1).
+$$
+
+The model reads bidirectional context; the target uses the previous output
+position, as in masked next-token prediction \citep{behnamghader-etal2024}.
+The first position and special tokens are ineligible, and a draw with no
+chosen position takes no update. This optional adaptation does not imply that
+the full LLM2Vec training pipeline, including contrastive training, has run.
+
+For an adapted linear map, LoRA replaces $\mathbf{W}$ by
+$\mathbf{W}+(\alpha/r)\mathbf{B}\mathbf{A}$, with
+$\mathbf{A}\in\mathbb{R}^{r\times d_{\mathrm{in}}}$ and
+$\mathbf{B}\in\mathbb{R}^{d_{\mathrm{out}}\times r}$
+\citep{hu-etal2022}. The original matrix is frozen under this parameterization;
+`full` instead permits the original parameters to change.
+
 ## Pool subwords into words
 
 A `pretrained` or `llm2vec` encoder produces one row per subword, and the
@@ -258,3 +301,7 @@ one-layer bidirectional GRU.
   stage.
 - The [model configuration reference](../../reference/configuration/model.md)
   for every field of every encoder and pooler.
+
+## References
+
+\bibliography

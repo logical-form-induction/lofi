@@ -48,6 +48,35 @@ two sides independently with replacement. `overlap-matched` draws among the
 candidate pairs with the greatest predicate overlap; the packaged option
 `synthetic-inference-overlap` selects it.
 
+Write $\varphi$ and $\psi$ for the interpreted premise and hypothesis,
+and $\Gamma$ for the source theory. The two oracle questions are
+$\Gamma,\varphi\vdash\psi$ and
+$\Gamma,\varphi\vdash\neg\psi$. The generator first asks the positive
+question and immediately labels a proof as entailment. Otherwise it asks the
+negative question and applies the language profile's declared relation map
+to the available evidence. Under the ordinary consistent three-way setting,
+the decided cells are
+
+| Positive entailment | Negative entailment | Relation |
+| --- | --- | --- |
+| proved | not queried | entailment |
+| refuted | proved | contradiction |
+| refuted | refuted | neutral |
+
+A refutation is a decision against entailment, not failure to find a proof.
+Abstention retains unresolved possibilities and is not automatically neutral;
+the profile's map must select a label from the evidence. The short circuit
+also means an entailment label does not establish that contradiction was
+separately ruled out. See [Inference as evidence](../../explanation/inference-as-evidence.md)
+for the four relation cells and the distinction between proof, refutation,
+and abstention.
+
+The RTE map $g$ sends entailment to entailment and both remaining relations
+to non-entailment. A PMF over the coarse labels is consequently
+$p_{g(Y)}(z)=\sum_{y:g(y)=z}p_Y(y)$. The graded vocabulary uses the same
+entailment/non-entailment scale; the label vocabulary alone does not make a
+Boolean prover return graded evidence.
+
 ## Draw and read the pairs
 
 `experiments/l4/l4-run.yaml` is a run over a relational source whose
@@ -127,6 +156,19 @@ decide them.
 `trivial` is the share of trivial pairs, zero by default, and `entailment` is
 the least number of subterms an entailing pair's forms must differ by.
 
+For $n$ accepted pairs and target share $\pi_y$, the achieved label
+fraction is $\widehat p_Y(y)=n_y/n$ and must satisfy
+$|\widehat p_Y(y)-\pi_y|\leq\epsilon$ for every requested relation,
+where $\epsilon$ is `tolerance`. Targeting these proportions conditions the
+pair draw on its labels; it is not an estimate of their prevalence under
+independent sampling.
+
+Let $S(t)$ be the set of subterms of logical form $t$. The nontrivial
+entailment control uses the symmetric-difference count
+$|S(\varphi)\mathbin{\triangle}S(\psi)|$, rather than a tree-edit distance.
+The trivial-pair predicate is term identity $\varphi=\psi$ in the store,
+which already identifies alphabetic variants of bound variables.
+
 ## Declare label noise
 
 `label_noise` flips a pair's relation to another at a per-relation rate and
@@ -175,6 +217,26 @@ neutral {'entails': 0, 'contradicts': 0, 'neutral': 3}
 One of the six entailing pairs is observed as neutral, and no other relation
 is touched. `experiments/l4/label-noise.yaml` crosses clean labels with two
 uniform rates and an asymmetric tabular confusion in exactly this form.
+
+For oracle relation $a$, let $\eta_a$ be its declared noise rate and
+$q_a(b)$ the confusion row's routing share to relation $b$. The effective
+row-stochastic transition matrix $\mathbf C$ has entries
+
+$$
+c_{ab}=\mathbb P(\widetilde Y=b\mid Y=a)=
+\begin{cases}
+\eta_a q_a(b),&b\ne a,\\
+1-\eta_a\displaystyle\sum_{c\ne a}q_a(c),&b=a.
+\end{cases}
+$$
+
+This form also covers a zero routing row, which leaves the label unchanged
+regardless of $\eta_a$. With a normalized row entirely over other labels,
+the diagonal is $1-\eta_a$; uniform routing assigns each other relation
+probability $\eta_a/2$. The noisy marginal is
+$p_{\widetilde Y}(b)=\sum_a p_Y(a)c_{ab}$. The tolerance check compares each
+observed row's empirical entries with $c_{ab}$; an oracle relation absent
+from the sample supplies no row to test.
 
 ## Refusals
 

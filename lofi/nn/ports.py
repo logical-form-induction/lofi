@@ -197,7 +197,7 @@ class ForwardOptions:
         a rate or a temperature is not a number.
     ValueError
         If an option is named that the mode does not declare, if the sampling rate falls
-        outside ``(0, 1]``, or if the temperature is not above zero.
+        outside $(0, 1]$, or if the temperature is not above zero.
     """
 
     __slots__ = ("_mode", "_relaxation", "_sampling", "_sampling_rate")

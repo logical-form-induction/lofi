@@ -27,18 +27,22 @@ def initialized_embedder(
     vocabulary: TokenVocabulary,
     component: ComponentId,
 ) -> StaticTokenEmbedder:
-    """Return a trainable embedder whose rows are drawn at random.
+    r"""Return a trainable embedder whose rows are drawn at random.
 
-    Every row, reserved ones included, is drawn from a normal distribution with
-    standard deviation ``1 / sqrt(width)``, so that a row's expected squared norm
-    is one at any width. The draw is made on the CPU from torch's default
-    generator, which a run seeds from its random streams before it builds its
+    Every row, reserved ones included, has independent normal coordinates with
+    mean zero and standard deviation $\sigma$, the supplied ``init_std``.
+    For width $d$, its expected squared norm is
+    $\mathbb{E}[\lVert\mathbf{h}\rVert_2^2]=d\sigma^2$, which equals one
+    when $\sigma=d^{-1/2}$. The draw is made on the CPU from torch's default
+    generator, which a run seeds from its random streams before building its
     components, so one run seed gives one table on every device.
 
     Parameters
     ----------
     width : int
         The number of features of every row, positive by its declaration.
+    init_std : float
+        The standard deviation of each independently drawn coordinate.
     vocabulary : TokenVocabulary
         What the table's rows are indexed by.
     component : ComponentId

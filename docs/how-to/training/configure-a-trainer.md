@@ -26,6 +26,25 @@ codec = RunSpecCodec(search_path=config_search_path(Path.cwd()))
 document = Path("docs/examples/synthetic-parser.yaml")
 ```
 
+## Optimization units
+
+Let $\ell_j(\boldsymbol{\theta})$ be the scalar objective of microbatch $j$.
+An accumulation window of $a$ microbatches differentiates
+$a^{-1}\sum_{j=1}^{a}\ell_j(\boldsymbol{\theta})$ before one optimizer update.
+Thus it averages microbatch objectives; when their sizes differ, it is not
+necessarily an average over examples. With gradient
+$\mathbf{g}=\nabla_{\boldsymbol{\theta}}\ell$ and clipping threshold $c>0$,
+the ideal norm-clipping operation is
+$\mathbf{g}\leftarrow\mathbf{g}\min(1,c/\|\mathbf{g}\|_2)$, leaving a zero
+gradient unchanged. The implementation uses Torch's numerically stabilized
+norm clip after unscaling mixed-precision gradients. Only active, trainable
+parameter groups receive updates.
+
+For minimization, early stopping counts an improvement when the monitored
+value is less than the retained best minus `minimum_delta`; maximization
+reverses the inequality. This validation-based selection is separate from
+the final held-out evaluation.
+
 ## Choose a trainer kind
 
 Five trainer kinds are registered under the `lofi.trainer` entry-point group.
@@ -68,7 +87,7 @@ The fields of [`ParserTrainerSpec`](../../reference/configuration/training.md):
 | `dataset` | The dataset role under `data.datasets` whose sentence batches are trained and whose held-out split is evaluated. |
 | `epochs` | Positive number of passes over the training partition. |
 | `batch_size` | Positive number of items in one microbatch. |
-| `accumulation_steps` | Positive number of microbatches whose gradients are summed into one optimizer step. Defaults to `1`. |
+| `accumulation_steps` | Positive number of microbatches whose gradients are averaged into one optimizer step. Defaults to `1`. |
 | `max_grad_norm` | Positive gradient-clipping norm, or `null` for no clipping. |
 | `active_groups` | The parameter groups that take a gradient, or `null` for every declared group. A group whose component is declared frozen stays frozen even when named. |
 | `batch_sampler` | How an epoch is partitioned into batches (see below). |
@@ -339,7 +358,7 @@ ConfigValueError | trainer was refused: staged training declares active groups o
 
 The `terms` and `distance` trainers fit term-space components on generated
 data, counting progress in optimizer steps. Their checkpoint `interval` is
-therefore a number of steps.
+thus a number of steps.
 
 A `terms` trainer names the `spaces` it pretrains and the `generation` of its
 terms, and sets exactly one of a fixed `steps` horizon and an accuracy `stop`.
@@ -374,6 +393,23 @@ distance 4 CheckpointPolicySpec(interval=2, keep=2) resume-latest
 ExhaustiveTypeSamplerSpec(kind='exhaustive', max_size=3, weighting=UniformExhaustiveWeightingSpec(kind='uniform'))
 ```
 
+For live generated pairs $(t_i,u_i)$, let $d_i$ be their declared tree-edit
+distance, $\mathbf{x}_i=e(t_i)$, and $\mathbf{y}_i=e(u_i)$. With inverse-distance
+power $\gamma\geq0$ and penalty $\lambda\geq0$, the distance trainer minimizes
+
+$$
+a_i=\frac{(1+d_i)^{-\gamma}}{\sum_{j\in I}(1+d_j)^{-\gamma}},\qquad
+\ell_{\mathrm{distance}}=\sum_{i\in I}a_i
+\left[\left(\|\mathbf{x}_i-\mathbf{y}_i\|_2^2-d_i^2\right)^2
++\frac{\lambda}{2}\left(\|\mathbf{x}_i\|_2^2+\|\mathbf{y}_i\|_2^2\right)\right].
+$$
+
+The live-pair set is $I$; weights are renormalized after masking. The reported
+absolute-error diagnostic instead averages
+$|\|\mathbf{x}_i-\mathbf{y}_i\|_2-d_i|$ without these pair weights.
+The objective regresses squared distances and does not assert an isometric
+embedding of all terms.
+
 A distance trainer writes no validation-best checkpoint, so its run releases
 `resume-latest`; see [Checkpoint and resume a run](resume-from-a-checkpoint.md).
 
@@ -382,7 +418,7 @@ A distance trainer writes no validation-best checkpoint, so its run releases
 Generated-data trainers and steps read two root-level sections.
 
 `type_sampler` draws types from the learner language. `kind: recursive` grows
-types up to `max_size` nodes. `kind: exhaustive` enumerates every type up to
+types to the requested depth; `max_size` bounds its companion inventory. `kind: exhaustive` enumerates every type up to
 `max_size` and weights them `uniform`ly or by `size`, with an `exponent`.
 Packaged fragments are `type_sampler/recursive.yaml` and
 `type_sampler/exhaustive.yaml`.
@@ -390,6 +426,69 @@ Packaged fragments are `type_sampler/recursive.yaml` and
 `pair_sampler` draws labeled rule instances from the declared grammar rules.
 Its one kind, `rule`, takes no fields; the packaged fragment is
 `pair_sampler/rule.yaml`.
+
+### Term and rule-instance distributions
+
+Sampler depth counts levels, with leaves at depth one. For root sort $s$,
+exact requested depth $d$, and inventory node bound $m$, let
+$C_{s,d,m}$ be the finite set of inventoried terms satisfying these bounds.
+The exhaustive sampler draws with replacement from
+
+$$
+q(t)=\frac{w(t)}{\sum_{u\in C_{s,d,m}}w(u)},\qquad
+w(t)=1\quad\text{or}\quad w(t)=|t|^\gamma,
+\qquad t\in C_{s,d,m}.
+$$
+
+Here $|t|$ is node count and $\gamma$ is the finite `size` exponent.
+Constructor and branching weights do not reweight this exhaustive law.
+An empty requested inventory is refused.
+
+The recursive sampler instead builds a depth-constrained term top down.
+Let $O(s,d)$ contain constructors that can produce sort $s$ at depth $d$.
+It selects constructor $c$ with probability proportional to its declared
+nonnegative weight $a_c$, taking unspecified weights as one. For positive
+arity $k$, it chooses a designated deepest child from the feasible positions
+$F(c,d)$:
+
+$$
+p(c\mid s,d)=\frac{a_c}{\sum_{c'\in O(s,d)}a_{c'}},\qquad
+p(j\mid c,d)=\frac{b_{k,j}}{\sum_{h\in F(c,d)}b_{k,h}}.
+$$
+
+That child's depth is $d-1$. Each other child's depth is independently drawn
+from the feasible levels $1,\ldots,d-1$, uniformly or with mass proportional
+to $\ell^\gamma$ at level $\ell$, before recursion at its required sort.
+Other children can also attain $d-1$, so the term PMF sums over all compatible
+choices of designated child. Nullary constructors occur only at depth one.
+Those with vocabulary payloads choose a payload uniformly; payload-free
+nullary constructors require no additional draw. A conditional weight total
+of zero is refused.
+Recursive samples are depth-bounded; `max_size` bounds their companion
+inventory, not the number of nodes in each recursive draw.
+
+For a nonempty declared bias list $B=(b_1,\ldots,b_r)$ and mass $\beta$, either
+sampler mixes its base law with the empirical law of that list:
+
+$$
+p(t)=(1-\beta)q(t)+\frac{\beta}{r}\sum_{j=1}^{r}\mathbf{1}\{t=b_j\}.
+$$
+
+An empty bias list gives $p=q$ and requires $\beta=0$; positive bias mass
+with an empty list is refused. Repeated list entries retain multiplicity. Bias terms need the required
+sort and a depth at most `max_depth`, but need not have the requested exact
+depth; the exhaustive sampler also enforces its node bound. A nonempty
+exhaustive request still requires a nonempty base inventory when $\beta=1$.
+
+The rule-instance sampler enumerates a finite set $P$ of admitted
+$(\mathbf{t},u,L)$ triples: ordered premise terms $\mathbf{t}$ from the
+bounded inventory, a conclusion $u$ emitted by a rule with complete forward
+enumeration, and the nonempty set $L$ of actions admitting those premises and
+that conclusion. It deduplicates triples and draws uniformly with replacement,
+$p(\mathbf{t},u,L)=1/|P|$. This is uniform over instances, not over rules or
+arities. Conclusions obey the depth bound, but need not obey the premise
+inventory's node bound. An incomplete forward enumerator can contribute an
+admissible label to a conclusion enumerated by another rule.
 
 ## Choose an optimizer and a schedule
 
@@ -409,6 +508,39 @@ field:
 | `constant` | `warmup_steps`, `warmup_start_factor` |
 | `cosine` | `warmup_steps`, `warmup_start_factor` |
 | `linear` | `warmup_steps`, `warmup_start_factor`, `final_factor` |
+
+For gradient $\mathbf{g}_t$, Adam maintains coordinatewise moments
+
+$$
+\begin{aligned}
+\mathbf{m}_t&=\beta_1\mathbf{m}_{t-1}+(1-\beta_1)\mathbf{g}_t,\\
+\mathbf{v}_t&=\beta_2\mathbf{v}_{t-1}+(1-\beta_2)\mathbf{g}_t^{\odot2},\\
+\widehat{\mathbf{m}}_t&=\mathbf{m}_t/(1-\beta_1^t),\qquad
+\widehat{\mathbf{v}}_t=\mathbf{v}_t/(1-\beta_2^t).
+\end{aligned}
+$$
+
+The initial moments are zero, and the update without decay is
+$\boldsymbol{\theta}_t=\boldsymbol{\theta}_{t-1}
+-\eta_t\widehat{\mathbf{m}}_t/(\sqrt{\widehat{\mathbf{v}}_t}+\epsilon)$,
+with coordinatewise division and square root \citep{kingma-ba2015}.
+Adam's coupled weight decay adds $\lambda\boldsymbol{\theta}_{t-1}$ to the
+gradient before these moments. AdamW instead applies the shrinkage
+$(1-\eta_t\lambda)\boldsymbol{\theta}_{t-1}$ separately from the adaptive
+update \citep{loshchilov-hutter2019}. These are different regularizers.
+SGD without momentum or weight decay updates by $-\eta_t\mathbf{g}_t$; its declared momentum,
+dampening, and Nesterov options use the Torch SGD recurrence.
+
+Let $t$ count completed accumulation windows, $h$ be the derived total updates,
+and $u<h$ the warmup length. With starting fraction $a\in(0,1]$, warmup uses
+$\eta(t)/\eta_{\mathrm{base}}=a+(1-a)t/u$ for $0\leq t\leq u$ when $u>0$.
+Here $\eta_{\mathrm{base}}$ is the configured rate and the initial rate is
+$a\eta_{\mathrm{base}}$. After warmup, write $v=(t-u)/(h-u)$. The `constant`, `linear`, and `cosine`
+schedules use factors $1$, $1-(1-f)v$, and $(1+\cos(\pi v))/2$,
+respectively, where $f$ is `final_factor`. The scheduler advances when an accumulation window closes. In the current
+implementation it also advances when the mixed-precision scaler skips the
+optimizer update; the schedule counts closed windows rather than only
+successful parameter changes.
 
 Select both by group and set one leaf. Leaves the document already sets, such
 as `optimizer.weight_decay: 0.0`, carry over to the new selection:
@@ -442,3 +574,7 @@ rate.
   every trainer, step, optimizer, scheduler and sampler class.
 - [Training](../../reference/train.md) renders the training plans and
   plugins that execute these declarations.
+
+## References
+
+\bibliography

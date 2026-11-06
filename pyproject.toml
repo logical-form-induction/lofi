@@ -825,6 +825,8 @@ ban-relative-imports = "parents"
 "torch.cuda.is_available".msg = "Device selection happens once, in the run policy."
 
 [tool.ruff.lint.per-file-ignores]
+# Documentation checks use unittest so the docs environment needs no pytest.
+"scripts/docs/test_citations.py" = ["PT009", "PT027"]
 # the launcher runs the site profile's declared submit and transport commands as an
 # argument vector, never shell text, so the subprocess audit rule does not apply (S603).
 "lofi/run/_launch.py" = ["S603"]

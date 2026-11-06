@@ -39,6 +39,25 @@ a design that selects fewer assignments than intended is refused with
 | `latin-hypercube` | `points`, `seed` | `points` combinations in which each dimension's values are spread evenly across the draws. |
 | `fractional-factorial` | `generators` | The fraction of the two-level grid axes the generators define, crossed with every other axis. |
 
+Let $\mathcal X_j$ be the finite value set of independent axis $j$.
+A yoked group of equally long axes contributes one dimension
+$\mathcal Z_h=\{(x_{h1k},\ldots,x_{hrk}):k=1,\ldots,m_h\}$, whose
+coordinates move together. The full assignment space is
+
+$$
+\mathcal A=\prod_j\mathcal X_j\times\prod_h\mathcal Z_h,
+\qquad
+|\mathcal A|=\prod_j|\mathcal X_j|\prod_h m_h.
+$$
+
+A grid takes every assignment; a random design takes a uniform sample of
+$n$ distinct assignment positions without replacement. With $m=|\mathcal A|$,
+each position has inclusion probability $n/m$. Exclusion, composition, and
+configuration deduplication occur afterward, so this probability describes
+design positions rather than necessarily distinct final configurations.
+Crossing the accepted assignments with the seed set $\mathcal S$ gives at
+most $|\mathcal A_{\mathrm{accepted}}|\,|\mathcal S|$ final points.
+
 ## Compare the designs
 
 The four designs can be compared without composing a run document. A
@@ -121,6 +140,21 @@ Where `points` is smaller than an axis's value count, some values are never
 drawn. Two draws that happen to agree on every axis produce one point, so set
 `expected_points` to the count of distinct points the design yields.
 
+For $n$ requested draws and $m_j$ values in dimension $j$, the implemented
+column begins with the zero-based indices
+
+$$
+b_{ij}=\min\left\{m_j-1,
+\left\lfloor\frac{(i+\tfrac12)m_j}{n}\right\rfloor\right\},
+\qquad i\in\{0,\ldots,n-1\}.
+$$
+
+Each column is independently permuted, and the resulting row determines
+one assignment. This is a discrete, midpoint-based adaptation of Latin
+hypercube stratification \citep{mckay-etal1979}; it does not draw a continuous
+uniform coordinate within each stratum. Discrete projection can repeat full
+rows, and later exclusions can disrupt the original balance.
+
 ## Declare a fractional factorial
 
 A `fractional-factorial` design reduces two-level grid axes to the fraction
@@ -149,6 +183,26 @@ for assignment in design_assignments(sweep.design, sweep):
 [0.0005, 0.01, 2, 1]
 [0.0005, 0.01, 4, 2]
 ```
+
+Encode a two-level factor's first and second declared values by
+$b_j=0$ and $b_j=1$. A generator with target factor $g$ and basic-factor
+word $W_g$ sets
+
+$$
+b_g=\left(\sum_{j\in W_g}b_j\right)\bmod2.
+$$
+
+Equivalently, using signs $x_j=(-1)^{b_j}$, it imposes
+$x_g=\prod_{j\in W_g}x_j$ and hence the defining relation
+$x_g\prod_{j\in W_g}x_j=1$. Products of defining words cancel repeated
+letters because $x_j^2=1$. The shortest nonidentity word gives the design's
+resolution \citep{box-hunter1961}; the validator requires its length to be
+at least four.
+A main-effect column can thus coincide with a three-factor interaction,
+and two-factor interactions can coincide with one another, even though main
+effects do not coincide with two-factor interactions. These statements concern
+the complete constructed fraction; exclusions or missing runs can remove its
+balance and orthogonality.
 
 The generators are checked when the sweep block is validated. They must name
 distinct generated factors, no generated factor may appear in a word, and
@@ -222,6 +276,16 @@ correction is an installed plugin in the `lofi.correction` entry-point group:
 | `benjamini-hochberg` | False discovery rate, step up. | `independent`, `prds` |
 | `benjamini-yekutieli` | False discovery rate under any dependence. | every regime |
 
+For $V$ false rejections among $R$ total rejections, family-wise error is
+$\mathbb P(V\geq1)$ and false discovery rate is
+$\mathbb E[V/\max\{R,1\}]$. The declared $\alpha$ bounds the selected
+error criterion under the procedure's assumptions
+\citep{holm1979,benjamini-hochberg1995,benjamini-yekutieli2001}.
+[Experiments and commitments](../../explanation/experiments-and-commitments.md)
+gives the adjusted-$p$ formulas and their dependence conditions. Declaring
+`dependence` records an assumption; validation does not test whether the
+observed data satisfy it.
+
 A correction declared under a regime its guarantee does not cover is refused
 when the experiment is read. The checked-in
 [`docs/examples/running/contracted.yaml`](https://github.com/logical-form-induction/lofi/blob/main/docs/examples/running/contracted.yaml)
@@ -252,3 +316,7 @@ a `seeds` contraction rung's floor from below. The
 procedure, and [Experiments and
 commitments](../../explanation/experiments-and-commitments.md) explains what a
 corrected family licenses.
+
+## References
+
+\bibliography

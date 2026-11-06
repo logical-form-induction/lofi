@@ -69,7 +69,7 @@ def dropout_rate(what: str, value: float, /) -> float:
     Raises
     ------
     ValueError
-        If the rate is not finite or lies outside ``[0, 1)``.
+        If the rate is not finite or lies outside $[0, 1)$.
     """
     rate = ensure_finite(what, value)
 

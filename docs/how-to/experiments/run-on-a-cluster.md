@@ -83,7 +83,7 @@ The profile has seven tables:
 | `environment` | `preamble` | Shell lines, such as module loads and exports, run before the interpreter. May be empty. |
 | `interpreter` | `command` | The argument vector that runs Python, with any container wrapper spelled out. |
 | `transport` | `host`, `command` | The host the remote launcher reaches and the argument vector that opens a session, to which the host and then the remote command are appended. |
-| `allocation` | `accelerator_hours`, `share` | The accelerator-hours the site grants and the largest fraction, in `(0, 1]`, one paper's admitted experiments may hold. |
+| `allocation` | `accelerator_hours`, `share` | The accelerator-hours the site grants and the largest fraction, in $(0, 1]$, one paper's admitted experiments may hold. |
 
 Each `*_syntax` field is a Python format template over a fixed set of names,
 and a template that leaves one out or names another is refused:
@@ -252,8 +252,8 @@ bootstrapped training seconds times the chunk size, rounded up to whole
 minutes, and the largest peak allocation among the pending points' stacks,
 rounded up to whole mebibytes. The array directive spans tasks `0` to the task
 count less one, and its throttle is the declared one or, when none is
-declared, the task count. Task `k` trains points `k * chunk_size` up to but
-excluding `(k + 1) * chunk_size` of the points file. Without `--dry-run`, the
+declared, the task count. Task $k$ trains the points with indices $kc\leq i<\min\{(k+1)c,n\}$,
+where $c$ is `chunk_size` and $n$ is the number of pending points. Without `--dry-run`, the
 launcher runs `submission.command` on the script and refuses a nonzero exit
 with `SubmissionError`.
 

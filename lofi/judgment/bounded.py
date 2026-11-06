@@ -222,7 +222,7 @@ class BoundedSource:
 
 
 def _log1mexp(value: Tensor) -> Tensor:
-    """Return ``log(1 - exp(value))`` for a nonpositive argument.
+    r"""Return $\log(1-\exp(x))$ for a nonpositive argument.
 
     Parameters
     ----------
@@ -237,7 +237,7 @@ def _log1mexp(value: Tensor) -> Tensor:
 
 
 def _log_standard_normal_interval(lower: Tensor, upper: Tensor) -> Tensor:
-    """Return ``log(Phi(upper) - Phi(lower))`` without tail cancellation."""
+    r"""Return $\log[\Phi(b)-\Phi(a)]$ for bounds $a,b$, avoiding tail cancellation."""
     lower_log_cdf = torch.special.log_ndtr(lower)
     upper_log_cdf = torch.special.log_ndtr(upper)
     below_zero = upper <= 0.0
@@ -323,7 +323,7 @@ class ClosedUnitTruncatedNormal(Distribution):
 
 @final
 class TruncatedNormalFamily:
-    """A bounded response family with location ``sigmoid(eta)``.
+    r"""A bounded response family with location $\mu=\sigma(\eta)=1/(1+\exp(-\eta))$.
 
     Parameters
     ----------

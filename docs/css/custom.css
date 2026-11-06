@@ -286,6 +286,11 @@ body {
   line-height: 1.55;
 }
 
+.md-typeset .csl-entry {
+  margin: 0.8em 0 0.8em 1.5em;
+  text-indent: -1.5em;
+}
+
 @media screen and (max-width: 76.25em) {
   .lf-hero {
     grid-template-columns: minmax(0, 1fr);

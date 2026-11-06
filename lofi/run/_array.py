@@ -252,7 +252,7 @@ class ArraySubmission(NamedTuple):
 
 
 class ArrayLauncher:
-    """Submits pending points as one scheduler array job.
+    r"""Submits pending points as one scheduler array job.
 
     A submission writes two files under ``<scope>/sweeps/<id>/``, where the
     scope is the store's: the scratch root, or the directory under it that a
@@ -263,10 +263,10 @@ class ArrayLauncher:
     placement directive, each resource directive and the array directive, the
     profile's preamble lines, and one line that runs the profile's interpreter
     on the program with three trailing arguments: the points file, the
-    scheduler's task index variable and the chunk size. Task ``k`` of the
-    array runs points ``k * chunk_size`` up to but excluding
-    ``(k + 1) * chunk_size`` of the points file, so a program recovers them
-    with ``task_points``. Rendering writes the files and runs nothing;
+    scheduler's task index variable and the chunk size. Task $k$ of the
+    array runs points $kc\leq i<\min\{(k+1)c,n\}$ of the points file,
+    where $c$ is `chunk_size` and $n$ is the number of points. A program
+    recovers them with ``task_points``. Rendering writes the files and runs nothing;
     submitting renders and then runs the submit command.
 
     Every resource a task is granted is read off the experiment's price

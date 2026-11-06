@@ -1,7 +1,8 @@
-"""MORCELA linking from language-model scores to a latent scale.
+r"""MORCELA linking from language-model scores to a latent scale.
 
-The score is ``slope * (p - beta * u + gamma) / l ** delta``. Here ``p`` and
-``u`` are sentence and unigram log probabilities, and ``l`` is token count.
+The score is $a(\ell-\beta u+\gamma)/n^\delta$. Here $\ell$ and $u$
+are sentence and unigram log probabilities, $n$ is token count, and $a$ is
+the slope.
 SLOR, raw log probability, and either correction alone are nested parameter
 settings.
 """
@@ -136,10 +137,13 @@ def morcela_rungs(*, length: str, frequency: str) -> Mapping[str, LinkingSpec]:
 
 @final
 class MorcelaLinking:
-    """MORCELA over a link term's readout and its length and frequency columns.
+    r"""MORCELA over a link term's readout and its length and frequency columns.
 
     Each row contributes
-    ``slope * (p - frequency * u + length) / l ** normalization``. Pinned
+    $a(\ell-\beta u+\gamma)/n^\delta$, where $a$, $\beta$, $\gamma$, and
+    $\delta$ are the `slope`, `frequency`, `length`, and `normalization`
+    parameters; $\ell$ and $u$ are the sentence and unigram log probabilities,
+    and $n$ is token count. Pinned
     parameters remain fixed; the rest are fitted in ``PARAMETERS`` order.
 
     Parameters

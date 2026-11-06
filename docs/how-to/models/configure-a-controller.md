@@ -34,6 +34,55 @@ codec = RunSpecCodec(search_path=config_search_path(Path.cwd()))
 document = Path("docs/examples/synthetic-parser.yaml")
 ```
 
+## Scores and action probabilities
+
+Let $\mathbf{u},\mathbf{v}\in\mathbb{R}^{d}$ be the two child vectors,
+$\mathcal{A}$ the finite action inventory, and $a=|\mathcal{A}|$.
+The declared feature map $\boldsymbol{\phi}(\mathbf{u},\mathbf{v})\in\mathbb{R}^{kd}$
+concatenates $k$ selected vectors from $\mathbf{u}$, $\mathbf{v}$,
+$\mathbf{u}-\mathbf{v}$, and $\mathbf{u}\odot\mathbf{v}$ in declaration order.
+The MLP head maps these features to logits $\mathbf{s}\in\mathbb{R}^{a}$.
+With `raise: none`, the bilinear head computes, for action $j$,
+
+$$
+s_j=\mathbf{u}^{\mathsf T}\mathbf{B}_j\mathbf{v}
++\mathbf{w}_j^{\mathsf T}\boldsymbol{\phi}(\mathbf{u},\mathbf{v})+b_j,
+$$
+
+Soft raising first constructs action-specific raised child vectors and
+evaluates the base head on those vectors. In the unraised equation,
+$\mathbf{B}_j\in\mathbb{R}^{d\times d}$ and
+$\mathbf{w}_j\in\mathbb{R}^{kd}$. The transformer contextualizes the two
+children before applying an affine map to their declared pair features.
+Each attention head uses
+
+$$
+\operatorname{Attention}(\mathbf{Q},\mathbf{K},\mathbf{V})
+=\operatorname{softmax}_{\mathrm{row}}
+\left(\frac{\mathbf{Q}\mathbf{K}^{\mathsf T}}{\sqrt{d_k}}\right)\mathbf{V},
+$$
+
+with learned query, key, and value projections and key width $d_k$
+\citep{vaswani-etal2017}. The configured residual, normalization, and
+feed-forward blocks surround this operation.
+
+Softmax defines $p(j\mid\mathbf{u},\mathbf{v})=\exp(s_j)/\sum_{i=1}^{a}\exp(s_i)$.
+For $\alpha>1$, entmax instead solves
+
+$$
+\mathbf{p}=\underset{\mathbf{q}\in\Delta^{a-1}}{\arg\max}
+\left\{\mathbf{q}^{\mathsf T}\mathbf{s}
++\frac{1-\sum_{j=1}^{a}q_j^\alpha}{\alpha(\alpha-1)}\right\},
+\qquad
+\Delta^{a-1}=\{\mathbf{q}\geq\mathbf{0}:\mathbf{1}^{\mathsf T}\mathbf{q}=1\}.
+$$
+
+The limit at $\alpha=1$ is softmax, and $\alpha=2$ is sparsemax
+\citep{martins-astudillo2016,peters-etal2019}. LoFI approximates the entmax
+threshold with the declared number of bisections. These probabilities weight
+neural actions; positive weight does not establish that a symbolic rule's
+premises are satisfied. Symbolic applicability remains a grammar judgment.
+
 ## Read the composed controller
 
 ```python
@@ -169,3 +218,7 @@ document valid. Declaring `raise: soft` on top of it is refused in turn, with
 - The [model configuration reference](../../reference/configuration/model.md)
   for every controller field, and the [network reference](../../reference/nn.md)
   for the built controllers.
+
+## References
+
+\bibliography

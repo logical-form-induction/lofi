@@ -45,6 +45,30 @@ applications or bound variables:
 A candidate is kept only when the type checker refuses it, and the refusal is
 kept as the form's certificate.
 
+For a source term $t$ with a successful typing judgment
+$\Gamma\vdash t:\tau$, an operator proposes $t'$. At an application
+subterm $u\,v$, the first two operators have the schemata
+
+$$
+u\,v\longmapsto v\,u
+\qquad\text{and}\qquad
+u\,v\longmapsto (u\,v)\,v.
+$$
+
+These are candidate transformations, not general proofs of ill-typing:
+some transformed terms remain typable and are rejected as negative examples.
+The implementation accepts $t'$ only when the configured checker returns a
+`TypingFailure`; the recorded conflict identifies the failed constraints.
+The [typing rules](../../explanation/logical-forms-as-types.md#semantic-typing)
+define the type language and judgment this check concerns.
+
+If $n$ grammatical items have interpreted forms and the share is $\rho$,
+`exact` selects $\lfloor n\rho+\tfrac12\rfloor$ items; `bernoulli` draws
+a count $K\sim\operatorname{Binomial}(n,\rho)$. Selected items keep their
+gold forms and receive additional negative forms. Thus the injection share
+is relative to grammatical source items, not to the final combined count of
+positive and negative form-typing examples.
+
 The packaged fragments are `data.datasets.train.dataset.ill_typing.operators:
 argument-swap` and `data.datasets.train.dataset.ill_typing.proportion:
 quarter`.
@@ -125,6 +149,24 @@ The twelve injections are drawn using the operator weights, and half of the
 ill-typed forms are observed as well-typed. The report gives the achieved flip
 rate, so it can be compared with the declared one.
 
+Let $Y=0$ denote an injected ill-typed form and $\widetilde Y$ its
+observed label, with one denoting well-typed. The three observation policies
+are
+
+$$
+\mathbb P(\widetilde Y=1\mid Y=0)=
+\begin{cases}
+0,&\text{`labeled-negatives'},\\
+1,&\text{`positive-only'},\\
+\eta,&\text{`label-flips'},
+\end{cases}
+$$
+
+where $\eta$ is `noise`. This observation channel changes the training
+label, not the typing certificate. The reported achieved rate is the sample
+fraction of injected negatives observed as positive; finite draws need not
+match $\eta$ exactly.
+
 ## Refusals
 
 An ill-typing over a corpus with no interpretation is refused when the
@@ -154,5 +196,5 @@ non-positive `attempts`, an empty or repeating operator list, or a `noise`
 rate outside the `label-flips` regime. An injection that exhausts its
 attempts for one form stops the draw.
 
-[Logical forms as types](../../explanation/logical-forms-as-types.md)
+[Categories, semantic types, and logical forms](../../explanation/logical-forms-as-types.md)
 explains what the type checker decides.

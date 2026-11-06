@@ -6,7 +6,7 @@ __all__ = ["warmup_start_factor"]
 
 
 def warmup_start_factor(value: float, /) -> float:
-    """Return a warmup's starting fraction of the learning rate, in ``(0, 1]``.
+    """Return a warmup's starting fraction of the learning rate, in $(0, 1]$.
 
     Parameters
     ----------
@@ -16,7 +16,7 @@ def warmup_start_factor(value: float, /) -> float:
     Raises
     ------
     ValueError
-        If the fraction is not finite or lies outside ``(0, 1]``.
+        If the fraction is not finite or lies outside $(0, 1]$.
     """
     checked = ensure_finite("warmup_start_factor", value)
 

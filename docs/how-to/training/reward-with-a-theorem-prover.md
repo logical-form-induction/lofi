@@ -187,11 +187,12 @@ when packaged, read at a positive `temperature`. Both scorers take a
 | `contradiction` | `negated-hypothesis` proves contradiction as entailment of the negated hypothesis; `joint-inconsistency` as inconsistency of the two forms together. |
 | `abstention` | `exclude`, the only value: an abstention pays nothing and is left out of the objective's mean. |
 
-A decided probability *p* pays `refuted + (proved - refuted) * p`.
+A decided probability $p$ pays $r=c_0+(c_1-c_0)p$,
+where $c_0$ is `refuted` and $c_1$ is `proved`.
 
 `control_variate: {kind: moving, decay, initial}` keeps an exponential moving
 mean of decided rewards, which the reward objective subtracts from each
-payment. `decay` lies in `[0, 1)`, and `initial` (default `0.0`) is the value
+payment. `decay` lies in $[0, 1)$, and `initial` (default `0.0`) is the value
 before the first observation. `moving` is the one control variate registered
 under `lofi.control_variate`.
 

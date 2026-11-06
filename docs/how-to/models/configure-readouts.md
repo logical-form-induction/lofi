@@ -2,7 +2,7 @@
 
 A readout under `model.readouts` declares which terms a run reads off the
 chart: at every span it observes one representation space through that space's
-decoders, and publishes either the decoder's marginal rows, the mass of a
+decoders, and publishes either the decoder's symbol-marginal rows, the mass of a
 declared target set, or weighted complete terms under a decoding strategy.
 Losses and evaluators then name a readout, or the output it publishes, as
 their input. This guide declares each of the three routes, chooses a decoding
@@ -83,12 +83,30 @@ run. The `types` readout's target mass needs the split posteriors `alpha` and
 `mu` as well as the cells, which is why a chart without them is refused
 ([Configure a chart parser](configure-a-chart-parser.md) shows the refusal).
 
+For a target set $A$ of complete terms and cell vector $\mathbf{h}_s$, a
+coupled target score sums the decoder weights
+$u_s(A)=\sum_{t\in A}w(t\mid\mathbf{h}_s)$, excluding terms outside the
+published rows' support. The factorized route instead uses
+
+$$
+u_s^{\mathrm{fact}}(A)=\sum_{t\in A}\prod_{i\in J(t)}p_i(o_i(t)\mid\mathbf{h}_s),
+$$
+
+where $J(t)$ lists the slots the target fills and $o_i(t)$ is its operator
+symbol at slot $i$ (payload alternatives are summed in these rows). Multiplication of marginal rows is an approximation to a joint
+term distribution; it need not equal teacher-forced decoding. The target
+readout then multiplies the member score by the chart's constituent factor
+$\mu_s$ and publishes the binary pair $(m_s,1-m_s)$, with
+$m_s=\min(1,\mu_su_s(A))$. Masks track cells for which both factors are
+defined. Clamping bounds the reported mass; it does not prove that overlapping
+factorized target events were disjoint.
+
 ## Choose a route
 
 A readout publishes one of three things:
 
 1. **Marginal rows.** With no `targets` and no `decoding`, the readout publishes
-   the decoder's per-choice marginal rows, which an objective such as
+   the decoder's per-symbol marginal rows, which an objective such as
    coherence reads.
 2. **Target mass.** With `targets` and an `output`, it publishes the mass of
    the target set under that output name. The document's grammaticality loss
@@ -97,7 +115,7 @@ A readout publishes one of three things:
    complete terms and their residual mass. The document's coherence loss reads
    `category-terms` this way.
 
-Target mass is computed from marginal rows, so a readout cannot declare both a
+Target scoring is a separate readout route, so a readout cannot declare both a
 target and a decoding strategy, and an output needs a target source. A
 `proof-term` meaning route builds on decoded lexical forms, so it needs a
 decoding strategy:

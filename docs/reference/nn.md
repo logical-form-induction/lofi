@@ -4,6 +4,14 @@ This page renders `lofi.nn`: encoders, decoders, controllers, parsers, losses,
 and the sites inside a model that an observer may name. Importing it needs the
 `nn` extra.
 
+The model guides define [controller distributions](../how-to/models/configure-a-controller.md),
+[neural chart composition](../how-to/models/configure-a-chart-parser.md),
+[term representations and decoding](../how-to/models/configure-term-encoders-and-decoders.md),
+[token representations](../how-to/models/choose-a-token-encoder.md), and
+[readout measures](../how-to/models/configure-readouts.md).
+[Induction objectives](../explanation/induction-objectives.md) specifies their
+losses and gradient conventions.
+
 ::: lofi.nn
 
 ## Encoders

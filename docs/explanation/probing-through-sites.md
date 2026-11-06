@@ -5,6 +5,40 @@ model's components publish. It describes what a site is, what publishing one
 guarantees and what it leaves unchecked, why role inventories are shared across
 component kinds, and what a probe result does and does not license.
 
+## Observations and interventions
+
+For input $x$ and fixed trained parameters $\boldsymbol{\theta}$, write
+$\mathbf{H}_s(x)$ for the tensor published at site $s$. Its declared
+axes specify a product shape $n_1\times\cdots\times n_k$ and its mask
+$\mathbf{M}_s$ specifies live entries. A probability dtype
+requires entries in $[0,1]$ and a log-probability dtype requires entries at
+most zero when numeric checks are enabled. These checks do not enforce
+normalization. Normalization belongs to the particular role: a split PMF
+sums to one over alternatives, whereas constituent marginals need not sum
+to one over spans.
+
+An observation returns $\operatorname{stopgrad}(\mathbf{H}_s(x))$.
+An intervention replaces that value by $\mathbf{H}'_s$ during the forward
+computation. If $o(x)$ denotes a scalar downstream outcome, write
+$o(x;s\leftarrow\mathbf{H}'_s)$ for the result of that replacement.
+This notation describes an intervention on the implemented computation;
+it does not by itself identify an intervention on a linguistic variable.
+
+The packaged intervention probe measures an absolute change. For pass $b$,
+let $J_b$ contain coordinates live under the clean reading’s mask at
+outcome sites reached in both passes.
+Its reported value over $m$ passes is
+
+$$
+\widehat\delta=\frac1m\sum_{b=1}^{m}
+\frac1{|J_b|}\sum_{j\in J_b}|o'_{b,j}-o_{b,j}|.
+$$
+
+The two-stage average gives each pass equal weight; it is not necessarily
+the average over all coordinates pooled across passes. Empty outcome sets
+are refused. Zero, mean, and resampled replacements define different
+measurements, even at the same site.
+
 ## A site is a published promise
 
 A site names one value a component computes: the component it belongs to, the
@@ -43,7 +77,7 @@ a run never trains to completion only to find its probe unanswerable.
 Patching is scoped. A replacement holds for one pass inside one region, and
 leaving the region restores every component, after a completed pass, an
 exception or a refusal, so a probe leaves the trained model as it found it.
-Observations are detached copies; a gradient is taken only through a
+Observations are detached readings; a gradient is taken only through a
 `differentiate` region over sites checked as `GradientSites`.
 
 Some guarantees are conditional. Whether each reading matches its declared
@@ -100,6 +134,74 @@ own grammar and adds only the substitution settings and the candidate file.
 
 ## What a probe result licenses
 
+Classifier probes fit a prediction function on representations and evaluate
+it on held-out labels. Their selectivity is
+$s=a_{\mathrm{task}}-a_{\mathrm{control}}$, where both accuracies use
+the same declared probe capacity and their respective training tasks
+\citep{hewitt-liang2019}. High task accuracy alone can reflect a probe's
+ability to memorize regularities rather than information used by the model.
+
+For distributed interchange interventions, an orthogonal matrix
+$\mathbf{R}\in\mathbb{R}^{h\times h}$ and coordinate mask
+$\mathbf{M}\in\mathbb{R}^{h\times h}$ define, in column-vector notation,
+
+$$
+\mathbf{h}'=\mathbf{R}
+\left[(\mathbf{I}-\mathbf{M})\mathbf{R}^{\mathsf T}\mathbf{h}
++\mathbf{M}\mathbf{R}^{\mathsf T}\mathbf{h}_{\mathrm{source}}\right],
+\qquad\mathbf{R}^{\mathsf T}\mathbf{R}=\mathbf{I}.
+$$
+
+A binary diagonal mask exchanges a subspace; a soft diagonal mask blends it
+during optimization. Interchange accuracy compares the resulting outputs
+with the declared high-level counterfactual outcomes on held-out aligned
+pairs \citep{geiger-etal2024}. It is relative to that counterfactual population
+and variable alignment, not a universal equivalence of two models.
+
+Circuit discovery searches for subsets of a published computation graph
+whose retained or removed components preserve a declared behavior
+\citep{conmy-etal2023}. With mean clean score $s_{\mathrm{clean}}$, corrupt
+score $s_{\mathrm{corrupt}}$, and circuit score $s_C$, the normalized recovery is
+
+$$
+r_C=\frac{s_C-s_{\mathrm{corrupt}}}
+{s_{\mathrm{clean}}-s_{\mathrm{corrupt}}}.
+$$
+
+Equal endpoints leave recovery undefined and are refused. Recovery need not
+lie in $[0,1]$. Sufficiency of retained components, effects of removing them,
+and contributions of individual components answer different questions;
+circuit overlap alone does not establish behavioral faithfulness
+\citep{hanna-etal2024}.
+
+For the packaged sparse autoencoder, stack $n$ site vectors as rows of
+$\mathbf{X}\in\mathbb{R}^{n\times d}$. With hidden width $h$, its activations
+and reconstructions are
+
+$$
+\mathbf{Z}=\operatorname{ReLU}(\mathbf{X}\mathbf{W}_e
++\mathbf{1}\mathbf{b}_e^{\mathsf T}),\qquad
+\widehat{\mathbf{X}}=\mathbf{Z}\mathbf{W}_d
++\mathbf{1}\mathbf{b}_d^{\mathsf T},
+$$
+
+where $\mathbf{W}_e\in\mathbb{R}^{d\times h}$ and
+$\mathbf{W}_d\in\mathbb{R}^{h\times d}$. Training minimizes
+
+$$
+\ell_{\mathrm{sae}}=\frac{\|\widehat{\mathbf{X}}-\mathbf{X}\|_F^2}{nd}
++\frac{\lambda}{nh}\sum_{i=1}^{n}\sum_{j=1}^{h}z_{ij}.
+$$
+
+Decoder rows are normalized after each update. Encoder and decoder weights
+are separately trainable; the decoder is initialized from the encoder's
+transpose, but they remain untied. Sparse-autoencoder feature analysis is
+background for this probe \citep{huben-etal2024}; the equation states LoFI's
+particular objective and normalization. Reported activation sparsity is the
+fraction of exactly zero activations. Reconstruction error or sparsity alone
+does not identify a linguistic variable; the held-out alignment and
+intervention measurements supply separate evidence.
+
 A probe result is a measurement of a trained point at its published sites over
 declared inputs. An intervention's effect on the log partition says how much
 the computation downstream of a site depends on the value there, on those
@@ -117,18 +219,4 @@ probes.
 
 ## References
 
-Conmy, A., Mavor-Parker, A. N., Lynch, A., Heimersheim, S., and Garriga-Alonso,
-A. (2023). Towards automated circuit discovery for mechanistic
-interpretability. *Advances in Neural Information Processing Systems*, 36.
-
-Geiger, A., Wu, Z., Potts, C., Icard, T., and Goodman, N. (2024). Finding
-alignments between interpretable causal variables and distributed neural
-representations. *Proceedings of the Third Conference on Causal Learning and
-Reasoning*, PMLR 236, 160–187.
-
-Hanna, M., Pezzelle, S., and Belinkov, Y. (2024). Have faith in faithfulness:
-Going beyond circuit overlap when finding model mechanisms. *First Conference
-on Language Modeling*.
-
-Hewitt, J., and Liang, P. (2019). Designing and interpreting probes with
-control tasks. *Proceedings of EMNLP-IJCNLP 2019*, 2733–2743.
+\bibliography

@@ -1,81 +1,225 @@
-# Logical forms as types
+# Categories, semantic types, and logical forms
 
-This page explains the reading under which LoFI treats a syntactic category as
-a type, a derivation as a proof, and a logical form as that proof's term. It
-distinguishes what the syntactic and semantic sides share, one term algebra,
-from what they keep apart: their signatures, their stores and their imports.
+A syntactic category specifies how an expression combines; a semantic type
+specifies the kind of value its meaning denotes; and a logical form is a term of
+that semantic type. LoFI represents all three with its
+[term algebra](../reference/terms.md). This page defines term formation and
+typing, distinguishes equality from matching, and explains how an
+interpretation relates a derivation to its meaning.
 
 ## The correspondence
 
-In the type-logical tradition a category is a formula and a derivation is a
-proof of it from the categories of the words (Lambek 1958). Under the
-formulae-as-types correspondence, a proof determines a term, and that term is
-the derivation's meaning (Howard 1980). LoFI implements both sides over one
-[term algebra](../reference/terms.md): categories are terms over a syntactic
-signature, logical forms are terms over a semantic signature, and a derivation
-built from lexical entries yields a category and, through an interpretation,
-a logical form.
+In type-logical grammar, categories are formulas and grammatical derivations
+are proofs [@lambek1958]. Under the Curry–Howard correspondence, a proof has
+an associated term [@howard1980]. These statements concern different levels:
 
-Sharing the algebra keeps the two sides' operations consistent. Equality,
-substitution and proof-term construction are implemented once, so a property
-established for terms holds for categories and logical forms alike. Sharing it
-does not force the two signatures to agree: a semantic signature may draw
-distinctions a syntactic one does not, and the reverse.
+| Object | Notation | LoFI representation |
+| --- | --- | --- |
+| Syntactic category | $A$, such as $\mathrm{NP}$ or $\mathrm{S}/\mathrm{NP}$ | A term of the category sort, usually `Cat`. |
+| Semantic type | $\tau$, such as $e$ or $e\to t$ | A term of the type sort, usually `Ty`. |
+| Logical form | $u$, such as $\lambda x_e.\operatorname{sleep}(x)$ | A term of the expression sort, usually `Tm`. |
 
-## Terms
+The sort `Tm` identifies an expression's position in the term algebra; it
+does not say whether the expression has semantic type $e$, $t$, or
+$e\to t$. A typing judgment establishes that additional fact. Sharing a
+representation thus does not identify these three objects with one another.
 
-A term is a value over a declared signature. When no operator of the
-signature binds variables, the signature is a first-order algebra and the
-binding machinery stays inert, so the same store implementation serves
-categories and lambda terms, with one store instance for each signature.
+## Signatures and terms
 
-A term holds no score, tensor or mutable child list. Scores belong to
-deduction items and edges, and a decoder's state belongs in a `Frontier`
-beside the term. Term equality therefore depends only on term structure, and a
-term can serve as a key wherever a category or a meaning must be compared.
+A many-sorted signature $\Sigma$ specifies sorts $S$ and operators with
+declarations $c:s_1\times\cdots\times s_n\to s$. For a variable context
+$\Gamma$, the nonbinding formation rules are the sorted version of term
+formation in universal algebra [@meinke-tucker1992]:
 
-## Equality and matching
+$$
+\frac{x:s\in\Gamma}{\Gamma\vdash_\Sigma x:s}
+\qquad
+\frac{\Gamma\vdash_\Sigma u_1:s_1\quad\cdots\quad
+      \Gamma\vdash_\Sigma u_n:s_n
+      \qquad(c:s_1\times\cdots\times s_n\to s)\in\Sigma}
+     {\Gamma\vdash_\Sigma c(u_1,\ldots,u_n):s}.
+$$
 
-A term has one equality. A rule that ignores morphosyntactic features must
-still read `NP[conj]` as an `NP`, so it reads its premises under a relation
-coarser than identity. LoFI represents that relation as a named
-[`Matching`](../reference/terms.md) with a key function, and each rule set
-declares the matching it uses. A comparison that erases features therefore
-stays distinct from structural equality, and two grammars that differ only in
-their matching differ in a declared value (see [Grammars as deductive
-systems](derivations-as-proofs.md)).
+A nullary operator is a constant. LoFI additionally derives payload-bearing
+operators for vocabulary constants, free and bound variables, and, when
+enabled, holes. A hole represents an unfinished term; it is not a logical
+constant or a completed logical form. The notation is the usual inductive
+presentation of syntax; binding and semantic typing add conditions to this
+nonbinding fragment [@pierce2002].
 
-## A rule is a relation
+A `BindingSite` specifies a bound variable's sort, the argument positions
+in its scope, and an optional annotation position. In a typed lambda
+abstraction, the annotation is outside the newly introduced variable's
+scope and the body is inside it. The runtime represents bound variables
+with de Bruijn indices [@debruijn1972]; printed names are a surface
+presentation, not the identity of the binder.
 
-A rule relates premises to a conclusion, and the relation need not be a
-function. Type raising without a target set has infinitely many conclusions,
-and a coercion may have several. A [rule](../reference/judge.md) therefore
-declares which directions it computes: it may enumerate conclusions from
-premises, validate a proposed step, or residuate a missing premise from a
-conclusion and the other premises. `forward_is_complete` says whether forward
-enumeration yields every conclusion. A consumer inspects it and `directions`
-before choosing an operation, and a consumer that needs complete enumeration
-does not assume it.
+Write $T_\Sigma(\Gamma,s)$ for the terms of sort $s$ in context $\Gamma$.
+The syntactic and logical-form signatures have separate stores. Within a
+store, terms are interned, so the same structural term has one
+representative. Terms contain no neural vectors or probabilities; those
+belong to the computations that read them.
 
-## Consequences
+## Semantic typing
 
-The induction packages are import-independent of the logical-form packages.
-Terms, rules, lexical entries, spans and semirings do not import logical-form
-typing, and an import contract enforces this (see [The layer
-order](layering.md)). Category induction can therefore run, and be tested,
-without any logical-form language declared.
+For the simply typed lambda-calculus fragment [@church1940], let
+$\mathcal{B}$ be the atomic semantic types. Types are generated by:
 
-The syntactic and semantic signatures stay separate and may encode different
-distinctions. They share the term implementation, its equality and its
-proof-term construction, but not a `TermStore` instance, so a category can
-never be mistaken for a logical form that happens to have the same shape.
+$$
+\tau,\sigma ::= b\ (b\in\mathcal{B})\mid\tau\to\sigma.
+$$
+
+The packaged languages include $e$ for individuals, $v$ for events, and $t$
+for truth values. An extended language may declare further type
+constructors. The following rules describe the function-type fragment,
+using the standard typing judgments for variables, constants, application,
+and abstraction [@howard1980; @pierce2002].
+
+Let $\Gamma$ associate variables with semantic types and $\Delta$ associate
+constants with declared types. The judgment $\Delta;\Gamma\vdash u:\tau$
+says that $u$ has semantic type $\tau$. Contexts assign at most one type
+to each variable; rename a bound variable when necessary so that the
+variable introduced by abstraction is fresh for $\Gamma$:
+
+$$
+\frac{x:\tau\in\Gamma}{\Delta;\Gamma\vdash x:\tau}
+\qquad
+\frac{c:\tau\in\Delta}{\Delta;\Gamma\vdash c:\tau}
+$$
+
+$$
+\frac{\Delta;\Gamma\vdash u:\sigma\to\tau
+      \qquad\Delta;\Gamma\vdash w:\sigma}
+     {\Delta;\Gamma\vdash u\,w:\tau}
+\qquad
+\frac{\Delta;\Gamma,x:\sigma\vdash u:\tau}
+     {\Delta;\Gamma\vdash\lambda x_\sigma.u:\sigma\to\tau}.
+$$
+
+These semantic-type contexts are distinct from the sort contexts in the
+formation judgment. A polymorphic constant is instantiated before applying
+the constant rule: the equality scheme
+$\forall\alpha.\alpha\to\alpha\to t$, for instance, allows individual or
+event equality with a consistent choice of $\alpha$ within each instance.
+Type schemes and their instances are distinct from object-language
+quantification [@hindley1969; @milner1978; @pierce2002]. The [type-checking
+API](../reference/typecheck.md) supplies the language's typing rules and
+unification machinery.
+
+## Category-to-type interpretation
+
+An [erasure](../how-to/grammars/map-between-signatures.md) assigns semantic
+types to categories. The distinction between syntactic composition and its
+semantic interpretation follows \citeauthor{montague1970}'s
+(\citeyear{montague1970}) compositional account. Write the type map as $E$. For the usual CCG slash
+constructors, where both $A/B$ and $A\backslash B$ return $A$, one
+interpretation is:
+
+$$
+E(\mathrm{NP})=e,\qquad E(\mathrm{S})=t,\qquad
+E(A/B)=E(A\backslash B)=E(B)\to E(A).
+$$
+
+These clauses erase direction, not argument type. They specify this
+interpretation, not every signature morphism LoFI permits. In Lambek's
+residual notation, the corresponding left-taking category is
+$B\backslash A$ [@lambek1958]; translate that convention when comparing the
+two presentations. The CCG convention is used in this page's examples
+[@steedman2000].
+
+For an entry with category $A$ and meaning $u$, the interpretation requires
+$\Delta;\varnothing\vdash u:E(A)$. An action for a rule with premises
+$A_1,\ldots,A_n$ and conclusion $A$ must combine meanings of types
+$E(A_1),\ldots,E(A_n)$ into a meaning of type $E(A)$. Subject to these
+conditions, typing is preserved by induction on the derivation tree, using
+the application and substitution properties of the typed calculus
+[@pierce2002]. Sharing a term representation alone does not establish these
+conditions.
+
+Take *John* at $\mathrm{NP}$ with meaning $\operatorname{john}:e$, and
+*sleeps* at $\mathrm{S}\backslash\mathrm{NP}$ with meaning
+$\lambda x_e.\operatorname{sleep}(x)$, where $\operatorname{sleep}:e\to t$.
+Backward application yields:
+
+$$
+(\lambda x_e.\operatorname{sleep}(x))\,\operatorname{john}
+\longrightarrow_\beta\operatorname{sleep}(\operatorname{john}):t.
+$$
+
+Both the application and its reduct have type $E(\mathrm{S})=t$.
+[Declare an interpretation](../how-to/grammars/declare-an-interpretation.md)
+connects these objects to configuration fields and semantic actions.
+
+## Substitution, equality, and matching
+
+Write $u[x:=w]$ for capture-avoiding substitution. Beta reduction is:
+
+$$
+(\lambda x_\sigma.u)\,w\longrightarrow_\beta u[x:=w].
+$$
+
+Capture avoidance matters: substituting the free variable $y$ for $x$ in
+$\lambda y.x$ gives a term alpha-equivalent to $\lambda z.y$, not
+$\lambda y.y$. De Bruijn's representation addresses this problem by
+representing binding through indices rather than printed names
+[@debruijn1972; @pierce2002].
+
+Structural equality, alpha-equivalence, and beta-convertibility are
+separate notions. The `alpha` matching uses the same representative
+identity as `identity` for LoFI's interned binding representation. Beta
+reduction is a separate operation with a fuel budget. If a redex remains
+after that budget is spent, the runtime raises `NonTerminatingError`;
+the exception records budget exhaustion, not a proof of divergence.
+Equivalence in an
+object logic is a further relation, relative to its theory and semantics.
+
+A [`Matching`](../reference/terms.md) specifies the equivalence relation a
+rule uses. Where it provides a representative key $k$, write:
+
+$$
+u\sim w\quad\Longleftrightarrow\quad k(u)=k(w).
+$$
+
+Feature erasure uses feature-erased cores as representatives. The
+`subsumption` matching tests **mutual** free-variable subsumption, not
+one-way subsumption: if $u\preceq w$ means that a substitution takes $u$ to
+$w$, its equivalence test is $u\preceq w\land w\preceq u$. Product matching
+intersects its component relations. These are the runtime's matching
+choices; none changes the underlying structural identity.
+
+## Rules and computational directions
+
+For categories in $\mathcal{C}$, a rule of arity $n$ is a relation
+$R\subseteq\mathcal{C}^n\times\mathcal{C}$. For fixed premises, its
+conclusions form the set:
+
+$$
+R(A_1,\ldots,A_n)
+=\{A\in\mathcal{C}:(A_1,\ldots,A_n,A)\in R\}.
+$$
+
+This set need not be a singleton or finite. Type raising with unrestricted
+target categories is one instance [@steedman2000]. A
+[rule](../reference/judge.md) declares which directions it computes:
+forward enumeration, validation, or residuation of a missing premise.
+`forward_is_complete` states whether its forward enumeration exhausts the
+relation. Consumers check that capability instead of inferring it from the
+existence of a rule.
+
+## Implementation boundaries
+
+Categories and logical forms use the same term operations but separate
+signatures and stores. The category-induction packages do not import the
+logical-form typing packages, as enforced by the [layer
+contracts](layering.md). Category induction can thus run without declaring
+a logical-form language at that API boundary; complete run-document
+workflows may impose further language requirements.
+
+This separates three questions: (i) whether an object is a term of a sort;
+(ii) whether a logical form has a semantic type; and (iii) whether a
+meaning has the type assigned to its derivation's category. The term
+algebra answers the first; typing and interpretation answer the others.
 
 ## References
 
-- William A. Howard. 1980. The formulae-as-types notion of construction. In
-  J. P. Seldin and J. R. Hindley, editors, *To H. B. Curry: Essays on
-  Combinatory Logic, Lambda Calculus and Formalism*, pages 479–490. Academic
-  Press.
-- Joachim Lambek. 1958. The mathematics of sentence structure. *The American
-  Mathematical Monthly*, 65(3):154–170.
-  [doi:10.1080/00029890.1958.11989160](https://doi.org/10.1080/00029890.1958.11989160).
+\bibliography

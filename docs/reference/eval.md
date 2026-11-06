@@ -51,6 +51,79 @@ probability and the highest-ranked candidate's crisp entailment decision,
 over decided nondegenerate candidates. Proof rows also report calls, memo
 hits, questions, CPU and wall time, and abstention causes.
 
+## Classification and calibration definitions
+
+Let $n$ be the number of scored occurrences, $y_i$ the gold label,
+$\widehat y_i$ the predicted label, and $p_i(k)$ the decided forecast PMF
+after reduction and renormalization. Calibration uses only decided
+occurrences: in its formulas below, $n$ is the number of those occurrences,
+which can differ from the classification denominator. Accuracy is
+$n^{-1}\sum_i\mathbf{1}\{\widehat y_i=y_i\}$. For class $k$, let
+$t_k$, $f_k$, and $m_k$ count true positives, false positives, and false
+negatives. Then
+
+$$
+\operatorname{precision}_k=\frac{t_k}{t_k+f_k},\quad
+\operatorname{recall}_k=\frac{t_k}{t_k+m_k},\quad
+\operatorname{f1}_k=\frac{2t_k}{2t_k+f_k+m_k}.
+$$
+
+A zero denominator makes the corresponding metric undefined. Macro-F1 is the
+arithmetic mean of defined class F1 values; classes absent on both sides are
+omitted. Under `coverage: zero`, an abstention counts as an incorrect
+prediction and as a missed gold label. Under `ignore`, classification
+conditions on non-abstention. Decision coverage is the fraction of all
+occurrences with a decided forecast, and must accompany conditional scores.
+
+For $c$ classes, the multiclass Brier score is
+
+$$
+\operatorname{brier}=\frac1n\sum_{i=1}^n\sum_{k=1}^{c}
+\left(p_i(k)-\mathbf{1}\{y_i=k\}\right)^2.
+$$
+
+This is the summed, not class-averaged, convention \citep{brier1950}.
+The category-specific version keeps one summand; in a binary task, the full
+score is twice either category-specific score.
+
+For top-label calibration, define $u_i=\max_k p_i(k)$ and
+$v_i=\mathbf{1}\{\arg\max_k p_i(k)=y_i\}$. Sort by $u_i$ and partition into
+$b$ equal-count bins $B_1,\ldots,B_b$, whose sizes differ by at most one.
+LoFI reports
+
+$$
+\operatorname{ece}=\sum_{j=1}^{b}\frac{|B_j|}{n}
+\left|\frac1{|B_j|}\sum_{i\in B_j}u_i
+-\frac1{|B_j|}\sum_{i\in B_j}v_i\right|.
+$$
+
+For a category-specific curve, use $u_i=p_i(k)$ and
+$v_i=\mathbf{1}\{y_i=k\}$ instead. ECE depends on the binning convention;
+LoFI uses equal-count bins, whereas equal-width bins are also common
+\citep{guo-etal2017}. It is not a population calibration guarantee.
+
+## Proof reproduction definitions
+
+Let $c_i^\star$ be the retained reference proof cell and $c_{ij}$ the cell
+of the $j$th joint candidate, ordered by the sum of its two log weights.
+On decided, nondegenerate comparisons, EPR scores
+$\mathbf{1}\{c_{i1}=c_i^\star\}$ and EPR@K scores
+$\mathbf{1}\{\exists j\leq k:c_{ij}=c_i^\star\}$.
+A match establishes the latter despite other undecided candidates; without
+a match, an undecided candidate can leave it undefined. A zero score requires
+a settled nondegenerate reference, at least one decided nondegenerate
+candidate, and no undecided candidate; an entirely degenerate beam is
+undefined. The aggregate averages
+defined scores and reports their coverage. These are budget-dependent
+reproduction measurements, not proofs that a decoded logical form is correct.
+
+For a decided highest-ranked candidate with crisp entailment indicator
+$e_i\in\{0,1\}$, let $r_i$ be the native published entailment mass before
+label reduction or renormalization. The relaxation gap is $|r_i-e_i|$,
+averaged over eligible occurrences.
+Both-proved cases and abstentions have separate rows rather than being
+silently assigned one of the three labels.
+
 ```yaml
 evaluators:
   inference:
@@ -78,3 +151,7 @@ evaluators:
 ## Corpus-dependent evaluation
 
 ::: lofi.eval.corpora
+
+## References
+
+\bibliography

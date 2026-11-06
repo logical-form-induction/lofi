@@ -587,7 +587,7 @@ def attribute_edges[T, ReadingT: Reading](
         For each edge, the counterfactual-minus-clean displacement at its target
         dotted with the float64 mean gradient there over the right endpoints,
         summed over the entries the edge's unit indexes. The estimator costs
-        ``steps + 1`` forwards and ``steps`` backwards.
+        $m+1$ forward passes and $m$ backward passes, where $m$ is ``steps``.
 
     Raises
     ------

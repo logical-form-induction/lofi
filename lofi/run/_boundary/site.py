@@ -678,7 +678,7 @@ class SiteAllocation(dx.Model, extra="forbid"):
         The accelerator-hours the allocation grants.
     share : float
         The largest fraction of the allocation one paper's admitted
-        experiments may hold at once, in ``(0, 1]``.
+        experiments may hold at once, in $(0, 1]$.
     """
 
     accelerator_hours: float

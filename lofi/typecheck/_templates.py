@@ -1,8 +1,8 @@
-"""Semantic types written as data, and the span constraints built from them.
+r"""Semantic types written as data, and the span constraints built from them.
 
 A template writes a type as nested lists of primitive names: a string names a
 primitive, and a list of two or more members is a function type nested to the
-right, so ``["e", "e", "t"]`` is ``e -> (e -> t)``. Resolving a template against
+right, so ``["e", "e", "t"]`` is $e\to(e\to t)$. Resolving a template against
 a declared language turns the names into interned type terms, and a name the
 language does not declare is refused there rather than when the constraint is
 first applied to an input.

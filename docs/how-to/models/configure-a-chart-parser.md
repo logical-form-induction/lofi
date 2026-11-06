@@ -109,6 +109,31 @@ model.parser: the 'span-crf' parser publishes chart outputs ['alpha', 'entropy',
 model.parser: the 'flat' parser publishes chart outputs ['cells', 'inside'], but model.readouts.types requires ['alpha', 'mu']
 ```
 
+## Scalar tree distributions
+
+For a string $\mathbf{w}$ of length $n$, let $\mathcal{T}_n$ be its binary
+span trees. A span CRF assigns a real leaf potential $\lambda_i$ and a real
+split potential $s_{ikj}$ to $[i,j)$ split at $k$. Its tree PMF is
+
+$$
+p(t\mid\mathbf{w})=\frac{\exp\ell(t)}{z(\mathbf{w})},\qquad
+\ell(t)=\sum_{i=0}^{n-1}\lambda_i+
+\sum_{(i,k,j)\in t}s_{ikj},\qquad
+z(\mathbf{w})=\sum_{t\in\mathcal{T}_n}\exp\ell(t).
+$$
+
+LoFI scores a split from its two spans' mean word vectors:
+$s_{ikj}=\mathbf{v}^{\mathsf T}\tanh(\mathbf{W}_{l}\overline{\mathbf{x}}_{ik}
++\mathbf{W}_{r}\overline{\mathbf{x}}_{kj})+b$.
+For $T\sim p(\cdot\mid\mathbf{w})$, inside–outside computes $\log z$, span probabilities
+$\mu_{ij}=\mathbb{P}([i,j)\in T\mid\mathbf{w})$, and split probabilities
+conditioned on the parent span. These marginals are differentiable functions
+of the potentials \citep{kim-etal2017}. The entropy is
+$h(T\mid\mathbf{w})=-\sum_t p(t\mid\mathbf{w})\log p(t\mid\mathbf{w})$.
+An inside score is an unnormalized log weight; neither it nor $\log z$ is
+itself a log probability. See [Charts and approximation](../../explanation/charts-and-approximation.md)
+for the recurrences and minimum-Bayes-risk decoding.
+
 ## Compose spans and weigh splits
 
 The neural charts share four declared parts:
@@ -117,8 +142,46 @@ The neural charts share four declared parts:
 | --- | --- |
 | `composition` | How leaves enter the chart and two child cells make a parent, from the `lofi.chart_composition` group. `mean-field` (the default) composes each child pair directly before mixing over splits, with `leaf` and `cell` functions. `gated-residual` gates a composed `candidate` against the mean of the two children with a `gate` function. |
 | `attend` | How a span's candidate splits are mixed, from the `lofi.split_weigher` group. `marginal` (the default) uses each split's exact conditional posterior under the chart. `attend` uses learned child-pair scores alone, from its `score` function. |
-| `reduction` | How alternative derivations combine: `log-sum-exp` (the default) sums their probabilities in log space, and `maximum` keeps the largest. |
+| `reduction` | How alternative derivations combine: `log-sum-exp` (the default) sums their nonnegative weights in log space, and `maximum` keeps the largest. |
 | `split_left`, `split_right`, `share_splits` | The functions that project the left and right children of a split, and whether one projection serves both. Shared slots must declare the same function. |
+
+For child cells $\mathbf{h}_{ik},\mathbf{h}_{kj}\in\mathbb{R}^{d}$, direct
+composition produces $\mathbf{c}_{ikj}=f(\mathbf{h}_{ik},\mathbf{h}_{kj})$.
+Gated residual composition instead uses
+
+$$
+\begin{aligned}
+\mathbf{g}_{ikj}&=\sigma\!\left(g(\mathbf{h}_{ik},\mathbf{h}_{kj})\right),\\
+\mathbf{c}_{ikj}&=\mathbf{g}_{ikj}\odot f(\mathbf{h}_{ik},\mathbf{h}_{kj})
++(\mathbf{1}-\mathbf{g}_{ikj})\odot
+\frac{\mathbf{h}_{ik}+\mathbf{h}_{kj}}2,\\
+\mathbf{h}_{ij}&=\sum_{k=i+1}^{j-1}q_{ikj}\mathbf{c}_{ikj}.
+\end{aligned}
+$$
+
+Here $\sigma$ acts coordinatewise. Under `marginal`, $q_{ikj}$ is the
+conditional split posterior; under `attend`, it is softmax over learned local
+split scores. The latter need not equal the structural posterior. Composing
+already averaged child vectors is generally different from averaging the
+composition over every pair of discrete child trees: nonlinear $f$ does not
+commute with expectation. This is the approximation expressed by
+`mean-field`, not an exact expectation over vector-valued derivations.
+
+A full bilinear span function has coordinates
+$c_o=\mathbf{u}^{\mathsf T}\mathbf{B}_o\mathbf{v}+b_o$.
+Its CP-factorized counterpart is
+
+$$
+\mathbf{c}=\mathbf{W}\bigl((\mathbf{U}\mathbf{u})\odot
+(\mathbf{V}\mathbf{v})\bigr)+\mathbf{b},
+$$
+
+where $\mathbf{U}$ and $\mathbf{V}$ have $r$ rows and
+$\mathbf{W}\in\mathbb{R}^{d_{\mathrm{out}}\times r}$; `rank` sets $r$.
+This constrains the three-way coefficient tensor's CP rank to at most $r$
+\citep{kolda-bader2009}. The `hrr` function uses either elementwise binding
+$\mathbf{u}\odot\mathbf{v}$ or circular convolution,
+$c_i=\sum_{j=0}^{d-1}u_jv_{(i-j)\bmod d}$ \citep{plate1995}.
 
 Every function slot takes a span function from the `lofi.span_function` group,
 and each defaults to a one-layer `mlp` under `tanh`:
@@ -217,7 +280,7 @@ declared semiring lacks is refused when the run is composed:
 | `expectation` | `dimensions`, the number of expectation coordinates. | None. |
 | `forest` | None. | None. |
 
-`log-probability` weights are float log probabilities, which the `top-k`
+The `log-probability` capability supplies floating-point log weights, which the `top-k`
 pruner ranks and A* decoding bounds. `marginals` weights sum over every
 derivation, which a minimum-Bayes-risk decode and `measure_pruned_mass` read.
 The Bisk--Hockenmaier baseline's own parse needs `log-probability` weights.
@@ -255,7 +318,7 @@ A pruned forest records, in its `pruned` mapping, the semiring sum of the
 inside weights each cell's pruner removed, next to its `truncated` flag.
 Declaring `measure_pruned_mass: true` also reparses each sentence without the
 pruner, and the pruned forest's `pruned_mass` then holds both goal log masses,
-with the probability mass the pruner lost as `lost` and its share of the
+with the unnormalized goal mass the pruner lost as `lost` and its share of the
 exhaustive mass as `lost_fraction`. The reparse costs an exhaustive parse per
 sentence. It needs a sum over derivations, so it is refused under `viterbi`:
 
@@ -313,3 +376,7 @@ metrics as `approximation-residual-mass` and `approximation-overrides`.
   chart sweep run by hand.
 - The [model configuration reference](../../reference/configuration/model.md)
   for every chart and span-function field.
+
+## References
+
+\bibliography
