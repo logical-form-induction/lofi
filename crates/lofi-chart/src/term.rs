@@ -144,6 +144,19 @@ struct Node {
     structural_hash: u64,
 }
 
+impl Drop for Node {
+    fn drop(&mut self) {
+        let mut pending = std::mem::take(&mut self.arguments);
+        pending.extend(self.core.take());
+        while let Some(term) = pending.pop() {
+            if let Ok(mut node) = Arc::try_unwrap(term.0) {
+                pending.append(&mut node.arguments);
+                pending.extend(node.core.take());
+            }
+        }
+    }
+}
+
 /// An immutable native term node.
 #[derive(Clone, Debug)]
 pub struct Term(Arc<Node>);
@@ -1753,6 +1766,28 @@ mod tests {
             holes: vec![None],
             allows_vacuous_binding: true,
         }
+    }
+
+    #[test]
+    fn releases_deep_terms_on_a_small_stack() -> Result<(), Box<dyn std::error::Error>> {
+        let worker = std::thread::Builder::new().stack_size(256 * 1024).spawn(
+            || -> Result<(), super::TermError> {
+                let store = TermStore::new(signature(), 20_002)?;
+                let leaf = store.intern(0, vec![], None)?;
+                let mut root = leaf.clone();
+                for _ in 0..20_000 {
+                    root = store.intern(1, vec![leaf.clone(), root], None)?;
+                }
+                drop(store);
+                drop(root);
+                Ok(())
+            },
+        )?;
+        match worker.join() {
+            Ok(result) => result?,
+            Err(payload) => std::panic::resume_unwind(payload),
+        }
+        Ok(())
     }
 
     #[test]
