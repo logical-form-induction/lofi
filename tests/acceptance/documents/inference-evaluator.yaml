@@ -1,0 +1,12 @@
+# Labeled inference with all classification rows reachable from one declaration.
+defaults:
+  - inference-point
+  - evaluators.inference: inference
+data:
+  datasets:
+    train:
+      dataset:
+        labeling: rte
+        retained: {dev: 0.25, test: 0.25}
+        size: 12
+        relations: {trivial: 0.5}

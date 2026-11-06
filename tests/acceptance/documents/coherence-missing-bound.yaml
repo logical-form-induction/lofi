@@ -1,0 +1,14 @@
+# A truncating decoder and objective with no residual-mass budget.
+defaults:
+  - coherence-truncated
+approximation: null
+loss:
+  terms:
+    - objective: {kind: grammaticality, readout: sentences}
+    - objective:
+        kind: coherence
+        readout: category-terms
+        space: categories
+        estimator: truncated
+        warmup: null
+      weight: 0.1

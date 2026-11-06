@@ -1,0 +1,3 @@
+# The packaged parser learns a map from category cells into its represented type space.
+defaults:
+  - run/synthetic-parser-mapped

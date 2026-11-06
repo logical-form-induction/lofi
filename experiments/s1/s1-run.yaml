@@ -1,0 +1,11 @@
+# CCGbank 02--21 training with 00/22/23 held out under the packaged grammar.
+defaults:
+  - s1-common-run
+  - data.datasets.train.dataset: ccgbank
+  - data.datasets.train.dataset.grammar: ccgbank
+  - data.datasets.train.dataset.language: propositional
+data:
+  datasets:
+    train:
+      dataset:
+        source: ${lofi.path:ccgbank}

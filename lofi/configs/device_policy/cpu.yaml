@@ -1,0 +1,5 @@
+device: cpu
+compute_dtype: float32
+deterministic: true
+matmul_precision: highest
+activation_memory_bytes: 8000000000

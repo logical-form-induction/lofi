@@ -1,0 +1,10 @@
+kind: pmb-drs
+sources:
+  - source: ${lofi.path:pmb/drs/en.drs.clf}
+    release:
+      source_id: pmb
+      release_id: pmb-5.1.0  # https://pmb.let.rug.nl/data.php
+      split: train
+      language: en
+      source_method: gold
+      spdx: NOASSERTION  # to be read from the pmb-5.1.0 release itself

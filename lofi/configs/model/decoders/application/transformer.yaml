@@ -1,0 +1,1 @@
+{kind: transformer, width: 256, heads: 8, layers: 2, feedforward_width: 512, structure: parent-recurrence}

@@ -1,0 +1,30 @@
+# The checkpointed parser warmed up on its gold lexicon before parser fitting.
+defaults:
+  - checkpointed-parser
+  - data.datasets.train.constraint_source: gold-lexicon
+  - data.datasets.train.constraint_policy.syntactic: all
+trainer:
+  kind: staged
+  validation_stage: parser
+  base:
+    kind: parser
+    dataset: train
+    epochs: 2
+    batch_size: 2
+    batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+    early_stopping:
+      metric: loss/grammaticality
+      mode: min
+      patience: 2
+      minimum_delta: 0.0
+      keep_best: 1
+    checkpoints: {interval: 1, keep: 1}
+  stages:
+    - name: lexical-warm-up
+      step: {kind: token-warm-up, name: tokens, dataset: train, space: categories}
+      active_groups: [token_encoder]
+      epochs: 1
+    - name: parser
+      step: {kind: parser, name: parser, dataset: train}
+      active_groups: [token_encoder, terms, identity, application, controller, parser]
+      epochs: 1

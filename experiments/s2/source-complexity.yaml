@@ -1,0 +1,566 @@
+role: source-comparison
+freeze_id: freeze/1
+config: {kind: run, path: s2-run.yaml}
+launch: {kind: serial}
+failure: {numerical: final, out_of_memory: retry}
+sweep:
+  yoked:
+    - - group: data.datasets.train.dataset
+        values:
+          - s2-source-run
+          - s2-source-run
+          - s2-source-run
+          - s2-source-run
+          - s2-source-run
+          - s2-source-run
+          - s2-source-run
+          - s2-source-run
+          - slashes-application-k2-depth1-reversed
+          - slashes-application-k2-depth1-scrambled
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2-reversed
+          - arrow-composition-k4-depth2-scrambled
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3-reversed
+          - slashes-raised-k8-depth3-scrambled
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1-reversed
+          - arrow-generalized-composition-k16-depth1-scrambled
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2-reversed
+          - arrow-application-k8-depth2-scrambled
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3-reversed
+          - slashes-composition-k16-depth3-scrambled
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1-reversed
+          - arrow-raised-k2-depth1-scrambled
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2-reversed
+          - slashes-generalized-composition-k4-depth2-scrambled
+      - group: model.language
+        values:
+          - slashes-application-k2-depth1
+          - arrow-composition-k4-depth2
+          - slashes-raised-k8-depth3
+          - arrow-generalized-composition-k16-depth1
+          - arrow-application-k8-depth2
+          - slashes-composition-k16-depth3
+          - arrow-raised-k2-depth1
+          - slashes-generalized-composition-k4-depth2
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - arrow-composition-k4-depth2
+          - slashes-raised-k8-depth3
+          - arrow-generalized-composition-k16-depth1
+          - arrow-application-k8-depth2
+          - slashes-composition-k16-depth3
+          - arrow-raised-k2-depth1
+          - slashes-generalized-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - slashes-application-k2-depth1
+          - arrow-composition-k4-depth2
+          - slashes-raised-k8-depth3
+          - arrow-generalized-composition-k16-depth1
+          - arrow-application-k8-depth2
+          - slashes-composition-k16-depth3
+          - arrow-raised-k2-depth1
+          - slashes-generalized-composition-k4-depth2
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-application-k2-depth1
+          - arrow-composition-k4-depth2
+          - slashes-raised-k8-depth3
+          - arrow-generalized-composition-k16-depth1
+          - arrow-application-k8-depth2
+          - slashes-composition-k16-depth3
+          - arrow-raised-k2-depth1
+          - slashes-generalized-composition-k4-depth2
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - slashes-application-k2-depth1
+          - arrow-composition-k4-depth2
+          - slashes-raised-k8-depth3
+          - arrow-generalized-composition-k16-depth1
+          - arrow-application-k8-depth2
+          - slashes-composition-k16-depth3
+          - arrow-raised-k2-depth1
+          - slashes-generalized-composition-k4-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - slashes-application-k2-depth1
+          - arrow-composition-k4-depth2
+          - slashes-raised-k8-depth3
+          - arrow-generalized-composition-k16-depth1
+          - arrow-application-k8-depth2
+          - slashes-composition-k16-depth3
+          - arrow-raised-k2-depth1
+          - slashes-generalized-composition-k4-depth2
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-application-k2-depth1
+          - arrow-composition-k4-depth2
+          - slashes-raised-k8-depth3
+          - arrow-generalized-composition-k16-depth1
+          - arrow-application-k8-depth2
+          - slashes-composition-k16-depth3
+          - arrow-raised-k2-depth1
+          - slashes-generalized-composition-k4-depth2
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - slashes-application-k2-depth1
+          - arrow-composition-k4-depth2
+          - slashes-raised-k8-depth3
+          - arrow-generalized-composition-k16-depth1
+          - arrow-application-k8-depth2
+          - slashes-composition-k16-depth3
+          - arrow-raised-k2-depth1
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+      - group: model.spaces.categories.combinators
+        values:
+          - application
+          - arrow-composition
+          - raised-composition
+          - arrow-generalized-composition
+          - arrow-application
+          - slashes-composition
+          - arrow-raised
+          - slashes-generalized-composition
+          - application
+          - application
+          - application
+          - arrow-composition
+          - raised-composition
+          - arrow-generalized-composition
+          - arrow-application
+          - slashes-composition
+          - arrow-raised
+          - slashes-generalized-composition
+          - arrow-composition
+          - arrow-composition
+          - application
+          - arrow-composition
+          - raised-composition
+          - arrow-generalized-composition
+          - arrow-application
+          - slashes-composition
+          - arrow-raised
+          - slashes-generalized-composition
+          - raised-composition
+          - raised-composition
+          - application
+          - arrow-composition
+          - raised-composition
+          - arrow-generalized-composition
+          - arrow-application
+          - slashes-composition
+          - arrow-raised
+          - slashes-generalized-composition
+          - arrow-generalized-composition
+          - arrow-generalized-composition
+          - application
+          - arrow-composition
+          - raised-composition
+          - arrow-generalized-composition
+          - arrow-application
+          - slashes-composition
+          - arrow-raised
+          - slashes-generalized-composition
+          - arrow-application
+          - arrow-application
+          - application
+          - arrow-composition
+          - raised-composition
+          - arrow-generalized-composition
+          - arrow-application
+          - slashes-composition
+          - arrow-raised
+          - slashes-generalized-composition
+          - slashes-composition
+          - slashes-composition
+          - application
+          - arrow-composition
+          - raised-composition
+          - arrow-generalized-composition
+          - arrow-application
+          - slashes-composition
+          - arrow-raised
+          - slashes-generalized-composition
+          - arrow-raised
+          - arrow-raised
+          - application
+          - arrow-composition
+          - raised-composition
+          - arrow-generalized-composition
+          - arrow-application
+          - slashes-composition
+          - arrow-raised
+          - slashes-generalized-composition
+          - slashes-generalized-composition
+          - slashes-generalized-composition
+      - path: comparison.source
+        values:
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - slashes-application-k2-depth1
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - arrow-composition-k4-depth2
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - slashes-raised-k8-depth3
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-generalized-composition-k16-depth1
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - arrow-application-k8-depth2
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - slashes-composition-k16-depth3
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - arrow-raised-k2-depth1
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+          - slashes-generalized-composition-k4-depth2
+      - path: comparison.condition
+        values:
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - reversed-ground-truth
+          - lexicon-scrambled
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - reversed-ground-truth
+          - lexicon-scrambled
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - reversed-ground-truth
+          - lexicon-scrambled
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - reversed-ground-truth
+          - lexicon-scrambled
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - reversed-ground-truth
+          - lexicon-scrambled
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - reversed-ground-truth
+          - lexicon-scrambled
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - reversed-ground-truth
+          - lexicon-scrambled
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - primary
+          - reversed-ground-truth
+          - lexicon-scrambled
+      - path: comparison.direction
+        values:
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - directed
+          - directed
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - directed
+          - directed
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - directed
+          - directed
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - undirected
+          - undirected
+          - directed
+          - undirected
+          - directed
+          - directed
+          - directed
+  grid:
+    - path: data.datasets.train.dataset.size
+      values: [16, 64, 256]
+  seeds: [0, 1, 2, 3, 4]
+  expected_points: 4080
+signature_twins: {count: 3, seed: 109, primary_condition: primary, observed_twin: observed}
+seed_policy: {root: 109}
+rows:
+  - {evaluator: held-out, metric: string-log-likelihood-per-sentence}
+  - {evaluator: held-out, metric: description-length-nats}
+primary: {evaluator: held-out, metric: string-log-likelihood-per-sentence}
+reducers:
+  - kind: source-comparison
+    metric: string-log-likelihood-per-sentence
+    source_path: comparison.source
+    candidate_path: model.language.grammar.name
+    data_size_path: data.datasets.train.dataset.size
+    condition_path: comparison.condition
+    direction_path: comparison.direction
+    twin_path: comparison.twin
+    description_length_metric: description-length-nats
+    primary_condition: primary
+    reversed_ground_truth_condition: reversed-ground-truth
+    lexicon_scrambled_condition: lexicon-scrambled
+    observed_twin: observed
+    permutation: {replicates: 999, seed: 109}
+    equivalence: {replicates: 999, seed: 110}
+    falsifier: A candidate grammar or validity control matches the planted source grammar.
+    smoke_test: false
+preregistration: source-complexity.json
+factors:
+  source-grammar:
+    axis: data.datasets.train.dataset
+    levels:
+      - {level: slashes-application-k2-depth1, value: s2-source-run}
+      - {level: arrow-composition-k4-depth2, value: arrow-composition-k4-depth2}
+      - {level: slashes-raised-k8-depth3, value: slashes-raised-k8-depth3}
+      - {level: arrow-generalized-composition-k16-depth1, value: arrow-generalized-composition-k16-depth1}
+      - {level: arrow-application-k8-depth2, value: arrow-application-k8-depth2}
+      - {level: slashes-composition-k16-depth3, value: slashes-composition-k16-depth3}
+      - {level: arrow-raised-k2-depth1, value: arrow-raised-k2-depth1}
+      - {level: slashes-generalized-composition-k4-depth2, value: slashes-generalized-composition-k4-depth2}
+  candidate-grammar: {axis: model.language}
+  data-size: {axis: data.datasets.train.dataset.size}
+compute: {kind: unpriced}
+contraction:
+  rungs: [{kind: fallback}]
+  factorial: eight source grammars crossed with eight candidate grammars, three data sizes, and two validity controls
+stop_rules:
+  - name: numerical failure
+    when: {kind: points, statuses: [numerical-failure], at_least: 1}
+decision_point:
+  date: "2027-03-01"
+  signal:
+    kind: metric
+    row: {evaluator: held-out, metric: string-log-likelihood-per-sentence}
+    statistic: mean
+    direction: above
+    threshold: 0.0
+  fallback: The comparison does not identify the planted source grammar.
+evaluation:
+  alpha: 0.05
+  correction: {kind: benjamini-hochberg}
+  dependence: prds
+  minimum_seeds: 5
+  seed_budget: {metric: string-log-likelihood-per-sentence, target: mean, precision: 0.1, level: 0.95}
+

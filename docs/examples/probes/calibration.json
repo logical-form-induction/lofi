@@ -1,0 +1,18 @@
+{
+  "scorer": "parser",
+  "grid": [
+    {
+      "name": "three-words",
+      "clean": ["word-0", "word-2", "word-4"],
+      "counterfactual": ["word-4", "word-6", "word-0"]
+    }
+  ],
+  "steps": 4,
+  "threshold": {"kind": "relative", "fraction": 0.01},
+  "maximum_trials": 8,
+  "divergence": "mean-absolute",
+  "metric": "log-partition",
+  "budget_seconds": 600.0,
+  "price_warmup": 1,
+  "price_repeats": 3
+}

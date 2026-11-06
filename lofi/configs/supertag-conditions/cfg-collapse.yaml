@@ -1,0 +1,34 @@
+# Fit the recursive CFG only on its base case and score deeper recursion.
+defaults:
+  - data.datasets.train.dataset.grammar: cfg-collapse
+data:
+  datasets:
+    train:
+      dataset:
+        retained: {validation: 0.5}
+        size: 8
+        seed: 5
+        length: {kind: uniform, min_length: 2, max_length: 4}
+        shape:
+          splits:
+            train:
+              depth: {value: 2.0, tolerance: 0.0}
+              attempts: 100
+            validation:
+              depth: {value: 4.0, tolerance: 0.0}
+              attempts: 100
+evaluators:
+  lexical:
+    kind: lexical-diagnostics
+    interval: {replicates: 20, level: 0.95}
+    readout: category-terms
+    beta: 0.1
+    clustering_beta: 1.0
+    top_k: 2
+    frequency_strata:
+      all: {at_least: 0, at_most: null}
+    ambiguity_strata:
+      all: {at_least: 0, at_most: null}
+    word_classes: {terminals: [a]}
+    case_studies: {}
+    conventions: {punctuation: keep, unary_chains: keep, trivial_spans: keep, minimum_length: 0, aggregation: corpus, coverage: zero, self_arcs: allow, gold_derivation: canonical}

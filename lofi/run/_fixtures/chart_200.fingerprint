@@ -1,0 +1,10 @@
+{
+  "count": 200,
+  "digest": "874e7a8475dfe804102032fac9ed83a893df4b4bbc93492cec778ef42ce2613f",
+  "fingerprint": "365dacb1a435eca7f3d081cf7ec43066bf4f9603d9056a41ea6f8e26dfd41be5",
+  "grammar": "cfg-toy",
+  "lengths": {
+    "20": 200
+  },
+  "seed": 7
+}

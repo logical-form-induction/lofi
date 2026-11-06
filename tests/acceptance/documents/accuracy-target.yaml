@@ -1,0 +1,15 @@
+# Generated combinator pretraining with a held-out exact-match target.
+defaults:
+  - rule-pair-unary
+trainer:
+  kind: terms
+  dataset: train
+  spaces: [categories]
+  steps: null
+  stop:
+    metric: loss/categories/combinators/exact_match
+    target: 0.95
+    max_steps: 2
+  batch_size: 2
+  generation: {max_depth: 2}
+  checkpoints: {interval: 2, keep: 1}

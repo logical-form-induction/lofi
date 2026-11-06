@@ -1,0 +1,21 @@
+kind: synthetic-inference
+labeling: three-way
+retained: {dev: 0.16666666666666666, test: 0.16666666666666666}
+size: 6
+seed: derived
+candidates: 16
+attempts: 400
+premise: {kind: uniform, min_length: 2, max_length: 5}
+hypothesis: {kind: uniform, min_length: 2, max_length: 5}
+label_noise:
+  rates:
+    - {relation: entails, rate: 1.0}
+    - {relation: contradicts, rate: 1.0}
+    - {relation: neutral, rate: 1.0}
+  confusion:
+    kind: tabular
+    rows:
+      - {oracle: entails, contradicts: 1.0}
+      - {oracle: contradicts, neutral: 1.0}
+      - {oracle: neutral, entails: 1.0}
+  tolerance: 0.0

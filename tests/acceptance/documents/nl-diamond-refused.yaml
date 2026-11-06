@@ -1,0 +1,8 @@
+defaults:
+  - nl-diamond-pack
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          max_hypotheses: 1

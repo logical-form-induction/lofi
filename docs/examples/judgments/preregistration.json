@@ -1,0 +1,16 @@
+{
+  "grid": {
+    "inference.guide": [
+      "structured",
+      "mean_field"
+    ]
+  },
+  "hypotheses": [
+    {
+      "name": "evidence-bound",
+      "left": "structured",
+      "right": "mean_field",
+      "family": "primary"
+    }
+  ]
+}

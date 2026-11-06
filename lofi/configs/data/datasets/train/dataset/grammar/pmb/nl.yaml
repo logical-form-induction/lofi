@@ -1,0 +1,22 @@
+defaults: [base]
+name: pmb-nl
+signature: {name: pmb-nl}
+rules:
+  name: pmb-nl
+  rules+:
+    - rule: coercions
+      label: pmb-lexical
+      matching: {kind: identity}
+      entries: ['n => np',
+        "np => (s:dcl\\np)\\((s:dcl\\np)/np)",
+        "np => (s:b\\np)/((s:b\\np)\\np)",
+        "np => s:dcl\\(s:dcl/np)",
+        "np => (s:pt\\np)/((s:pt\\np)\\np)",
+        "np => s:dcl/(s:dcl\\np)",
+        "pp => (s:pt\\np)/((s:pt\\np)\\pp)",
+        "s:dcl\\np => (s:dcl\\np)/((s:dcl\\np)\\(s:dcl\\np))",
+        "np => np/(np\\np)",
+        "s:b\\np => s:dcl\\(s:dcl/(s:b\\np))",
+        "np => ((s:pt\\np)\\np)/(((s:pt\\np)\\np)\\np)",
+        "np => s:q\\(s:q/np)",
+        "np => (s:dcl\\np)/((s:dcl\\np)\\np)"]

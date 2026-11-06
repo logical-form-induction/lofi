@@ -1,0 +1,8 @@
+# Gold-derivation reachability under the slash grammar's rule inventory.
+defaults:
+  - slash-point
+  - evaluators.reachability: reachability
+evaluators:
+  reachability:
+    inventory: slash
+    interval: {replicates: 20, level: 0.95}

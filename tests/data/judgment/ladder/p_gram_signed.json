@@ -1,0 +1,31 @@
+{
+  "objective": {"objective": "conditional"},
+  "family": {
+    "family": "cumulative"
+  },
+  "levels": 7,
+  "predictor": [
+    {
+      "kind": "random_intercept",
+      "group": "participant"
+    },
+    {
+      "kind": "link",
+      "readout": "p_gram",
+      "linking": {
+        "family": "logit",
+        "columns": {
+          "complement": "p_gram_complement"
+        }
+      }
+    }
+  ],
+  "identification": {
+    "constraint": "fixed_cutpoint_variance",
+    "value": 1.0
+  },
+  "priors": {
+    "thresholds": {}
+  },
+  "normalization": "identity"
+}

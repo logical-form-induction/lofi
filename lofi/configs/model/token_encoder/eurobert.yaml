@@ -1,0 +1,5 @@
+kind: pretrained
+checkpoint:
+  kind: hub
+  repository: EuroBERT/EuroBERT-210m
+  revision: 39b51e15dd1f1a06f58b5cbf6a8a188cec60bd0e

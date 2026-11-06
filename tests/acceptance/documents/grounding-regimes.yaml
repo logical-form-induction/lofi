@@ -1,0 +1,41 @@
+yoked:
+  - - group: model.grounding
+      values:
+        - prover-reward
+        - prover-enumerated
+        - expected-embedding
+        - nli-baseline
+    - path: model.readouts.forms.decoding
+      values:
+        - strategy: sample
+          restriction: {kind: full}
+          draws: 2
+          rescore_tolerance: 1.0e-5
+          clamp: null
+        - {strategy: beam, width: 16, clamp: null}
+        - {strategy: beam, width: 16, clamp: null}
+        - {strategy: beam, width: 16, clamp: null}
+    - path: loss.terms
+      values:
+        - - objective:
+              kind: inference
+              signal: reward
+              response: {kind: label}
+              auxiliary_weight: 0.0
+        - - objective:
+              kind: inference
+              signal: likelihood
+              response: {kind: label}
+              auxiliary_weight: 0.0
+        - - objective:
+              kind: inference
+              signal: likelihood
+              response: {kind: label}
+              auxiliary_weight: 0.0
+        - - objective:
+              kind: inference
+              signal: likelihood
+              response: {kind: label}
+              auxiliary_weight: 0.0
+seeds: [0]
+expected_points: 4

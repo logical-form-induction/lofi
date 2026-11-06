@@ -1,0 +1,82 @@
+role: lexical-distribution
+freeze_id: freeze/1
+config: {kind: run, path: l3-run.yaml}
+launch: {kind: array, chunk_size: 1, throttle: 32}
+failure: {numerical: final, out_of_memory: retry}
+sweep:
+  grid:
+    - path: data.datasets.train.dataset.premise
+      values:
+        - {kind: uniform, min_length: 2, max_length: 4}
+        - {kind: negative-binomial, min_length: 2, max_length: 6, r: 3.0, p: 0.6, out_of_support: resample}
+    - path: data.datasets.train.dataset.hypothesis
+      values:
+        - {kind: uniform, min_length: 2, max_length: 4}
+        - {kind: negative-binomial, min_length: 2, max_length: 6, r: 3.0, p: 0.6, out_of_support: resample}
+    - group: data.datasets.train.dataset.source.interpretation.meanings.source.structure.joint
+      values:
+        - i6-du-cn
+        - i6-du-c0
+        - i6-du-cp
+        - i6-dp-cn
+        - i6-dp-c0
+        - i6-dp-cp
+        - i12-du-cn
+        - i12-du-c0
+        - i12-du-cp
+        - i12-dp-cn
+        - i12-dp-c0
+        - i12-dp-cp
+    - group: data.datasets.train.dataset.source.interpretation.meanings.source.structure.rank_law
+      values: [uniform, power-law]
+  seeds: [0, 1, 2, 3]
+  expected_points: 384
+seed_policy: {root: 401}
+rows:
+  - {evaluator: logical-forms, metric: logical-form-normal-form}
+  - {evaluator: logical-forms, metric: many-to-one-accuracy}
+  - {evaluator: logical-forms, metric: random-relabeling-floor}
+  - {evaluator: logical-forms, metric: fiber-relative-recovery}
+primary: {evaluator: logical-forms, metric: fiber-relative-recovery}
+preregistration: distribution.json
+factors:
+  premise-length:
+    axis: data.datasets.train.dataset.premise
+    levels:
+      - {level: uniform, value: {kind: uniform, min_length: 2, max_length: 4}}
+      - {level: negative-binomial, value: {kind: negative-binomial, min_length: 2, max_length: 6, r: 3.0, p: 0.6, out_of_support: resample}}
+  hypothesis-length:
+    axis: data.datasets.train.dataset.hypothesis
+    levels:
+      - {level: uniform, value: {kind: uniform, min_length: 2, max_length: 4}}
+      - {level: negative-binomial, value: {kind: negative-binomial, min_length: 2, max_length: 6, r: 3.0, p: 0.6, out_of_support: resample}}
+  semantic-profile: {axis: data.datasets.train.dataset.source.interpretation.meanings.source.structure.joint}
+  rank-law:
+    axis: data.datasets.train.dataset.source.interpretation.meanings.source.structure.rank_law
+    levels:
+      - {level: uniform, value: uniform}
+      - {level: power-law, value: power-law}
+compute: {kind: unpriced}
+contraction:
+  rungs:
+    - {kind: seeds, floor: 4}
+    - {kind: fallback}
+  factorial: premise and hypothesis length laws crossed with logical-form inventory size, class diversity, class-frequency coupling, and rank law
+stop_rules:
+  - name: numerical failure
+    when: {kind: points, statuses: [numerical-failure], at_least: 1}
+decision_point:
+  date: "2027-04-01"
+  signal:
+    kind: metric
+    row: {evaluator: logical-forms, metric: fiber-relative-recovery}
+    statistic: mean
+    direction: above
+    threshold: 0.0
+  fallback: Logical-form recovery does not exceed its fitted fiber floor across the distribution grid.
+evaluation:
+  alpha: 0.05
+  correction: {kind: benjamini-hochberg}
+  dependence: prds
+  minimum_seeds: 4
+  seed_budget: {metric: fiber-relative-recovery, target: mean, precision: 0.05, level: 0.95}

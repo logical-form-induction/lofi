@@ -1,0 +1,34 @@
+# A ternary constructor whose functor takes two arguments in one three-premise step.
+name: ternary
+signature:
+  primitives: [S, NP]
+  syntax: s-expression
+  constructors:
+    - {name: "tri", kind: [Cat, Cat, Cat, Cat], notation: {style: prefix, spelling: tri}}
+rules:
+  name: ternary
+  rules:
+    - rule: pattern
+      name: apply-two
+      premises:
+        - {pattern: term, name: Y}
+        - pattern: node
+          operator: {kind: fixed, name: tri}
+          arguments:
+            - {pattern: term, name: X}
+            - {pattern: term, name: Y}
+            - {pattern: term, name: Z}
+        - {pattern: term, name: Z}
+      conclusion: {pattern: term, name: X}
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: '("#const[Cat]" "NP")'}
+    - {form: mary, category: '("#const[Cat]" "NP")'}
+    - {form: sees, category: '("tri" ("#const[Cat]" "S") ("#const[Cat]" "NP") ("#const[Cat]" "NP"))'}
+goal:
+  kind: root
+  categories: ['("#const[Cat]" "S")']
+budget:
+  unary_rounds: 1
+formalism: declared

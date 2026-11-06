@@ -1,0 +1,64 @@
+role: syntactic-anchoring
+freeze_id: freeze/1
+config: {kind: run, path: s5-run.yaml}
+launch: {kind: array, chunk_size: 1, throttle: 32}
+failure: {numerical: final, out_of_memory: retry}
+sweep:
+  grid:
+    - group: data.datasets.train.constraint_policy.syntactic
+      values:
+        - rank-25
+        - rank-50
+        - rank-75
+        - quantile-25
+        - quantile-50
+        - quantile-75
+        - closed-25
+        - closed-50
+        - closed-75
+        - open-25
+        - open-50
+        - open-75
+    - group: data.datasets.train.dataset.grammar.lexicon
+      values: [coupling-negative, coupling-zero, coupling-positive]
+  seeds: [0, 1, 2, 3]
+  expected_points: 144
+seed_policy: {root: 511}
+rows:
+  - {evaluator: lexical-recovery, metric: lexical-type-f1}
+  - {evaluator: lexical-recovery, metric: primitive-many-to-one-accuracy}
+  - {evaluator: lexical-recovery, metric: primitive-random-relabeling-floor}
+primary: {evaluator: lexical-recovery, metric: primitive-many-to-one-accuracy}
+preregistration: anchoring.json
+factors:
+  selection-policy: {axis: data.datasets.train.constraint_policy.syntactic}
+  frequency-class-coupling:
+    axis: data.datasets.train.dataset.grammar.lexicon
+    levels:
+      - {level: -0.75, value: coupling-negative}
+      - {level: 0.0, value: coupling-zero}
+      - {level: 0.75, value: coupling-positive}
+compute: {kind: unpriced}
+contraction:
+  rungs:
+    - {kind: seeds, floor: 4}
+    - {kind: fallback}
+  factorial: rank, token-mass quantile, and closed- or open-category selection at three share-valued budgets, crossed with frequency-class coupling
+stop_rules:
+  - name: numerical failure
+    when: {kind: points, statuses: [numerical-failure], at_least: 1}
+decision_point:
+  date: "2027-04-01"
+  signal:
+    kind: metric
+    row: {evaluator: lexical-recovery, metric: primitive-many-to-one-accuracy}
+    statistic: mean
+    direction: above
+    threshold: 0.0
+  fallback: No selection policy improves lexical recovery above its random-relabeling floor.
+evaluation:
+  alpha: 0.05
+  correction: {kind: benjamini-hochberg}
+  dependence: prds
+  minimum_seeds: 4
+  seed_budget: {metric: primitive-many-to-one-accuracy, target: mean, precision: 0.05, level: 0.95}

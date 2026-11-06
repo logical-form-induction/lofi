@@ -1,0 +1,29 @@
+# The slash pair with application and type raising to declared targets.
+name: raising
+signature:
+  primitives: [S, NP]
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: "/"}
+rules:
+  name: raising
+  rules:
+    - {rule: application, view: /}
+    - {rule: application, view: "\\"}
+    - {rule: type-raising, view: /, targets: [S], arguments: [NP]}
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: NP, meaning: john}
+    - {form: mary, category: NP, meaning: mary}
+    - {form: sleeps, category: "S\\NP", meaning: '\x. sleep(x)'}
+    - {form: sees, category: "S\\NP/NP", meaning: '\y. \x. see(x)(y)'}
+goal:
+  kind: root
+  categories: [S]
+budget:
+  unary_rounds: 1
+formalism: declared

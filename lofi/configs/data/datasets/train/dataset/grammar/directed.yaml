@@ -1,0 +1,31 @@
+name: directed-slashes
+signature:
+  name: directed
+  primitives: [S, NP, N, conj]
+  constructors:
+    - {name: /, kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+  operators:
+    - {name: 'NP[conj]', sort: Cat, erases_to: NP}
+  conjunctions:
+    markers: [conj]
+    pairs:
+      - unmarked: NP
+        marked: 'NP[conj]'
+  functors:
+    - {name: /, constructor: /, argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: /}
+rules:
+  name: directed-application
+  rules:
+    - {rule: application, view: /}
+    - {rule: application, view: '\'}
+lexicon: {kind: inline, entries: [{form: john, category: NP}, {form: mary, category: NP}, {form: sleeps, category: 'S\NP'}, {form: sees, category: 'S\NP/NP'}]}
+goal:
+  kind: root
+  categories: [S]
+matching:
+  kind: feature-erasure
+budget:
+  unary_rounds: 1
+formalism: declared

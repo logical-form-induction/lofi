@@ -1,0 +1,4 @@
+kind: ccgbank
+source: ${oc.env:LOFI_CCGBANK}
+splits: [train, validation, development, test]
+unknown_words: {kind: skip}

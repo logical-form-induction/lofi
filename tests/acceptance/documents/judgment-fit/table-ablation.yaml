@@ -1,0 +1,57 @@
+dataset: megaacceptability
+response:
+  ResponseDeclaration_responsespec:
+    family: {family: cumulative}
+    levels: 7
+    objective: {objective: conditional}
+    predictor:
+      - {kind: factor, name: verb}
+      - {kind: random_intercept, group: participant}
+    identification: {constraint: fixed_discrimination, value: 1.0}
+    priors: {thresholds: {}}
+inference:
+  inference: map
+  optimizer: {kind: adam, learning_rate: 0.05}
+  steps: 20
+  initial_scale: 0.1
+elicitation: {method: participants, version: "1"}
+calibration: null
+comparison:
+  held_out_unit: participant
+  readout_units: {}
+  splitter: leave-one-group-out
+  folds: null
+  seed: 23
+  coverage_threshold: 0.0
+  unseen_participant: plug_in
+  models:
+    candidates: [declared, twin]
+    candidate: declared
+    criterion: psis_loo
+    weighting: stacking
+    pareto_fraction: 0.1
+    pareto_threshold: 0.7
+dynamic_range: null
+interannotator: null
+ablation:
+  - &memorized
+    rows: {attribute: verb, levels: [think, want, try]}
+    columns:
+      attribute: frame
+      inventory:
+        primitive_types: [S_that, VP_to]
+        null_type: NONE
+        levels:
+          - {label: NP _ that S, arguments: [S_that]}
+          - {label: NP _ to VP, arguments: [VP_to]}
+    width: 2
+    lift: {lift: memorized}
+    schedule:
+      optimizer: {kind: adam, learning_rate: 0.02}
+      steps: 2
+      batch_size: 4
+      initial_scale: 0.25
+  - <<: *memorized
+    lift: {lift: joint_type}
+  - <<: *memorized
+    lift: {lift: row_classes, classes: 2}

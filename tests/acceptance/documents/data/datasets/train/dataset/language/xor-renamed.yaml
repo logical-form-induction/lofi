@@ -1,0 +1,25 @@
+name: xor-renamed
+atomic_types: [{name: entity}, {name: truth, kind: proposition}]
+constructors:
+  - {name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}
+constants:
+  - name: not
+    type: "truth -> truth"
+    classes: [sentential, negation]
+    notation: {kind: prefix, ascii: "~", unicode: "¬", precedence: 6}
+  - name: or
+    type: "truth -> truth -> truth"
+    classes: [sentential, disjunction]
+    notation: {kind: infix, ascii: "|", unicode: "∨", precedence: 3, associativity: left}
+  - name: xor
+    type: "truth -> truth -> truth"
+    classes: [sentential, exclusive-or]
+    notation: {kind: infix, ascii: "^^", unicode: "⊕", precedence: 2, associativity: left}
+binders: {style: curry}
+logic:
+  order: first
+  functions: true
+  equality: false
+  negation: not
+  prover: {kind: truth-table, timeout: 5.0}
+  labeling: {budget: {}}

@@ -1,0 +1,25 @@
+{
+  "objective": {"objective": "conditional"},
+  "family": {
+    "family": "cumulative"
+  },
+  "levels": 7,
+  "predictor": [
+    {
+      "kind": "random_intercept",
+      "group": "participant"
+    },
+    {
+      "kind": "factor",
+      "name": "frame"
+    }
+  ],
+  "identification": {
+    "constraint": "fixed_discrimination",
+    "value": 1.0
+  },
+  "priors": {
+    "thresholds": {}
+  },
+  "normalization": "identity"
+}

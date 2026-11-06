@@ -1,0 +1,4 @@
+# Application over the slash pair, each rule's meaning derived from the rule.
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.interpretation: first-order

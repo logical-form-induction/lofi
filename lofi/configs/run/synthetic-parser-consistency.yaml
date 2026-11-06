@@ -1,0 +1,56 @@
+defaults:
+  - synthetic-parser
+model:
+  encoders:
+    semantic-types: {kind: tree-rnn, width: 4}
+  decoders:
+    type-identity: {kind: tree-rnn, width: 4}
+    type-application: {kind: tree-rnn, width: 4}
+  spaces:
+    categories:
+      relation: {space: semantic-space, via: consistency}
+    semantic-space:
+      sort: Ty
+      encoder: semantic-types
+      identity: type-identity
+      combinators:
+        merge: concatenate
+        decoders:
+          "application:/": type-application
+          "application:\\": type-application
+  readouts:
+    category-terms:
+      space: semantic-space
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          logic:
+            prover: {kind: truth-table, timeout: 5.0}
+            labeling: {budget: {}}
+        grammar:
+          lexicon:
+            entries:
+              - {form: word-0, category: NP, meaning: a}
+              - {form: word-1, category: "S\\NP", meaning: '\x. p(x)'}
+              - {form: word-2, category: "S\\NP/NP", meaning: '\y. \x. r(x)(y)'}
+              - {form: word-3, category: NP/NP, meaning: '\x. x'}
+              - {form: word-4, category: NP, meaning: a}
+              - {form: word-5, category: "S\\NP", meaning: '\x. p(x)'}
+              - {form: word-6, category: "S\\NP/NP", meaning: '\y. \x. r(x)(y)'}
+              - {form: word-7, category: NP/NP, meaning: '\x. x'}
+        interpretation:
+          erasure:
+            kind: signature-morphism
+            atoms: {S: t, NP: e, conj: e}
+          constants:
+            - {name: a, type: e, classes: [individual]}
+            - {name: p, type: "e -> t", classes: [predicate]}
+            - {name: r, type: "e -> e -> t", classes: [predicate]}
+          meanings: {source: {kind: lexical}}
+trainer:
+  active_groups+:
+    - semantic-types
+    - type-identity
+    - type-application

@@ -1,0 +1,19 @@
+# A tiny point whose subject must type-raise before forward application.
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: raising-required
+  - model.spaces.categories.combinators: raising-required
+approximation: {residual_mass: 0.9}
+model:
+  language: {from: data}
+  parser:
+    kind: tagged
+    width: 4
+    unary_depth: 1
+  controller:
+    kind: mlp
+    raise: soft
+    hidden: [{width: 4, activation: tanh}]
+loss:
+  terms:
+    - objective: {kind: grammaticality, readout: sentences}

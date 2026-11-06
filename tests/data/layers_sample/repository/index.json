@@ -1,0 +1,22 @@
+{
+  "at://did:plc:lofisample/pub.layers.annotation.annotationLayer/en-sleeps-dependency": "a6e80979941ba68c69612583b440a7d7f5bc91e70a416ee5d69da333f640a1b1",
+  "at://did:plc:lofisample/pub.layers.annotation.annotationLayer/en-sleeps-token-tags": "fb4c0242965379ec1c1cfd0e7b77ec94e4fb164c702482ea5c5fdac192e3a41f",
+  "at://did:plc:lofisample/pub.layers.annotation.annotationLayer/en-sleeps-tree": "c4f7d2a84b373788d24152b2c38d397b94b09a545a12ebabb4b093a7e5a2069b",
+  "at://did:plc:lofisample/pub.layers.corpus.corpus/sample": "7a26b19a8e92f942cde2d41588e252b1792abcb3b00c5d06403f309559b2c4d9",
+  "at://did:plc:lofisample/pub.layers.corpus.membership/en-repeated": "ff0d5a4133d685fa4b5982a6d9cca65c3e283e6986eed26f321d04d097e41e27",
+  "at://did:plc:lofisample/pub.layers.corpus.membership/en-sleeps": "c4d98cb1dc0af16c6b773ef9069e53c416c4693fef5e6a15f2aad54873118b4f",
+  "at://did:plc:lofisample/pub.layers.corpus.membership/es-duerme": "62934df3d1e8a643433bc0959a1d36bfefe84b45cbf8f4de9520ff01042f22c5",
+  "at://did:plc:lofisample/pub.layers.corpus.membership/zh-shuijiao": "eb59390d989eced62a26dd208fc97e1065da0a5552c6a1080cbbd6d7cf09269c",
+  "at://did:plc:lofisample/pub.layers.expression.expression/en-repeated": "f68800fc7e32fe65dca8b8acfc48867b08f72fba73d3bbeab8f6b67ed3acdbc9",
+  "at://did:plc:lofisample/pub.layers.expression.expression/en-sleeps": "0924a5050704771b98b99a3d79f22be04a03f9d89f2908a413db4bce28d918d7",
+  "at://did:plc:lofisample/pub.layers.expression.expression/es-duerme": "14637cad86b962504f4d0b12cea26943d4c261b035c1c425a6124af4eab19597",
+  "at://did:plc:lofisample/pub.layers.expression.expression/zh-shuijiao": "8159706e853244df8da8c1c2b5a7560998f86853a48e6490281998b5ffa7715c",
+  "at://did:plc:lofisample/pub.layers.graph.graphEdge/en-sleeps-denotes": "abdfebdd9d3312093125b17f4ab290265532c75a61d3a39219ddaff0708da9cd",
+  "at://did:plc:lofisample/pub.layers.graph.graphNode/sleep-situation": "33db531b150b253ad791a47d1c9e9f1e19b4bab75259b22bc028273c7659ea96",
+  "at://did:plc:lofisample/pub.layers.judgment.experimentDef/acceptability": "8df86e4785cff560746468aa4eb39f13b8d16c969cd2800c06942f13b5226022",
+  "at://did:plc:lofisample/pub.layers.judgment.judgmentSet/annotator-a": "f37a44fbebda59086dccf20a2c98407ca3e40d39a608d7274a918114168152af",
+  "at://did:plc:lofisample/pub.layers.judgment.judgmentSet/annotator-b": "ed26be7fe5c190c1d2464f719c016f95f088917ca37769fcf556871076d1a8c6",
+  "at://did:plc:lofisample/pub.layers.segmentation.segmentation/en-sleeps": "ddabb42ec7d582b008f784243d03e84b1c8fcb17ed4e8b089cc2e85d739f9de7",
+  "at://did:plc:lofisample/pub.layers.segmentation.segmentation/es-duerme": "fa4bc45531b509df71252439ae69807e37b8fef0fd701194bf1521ff85fb10f2",
+  "at://did:plc:lofisample/pub.layers.segmentation.segmentation/zh-shuijiao": "4d3f59dcc7accdc38c41cbf2c0de8f15c7ee51e9ad18828510dacb715e9ca75d"
+}

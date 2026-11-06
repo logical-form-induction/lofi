@@ -1,0 +1,37 @@
+[package]
+name = "lofi-chart"
+description = "The pure-Rust core of LoFI's chart kernel"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+publish.workspace = true
+
+[dependencies]
+num-bigint.workspace = true
+rayon.workspace = true
+
+[dev-dependencies]
+gungraun.workspace = true
+proptest.workspace = true
+
+[[bench]]
+name = "build"
+harness = false
+
+[[bench]]
+name = "semiring"
+harness = false
+
+[[bench]]
+name = "chart"
+harness = false
+
+[lints]
+workspace = true

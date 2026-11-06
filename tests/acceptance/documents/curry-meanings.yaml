@@ -1,0 +1,23 @@
+# The arrow and product grammar interpreted into product types, its pairing and
+# curry combinators given their meanings.
+defaults:
+  - arrow-product-point
+  - data.datasets.train.dataset.interpretation: products
+  - data.datasets.train.dataset.language: products
+data:
+  datasets:
+    train:
+      dataset:
+        interpretation:
+          erasure:
+            constructors:
+              "*": "prod(a0, a1)"
+          constants:
+            - {name: john, type: e, classes: [individual]}
+            - {name: mary, type: e, classes: [individual]}
+            - {name: sleep, type: "e -> t", classes: [predicate]}
+            - {name: see, type: "prod(e, e) -> t", classes: [predicate]}
+          meanings: {source: {kind: lexical}}
+          actions:
+            pair: '\a. \b. pair(a)(b)'
+            curry: '\f. \z. \y. f(pair(y)(z))'

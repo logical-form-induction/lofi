@@ -1,0 +1,7 @@
+# Map each composing action of the multimodal grammar to its decoder.
+merge: concatenate
+decoders:
+  "application:/": application
+  "application:\\": application
+  "application:\u002fx": application
+  "composition:\u002fx:1:harmonic:unrestricted": application

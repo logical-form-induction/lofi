@@ -1,0 +1,57 @@
+role: lexical-distribution
+freeze_id: freeze/1
+config: {kind: run, path: l4-run.yaml}
+launch: {kind: array, chunk_size: 1, throttle: 32}
+failure: {numerical: reseed, out_of_memory: retry}
+sweep:
+  grid:
+    - path: data.datasets.train.dataset.proportion
+      values:
+        - {entails: 1.0, contradicts: 0.0, neutral: 0.0, tolerance: 0.0}
+        - {entails: 0.95, contradicts: 0.025, neutral: 0.025, tolerance: 0.1}
+        - {entails: 0.9, contradicts: 0.05, neutral: 0.05, tolerance: 0.1}
+        - {entails: 0.75, contradicts: 0.125, neutral: 0.125, tolerance: 0.1}
+        - {entails: 0.5, contradicts: 0.25, neutral: 0.25, tolerance: 0.1}
+  seeds: [0, 1, 2, 3]
+  expected_points: 20
+seed_policy: {root: 411}
+rows:
+  - {evaluator: logical-forms, metric: logical-form-normal-form}
+  - {evaluator: logical-forms, metric: many-to-one-accuracy}
+  - {evaluator: logical-forms, metric: random-relabeling-floor}
+  - {evaluator: logical-forms, metric: fiber-relative-recovery}
+primary: {evaluator: logical-forms, metric: fiber-relative-recovery}
+preregistration: regimes.json
+factors:
+  non-entailment-share:
+    axis: data.datasets.train.dataset.proportion
+    levels:
+      - {level: 0.0, value: {entails: 1.0, contradicts: 0.0, neutral: 0.0, tolerance: 0.0}}
+      - {level: 0.05, value: {entails: 0.95, contradicts: 0.025, neutral: 0.025, tolerance: 0.1}}
+      - {level: 0.1, value: {entails: 0.9, contradicts: 0.05, neutral: 0.05, tolerance: 0.1}}
+      - {level: 0.25, value: {entails: 0.75, contradicts: 0.125, neutral: 0.125, tolerance: 0.1}}
+      - {level: 0.5, value: {entails: 0.5, contradicts: 0.25, neutral: 0.25, tolerance: 0.1}}
+compute: {kind: unpriced}
+contraction:
+  rungs:
+    - {kind: seeds, floor: 4}
+    - {kind: fallback}
+  factorial: an entailment-only arm and four entailment/non-entailment contamination shares
+stop_rules:
+  - name: numerical failure
+    when: {kind: points, statuses: [numerical-failure], at_least: 1}
+decision_point:
+  date: "2027-04-15"
+  signal:
+    kind: metric
+    row: {evaluator: logical-forms, metric: fiber-relative-recovery}
+    statistic: mean
+    direction: above
+    threshold: 0.0
+  fallback: Logical-form recovery does not exceed its fitted fiber floor under the declared relation regimes.
+evaluation:
+  alpha: 0.05
+  correction: {kind: benjamini-hochberg}
+  dependence: prds
+  minimum_seeds: 4
+  seed_budget: {metric: fiber-relative-recovery, target: mean, precision: 0.05, level: 0.95}

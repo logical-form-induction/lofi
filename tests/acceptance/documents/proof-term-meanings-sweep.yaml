@@ -1,0 +1,8 @@
+grid:
+  - path: model.readouts.forms.meanings
+    values:
+      - {kind: decoded}
+      # The derived-cell bound proof-term-meanings.yaml declares and justifies.
+      - {kind: proof-term, weighting: distinct, residual_mass: 0.99999}
+seeds: [0]
+expected_points: 2

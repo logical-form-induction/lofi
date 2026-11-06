@@ -1,0 +1,19 @@
+{
+  "grid": {
+    "selection-policy": [
+      "rank-25", "rank-50", "rank-75",
+      "quantile-25", "quantile-50", "quantile-75",
+      "closed-25", "closed-50", "closed-75",
+      "open-25", "open-50", "open-75"
+    ],
+    "frequency-class-coupling": [-0.75, 0.0, 0.75]
+  },
+  "hypotheses": [
+    {
+      "name": "anchored-recovery-above-floor",
+      "left": "primitive-many-to-one-accuracy",
+      "right": "primitive-random-relabeling-floor",
+      "family": "syntactic-anchoring"
+    }
+  ]
+}

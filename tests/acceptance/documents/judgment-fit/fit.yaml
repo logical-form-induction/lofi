@@ -1,0 +1,22 @@
+dataset: megaacceptability
+response:
+  ResponseDeclaration_responsespec:
+    family: {family: cumulative}
+    levels: 7
+    objective: {objective: conditional}
+    predictor:
+      - {kind: factor, name: verb}
+      - {kind: random_intercept, group: participant}
+    identification: {constraint: fixed_discrimination, value: 1.0}
+    priors: {thresholds: {}}
+inference:
+  inference: map
+  optimizer: {kind: adam, learning_rate: 0.05}
+  steps: 20
+  initial_scale: 0.1
+elicitation: {method: participants, version: "1"}
+calibration: null
+comparison: null
+dynamic_range: null
+interannotator: null
+ablation: []

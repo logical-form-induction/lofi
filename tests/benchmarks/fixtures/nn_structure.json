@@ -1,0 +1,75 @@
+{
+  "fixture_sha256": "86cf9c3e97395d2385f076b6762f43b51ac31b00626fdc892e5ef86a63f8e915",
+  "hardware": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "processor": "arm",
+    "logical_cores": 10,
+    "model": "MacBookPro18,2",
+    "chip": "Apple M1 Max",
+    "cores": "proc 10:8:2",
+    "memory": "64 GB"
+  },
+  "runtime": {
+    "python": "3.14.5",
+    "torch": "2.14.0",
+    "device": "cpu",
+    "dtype": "float32"
+  },
+  "measurements": [
+    {
+      "family": "term_decoder",
+      "declaration": "diffusion",
+      "seconds_per_batch": 0.16352259569684974,
+      "peak_bytes": 24292
+    },
+    {
+      "family": "term_decoder",
+      "declaration": "hrr",
+      "seconds_per_batch": 0.005915512598585337,
+      "peak_bytes": 50144
+    },
+    {
+      "family": "term_decoder",
+      "declaration": "linear-rnn",
+      "seconds_per_batch": 0.005775837408145889,
+      "peak_bytes": 125920
+    },
+    {
+      "family": "term_decoder",
+      "declaration": "transformer",
+      "seconds_per_batch": 0.01006352049880661,
+      "peak_bytes": 498816
+    },
+    {
+      "family": "term_decoder",
+      "declaration": "tree-rnn",
+      "seconds_per_batch": 0.007519541698275134,
+      "peak_bytes": 66784
+    },
+    {
+      "family": "term_encoder",
+      "declaration": "hrr",
+      "seconds_per_batch": 0.0003354541084263474,
+      "peak_bytes": 157356
+    },
+    {
+      "family": "term_encoder",
+      "declaration": "linear-rnn",
+      "seconds_per_batch": 0.0008891083940397948,
+      "peak_bytes": 130528
+    },
+    {
+      "family": "term_encoder",
+      "declaration": "transformer",
+      "seconds_per_batch": 0.0008969457063358277,
+      "peak_bytes": 465504
+    },
+    {
+      "family": "term_encoder",
+      "declaration": "tree-rnn",
+      "seconds_per_batch": 0.0025249625148717316,
+      "peak_bytes": 676736
+    }
+  ]
+}

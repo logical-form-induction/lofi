@@ -1,0 +1,26 @@
+{
+  "held_out_unit": "item",
+  "rungs": [
+    "intercept_only",
+    "frame_only",
+    "verb_only",
+    "verb_by_frame",
+    "pooled_encoder",
+    "p_gram_only",
+    "morcela_only",
+    "p_gram_morcela",
+    "morcela_by_frame",
+    "morcela_by_verb_by_frame"
+  ],
+  "ablations": {
+    "p_gram_only": [
+      "p_gram_rank_consistent",
+      "p_gram_corn",
+      "p_gram_metric",
+      "p_gram_probability",
+      "p_gram_signed",
+      "p_gram_entropy"
+    ]
+  },
+  "annotator": "ordinal_2pl"
+}

@@ -1,0 +1,389 @@
+[importlinter]
+# The scripts tree is the second root so that the launcher, the pre-flight and
+# the fixture generators are in the graph and can be forbidden to the library.
+root_packages =
+    lofi
+    scripts
+include_external_packages = True
+
+# The dependency graph. A layer may import any layer below it and nothing above
+# it; names joined by a pipe are independent siblings that may not import each
+# other, which is what this file means everywhere it joins names. A colon is
+# import-linter's delimiter for siblings that MAY import each other, so it
+# states the opposite. Exhaustive, so a new top-level package fails the build
+# until someone
+# decides where it sits.
+[importlinter:contract:layers]
+name = The layer DAG
+type = layers
+exhaustive = True
+containers =
+    lofi
+layers =
+    run
+    report
+    train | eval
+    training_plugins
+    data | probe | judgment
+    nn
+    stats
+    spec
+    control_variate | mixing | reward
+    grammars
+    formalism
+    interpret | typecheck | lf
+    deduce
+    lexicon
+    judge
+    terms
+    registry | _artifacts
+    _frozen
+    _types | _checks | _alignment | _stats | _files
+
+# An entry pairs a form with a category and carries no span, so the lexicon has
+# no reason to know about charts. The axiom edge is the engine's to build.
+[importlinter:contract:lexicon-does-not-import-deduce]
+name = The lexicon does not import the deduction engine
+type = forbidden
+source_modules =
+    lofi.lexicon
+forbidden_modules =
+    lofi.deduce
+
+# The engine depends on the Rule protocol, never on a concrete rule set, which
+# is what lets one engine serve every formalism under comparison.
+[importlinter:contract:deduce-does-not-import-a-grammar]
+name = The deduction engine does not import a formalism or a grammar pack
+type = forbidden
+source_modules =
+    lofi.deduce
+forbidden_modules =
+    lofi.formalism
+    lofi.grammars
+
+# A derivation style reads a rule's name and an injected symbol table. It does
+# not dispatch on the identity of a combinator.
+[importlinter:contract:interpret-does-not-import-a-grammar]
+name = Readings and rendering do not import a grammar pack
+type = forbidden
+source_modules =
+    lofi.interpret
+forbidden_modules =
+    lofi.grammars
+
+# The importable neural surface inside the probe layer is an allowlist. A
+# denylist of private paths is defeated by importing the public module beside
+# them. An allowlist entry that names no import is not an error; one that is
+# misspelled breaks the contract, which is the failure worth having.
+[importlinter:contract:probe-through-sites-only]
+name = A probe reaches a model only through its published surfaces
+type = forbidden
+source_modules =
+    lofi.probe
+forbidden_modules =
+    lofi.nn
+unmatched_ignore_imports_alerting = none
+ignore_imports =
+    lofi.probe -> lofi.nn.sites
+    lofi.probe -> lofi.nn.ports
+    lofi.probe -> lofi.nn.policy
+    lofi.probe.** -> lofi.nn.sites
+    lofi.probe.** -> lofi.nn.ports
+    lofi.probe.** -> lofi.nn.policy
+
+# `pip install lofi` delivers the induction half alone, so the symbolic core
+# carries no tensor library at any depth.
+[importlinter:contract:no-torch-in-symbolic-core]
+name = The symbolic core imports no tensor library
+type = forbidden
+source_modules =
+    lofi.terms
+    lofi.judge
+    lofi.lexicon
+    lofi.deduce
+    lofi.interpret
+    lofi.formalism
+    lofi.grammars
+forbidden_modules =
+    torch
+    numpy
+    quivers
+    lairs
+    bead
+
+# A didactic model costs about ten microseconds to construct, so it is a
+# boundary object and never an inner-loop representation. The exceptions are the
+# boundary modules, and this is the only place that list appears.
+[importlinter:contract:didactic-containment]
+name = didactic is named only at a boundary
+type = forbidden
+source_modules =
+    lofi
+forbidden_modules =
+    didactic
+allow_indirect_imports = False
+unmatched_ignore_imports_alerting = none
+ignore_imports =
+    lofi.spec -> didactic
+    lofi.spec.** -> didactic
+    lofi.grammars.*.spec -> didactic
+    lofi.data.corpora.*.spec -> didactic
+    lofi.data.synthetic.spec.** -> didactic
+    lofi.train._boundary -> didactic
+    lofi.run._boundary.** -> didactic
+    lofi.eval._boundary -> didactic
+    lofi.probe._boundary -> didactic
+    lofi.judgment._spec -> didactic
+    lofi.control_variate -> didactic
+    lofi.mixing -> didactic
+    lofi.reward -> didactic
+
+# panproto is the theory compiler under didactic and the version control under
+# the dataset cache. The boundary packages reach it through didactic and name
+# it only for its theory type; the cache is the one module that imports it
+# for itself. Nothing else names it, so a compiled theory never leaves the
+# boundary as anything but its canonical bytes and digest.
+[importlinter:contract:panproto-containment]
+name = panproto is imported directly only at a boundary or by the dataset cache
+type = forbidden
+source_modules =
+    lofi
+forbidden_modules =
+    panproto
+allow_indirect_imports = True
+unmatched_ignore_imports_alerting = none
+ignore_imports =
+    lofi.spec -> panproto
+    lofi.spec.** -> panproto
+    lofi.grammars.*.spec -> panproto
+    lofi.data.corpora.*.spec -> panproto
+    lofi.train._boundary -> panproto
+    lofi.run._boundary.** -> panproto
+    lofi.probe._boundary -> panproto
+    lofi.judgment._spec -> panproto
+
+# The extension is a private implementation detail of terms and deduction.
+# Other layers consume those packages' published protocols and values, never
+# PyO3 objects or the extension module directly.
+[importlinter:contract:native-extension-containment]
+name = The native extension is reached only through terms and deduction
+type = forbidden
+source_modules =
+    lofi
+forbidden_modules =
+    lofi._native
+allow_indirect_imports = True
+unmatched_ignore_imports_alerting = none
+ignore_imports =
+    lofi.terms -> lofi._native
+    lofi.terms.** -> lofi._native
+    lofi.deduce -> lofi._native
+    lofi.deduce.** -> lofi._native
+
+# Telemetry, progress reporting and the command line are wired at the run layer
+# and nowhere below it, so importing the library never starts a UI or a client.
+[importlinter:contract:no-app-libs-in-library]
+name = Application libraries appear only in the run layer
+type = forbidden
+source_modules =
+    lofi.terms
+    lofi.judge
+    lofi.lexicon
+    lofi.deduce
+    lofi.interpret
+    lofi.typecheck
+    lofi.lf
+    lofi.formalism
+    lofi.grammars
+    lofi.spec
+    lofi.registry
+    lofi.stats
+    lofi.nn
+    lofi.data
+    lofi.probe
+    lofi.judgment
+    lofi.train
+    lofi.eval
+forbidden_modules =
+    wandb
+    mlflow
+    typer
+    click
+    rich
+    tqdm
+
+# The Hub client belongs to the optional publication route and to the snapshot
+# transport the artifact fetcher is given. The base run surface and every lower
+# package remain importable without it.
+[importlinter:contract:hugging-face-hub-is-optional]
+name = The Hugging Face Hub client appears only in the optional Hub module
+type = forbidden
+source_modules =
+    lofi
+forbidden_modules =
+    huggingface_hub
+allow_indirect_imports = True
+unmatched_ignore_imports_alerting = none
+ignore_imports =
+    lofi.run.hub -> huggingface_hub
+    lofi.nn._snapshots -> huggingface_hub
+
+# The narrower contract wins over the layer order, which would otherwise permit
+# `lofi.formalism -> lofi.typecheck`. Both must pass. A formalism that genuinely
+# needs logical forms typed is a design conflict, not an edge to add.
+[importlinter:contract:lofi-core-standalone]
+name = The induction half does not import the logical-form half
+type = forbidden
+source_modules =
+    lofi.terms
+    lofi.judge
+    lofi.lexicon
+    lofi.deduce
+    lofi.interpret.*
+    lofi.formalism
+    lofi.grammars
+forbidden_modules =
+    lofi.typecheck
+    lofi.lf
+unmatched_ignore_imports_alerting = none
+ignore_imports =
+    lofi.interpret._meaning -> lofi.typecheck
+    lofi.interpret._meaning -> lofi.typecheck.**
+    lofi.interpret._meaning -> lofi.lf
+    lofi.interpret._meaning -> lofi.lf.**
+
+# The meaning reading is the one half of interpretation the induction package
+# ships without, so nothing else in the layer may import it.
+[importlinter:contract:interpret-meaning-is-separable]
+name = The meaning reading is separable from the rest of interpretation
+type = layers
+containers =
+    lofi.interpret
+layers =
+    (_meaning)
+    (_derive) : (_readings) : (_render)
+
+# The three halves of the judgment layer sit side by side: readings and
+# rendering, the typing judgment, and the logical-form surface. None of them
+# imports another in either direction, which is what lets the induction half
+# ship without the logical-form half and lets a grammar be compared with typing
+# switched off. The meaning reading is the single blessed edge, and it points
+# out of interpretation rather than into it.
+[importlinter:contract:judgment-layer-halves-are-independent]
+name = Interpretation, typing and logical forms are independent of one another
+type = independence
+modules =
+    lofi.interpret
+    lofi.typecheck
+    lofi.lf
+unmatched_ignore_imports_alerting = none
+ignore_imports =
+    lofi.interpret._meaning -> lofi.typecheck
+    lofi.interpret._meaning -> lofi.typecheck.**
+    lofi.interpret._meaning -> lofi.lf
+    lofi.interpret._meaning -> lofi.lf.**
+
+# Two implementations of one protocol must not learn about each other. A family
+# that reaches into its neighbor for a live instance runs only beside that
+# neighbor, and a comparison between the two then measures the coupling.
+[importlinter:contract:type-encoders-are-independent]
+name = Type encoders are independent of one another
+type = independence
+modules =
+    lofi.nn.encoders.*
+
+[importlinter:contract:combinator-decoders-are-independent]
+name = Combinator decoders are independent of one another
+type = independence
+modules =
+    lofi.nn.decoders.*
+
+[importlinter:contract:grammar-packs-are-independent]
+name = Grammar packs are independent of one another
+type = independence
+modules =
+    lofi.grammars.*
+
+# The glob is over the package, so it says what it means only while every child
+# of that package is a reader. The corpus-agnostic vocabulary a reader emits
+# lives at `lofi.data` for that reason: a derivation is built from those value
+# types, and an exception list for the vocabulary depending on itself would grow
+# as readers times vocabulary modules forever.
+[importlinter:contract:corpus-readers-are-independent]
+name = Corpus readers are independent of one another
+type = independence
+modules =
+    lofi.data.corpora.*
+
+[importlinter:contract:no-encoder-imports-a-decoder]
+name = No type encoder imports a combinator decoder
+type = forbidden
+source_modules =
+    lofi.nn.encoders.*
+forbidden_modules =
+    lofi.nn.decoders
+
+# The abstract corpus interface is the point. import-linter catches the import;
+# whether a name is shaped by one treebank is a reader's check.
+[importlinter:contract:no-corpus-below-data]
+name = Nothing below the data layer reaches for a corpus
+type = forbidden
+source_modules =
+    lofi.terms
+    lofi.judge
+    lofi.lexicon
+    lofi.deduce
+    lofi.interpret
+    lofi.typecheck
+    lofi.lf
+    lofi.formalism
+    lofi.grammars
+    lofi.spec
+    lofi.registry
+    lofi.stats
+    lofi.nn
+forbidden_modules =
+    lofi.data
+
+# A corpus codec is the one place a file layout, a `.parg`/`.auto` pairing or a
+# Prolog term is named, and what it hands up is the corpus-agnostic vocabulary
+# one level above it. A reader that reaches for a model, a chart or a rule set
+# is a reader shaped by what happens to run on top of it, and a comparison
+# between formalisms cannot then swap the corpus.
+[importlinter:contract:no-model-stack-in-a-corpus-reader]
+name = A corpus reader reaches no neural, deduction or judge package
+type = forbidden
+source_modules =
+    lofi.data.corpora
+forbidden_modules =
+    lofi.nn
+    lofi.deduce
+    lofi.judge
+
+# The scripts tree holds the executables: the sweep launcher, the compute
+# pre-flight and the fixture generators. They read the library and the library
+# never reads them, so the launcher stays a process the experiments are run
+# from rather than a dependency of the package they run.
+[importlinter:contract:scripts-are-not-a-library]
+name = No library module imports a script
+type = forbidden
+source_modules =
+    lofi
+forbidden_modules =
+    scripts
+
+# The publish implementation imports the Layers record models, an optional
+# dependency, and publishing is off-line and write-only, so only the run
+# package's publish surface reaches it.
+[importlinter:contract:publish-reached-through-run]
+name = Only the run package's publish surface imports the publish implementation
+type = forbidden
+source_modules =
+    lofi
+    scripts
+forbidden_modules =
+    lofi.eval._publish
+allow_indirect_imports = True
+unmatched_ignore_imports_alerting = none
+ignore_imports =
+    lofi.run.publishing -> lofi.eval._publish

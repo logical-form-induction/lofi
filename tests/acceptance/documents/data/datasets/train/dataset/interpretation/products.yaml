@@ -1,0 +1,5 @@
+# Typed product meanings in the dataset's declared learner language.
+countermodels: null
+erasure:
+  kind: signature-morphism
+  atoms: {S: t, NP: e}

@@ -1,0 +1,4 @@
+defaults:
+  - "off"
+mode: sample
+sample_items: 32

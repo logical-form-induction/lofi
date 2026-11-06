@@ -1,0 +1,18 @@
+defaults: [base]
+name: pmb-it
+signature: {name: pmb-it}
+rules:
+  name: pmb-it
+  rules+:
+    - {rule: coercions, label: pmb-lexical, matching: {kind: identity},
+      entries: ["n => np",
+        "np => s:dcl\\(s:dcl/np)",
+        "np => np/(np\\np)",
+        "s:b\\np => s:q\\(s:q/(s:b\\np))",
+        "np => s:dcl/(s:dcl\\np)",
+        "n => n/(n\\n)",
+        "n => np\\(np/n)",
+        "s:pss\\np => n\\n",
+        "s:adj\\np => (s:adj\\np)\\((s:adj\\np)/(s:adj\\np))",
+        "s:pss\\np => (s:pss\\np)/((s:pss\\np)\\(s:pss\\np))",
+        "s:pt\\np => s:dcl\\(s:dcl/(s:pt\\np))"]}

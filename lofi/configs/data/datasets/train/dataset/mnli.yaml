@@ -1,0 +1,11 @@
+kind: mnli
+sources:
+  - source: ${lofi.path:multinli/multinli_1.0_train.jsonl}
+    release:
+      source_id: multinli
+      release_id: "1.0"  # https://aclanthology.org/N18-1101/
+      split: train
+      language: en
+      source_method: crowdsourced
+      spdx: LicenseRef-OANC AND CC-BY-SA-3.0 AND CC-BY-3.0  # licenses stated in https://aclanthology.org/N18-1101/
+      eprint_refs: ["arXiv:1704.05426"]

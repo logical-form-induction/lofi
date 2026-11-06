@@ -1,0 +1,13 @@
+defaults:
+  - synthetic-pinning-declared
+data:
+  datasets:
+    train:
+      constraint_source:
+        score_quantile:
+          quantile: 0.5
+          scores:
+            "db61f72dc0e5:5:0": 0.0
+            "db61f72dc0e5:5:1": 1.0
+            "db61f72dc0e5:5:2": 2.0
+            "db61f72dc0e5:5:3": 3.0

@@ -1,0 +1,16 @@
+# Type and logical-form spaces built against one higher-order learner language.
+encoders:
+  semantic-types: {kind: tree-rnn, width: 4}
+  logical-forms: {kind: tree-rnn, width: 4}
+decoders:
+  type-identity: {kind: tree-rnn, width: 4}
+  form-identity: {kind: tree-rnn, width: 4}
+spaces:
+  types: {sort: Ty, encoder: semantic-types, identity: type-identity}
+  forms: {sort: Tm, encoder: logical-forms, identity: form-identity}
+readouts:
+  published-forms:
+    kind: terms
+    space: forms
+    reads: inside
+    decoding: {strategy: exhaustive, cap: 128}

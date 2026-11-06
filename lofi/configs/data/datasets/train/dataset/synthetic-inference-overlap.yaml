@@ -1,0 +1,3 @@
+defaults:
+  - synthetic-inference
+pairing: {kind: overlap-matched}

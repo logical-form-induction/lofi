@@ -1,0 +1,5 @@
+defaults: [slashes-composition-k16-depth3]
+kind: synthetic
+grammar:
+  lexicon:
+    seed: 163

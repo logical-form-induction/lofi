@@ -1,0 +1,4 @@
+kind: tree-rnn
+width: 256
+layers: 2
+norm_cap: 1.0

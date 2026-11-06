@@ -1,0 +1,42 @@
+# A composition combinator written as a pattern rule that declares its role, so
+# the Eisner normal form constrains it as it constrains the built-in composition.
+defaults:
+  - slash-point
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  spaces:
+    categories:
+      combinators:
+        merge: concatenate
+        decoders:
+          forward-composition: application
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          formalism: declared
+          normal_form: {kind: eisner}
+          rules:
+            rules:
+              - {rule: application, view: /}
+              - {rule: application, view: "\\"}
+              - rule: pattern
+                name: forward-composition
+                normal_form_role:
+                  kind: composition
+                  direction: forward
+                  principal_slot: 0
+                  order: 1
+                premises:
+                  - pattern: node
+                    operator: {kind: fixed, name: /}
+                    arguments: [{pattern: term, name: X}, {pattern: term, name: Y}]
+                  - pattern: node
+                    operator: {kind: fixed, name: /}
+                    arguments: [{pattern: term, name: Y}, {pattern: term, name: Z}]
+                conclusion:
+                  pattern: node
+                  operator: {kind: fixed, name: /}
+                  arguments: [{pattern: term, name: X}, {pattern: term, name: Z}]

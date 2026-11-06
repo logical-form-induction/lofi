@@ -1,0 +1,20 @@
+# Learned symbolic proof search with predicate instantiation and THF rechecking.
+defaults:
+  - second-order-proof-base
+  - model.grounding: guided-proof
+model:
+  language: {from: data}
+  grounding:
+    scorer:
+      order: second
+trainer:
+  active_groups:
+    - token_encoder
+    - terms
+    - logical-forms
+    - identity
+    - application
+    - form-identity
+    - controller
+    - parser
+    - scorer

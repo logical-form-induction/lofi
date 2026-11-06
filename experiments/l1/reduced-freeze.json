@@ -1,0 +1,11 @@
+{
+  "grid": {"treatment": ["induced-with-prover", "nli-baseline"]},
+  "hypotheses": [
+    {
+      "name": "fiber-recovery-over-nli",
+      "left": "induced-with-prover",
+      "right": "nli-baseline",
+      "family": "known-grammar-logical-form"
+    }
+  ]
+}

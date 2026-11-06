@@ -1,0 +1,2 @@
+ID=wsj_2300.1 PARSER=GOLD NUMPARSE=1
+(<T N 0 2> (<L N NN NN dogs N>) (<L N\N . . . N\N>) )

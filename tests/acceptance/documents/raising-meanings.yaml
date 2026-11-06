@@ -1,0 +1,4 @@
+# Type raising over the slash pair, its meaning derived from the rule.
+defaults:
+  - raising-point
+  - data.datasets.train.dataset.interpretation: first-order

@@ -1,0 +1,27 @@
+# Labeled inference grounded in one declared, read-only intended model.
+defaults:
+  - inference-point
+  - model.grounding: model-checking-given
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  encoders:
+    logical-forms:
+      kind: transformer
+      width: 4
+      heads: 1
+      layers: 1
+      feedforward_width: 4
+      structure: positions
+      norm_cap: null
+data:
+  datasets:
+    train:
+      dataset:
+        relations: {trivial: 1.0}
+        source:
+          language:
+            bounds:
+              Ty: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+              Tm: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+              Cat: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}

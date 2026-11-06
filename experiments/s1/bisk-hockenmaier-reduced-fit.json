@@ -1,0 +1,31 @@
+{
+  "defaults": [{"system.grammar": "bisk-hockenmaier"}],
+  "system": {
+    "kind": "bisk-hockenmaier",
+    "ccgbank_source": "data/bisk-hockenmaier-tiny/ccgbank",
+    "dependency_gold_source": "data/bisk-hockenmaier-tiny/evaluation.conll",
+    "reference_source": "data/bisk-hockenmaier-tiny/reference.json",
+    "reference_tolerance": 0.0,
+    "training_sections": [2],
+    "training_max_length": 1,
+    "nominal_category": "N",
+    "sentence_category": "S",
+    "coordination_category": "conj",
+    "gold_sentence_atom": "S",
+    "gold_coordination_atom": "conj",
+    "nominal_tags": ["NN"],
+    "verbal_tags": ["VB", "VBG"],
+    "coordination_tags": ["CC"],
+    "other_tags": ["JJ", "."],
+    "punctuation_tags": ["."],
+    "headed_or_modifier_arguments": ["N", "S"],
+    "sentence_arguments": ["N"],
+    "second_order_modifiers": false,
+    "max_arity": 1,
+    "category_induction_steps": 1,
+    "derived_constituent_pass": false,
+    "em_max_iterations": 1,
+    "convergence_tolerance": 1e-6,
+    "grammar": {"budget": {"max_category_arity": 3}}
+  }
+}

@@ -1,0 +1,289 @@
+# Declare an interpretation
+
+An interpretation maps a grammar's derivations to values. Two declarations
+take part. A grammar's `interpretations` list binds names to derivation
+readings from the `lofi.interpretation` group: the exact category at each
+node, the surface string, the dependencies the rules' heads project, or the
+[logical form](../../explanation/logical-forms-as-types.md#semantic-typing). A synthetic dataset's `interpretation` section then supplies
+what the `meaning` reading needs: an erasure from categories to semantic
+types, the typed constants, a source of lexical meanings, and the semantic
+action of each rule. This guide declares both, lowers the result, and shows
+how an interpretation that does not cover its grammar is refused.
+## Name the derivation readings
+
+One [derivation](../../explanation/derivations-as-proofs.md#from-words-to-a-derivation) supports several questions. In a hypothetical derivation of
+“Ada sleeps,” its string reading gives those words, its category reading gives
+`S` at the root, and its meaning reading can give `sleep(ada)`. A dependency
+reading records which words depend on which heads. A loss or evaluator names
+the reading that supplies its required annotation.
+
+A grammar that declares no `interpretations` gets the four packaged readings
+under their own names. A grammar may bind other names, but each name once:
+
+```yaml
+interpretations:
+  - {name: category, reading: {kind: category}}
+  - {name: string, reading: {kind: string}}
+  - {name: dependency, reading: {kind: dependency}}
+  - {name: meaning, reading: {kind: meaning}}
+```
+
+| `kind` | A derivation's value |
+|---|---|
+| `category` | The exact category at each node. |
+| `string` | The surface string the derivation yields. |
+| `dependency` | The dependencies projected by each rule's head slot, as its `head_policy` selects. |
+| `meaning` | The [logical form](../../explanation/logical-forms-as-types.md#semantic-typing) the semantic actions build. |
+
+Evaluators and readouts refer to a reading by its name; the packaged
+category side evaluator, for instance, declares
+`dependency_interpretation: dependency`.
+
+## Declare the dataset's interpretation
+
+The packaged run document [`lofi/configs/run/synthetic-parser-consistency.yaml`](https://github.com/logical-form-induction/lofi/blob/main/lofi/configs/run/synthetic-parser-consistency.yaml)
+extends the first tutorial's document with an interpretation:
+
+```yaml
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          lexicon:
+            entries:
+              - {form: word-0, category: NP, meaning: a}
+              - {form: word-1, category: "S\\NP", meaning: '\x. p(x)'}
+              - {form: word-2, category: "S\\NP/NP", meaning: '\y. \x. r(x)(y)'}
+              - {form: word-3, category: NP/NP, meaning: '\x. x'}
+              # ... four more entries
+        interpretation:
+          erasure:
+            kind: signature-morphism
+            atoms: {S: t, NP: e, conj: e}
+          constants:
+            - {name: a, type: e, classes: [individual]}
+            - {name: p, type: "e -> t", classes: [predicate]}
+            - {name: r, type: "e -> e -> t", classes: [predicate]}
+          meanings: {source: {kind: lexical}}
+```
+
+Reading the interpretation line by line:
+
+| Line | What it says |
+|---|---|
+| `meaning` on each entry | The lexical [logical form](../../explanation/logical-forms-as-types.md#semantic-typing) of that form and category, in the language's term syntax. |
+| `erasure` | The image of each category atom as a semantic type. Functor images are derived from the signature's [functor views](declare-a-signature.md#declare-functor-views), so $\mathrm S\backslash\mathrm{NP}$ erases to $e\to t$. |
+| `constants` | The nonlogical constants the meanings use, each typed and given at least one `classes` role for the symbol inventory. They are added to the language's own constants. |
+| `meanings` | Read the meanings from the lexical entries. |
+
+Compose the document and read the declarations back:
+
+```python
+from pathlib import Path
+
+from lofi.spec import RunSpecCodec, config_search_path, load_plugins
+
+load_plugins()
+codec = RunSpecCodec(search_path=config_search_path(Path.cwd()))
+run = codec(Path("lofi/configs/run/synthetic-parser-consistency.yaml"))
+dataset = run.data.datasets["train"].dataset
+
+print([(named.name, named.reading.kind) for named in dataset.grammar.interpretations])
+interpretation = dataset.interpretation
+print(interpretation.erasure.kind, interpretation.erasure.atoms)
+print([(constant.name, constant.type) for constant in interpretation.constants])
+print(interpretation.meanings.source.kind, interpretation.meanings.inhabitant_selection)
+```
+
+```text
+[('category', 'category'), ('string', 'string'), ('dependency', 'dependency'), ('meaning', 'meaning')]
+signature-morphism {'S': 't', 'NP': 'e', 'conj': 'e'}
+[('a', 'e'), ('p', 'e -> t'), ('r', 'e -> e -> t')]
+lexical unique
+```
+
+To connect [grammatical combination to meaning](../../explanation/logical-forms-as-types.md#category-to-type-interpretation), assign `NP` the semantic type
+$e$ and `S` the type $t$. Then `S\NP` has type $e\to t$: it needs an
+individual and returns a truth-valued expression. Combining the meanings of
+`Ada` and `sleeps` can thus apply `sleep` to `ada`. The category records which
+side supplies the phrase; the semantic type records what kind of value its
+meaning supplies.
+
+A [lambda application](../../explanation/reading-the-notation.md#lambda-expressions-and-substitution) can leave a substitution waiting to be performed.
+Eager normalization performs the permitted reductions as the derivation is
+interpreted; lazy substitution can retain the unreduced expression. Different
+printed forms need not imply different meanings, but equivalence still depends
+on the declared equations and successful bounded computation.
+
+Write $E(A)$ for the semantic type assigned to category $A$. A lexical
+meaning $t$ for an entry of category $A$ must satisfy the typing judgment
+$\vdash t:E(A)$ in the declared [logical form language](declare-a-logical-form-language.md#use-a-registered-language). For a rule
+$A_1,\ldots,A_k\Rightarrow B$, its closed semantic action must have type
+
+$$
+\vdash a:E(A_1)\to\cdots\to E(A_k)\to E(B).
+$$
+
+Internally, an action is represented with open premise hypotheses. If its
+body is $s$ and derivations $d_i$ have meanings $t_i$, first substitute the
+children [capture-avoidantly](../../explanation/logical-forms-as-types.md#substitution-equality-and-matching) to obtain $u=s[t_1/x_1,\ldots,t_k/x_k]$. The
+meaning reading then follows the derivation policy:
+
+$$
+\llbracket r(d_1,\ldots,d_k)\rrbracket=
+\begin{cases}
+\operatorname{nf}(u),&\text{eager normalization},\\
+u,&\text{lazy substitution}.
+\end{cases}
+$$
+
+The lazy policy leaves redexes in the substituted term. In the eager case,
+$\operatorname{nf}$ denotes successful normalization under the declared
+equations within the declared budget. Terms that exhaust the budget leave
+normalization incomplete. This realizes the compositional correspondence between
+syntactic combination and semantic interpretation \citep{montague1970};
+[Category-to-type interpretation](../../explanation/logical-forms-as-types.md#category-to-type-interpretation)
+defines the erasure and proof term correspondence in detail.
+
+## Lower the interpretation
+
+[`lower_interpretation`](../../reference/configuration/datasets.md#lofi.data.synthetic.spec.interpretation.lower_interpretation) compiles the grammar into the dataset's language with
+the interpretation's constants added, resolves the lexical meanings, and
+builds the interpretation function a draw applies:
+
+```python
+from lofi.data.synthetic.spec.interpretation import lower_interpretation
+from lofi.spec.grammar import GrammarIso, declare_grammar
+from lofi.spec.language import LanguageIso
+
+grammar = declare_grammar(dataset.grammar)
+assembly, function = lower_interpretation(
+    grammar, dataset.language, interpretation, GrammarIso(), LanguageIso()
+)
+print(sorted(function.interpretations))
+print(dict(function.report()))
+```
+
+```text
+['category', 'dependency', 'meaning', 'string']
+{'actions': 2, 'uncovered': '[]', 'ambiguous': '[]', 'bound-exhausted': '{}'}
+```
+
+The report says every rule has an action: the grammar's two application
+rules each received one, none is `uncovered` or `ambiguous`, and no proof
+search ran out of its bound. The erasure the function holds maps each
+category to its [semantic type](../../explanation/logical-forms-as-types.md#semantic-typing):
+
+```python
+for category in ("NP", "S\\NP", "S\\NP/NP", "NP/NP"):
+    term = function.erasure(assembly.syntax.parse(assembly.store, category))
+    print(f"{category:8} {assembly.language.print_type(term)}")
+```
+
+```text
+NP       e
+S\NP     e -> t
+S\NP/NP  e -> e -> t
+NP/NP    e -> e
+```
+## Derive or supply the rule actions
+
+Deriving an action asks how the meanings of the premises can be used to
+construct a meaning of the conclusion. Resource restrictions answer whether
+a premise may be ignored or reused. For instance, linear search requires each
+premise exactly once, whereas affine search permits leaving one unused. These
+choices determine which uses of premise meanings are admitted in the
+returned action. Read a returned action together with the ambiguity and bound reports.
+
+A rule's semantic action is derived by proof search over the erased types of
+its premises and conclusion. `proof_search` declares the structural `logic`
+(`relevant` by default, or `linear`, `affine` or `intuitionistic`) and
+`max_uses`, which must be one for the linear and affine logics.
+`meanings.inhabitant_selection` decides which inhabitants the search
+returns become the action: `unique` (the default) takes the only one and
+none if there are several, `first` takes the first in proof search order,
+`smallest` the smallest term, and `all` keeps every one.
+`meanings.search_budget` (64) bounds how many inhabitants the search
+collects. A rule with no unique derived action needs one in
+`actions`, a closed term keyed by the rule's name and applied to its premises
+in order; a listed action also overrides a derived one.
+
+The action search asks for inhabitants of
+$x_1:E(A_1),\ldots,x_k:E(A_k)\vdash t:E(B)$ and abstracts over the premises.
+Its resource discipline constrains premise use: linear search uses each
+premise once, affine search at most once, relevant search at least once,
+and intuitionistic search permits unused or repeated premises. The latter
+two still obey `max_uses`; all four obey the search budget.
+
+Consequently, `unique` means unique among the inhabitants returned by this
+search. Further inhabitants may lie beyond an exhausted bound, including
+when the bounded search returns zero or one. Read `bound-exhausted` together
+with the report's coverage and ambiguity fields to assess that possibility.
+
+The other fields:
+
+| Field | Default | What it declares |
+|---|---|---|
+| `entity`, `truth` | `e`, `t` | The types of an individual and of a formula, which must differ. |
+| `type_syntax` | `angle` | How atom images are written: `⟨⟨e,t⟩,t⟩` in angle syntax, or the language's canonical s-expressions under `s-expression`. |
+| `normalization` | | Beta traversal, the eager or lazy derivation policy, and quotient equations such as associative-commutative symbols. |
+| `countermodels` | none | A [countermodel](../../explanation/inference-as-evidence.md#deciding-a-question) filter over finite structures. |
+
+## Choose a meaning source
+
+`meanings.source` selects where the lexical meanings come from:
+
+| `kind` | Meanings |
+|---|---|
+| `lexical` | The `meaning` on each lexical entry. At least one entry must carry one. |
+| `structured` | Generated over the compiled [lexicon](declare-a-lexicon.md#list-entries-inline) from a semantic lexicon `structure` declared inline, or a `preset` read from `semantic_lexicons/<name>.json` on the configuration search path. LoFI packages `natural`. |
+| `resembling` | Drawn at a declared size to resemble a measured semantic lexicon. |
+
+A generated source also generates the typed constants its meanings use.
+[Control semantic distributions](../data/control-semantic-distributions.md)
+declares the structure of a generated semantic lexicon.
+
+## How an interpretation is refused
+
+Lowering refuses an interpretation that does not cover its grammar. Strip the
+meanings from the [lexicon](declare-a-lexicon.md#list-entries-inline) and lower again:
+
+```python
+from lofi.spec import DeclarationError
+
+bare = grammar.with_(
+    lexicon=grammar.lexicon.with_(
+        entries=tuple(entry.with_(meaning=None) for entry in grammar.lexicon.entries)
+    )
+)
+try:
+    lower_interpretation(
+        bare, dataset.language, interpretation, GrammarIso(), LanguageIso()
+    )
+except DeclarationError as refused:
+    print(refused)
+```
+
+```text
+the interpretation does not lower over 'synthetic-parser': a lexical meaning source needs a meaning on a lexical entry
+```
+
+Lowering also refuses a type term that does not read, a constant the language already declares, an
+associative-commutative symbol that is not a closed binary operation, and a
+language whose profile lies outside the declared prover's bound. A grammar
+that binds one name to two readings is refused when the grammar itself is
+validated.
+
+## Related
+
+- [Declare a logical form language](declare-a-logical-form-language.md) for the
+  language the meanings are written in.
+- [Map between signatures](map-between-signatures.md) for the erasure in
+  detail.
+- [Categories, semantic types, and logical forms](../../explanation/logical-forms-as-types.md) for
+  why a rule's action is a proof term.
+
+## References
+
+\bibliography

@@ -1,0 +1,5 @@
+defaults: [slashes-generalized-composition-k4-depth2]
+kind: synthetic
+grammar:
+  lexicon:
+    seed: 173

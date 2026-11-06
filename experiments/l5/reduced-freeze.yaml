@@ -1,0 +1,46 @@
+role: logical-form-anchoring
+freeze_id: freeze/1
+config: {kind: run, path: l5-run.yaml}
+launch: {kind: serial}
+failure: {numerical: final, out_of_memory: retry}
+sweep:
+  grid:
+    - group: data.datasets.train.constraint_policy.semantic
+      values: [rank-50, quantile-50, classes-50]
+    - path: data.datasets.train.dataset.size
+      values: [16]
+  seeds: [0]
+  expected_points: 3
+seed_policy: {root: 514}
+rows:
+  - {evaluator: logical-forms, metric: logical-form-normal-form}
+  - {evaluator: logical-forms, metric: many-to-one-accuracy}
+  - {evaluator: logical-forms, metric: random-relabeling-floor}
+  - {evaluator: logical-forms, metric: fiber-relative-recovery}
+  - {evaluator: logical-forms, metric: fiber-floor}
+primary: {evaluator: logical-forms, metric: fiber-relative-recovery}
+preregistration: reduced-freeze.json
+factors:
+  selection-policy: {axis: data.datasets.train.constraint_policy.semantic}
+compute: {kind: unpriced}
+contraction:
+  rungs: [{kind: fallback}]
+  factorial: rank, token-mass quantile, and cumulative logical-constant-class selection at the half-share budget
+stop_rules:
+  - name: numerical failure
+    when: {kind: points, statuses: [numerical-failure], at_least: 1}
+decision_point:
+  date: "2027-04-01"
+  signal:
+    kind: metric
+    row: {evaluator: logical-forms, metric: fiber-relative-recovery}
+    statistic: mean
+    direction: above
+    threshold: 0.0
+  fallback: The reduced logical-form anchoring freeze does not recover meanings above its fitted fiber floor.
+evaluation:
+  alpha: 0.05
+  correction: {kind: benjamini-hochberg}
+  dependence: prds
+  minimum_seeds: 1
+  seed_budget: {metric: fiber-relative-recovery, target: mean, precision: 0.1, level: 0.95}

@@ -1,0 +1,7 @@
+defaults: [../category-side/category-side]
+kind: logical-form
+interval: {replicates: 1000, level: 0.95}
+readout: forms
+measure: exact
+restarts: 4
+permutation_limit: 5040

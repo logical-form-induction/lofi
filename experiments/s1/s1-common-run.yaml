@@ -1,0 +1,170 @@
+# Shared known-grammar learner and held-out category-side evaluation.
+parse: {retain: forest, reachability: all}
+approximation: {residual_mass: 0.75}
+model:
+  language: {from: data}
+  capacity: {kind: parameter-count, target: 250000}
+  parser: {kind: tagged, width: 8, attend: {kind: marginal}, unary_depth: 2}
+  token_encoder: {kind: learned, width: 16}
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 16, activation: tanh}]}
+  encoders:
+    terms: {kind: tree-rnn, width: 16, layers: 1, norm_cap: null}
+  decoders:
+    identity: {kind: tree-rnn, width: 16}
+    application: {kind: tree-rnn, width: 16}
+  spaces:
+    categories:
+      sort: Cat
+      encoder: terms
+      identity: identity
+      combinators:
+        merge: concatenate
+        decoders:
+          "application:/": application
+          "application:\\": application
+          "composition:/:1:crossed:steedman": application
+          "composition:/:1:harmonic:steedman": application
+          "composition:/:2:crossed:steedman": application
+          "composition:/:2:harmonic:steedman": application
+          "composition:\\:1:crossed:steedman": application
+          "composition:\\:1:harmonic:steedman": application
+          "composition:\\:2:crossed:steedman": application
+          "composition:\\:2:harmonic:steedman": application
+          "substitution:/:1:crossed": application
+          "substitution:/:1:harmonic": application
+          "substitution:\\:1:crossed": application
+          "substitution:\\:1:harmonic": application
+          punctuation-left: application
+          punctuation-right: application
+          appositive-np-comma-forward: application
+          appositive-comma-np-backward: application
+          appositive-comma-np-verbal: application
+          coordination-mark-conj: application
+          coordination-mark-period: application
+          coordination-mark-comma: application
+          coordination-mark-colon: application
+          coordination-mark-semicolon: application
+          coordination-mark-lrb: application
+          coordination-mark-rrb: application
+          coordination-merge: application
+          coordination-unlike: application
+          compound-conj-n: application
+  readouts:
+    category-terms:
+      kind: terms
+      space: categories
+      reads: inside
+      decoding: {strategy: exhaustive, cap: 64}
+  span_decoders:
+    reconstruction: {kind: rnn-span-decoder}
+loss:
+  terms:
+    - objective:
+        kind: coherence
+        readout: category-terms
+        space: categories
+        estimator: truncated
+        warmup: null
+data:
+  datasets:
+    train:
+      featurizer: {kind: unlabeled}
+      constraint_source: {kind: gold-lexicon, policy: syntactic}
+      constraint_policy:
+        syntactic: {ambiguity: union, coverage: 0.0}
+trainer:
+  kind: staged
+  validation_stage: parser
+  base:
+    kind: parser
+    dataset: train
+    epochs: 2
+    batch_size: 4
+    accumulation_steps: 1
+    batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+    max_grad_norm: null
+    active_groups: null
+    early_stopping:
+      metric: loss/coherence
+      mode: min
+      patience: 2
+      minimum_delta: 0.0
+      keep_best: 1
+    checkpoints: {interval: 1, keep: 1}
+  stages:
+    - name: lexical-constraints
+      step: {kind: token-warm-up, name: lexical-constraints, dataset: train, space: categories}
+      active_groups: [token_encoder, terms, identity]
+      epochs: 1
+    - name: parser
+      step: {kind: parser, name: parser, dataset: train}
+      active_groups: [token_encoder, terms, identity, application, controller, parser]
+      epochs: 1
+release: {checkpoint: validation-best}
+optimizer: {kind: adamw, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000
+evaluators:
+  lexical:
+    kind: lexical-diagnostics
+    interval: {replicates: 50, level: 0.95}
+    readout: category-terms
+    beta: 0.1
+    clustering_beta: 1.0
+    top_k: 5
+    frequency_strata:
+      unseen: {at_least: 0, at_most: 0}
+      rare: {at_least: 1, at_most: 1}
+      frequent: {at_least: 2, at_most: null}
+    ambiguity_strata:
+      unseen: {at_least: 0, at_most: 0}
+      unambiguous: {at_least: 1, at_most: 1}
+      ambiguous: {at_least: 2, at_most: null}
+    word_classes:
+      nominals: [John, Mary]
+      predicates: [sleeps, sees]
+    case_studies: {}
+    conventions: &diagnostic-conventions
+      punctuation: keep
+      unary_chains: keep
+      trivial_spans: keep
+      minimum_length: 0
+      aggregation: corpus
+      coverage: zero
+      self_arcs: forbid
+      gold_derivation: canonical
+  structural:
+    kind: structural-diagnostics
+    interval: {replicates: 50, level: 0.95}
+    readout: category-terms
+    derivation_counts: false
+    astar:
+      proposer: {kind: supertag-beam}
+    decode: {kind: viterbi}
+    dependency_interpretation: dependency
+    labels: [S, NP]
+    lengths: [2, 3, 4, 8, 16]
+    depths: [0, 1, 2, 3, 4]
+    attachment_band: all
+    attachment_limit: null
+    attachment_direction: directed
+    dependency_mode: labeled-directed
+    dependency_measure: f-score
+    conventions: *diagnostic-conventions
+  types:
+    kind: lexical-types
+    interval: {replicates: 50, level: 0.95}
+    readout: category-terms
+    alignment:
+      kind: one-to-one
+      tie_break: least-gold-label
+      fit_on: development
+      score_on: test
+      random_floor: {replicates: 50, level: 0.95}
+      stability: {replicates: 50, level: 0.95}
+    conventions: *diagnostic-conventions

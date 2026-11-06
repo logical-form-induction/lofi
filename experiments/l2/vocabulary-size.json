@@ -1,0 +1,6 @@
+{
+  "grid": {"vocabulary-size": ["eight", "twelve"]},
+  "hypotheses": [
+    {"name": "vocabulary-size", "left": "twelve", "right": "eight", "family": "source-preflight"}
+  ]
+}

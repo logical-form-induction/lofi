@@ -1,0 +1,6 @@
+defaults:
+  - synthetic-parser
+  - data.datasets.train.dataset.corruption.operators: standard
+  - data.datasets.train.dataset.corruption.proportion: quarter
+  - data.datasets.train.dataset.noise.grammatical: tenth
+  - data.datasets.train.dataset.noise.ungrammatical: tenth

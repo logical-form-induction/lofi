@@ -1,0 +1,5 @@
+defaults: [arrow-application-k8-depth2]
+kind: synthetic
+grammar:
+  signature:
+    primitives: [P7, P6, P5, P4, P3, P2, P1, S]

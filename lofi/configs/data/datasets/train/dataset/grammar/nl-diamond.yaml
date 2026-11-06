@@ -1,0 +1,17 @@
+formalism: tlg
+name: nl-diamond
+primitives: [S, NP]
+modes:
+  modes: [linear]
+  order: []
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: '("#const[Cat]" "NP")'}
+    - {form: mary, category: '("#const[Cat]" "NP")'}
+    - {form: sleeps, category: '("/_linear" ("#const[Cat]" "S") ("#const[Cat]" "NP"))'}
+    - {form: sees, category: '("/_linear" ("/_linear" ("#const[Cat]" "S") ("#const[Cat]" "NP")) ("#const[Cat]" "NP"))'}
+goal: S
+max_hypotheses: 0
+normal_form: {kind: none}
+budget: {unary_rounds: 3, closure_rounds: 2, closure_nodes: 256}

@@ -1,0 +1,6 @@
+kind: reachability
+interval: {replicates: 1000, level: 0.95}
+inventory: ccg
+corpus: synthetic
+language: en
+conventions: {punctuation: keep, unary_chains: keep, trivial_spans: keep, minimum_length: 0, aggregation: corpus, coverage: zero, self_arcs: forbid, gold_derivation: canonical}

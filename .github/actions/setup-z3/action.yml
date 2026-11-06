@@ -1,0 +1,20 @@
+name: Set up Z3
+description: Expose the executable installed by the locked z3-solver wheel.
+runs:
+  using: composite
+  steps:
+    - name: Locate the installed solver
+      shell: bash
+      run: |
+        uv run python - <<'PYTHON'
+        import os
+        import subprocess
+        import sys
+        from pathlib import Path
+
+        directory = Path(sys.prefix) / "bin"
+        executable = directory / ("z3.exe" if os.name == "nt" else "z3")
+        subprocess.run([str(executable), "--version"], check=True)
+        with Path(os.environ["GITHUB_PATH"]).open("a", encoding="utf-8") as path:
+            path.write(f"{directory}\n")
+        PYTHON

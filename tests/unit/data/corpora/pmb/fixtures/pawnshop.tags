@@ -1,0 +1,18 @@
+:- op(601, xfx, (/)).
+:- op(601, xfx, (\)).
+:- multifile ccg/2, id/2.
+:- discontiguous ccg/2, id/2.
+
+ccg(1,
+ ba(s:dcl,
+  t(np, 'He', [from:0, to:2, pos:'PRP', lemma:'male', sem:'PRO', wordnet:'male.n.02']),
+  ba(s:dcl\np,
+   t(s:dcl\np, 'works', [from:3, to:8, pos:'VBZ', lemma:'work', sem:'ENS', wordnet:'work.v.02', verbnet:['Agent']]),
+   fa((s\np)\(s\np),
+    t(((s\np)\(s\np))/np, 'at', [from:9, to:11, pos:'IN', lemma:'at', sem:'REL', wordnet:'O', verbnet:['Location']]),
+    rp(np,
+     fa(np,
+      t(np/n, 'a', [from:12, to:13, pos:'DT', lemma:'a', sem:'DIS', wordnet:'O']),
+      t(n, 'pawnshop', [from:14, to:23, pos:'NN', lemma:'pawnshop', sem:'CON', wordnet:'pawnshop.n.01'])),
+     t(., '.', [from:23, to:24, pos:'.', lemma:'.', sem:'NIL', wordnet:'O'])))))).
+

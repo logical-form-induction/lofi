@@ -1,0 +1,102 @@
+# Worked profile for one accelerator attached to the local machine. The serial
+# launcher uses no submission or transport, but those values remain explicit so
+# the same SiteProfile schema is complete and no field defaults silently.
+
+# Attempts a point receives across launches before infrastructure failure is final.
+
+[submission]
+# Inert placeholder command because a local serial run submits no script.
+command = "placeholder-submit-command"
+# Inert directive prefix because a local serial run emits no directives.
+directive_prefix = "#PLACEHOLDER"
+# Inert array template retained to make the profile structurally complete.
+array_syntax = "--array={first}-{last}"
+# Inert throttle template retained to make the profile structurally complete.
+throttle_syntax = "%{throttle}"
+# Inert account template retained to make the profile structurally complete.
+account_syntax = "--account={account}"
+# Inert partition template retained to make the profile structurally complete.
+partition_syntax = "--partition={partition}"
+# Inert accelerator template retained to make the profile structurally complete.
+accelerator_syntax = "--accelerator={accelerator}:{accelerators_per_node}"
+# Inert task-index variable because a local serial run has no array index.
+task_index_variable = "PLACEHOLDER_TASK_INDEX"
+# Native option template granting each task its wall-clock minutes.
+walltime_syntax = "--walltime={minutes}"
+# Native option template granting each task its memory in mebibytes.
+memory_syntax = "--memory={megabytes}"
+# Native option template granting each task its processor cores.
+cpus_syntax = "--cpus={cpus}"
+# Native option template naming each task's log file under the submission directory.
+log_syntax = "--log={directory}/task.log"
+# Inert job name template retained to make the profile structurally complete.
+name_syntax = "--name={name}"
+# Text every job name starts with, before a digest of the experiment and freeze.
+job_prefix = "lofi-"
+# Inert cancel command because a local serial run leaves no job to cancel.
+cancel_command = ["placeholder-cancel-command", "--name={name}"]
+
+[placement]
+# Inert account value because a local serial run is not charged by a submitter.
+account = "placeholder-account"
+# Inert partition value because a local serial run enters no queue.
+partition = "placeholder-partition"
+# Generic name for the one accelerator attached to the local machine.
+accelerator = "accelerator"
+# The profile describes exactly one local accelerator.
+accelerators_per_node = 1
+# Number of processor cores each array task takes.
+cpus_per_task = 4
+
+[storage]
+# Absolute placeholder root for local run outputs; replace it in a copied profile.
+scratch_root = "/placeholder/run"
+# Absolute placeholder root for local caches; replace it in a copied profile.
+cache_root = "/placeholder/cache"
+
+[storage.quota]
+# argument vector that prints the site's quota report for the scratch root
+command = ["placeholder-quota-report"]
+# regular expression whose group named used matches the amount the report holds
+used_pattern = "used (?P<used>[0-9]+)"
+# bytes one reported unit stands for
+unit_bytes = 1073741824
+# bytes reclamation keeps the scratch root under
+limit_bytes = 3000000000000
+
+# reclaimable files of a completed point, removed cheapest to remake first
+[[storage.artifacts]]
+# name reclamation reports the class under
+name = "representations"
+# glob, relative to a point's directory, the class's files match
+pattern = "representations"
+# accelerator-hours remaking one point's files of the class costs
+regeneration_hours = 0.5
+
+[[storage.artifacts]]
+# name reclamation reports the class under
+name = "checkpoints"
+# glob, relative to a point's directory, the class's files match
+pattern = "checkpoints"
+# accelerator-hours remaking one point's files of the class costs
+regeneration_hours = 4.0
+
+[environment]
+# Empty because the worked local profile requires no shell setup.
+preamble = []
+
+[interpreter]
+# Argument vector that invokes the active Python installation.
+command = ["python"]
+
+[transport]
+# Inert host value because a local serial run opens no remote session.
+host = "placeholder-host"
+# Inert transport command because a local serial run opens no remote session.
+command = ["remote-shell"]
+
+[allocation]
+# accelerator-hours the site grants
+accelerator_hours = 10000.0
+# largest fraction of the allocation one paper's admitted experiments may hold
+share = 0.6

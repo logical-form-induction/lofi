@@ -1,0 +1,6 @@
+defaults:
+  - application
+name: raised-composition
+rules+:
+  - {rule: composition, direction: unrestricted, order: 1, view: /}
+  - {rule: type-raising, view: /, targets: [S], arguments: null}

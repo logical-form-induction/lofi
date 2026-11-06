@@ -1,0 +1,63 @@
+{
+  "log_distribution": {
+    "axes": [
+      "item",
+      "split"
+    ],
+    "mask_axes": [
+      "item"
+    ],
+    "normalized_over": "split",
+    "peak": [
+      -0.693147,
+      0.0
+    ],
+    "splits": 2
+  },
+  "loss_term": {
+    "count": 4,
+    "diagnostics": [
+      "mass"
+    ],
+    "inapplicable_count": 0,
+    "inapplicable_value": 0.0,
+    "residual": 0.25,
+    "value": 1.5
+  },
+  "objective_suite": {
+    "applied": [
+      "agreement",
+      "coverage"
+    ],
+    "diagnostics": {
+      "agreement/loss": 4.0,
+      "agreement/scale": 2.0,
+      "coverage/loss": 1.0,
+      "coverage/scale": 0.5
+    },
+    "names": [
+      "coverage",
+      "agreement"
+    ],
+    "total": 2.0,
+    "weights": [
+      1.0,
+      0.25
+    ]
+  },
+  "published_bundle": {
+    "axes": [
+      "item",
+      "span"
+    ],
+    "batch": [
+      "first",
+      "second"
+    ],
+    "outside": -2.0,
+    "readouts": [
+      "span-head"
+    ],
+    "spans": 3
+  }
+}

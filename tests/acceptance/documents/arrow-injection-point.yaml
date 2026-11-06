@@ -1,0 +1,5 @@
+# The arrow-injection grammar with its represented category space, trained as a tiny point.
+defaults:
+  - tagged-combinator-point
+  - data.datasets.train.dataset.grammar: arrow-injection
+  - model.spaces.categories.combinators: arrow-injection

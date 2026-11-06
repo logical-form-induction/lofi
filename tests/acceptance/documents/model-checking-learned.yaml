@@ -1,0 +1,53 @@
+# Labeled inference grounded in structures fitted only to declared postulates.
+defaults:
+  - inference-point
+  - model.grounding: model-checking-learned
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  encoders:
+    logical-forms:
+      kind: transformer
+      width: 4
+      heads: 1
+      layers: 1
+      feedforward_width: 4
+      structure: positions
+      norm_cap: null
+  readouts:
+    forms:
+      decoding: {strategy: exhaustive, cap: 64}
+data:
+  datasets:
+    train:
+      dataset:
+        source:
+          language:
+            logic:
+              equality: false
+              negation: not
+              prover: {kind: truth-table, timeout: 5.0}
+              labeling: {budget: {}}
+              postulates: ["sleep(john)"]
+            bounds:
+              Ty: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+              Tm: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+              Cat: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+loss:
+  terms:
+    - objective:
+        kind: inference
+        signal: likelihood
+        response: {kind: label}
+        auxiliary_weight: 1.0
+trainer:
+  active_groups:
+    - token_encoder
+    - terms
+    - logical-forms
+    - identity
+    - application
+    - form-identity
+    - controller
+    - parser
+    - scorer

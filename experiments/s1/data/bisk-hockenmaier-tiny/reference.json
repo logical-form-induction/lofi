@@ -1,0 +1,17 @@
+{
+  "source": {
+    "title": "Synthetic Figure 4(a) reference",
+    "authors": ["Test Author"],
+    "venue": "Test",
+    "url": "https://example.test/bisk-hockenmaier",
+    "figure": "Figure 4(a)"
+  },
+  "metric": "unlabeled directed attachment",
+  "training_band": "wsj10",
+  "evaluation_section": 23,
+  "points": [
+    {"metric": "dependencies-length-10", "score_percent": 0.0},
+    {"metric": "dependencies-length-20", "score_percent": 0.0},
+    {"metric": "dependencies-all-lengths", "score_percent": 0.0}
+  ]
+}

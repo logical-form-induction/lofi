@@ -1,0 +1,16 @@
+# Synthetic inference data with every approved related LF factor declared.
+defaults:
+  - inference-base
+  - data.datasets.train.dataset.source.language: propositional
+  - data.datasets.train.dataset.grammar: slash
+  - data.datasets.train.dataset.source.interpretation: related-factors
+  - model.spaces.categories.combinators: slash
+data:
+  datasets:
+    train:
+      dataset:
+        complexity:
+          premise:
+            controls: {}
+          hypothesis:
+            controls: {}

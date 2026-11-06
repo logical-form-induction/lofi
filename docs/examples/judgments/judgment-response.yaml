@@ -1,0 +1,19 @@
+# Score the L1 pairs through an ordinal judgment instrument instead of their labels.
+approximation: {residual_mass: 0.95}
+loss:
+  terms:
+    - objective:
+        kind: inference
+        signal: likelihood
+        response:
+          kind: judgment
+          probabilities:
+            entails: [0.05, 0.15, 0.8]
+            neutral: [0.15, 0.7, 0.15]
+            contradicts: [0.8, 0.15, 0.05]
+        auxiliary_weight: 0.0
+data:
+  datasets:
+    train:
+      dataset:
+        judgments: [2, 1, 0, 2, 1, 0]

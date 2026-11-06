@@ -1,0 +1,61 @@
+language:
+  name: higher-order
+  atomic_types:
+    - {name: e}
+    - {name: v}
+    - {name: s}
+    - {name: t}
+  constructors:
+    - {name: '->', kind: [Ty, Ty, Ty], notation: {style: infix, spelling: '->', precedence: 1, associativity: right}}
+  constants:
+    - name: and
+      type: 'a -> a -> a'
+      quantifies: [a]
+      classes: [sentential, conjunction]
+      notation: {kind: infix, ascii: '&&', unicode: '∧', precedence: 4, associativity: left}
+    - name: iota
+      type: '(e -> t) -> e'
+      classes: [description]
+      notation: {kind: binder, ascii: iota, unicode: 'ι', bodies: 1}
+    - name: most
+      type: infer
+      classes: [quantifier]
+      notation: {kind: binder, ascii: most, unicode: most, bodies: 2}
+    - name: box
+      type: '(s -> t) -> s -> t'
+      notation: {kind: prefix, ascii: box, unicode: '□', precedence: 6}
+    - {name: now, type: s}
+    - {name: agent, type: 'v -> e -> t'}
+  binders: {style: curry}
+  logic:
+    order: higher
+    equality: false
+    prover: {kind: tptp, engine: vampire, dialect: thf, timeout: 5.0, polymorphism: monomorphize}
+    labeling: {budget: {}}
+lexicon:
+  kind: inline
+  entries:
+    - {form: word-0, category: NP, meaning: 'iota x:e. dog(x)'}
+    - {form: word-1, category: 'S\NP', meaning: '\x:e. snore(x)'}
+    - {form: word-2, category: '(S\NP)/NP', meaning: '\y. \x. love(x)(y)'}
+    - {form: word-3, category: NP/NP, meaning: '\x. iota y. friend(x)(y) && sleep(y)'}
+    - {form: word-4, category: NP, meaning: john}
+    - {form: word-5, category: 'S\NP', meaning: '\x. (box \w:s. sleep_at(w)(x))(now)'}
+    - {form: word-6, category: '(S\NP)/NP', meaning: '\y. \x. most z.(love(x)(z), love(z)(y))'}
+    - {form: word-7, category: NP/NP, meaning: '\x. x'}
+interpretation:
+  erasure:
+    kind: signature-morphism
+    atoms:
+      S: t
+      NP: e
+      conj: e
+  constants:
+    - {name: john, type: e, classes: [individual]}
+    - {name: dog, type: 'e -> t', classes: [predicate]}
+    - {name: sleep, type: 'e -> t', classes: [predicate]}
+    - {name: snore, type: infer, classes: [predicate]}
+    - {name: love, type: 'e -> e -> t', classes: [predicate]}
+    - {name: friend, type: 'e -> e -> t', classes: [predicate]}
+    - {name: sleep_at, type: 's -> e -> t', classes: [predicate]}
+  meanings: {source: {kind: lexical}}

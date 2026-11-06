@@ -1,0 +1,14 @@
+{
+  "grid": {
+    "encoder": ["tree-rnn", "hrr", "transformer"],
+    "capacity": [250000, 500000]
+  },
+  "hypotheses": [
+    {
+      "name": "known-grammar-recovery-above-floor",
+      "left": "primitive-one-to-one-accuracy",
+      "right": "primitive-random-relabeling-floor",
+      "family": "known-grammar-lexicon-induction"
+    }
+  ]
+}

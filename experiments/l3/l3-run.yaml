@@ -1,0 +1,119 @@
+# A known grammar and logic with generated lexical meanings learned from inference.
+defaults:
+  - data.datasets.train.dataset: synthetic-inference
+  - data.datasets.train.dataset.source.interpretation: l3-interpretation
+  - data.datasets.train.featurizer: pair
+  - model.grounding: prover-enumerated
+parse: {retain: forest, reachability: all}
+approximation: {residual_mass: 0.9}
+model:
+  language: {from: data}
+  capacity: {kind: parameter-count, target: 65536}
+  parser: {kind: inside-outside, width: 4}
+  token_encoder: {kind: learned, width: 4}
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 4, activation: tanh}]}
+  encoders:
+    terms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+    logical-forms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+  decoders:
+    identity: {kind: tree-rnn, width: 4}
+    application: {kind: tree-rnn, width: 4}
+    form-identity:
+      kind: tree-rnn
+      width: 4
+      type_directed: {prefix: type-grammar, mask: known}
+  spaces:
+    categories:
+      sort: Cat
+      encoder: terms
+      identity: identity
+      combinators:
+        merge: concatenate
+        decoders:
+          "application:/": application
+          "application:\\": application
+    semantics: {sort: Tm, encoder: logical-forms, identity: form-identity}
+  readouts:
+    forms:
+      kind: terms
+      space: semantics
+      reads: inside
+      decoding: {strategy: beam, width: 4, clamp: null}
+loss:
+  terms:
+    - objective:
+        kind: inference
+        signal: likelihood
+        response: {kind: label}
+        auxiliary_weight: 0.0
+data:
+  datasets:
+    train:
+      dataset:
+        retained: {dev: 0.25, test: 0.25}
+        size: 12
+        candidates: 24
+        premise: {kind: uniform, min_length: 2, max_length: 3}
+        hypothesis: {kind: uniform, min_length: 2, max_length: 3}
+        source:
+          language:
+            bounds:
+              Ty: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+              Tm: {layout: complete-tree, depth: 5, nodes: null, order: df, free_ranks: 0}
+              Cat: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 1
+  batch_size: 2
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  max_grad_norm: null
+  active_groups:
+    - token_encoder
+    - terms
+    - logical-forms
+    - identity
+    - application
+    - form-identity
+    - controller
+    - parser
+  early_stopping:
+    metric: loss/inference
+    mode: min
+    patience: 2
+    minimum_delta: 0.0
+    keep_best: 1
+  checkpoints: {interval: 1, keep: 1}
+release: {checkpoint: validation-best}
+optimizer: {kind: adamw, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000
+evaluators:
+  logical-forms:
+    kind: logical-form
+    interval: {replicates: 20, level: 0.95}
+    readout: forms
+    measure: normal-form
+    restarts: 2
+    permutation_limit: 5040
+    alignment:
+      kind: many-to-one
+      tie_break: largest-gold-marginal
+      fit_on: dev
+      score_on: test
+      random_floor: {replicates: 20, level: 0.95}
+      stability: {replicates: 20, level: 0.95}
+    conventions: &evaluation-conventions
+      punctuation: keep
+      unary_chains: keep
+      trivial_spans: keep
+      minimum_length: 0
+      aggregation: corpus
+      coverage: zero
+      self_arcs: forbid
+      gold_derivation: canonical

@@ -1,0 +1,13 @@
+{
+  "grid": {
+    "selection-policy": ["rank-50", "quantile-50", "classes-50"]
+  },
+  "hypotheses": [
+    {
+      "name": "reduced-logical-form-anchoring-above-fiber-floor",
+      "left": "fiber-relative-recovery",
+      "right": "fiber-floor",
+      "family": "reduced-logical-form-anchoring"
+    }
+  ]
+}

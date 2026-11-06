@@ -1,0 +1,26 @@
+dataset: known-random-effects
+response:
+  ResponseDeclaration_responsespec:
+    family: {family: cumulative}
+    levels: 7
+    objective: {objective: conditional}
+    predictor:
+      - kind: link
+        readout: score
+        linking: {family: linear}
+      - {kind: random_intercept, group: participant}
+    identification: {constraint: fixed_discrimination, value: 1.0}
+    priors:
+      thresholds: {}
+inference:
+  inference: svi
+  guide: structured
+  iterations: 1000
+  draws: 100
+  learning_rate: 0.01
+elicitation: {method: participants, version: "1"}
+calibration: null
+comparison: null
+dynamic_range: null
+ablation: []
+interannotator: null

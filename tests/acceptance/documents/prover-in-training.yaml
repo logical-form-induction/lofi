@@ -1,0 +1,45 @@
+# Higher-order proof evidence used as a sampled policy-gradient reward.
+defaults:
+  - inference-point
+  - model.grounding: prover-reward
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  grounding:
+    scorer:
+      budget: {calls_per_step: 8, wall_per_step: 10.0, cpu_seconds: null}
+      countermodels: null
+  readouts:
+    forms:
+      kind: terms
+      space: semantics
+      reads: inside
+      decoding:
+        strategy: sample
+        restriction: {kind: full}
+        draws: 2
+        rescore_tolerance: 1.0e-5
+        clamp: sleep(john)
+loss:
+  terms:
+    - objective:
+        kind: inference
+        signal: reward
+        response: {kind: label}
+        auxiliary_weight: 0.0
+data:
+  datasets:
+    train:
+      dataset:
+        retained: '${oc.create:{"validation":0.25}}'
+        size: 4
+        candidates: 12
+        attempts: 400
+        relations: {trivial: 1.0, entailment: 0}
+        source:
+          language:
+            logic:
+              order: higher
+              negation: not
+              prover: {kind: tptp, engine: leo3, dialect: thf, timeout: 5.0, polymorphism: monomorphize}
+              labeling: {budget: {}}

@@ -1,0 +1,11 @@
+entity: entity
+truth: truth
+erasure:
+  kind: signature-morphism
+  atoms: {S: truth, NP: entity}
+constants:
+  - {name: john, type: entity, classes: [individual]}
+  - {name: mary, type: entity, classes: [individual]}
+  - {name: sleep, type: "entity -> truth", classes: [predicate]}
+  - {name: see, type: "entity -> entity -> truth", classes: [predicate]}
+meanings: {source: {kind: lexical}}

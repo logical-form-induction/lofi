@@ -1,0 +1,33 @@
+# The tutorial grammar with a logical-form language and a lexical interpretation.
+defaults:
+  - induce-lexicon
+  - data.datasets.train.dataset.language: propositional
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          lexicon:
+            entries:
+              - {form: john, category: NP, meaning: john}
+              - {form: mary, category: NP, meaning: mary}
+              - {form: the, category: NP/N, meaning: '\p. the(p)'}
+              - {form: dog, category: N, meaning: '\x. dog(x)'}
+              - {form: cat, category: N, meaning: '\x. cat(x)'}
+              - {form: sleeps, category: 'S\NP', meaning: '\x. sleep(x)'}
+              - {form: sees, category: 'S\NP/NP', meaning: '\y. \x. see(x)(y)'}
+              - {form: chases, category: 'S\NP/NP', meaning: '\y. \x. chase(x)(y)'}
+        interpretation:
+          erasure:
+            kind: signature-morphism
+            atoms: {S: t, NP: e, N: '⟨e,t⟩'}
+          constants:
+            - {name: john, type: e, classes: [individual]}
+            - {name: mary, type: e, classes: [individual]}
+            - {name: the, type: '(e -> t) -> e', classes: [determiner]}
+            - {name: dog, type: 'e -> t', classes: [predicate]}
+            - {name: cat, type: 'e -> t', classes: [predicate]}
+            - {name: sleep, type: 'e -> t', classes: [predicate]}
+            - {name: see, type: 'e -> e -> t', classes: [predicate]}
+            - {name: chase, type: 'e -> e -> t', classes: [predicate]}
+          meanings: {source: {kind: lexical}}

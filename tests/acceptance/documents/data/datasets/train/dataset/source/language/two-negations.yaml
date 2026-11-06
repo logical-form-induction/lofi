@@ -1,0 +1,35 @@
+name: two-negations
+atomic_types: [{name: e}, {name: v, kind: event}, {name: t, kind: proposition}]
+constructors:
+  - {name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}
+constants:
+  - name: not
+    type: "t -> t"
+    classes: [sentential, negation]
+    notation: {kind: prefix, ascii: "~", unicode: "¬", precedence: 6}
+  - name: complement
+    type: "t -> t"
+    classes: [sentential, negation]
+    notation: {kind: prefix, ascii: "complement", unicode: "∁", precedence: 6}
+  - name: and
+    type: "t -> t -> t"
+    classes: [sentential, conjunction]
+    notation: {kind: infix, ascii: "&", unicode: "∧", precedence: 4, associativity: left}
+  - name: or
+    type: "t -> t -> t"
+    classes: [sentential, disjunction]
+    notation: {kind: infix, ascii: "|", unicode: "∨", precedence: 3, associativity: left}
+  - name: if
+    type: "t -> t -> t"
+    classes: [sentential, conditional]
+    notation: {kind: infix, ascii: "=>", unicode: "⇒", precedence: 2, associativity: right}
+  - name: iff
+    type: "t -> t -> t"
+    classes: [sentential, biconditional]
+    notation: {kind: infix, ascii: "<=>", unicode: "⇔", precedence: 1, associativity: right}
+binders: {style: curry}
+logic:
+  equality: false
+  negation: not
+  prover: {kind: tptp, engine: leo3, dialect: thf, timeout: 5.0, polymorphism: monomorphize}
+  labeling: {budget: {}}

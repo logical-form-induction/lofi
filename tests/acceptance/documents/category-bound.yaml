@@ -1,0 +1,10 @@
+# A grammar that bounds the size and arity of every category it may build.
+defaults:
+  - composition-point
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          formalism: declared
+          budget: {max_category_size: 7, max_category_arity: 2}

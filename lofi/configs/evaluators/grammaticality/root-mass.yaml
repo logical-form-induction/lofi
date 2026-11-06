@@ -1,0 +1,7 @@
+kind: grammaticality
+interval: {replicates: 1000, level: 0.95}
+readout: types
+output: sentences
+flip_rate: 0.0
+bins: 10
+conventions: {punctuation: keep, unary_chains: keep, trivial_spans: keep, minimum_length: 0, aggregation: sentence, coverage: zero, self_arcs: allow, gold_derivation: canonical}

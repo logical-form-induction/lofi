@@ -1,0 +1,308 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,400i;8..60,600&display=swap");
+
+/* --------------------------------------------------------------------------
+   LoFI documentation
+
+   Material for MkDocs supplies the behavior. This layer supplies the visual
+   system: a quiet paper canvas, a serif reading face for prose, a sans face
+   for structure, and one accent for links, signatures and proofs.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --lf-canvas: #f7f9f8;
+  --lf-surface: #ffffff;
+  --lf-ink: #1d2421;
+  --lf-muted: #66736d;
+  --lf-faint: #dfe6e2;
+  --lf-rail: #c9d3ce;
+  --lf-accent: #1d6b52;
+  --lf-accent-soft: #e6f3ee;
+  --lf-code-bg: #212a27;
+  --lf-code-fg: #eef3f0;
+  --lf-reading-measure: 75ch;
+  --lf-radius: 0.35rem;
+  --lf-serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: var(--lf-canvas);
+  --md-default-fg-color: var(--lf-ink);
+  --md-default-fg-color--light: var(--lf-muted);
+  --md-default-fg-color--lightest: var(--lf-faint);
+  --md-primary-fg-color: var(--lf-surface);
+  --md-primary-fg-color--light: var(--lf-surface);
+  --md-primary-fg-color--dark: #edf2ef;
+  --md-primary-bg-color: var(--lf-ink);
+  --md-primary-bg-color--light: var(--lf-muted);
+  --md-accent-fg-color: var(--lf-accent);
+  --md-accent-fg-color--transparent: rgba(29, 107, 82, 0.1);
+  --md-typeset-color: var(--lf-ink);
+  --md-typeset-a-color: #175c46;
+  --md-code-bg-color: var(--lf-code-bg);
+  --md-code-fg-color: var(--lf-code-fg);
+  --md-footer-bg-color: #edf2ef;
+  --md-footer-bg-color--dark: #e2e9e5;
+  --md-footer-fg-color: var(--lf-ink);
+  --md-footer-fg-color--light: var(--lf-muted);
+  --md-footer-fg-color--lighter: #84918b;
+}
+
+[data-md-color-scheme="slate"] {
+  --lf-canvas: #171b19;
+  --lf-surface: #1f2422;
+  --lf-ink: #edf1ee;
+  --lf-muted: #a7b3ad;
+  --lf-faint: #333c38;
+  --lf-rail: #46514c;
+  --lf-accent: #6fc2a4;
+  --lf-accent-soft: #23362f;
+  --lf-code-bg: #232b28;
+  --lf-code-fg: #eef3f0;
+  --md-default-bg-color: var(--lf-canvas);
+  --md-default-fg-color: var(--lf-ink);
+  --md-default-fg-color--light: var(--lf-muted);
+  --md-default-fg-color--lightest: var(--lf-faint);
+  --md-primary-fg-color: var(--lf-surface);
+  --md-primary-fg-color--light: #262c29;
+  --md-primary-fg-color--dark: var(--lf-canvas);
+  --md-primary-bg-color: var(--lf-ink);
+  --md-primary-bg-color--light: var(--lf-muted);
+  --md-accent-fg-color: var(--lf-accent);
+  --md-accent-fg-color--transparent: rgba(111, 194, 164, 0.12);
+  --md-typeset-color: var(--lf-ink);
+  --md-typeset-a-color: #8fd3b9;
+  --md-code-bg-color: var(--lf-code-bg);
+  --md-code-fg-color: var(--lf-code-fg);
+  --md-footer-bg-color: #121513;
+  --md-footer-bg-color--dark: #0f1211;
+}
+
+body {
+  background: var(--lf-canvas);
+}
+
+/* Header and tabs */
+
+.md-header {
+  color: var(--lf-ink);
+  background: color-mix(in srgb, var(--lf-canvas) 92%, transparent);
+  border-bottom: 1px solid var(--lf-faint);
+  box-shadow: none;
+  backdrop-filter: blur(14px);
+}
+
+.md-header__title {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.md-tabs {
+  color: var(--lf-muted);
+  background: var(--lf-surface);
+  border-bottom: 1px solid var(--lf-faint);
+}
+
+.md-tabs__link {
+  font-weight: 500;
+  opacity: 1;
+}
+
+.md-tabs__item--active .md-tabs__link {
+  color: var(--lf-accent);
+}
+
+/* Reading text */
+
+.md-typeset {
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.md-typeset :is(p, li, dd, blockquote) {
+  font-family: var(--lf-serif);
+}
+
+.md-typeset > :is(p, ul, ol, blockquote, dl) {
+  max-width: var(--lf-reading-measure);
+}
+
+.md-typeset :is(h1, h2, h3, h4) {
+  font-family: var(--md-text-font-family);
+  letter-spacing: -0.02em;
+}
+
+.md-typeset h1 {
+  font-weight: 650;
+  color: var(--lf-ink);
+}
+
+.md-typeset h2 {
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--lf-faint);
+}
+
+.md-typeset code {
+  border-radius: 0.2rem;
+}
+
+.md-typeset :not(pre) > code {
+  color: var(--lf-ink);
+  background: var(--lf-accent-soft);
+}
+
+.md-typeset pre > code {
+  border-left: 3px solid var(--lf-accent);
+}
+
+/* Tables and admonitions */
+
+.md-typeset table:not([class]) {
+  border: 1px solid var(--lf-faint);
+  border-radius: var(--lf-radius);
+  font-size: 0.74rem;
+}
+
+.md-typeset table:not([class]) th {
+  background: color-mix(in srgb, var(--lf-accent) 6%, var(--lf-surface));
+  font-weight: 600;
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-width: 0 0 0 3px;
+  border-radius: 0 var(--lf-radius) var(--lf-radius) 0;
+  box-shadow: none;
+  font-size: 0.76rem;
+}
+
+/* API reference */
+
+.doc-signature {
+  overflow-x: auto;
+  color: var(--lf-code-fg);
+  background: var(--lf-code-bg);
+  border-left: 3px solid var(--lf-accent);
+  border-radius: 0 var(--lf-radius) var(--lf-radius) 0;
+}
+
+.doc-contents > :is(p, ul, ol, blockquote) {
+  max-width: var(--lf-reading-measure);
+}
+
+.doc-heading code {
+  font-size: 1em;
+}
+
+/* Diagrams and display mathematics */
+
+.md-typeset div.mermaid {
+  margin: 1.6rem 0;
+  padding: 1rem;
+  background: var(--lf-surface);
+  border-top: 2px solid var(--lf-accent);
+  border-bottom: 1px solid var(--lf-faint);
+  text-align: center;
+}
+
+.md-typeset div.arithmatex {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Home page */
+
+.lf-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(24rem, 1.05fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+  padding: clamp(2.5rem, 6vw, 5rem) 0;
+  border-bottom: 1px solid var(--lf-faint);
+}
+
+.lf-hero > * {
+  min-width: 0;
+}
+
+.md-typeset .lf-hero h1 {
+  margin: 0 0 1.1rem;
+  font-size: clamp(2.4rem, 5vw, 3.9rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.lf-hero__lede {
+  max-width: 32rem;
+  color: var(--lf-muted);
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  line-height: 1.55;
+}
+
+.lf-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+}
+
+.md-typeset .lf-hero__actions .md-button {
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--lf-radius);
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.lf-hero__code pre {
+  margin: 0;
+}
+
+.lf-pathways {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin: 3rem 0 3.5rem;
+}
+
+.lf-pathway {
+  padding-top: 1rem;
+  border-top: 2px solid var(--lf-accent);
+}
+
+.md-typeset .lf-pathway h2 {
+  margin: 0 0 0.45rem;
+  padding: 0;
+  border: 0;
+  font-size: 0.92rem;
+}
+
+.md-typeset .lf-pathway h2 a {
+  text-decoration: none;
+}
+
+.md-typeset .lf-pathway p {
+  margin: 0;
+  color: var(--lf-muted);
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.md-typeset .csl-entry {
+  margin: 0.8em 0 0.8em 1.5em;
+  text-indent: -1.5em;
+}
+
+@media screen and (max-width: 76.25em) {
+  .lf-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lf-pathways {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 44.9375em) {
+  .lf-pathways {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
