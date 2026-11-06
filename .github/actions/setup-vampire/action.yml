@@ -10,6 +10,7 @@ runs:
         import io
         import os
         import subprocess
+        import tarfile
         import urllib.request
         import zipfile
         from pathlib import Path
@@ -35,6 +36,34 @@ runs:
         destination = Path(os.environ["RUNNER_TEMP"]) / "vampire"
         with zipfile.ZipFile(io.BytesIO(archive)) as compressed:
             compressed.extractall(destination)
+        if platform == "Windows-X64":
+            # The upstream archive omits two Cygwin runtime dependencies.
+            libraries = (
+                (
+                    "x86_64/release/gettext/libintl8/libintl8-0.22.5-1.tar.xz",
+                    "370a19af888bc7c9ed95cf8ade0d36d5e7cdb634abdebcba260cad61fa9a4cc05"
+                    "b5e748e315c9709f66861e8756b227d6757d529846591189e19ee2b2d00002d",
+                    "usr/bin/cygintl-8.dll",
+                ),
+                (
+                    "x86_64/release/libiconv/libiconv2/libiconv2-1.19-2-x86_64.tar.xz",
+                    "a1b23e24e0a495e7163923bcf40a4b933403e0826cfc0d9bde785bc92c909b8c4"
+                    "fb94b1e6b2c0242f4328a723855e72ff3baab9f557ef855b7fe7a7d901b0943",
+                    "usr/bin/cygiconv-2.dll",
+                ),
+            )
+            for package, digest, member in libraries:
+                url = f"https://mirrors.kernel.org/sourceware/cygwin/{package}"
+                with urllib.request.urlopen(url, timeout=60) as response:
+                    archive = response.read()
+                if hashlib.sha512(archive).hexdigest() != digest:
+                    raise RuntimeError(f"Cygwin archive checksum mismatch for {package}")
+                with tarfile.open(fileobj=io.BytesIO(archive), mode="r:xz") as compressed:
+                    library = compressed.extractfile(member)
+                    if library is None:
+                        raise RuntimeError(f"Cygwin archive is missing {member}")
+                    with library:
+                        (destination / Path(member).name).write_bytes(library.read())
         executable = destination / (
             "vampire.exe" if os.environ["RUNNER_OS"] == "Windows" else "vampire"
         )

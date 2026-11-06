@@ -100,6 +100,7 @@ jobs:
         run: uv sync --locked
 
       - uses: ./.github/actions/setup-vampire
+      - uses: ./.github/actions/setup-z3
 
       - name: Tests
         # the wider Hypothesis profile is declared in tests/conftest.py for this
@@ -135,6 +136,7 @@ jobs:
         run: uv sync --locked
 
       - uses: ./.github/actions/setup-vampire
+      - uses: ./.github/actions/setup-z3
 
       - name: Determinism
         env:
@@ -165,6 +167,7 @@ jobs:
         run: uv sync --locked
 
       - uses: ./.github/actions/setup-vampire
+      - uses: ./.github/actions/setup-z3
 
       - name: Tests
         # `-O` strips every `assert`, so validation written as one stops raising
@@ -197,6 +200,7 @@ jobs:
         run: uv sync --locked
 
       - uses: ./.github/actions/setup-vampire
+      - uses: ./.github/actions/setup-z3
 
       - name: Tests
         # the coarse-grained checks behind LOFI_CHECK are a development aid that

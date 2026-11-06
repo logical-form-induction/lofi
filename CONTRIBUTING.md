@@ -53,7 +53,12 @@ same way and fails if it differs from the committed file.
 The acceptance suite uses [Vampire 5.1.0](https://github.com/vprover/vampire/releases/tag/v5.1.0)
 for higher-order proofs. Download the binary for your operating system and
 architecture and put its directory on `PATH`. On Windows, keep `cygwin1.dll`
-beside `vampire.exe`. CI installs this version and verifies the archive checksum.
+beside `vampire.exe`, along with `cygintl-8.dll` and `cygiconv-2.dll` from
+Cygwin’s `libintl8` and `libiconv2` packages. CI installs these dependencies and
+verifies the archive checksums.
+
+The SMT tests use the Z3 executable installed by the locked `z3-solver` wheel.
+On Windows, add `.venv/bin` to `PATH`; the wheel installs `z3.exe` there.
 
 Run the standard checks from the repository root:
 
