@@ -6,6 +6,7 @@ from json import loads
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import pytest
 from tests.unit.run.test_operations import (
     CONFIG,
     assert_one_entry_per_optimizer_step,
@@ -28,8 +29,6 @@ from lofi.run.results import ingest_experiment, write_seed_budget
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-
-    import pytest
 
 
 def test_main_supplies_the_concrete_training_operations_and_step_timer(
@@ -67,13 +66,19 @@ def test_main_supplies_the_concrete_training_operations_and_step_timer(
     assert isinstance(_entrypoint.STEP_TIMER, TrainingStepTimer)
 
 
+@pytest.mark.parametrize("newline", ["\n", "\r\n"])
 def test_main_writes_utf_8_whatever_the_locale_of_its_streams(
+    newline: str,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     out = io.BytesIO()
     err = io.BytesIO()
-    monkeypatch.setattr(sys, "stdout", io.TextIOWrapper(out, encoding="cp1252"))
-    monkeypatch.setattr(sys, "stderr", io.TextIOWrapper(err, encoding="cp1252"))
+    monkeypatch.setattr(
+        sys, "stdout", io.TextIOWrapper(out, encoding="cp1252", newline=newline)
+    )
+    monkeypatch.setattr(
+        sys, "stderr", io.TextIOWrapper(err, encoding="cp1252", newline=newline)
+    )
 
     def run_cli(argv: Sequence[str] | None, **_: object) -> int:
         del argv
@@ -86,8 +91,11 @@ def test_main_writes_utf_8_whatever_the_locale_of_its_streams(
     monkeypatch.setattr(_entrypoint, "run_cli", run_cli)
 
     assert _entrypoint.main([]) == 0
-    assert out.getvalue().decode("utf-8") == "\N{GREEK SMALL LETTER LAMDA}x. dog(x)\n"
-    assert err.getvalue().decode("utf-8") == "\N{RIGHTWARDS ARROW}\n"
+    assert (
+        out.getvalue().decode("utf-8")
+        == f"\N{GREEK SMALL LETTER LAMDA}x. dog(x){newline}"
+    )
+    assert err.getvalue().decode("utf-8") == f"\N{RIGHTWARDS ARROW}{newline}"
 
 
 TELEMETRY_BACKENDS = ("mlflow", "wandb", "trackio")
