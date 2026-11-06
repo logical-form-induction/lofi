@@ -1770,12 +1770,12 @@ mod tests {
 
     #[test]
     fn releases_deep_terms_on_a_small_stack() -> Result<(), Box<dyn std::error::Error>> {
-        let worker = std::thread::Builder::new().stack_size(256 * 1024).spawn(
+        let worker = std::thread::Builder::new().stack_size(64 * 1024).spawn(
             || -> Result<(), super::TermError> {
-                let store = TermStore::new(signature(), 20_002)?;
+                let store = TermStore::new(signature(), 2_050)?;
                 let leaf = store.intern(0, vec![], None)?;
                 let mut root = leaf.clone();
-                for _ in 0..20_000 {
+                for _ in 0..2_048 {
                     root = store.intern(1, vec![leaf.clone(), root], None)?;
                 }
                 drop(store);

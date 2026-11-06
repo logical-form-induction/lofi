@@ -91,8 +91,9 @@ Continuous integration splits the benchmarks by what they measure.
 
 1. On GitHub-hosted Linux, macOS and Windows runners, bounded benchmarks on
    pushes and pull requests, with results saved as workflow artifacts. The
-   objective grid, posterior fit, and training-step grid carry the `slow` mark;
-   weekly and manual runs include them with `--run-slow`. Their workloads,
+   objective grid, posterior fit, training-step grid, and longer normalization
+   cases carry the `slow` mark; weekly and manual runs include them with
+   `--run-slow`. The shortest normalization cases run on pushes. Their workloads,
    timing rounds, and assertions are the same in local and hosted runs.
    Absolute wall-clock budgets are
    disabled because shared runners vary in speed. Committed local measurements

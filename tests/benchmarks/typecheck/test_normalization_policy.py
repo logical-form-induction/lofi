@@ -830,7 +830,13 @@ def test_reading_meanings_reports_consistent_complete_or_bounded_outcomes(
 
 
 @pytest.mark.parametrize("policy", NORMALIZATION_POLICIES)
-@pytest.mark.parametrize("length", LENGTHS)
+@pytest.mark.parametrize(
+    "length",
+    [
+        pytest.param(length, marks=() if length == LENGTHS[0] else pytest.mark.slow)
+        for length in LENGTHS
+    ],
+)
 def test_reading_meanings_off_a_forest_under_a_policy(
     benchmark: BenchmarkFixture,
     pytestconfig: pytest.Config,
