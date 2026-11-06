@@ -112,7 +112,7 @@ def test_a_packaged_corpus_resolves_to_an_absolute_path() -> None:
     ).settings()
 
     assert Path(settings.corpus).is_absolute()
-    assert settings.corpus.endswith("run/synthetic-parser.vec")
+    assert Path(settings.corpus).parts[-2:] == ("run", "synthetic-parser.vec")
 
 
 def _payload(**adaptation: JsonValue) -> dict[str, JsonValue]:

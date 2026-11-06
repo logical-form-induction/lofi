@@ -961,11 +961,12 @@ def test_results_recording_the_same_five_fields_are_one_result(
     )
 
 
-def ks_distance(pvalues: Sequence[float], replicates: int) -> float:
-    """Return the largest gap between the empirical CDF and the null's own.
+def rejection_excess(pvalues: Sequence[float], replicates: int) -> float:
+    """Return the largest excess rejection rate over its nominal level.
 
-    Under the null a permutation p-value is uniform over the lattice
-    ``k / (replicates + 1)``, so the CDFs are compared at the lattice points.
+    Permutation p-values lie on ``k / (replicates + 1)``. Tied accuracies
+    make them conservative, so calibration bounds excess rejections rather
+    than requiring equality with the uniform CDF.
 
     Parameters
     ----------
@@ -975,20 +976,20 @@ def ks_distance(pvalues: Sequence[float], replicates: int) -> float:
     lattice = replicates + 1
 
     return max(
-        abs(sum(1 for p in pvalues if p <= k / lattice) / len(pvalues) - k / lattice)
+        sum(1 for p in pvalues if p <= k / lattice) / len(pvalues) - k / lattice
         for k in range(1, lattice + 1)
     )
 
 
-def ks_critical(count: int, alpha: float) -> float:
-    """Return the asymptotic Kolmogorov critical value at the given level.
+def calibration_bound(count: int, alpha: float) -> float:
+    """Return the one-sided empirical-CDF deviation bound at the given level.
 
     Parameters
     ----------
     count : int
     alpha : float
     """
-    return sqrt(-log(alpha / 2) / 2) / sqrt(count)
+    return sqrt(-log(alpha) / (2 * count))
 
 
 def outcomes_at(accuracy: float) -> list[float]:
@@ -997,7 +998,7 @@ def outcomes_at(accuracy: float) -> list[float]:
     return [1.0] * matched + [0.0] * (TESTS_ON - matched)
 
 
-def test_on_a_null_signal_cell_the_p_values_are_uniform_by_a_ks_test() -> None:
+def test_on_a_null_signal_cell_the_p_values_control_false_positives() -> None:
     refits = 200
     pvalues: list[float] = []
     accuracies: list[float] = []
@@ -1014,12 +1015,12 @@ def test_on_a_null_signal_cell_the_p_values_are_uniform_by_a_ks_test() -> None:
         pvalues.append(found.p_value.value)
         accuracies.append(found.result.accuracy)
 
-    assert ks_distance(pvalues, REPLICATES) < ks_critical(refits, 0.01)
+    assert rejection_excess(pvalues, REPLICATES) < calibration_bound(refits, 0.01)
     assert min(pvalues) == pytest.approx(1 / (REPLICATES + 1))
     assert max(pvalues) == 1.0
 
     # a null that shuffles the observed outcomes leaves the accuracy where it was,
-    # so every p-value is one and the same test rejects uniformity outright
+    # so every p-value is one and fails the nondegeneracy check above
     shuffled = [
         LabelPermutation(replicates=REPLICATES, seed=refit)
         .test(fmean, outcomes_at(accuracy), tail="greater")
@@ -1028,4 +1029,4 @@ def test_on_a_null_signal_cell_the_p_values_are_uniform_by_a_ks_test() -> None:
     ]
 
     assert all(p == 1.0 for p in shuffled)
-    assert ks_distance(shuffled, REPLICATES) > ks_critical(refits, 0.01)
+    assert min(shuffled) > min(pvalues)

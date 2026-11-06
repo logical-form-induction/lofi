@@ -680,9 +680,33 @@ def traced_point(
     )
 
 
-def test_a_diverging_point_is_recorded_and_the_sweep_completes_the_next(
+def test_a_nonfinite_point_is_recorded_and_the_sweep_completes_the_next(
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    fit = operations.train.fit_training
+    attempts = 0
+
+    def nonfinite_first(
+        prepared: PreparedTraining,
+        store: CheckpointStore[StateTree],
+        manifest: CheckpointManifest,
+        streams: RestorableRandomStreams,
+        position: ResumePosition,
+        /,
+        *,
+        sinks: Sequence[MetricLog],
+    ) -> FittingReport:
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            with torch.no_grad():
+                for parameter in prepared.model.parameters:
+                    parameter.fill_(float("nan"))
+
+        return fit(prepared, store, manifest, streams, position, sinks=sinks)
+
+    monkeypatch.setattr(operations.train, "fit_training", nonfinite_first)
     root = tmp_path / "runs"
     points = tuple(
         traced_point(
@@ -694,7 +718,7 @@ def test_a_diverging_point_is_recorded_and_the_sweep_completes_the_next(
                 ),
             )
         )
-        for rate in (1.0e30, 1.0e-3)
+        for rate in (1.0e-2, 1.0e-3)
     )
     store = RunStore(root, freeze_id=None, seed=ExperimentSeed(5))
     execute = PointExecutor(
@@ -711,6 +735,7 @@ def test_a_diverging_point_is_recorded_and_the_sweep_completes_the_next(
     failure = read_failure(first)
 
     assert len(handles) == 2
+    assert attempts == 2
     assert failure is not None
     assert (failure.kind, failure.attempts, failure.final) == (
         FailureKind.NUMERICAL,
