@@ -17,9 +17,9 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  # a superseded pull request run is wasted work. On main every commit keeps its
-  # own result, which is what makes the history bisectable.
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  # A new pull request commit supersedes its previous run. Main commits run
+  # independently, so an older run cannot block validation of a newer commit.
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
