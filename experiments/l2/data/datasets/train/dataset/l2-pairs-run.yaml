@@ -1,0 +1,9 @@
+kind: synthetic-inference
+labeling: three-way
+retained: {dev: 0.16666666666666666, test: 0.16666666666666666}
+size: 6
+seed: derived
+candidates: 16
+attempts: 400
+premise: {kind: uniform, min_length: 2, max_length: 5}
+hypothesis: {kind: uniform, min_length: 2, max_length: 5}

@@ -1,0 +1,1 @@
+Translate each premise and hypothesis into the declared typed logical-form language. Return only the two formalizations.

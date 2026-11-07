@@ -1,0 +1,2 @@
+kind: linear-rnn
+width: 256

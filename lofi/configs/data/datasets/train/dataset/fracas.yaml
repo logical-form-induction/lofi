@@ -1,0 +1,10 @@
+kind: fracas
+sources:
+  - source: ${lofi.path:fracas/fracas.xml}
+    release:
+      source_id: fracas
+      release_id: fracas-xml  # the FraCaS suite in MacCartney's XML distribution, which states no license
+      split: test
+      language: en
+      source_method: expert
+      spdx: NOASSERTION  # the FraCaS suite in MacCartney's XML distribution, which states no license

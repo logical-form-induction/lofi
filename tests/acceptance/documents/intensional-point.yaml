@@ -1,0 +1,17 @@
+# The slash grammar interpreted into an intensional language with a necessity operator.
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.interpretation: intensional
+  - data.datasets.train.dataset.language: intensional
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          lexicon:
+            kind: inline
+            entries:
+              - {form: john, category: NP, meaning: john}
+              - {form: mary, category: NP, meaning: mary}
+              - {form: sleeps, category: "S\\NP", meaning: '\x. (box \w. sleep_at(w)(x))(now)'}
+              - {form: sees, category: "S\\NP/NP", meaning: '\y. \x. see_at(now)(x)(y)'}

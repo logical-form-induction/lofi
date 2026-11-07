@@ -1,0 +1,25 @@
+# Forward composition at every positive order, with a lexical third-order case.
+name: unbounded-composition
+signature:
+  primitives: [S, NP]
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: "/"}
+rules:
+  name: unbounded-composition
+  rules:
+    - {rule: composition, direction: unrestricted, order: null, view: /}
+lexicon:
+  kind: inline
+  entries:
+    - {form: predicate, category: "S/NP", meaning: '\x. sleep(x)'}
+    - {form: container, category: "((NP/NP)/NP)/NP", meaning: '\x. \y. \z. x'}
+goal:
+  kind: root
+  categories: ["((S/NP)/NP)/NP"]
+budget:
+  unary_rounds: 1
+formalism: declared

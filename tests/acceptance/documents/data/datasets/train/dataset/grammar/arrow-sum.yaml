@@ -1,0 +1,57 @@
+# An arrow and a sum constructor, with an injection and a three-premise case rule.
+name: arrow-sum
+signature:
+  primitives: [S, NP]
+  constructors:
+    - {name: "arrow", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: ->, precedence: 10, associativity: left}}
+    - {name: "+", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: +, precedence: 10, associativity: left}}
+  functors:
+    - {name: "arrow", constructor: "arrow", argument_side: either, opposite: "arrow"}
+rules:
+  name: arrow-sum
+  rules:
+    - rule: pattern
+      name: apply
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: arrow}
+          arguments:
+            - &result {pattern: term, name: X}
+            - &argument {pattern: term, name: Y}
+        - *argument
+      conclusion: *result
+    - rule: pattern
+      name: inject
+      premises:
+        - &np {pattern: constant, name: NP}
+      conclusion:
+        pattern: node
+        operator: {kind: fixed, name: "+"}
+        arguments: [*np, *np]
+    - rule: pattern
+      name: case
+      head_policy: left-conjunct
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: "+"}
+          arguments: [{pattern: term, name: A}, {pattern: term, name: B}]
+        - pattern: node
+          operator: {kind: fixed, name: arrow}
+          arguments: [{pattern: term, name: C}, {pattern: term, name: A}]
+        - pattern: node
+          operator: {kind: fixed, name: arrow}
+          arguments: [{pattern: term, name: C}, {pattern: term, name: B}]
+      conclusion: {pattern: term, name: C}
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: NP}
+    - {form: someone, category: "NP+NP"}
+    - {form: sleeps, category: "S->NP"}
+    - {form: snores, category: "S->NP"}
+goal:
+  kind: root
+  categories: [S]
+budget:
+  unary_rounds: 1
+formalism: declared

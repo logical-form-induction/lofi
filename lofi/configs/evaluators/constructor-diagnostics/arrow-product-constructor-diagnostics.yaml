@@ -1,0 +1,13 @@
+kind: constructor-diagnostics
+interval: {replicates: 20, level: 0.95}
+readout: category-terms
+view:
+  representative: NP
+  roles:
+    arrow: [result, argument]
+    "*": [left-factor, right-factor]
+normalization: nodes
+widths: [1, 2, 4]
+depths: [1, 2, 3]
+collapse_margin: 0.5
+conventions: {punctuation: keep, unary_chains: keep, trivial_spans: keep, minimum_length: 0, aggregation: sentence, coverage: zero, self_arcs: allow, gold_derivation: canonical}

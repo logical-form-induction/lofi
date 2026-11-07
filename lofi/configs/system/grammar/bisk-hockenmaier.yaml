@@ -1,0 +1,81 @@
+# The grammar Bisk and Hockenmaier (2012) induce over. The lexicon is the
+# witness the compile checks the goal against; the baseline induces its own.
+formalism: declared
+name: bisk-hockenmaier
+signature:
+  name: bisk-hockenmaier
+  primitives: [N, S, conj, TOP]
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+    - {name: '@[conj]', kind: [Cat, Cat], notation: {style: prefix, spelling: '@conj'}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: "/"}
+  conjunctions:
+    name: bisk-hockenmaier-conjunctions
+    markers: [conj]
+    pairs:
+      - {unmarked: N, marked: '@conj(N)'}
+      - {unmarked: S, marked: '@conj(S)'}
+    # Coordination marks every category, raised and composed ones and TOP
+    # included, with the unary conjunction constructor.
+    marking: '@[conj]'
+
+rules:
+  name: bisk-hockenmaier
+  rules:
+    # Type raising X => T/(T\X) and X => T\(T/X) raises only the argument
+    # atoms N and S, to the targets N and S. A raised category is never
+    # raised again, so the category set stays finite.
+    - rule: combinators
+      application: true
+      composition: [1]
+      crossed_composition: [1]
+      direction: steedman
+      type_raising: true
+      raising_targets: [N, S]
+      raising_arguments: [N, S]
+    - rule: coordination
+      name: coordination-mark
+      premises: [{pattern: constant, name: conj}, &x {pattern: term, name: X, sort: Cat}]
+      conclusion: *x
+      phase: mark
+      core_relation: same
+      head_policy: non-absorbing
+    - rule: coordination
+      name: coordination-merge
+      premises: [*x, *x]
+      conclusion: *x
+      phase: merge
+      core_relation: same
+      head_policy: left-conjunct
+    - rule: pattern
+      name: top-from-nominal
+      premises: [{pattern: constant, name: N}]
+      conclusion: &top {pattern: constant, name: TOP}
+      head_policy: pass-through
+    - rule: pattern
+      name: top-from-sentence
+      premises: [{pattern: constant, name: S}]
+      conclusion: *top
+      head_policy: pass-through
+lexicon:
+  kind: inline
+  entries:
+    - {form: dogs, category: N}
+    - {form: bark, category: S}
+    - {form: and, category: conj}
+goal:
+  kind: root
+  categories: [TOP]
+matching: {kind: identity}
+normal_form:
+  kind: hockenmaier-bisk
+  order_bound: 1
+  raised_application: true
+  coordination_raising: true
+budget:
+  unary_rounds: 1
+  closure_rounds: 1
+  max_category_arity: 5

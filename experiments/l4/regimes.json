@@ -1,0 +1,11 @@
+{
+  "grid": {"non-entailment-share": [0.0, 0.05, 0.1, 0.25, 0.5]},
+  "hypotheses": [
+    {
+      "name": "regime-recovery-above-floor",
+      "left": "many-to-one-accuracy",
+      "right": "random-relabeling-floor",
+      "family": "logical-form-relation-regimes"
+    }
+  ]
+}

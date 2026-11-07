@@ -1,0 +1,100 @@
+# Binary inference over predicate quantification, labeled and checked through THF.
+defaults:
+  - inference-base
+  - model.spaces.categories.combinators: slash
+data:
+  datasets:
+    train:
+      dataset:
+        labeling: rte
+        retained: '${oc.create:{"validation":0.2222222222222222}}'
+        size: 9
+        seed: 17
+        candidates: 24
+        attempts: 800
+        premise: {kind: uniform, min_length: 1, max_length: 1}
+        hypothesis: {kind: uniform, min_length: 1, max_length: 1}
+        source:
+          language:
+            name: second-order-proof
+            atomic_types:
+              - {name: e}
+              - {name: t, kind: proposition}
+            constructors:
+              - name: "->"
+                kind: [Ty, Ty, Ty]
+                notation: {style: infix, spelling: "->", precedence: 1, associativity: right}
+            constants:
+              - name: not
+                type: "t -> t"
+                classes: [sentential, negation]
+                notation: {kind: prefix, ascii: not, unicode: "¬", precedence: 6}
+              - name: and
+                type: "t -> t -> t"
+                classes: [sentential, conjunction]
+                notation: {kind: infix, ascii: "&", unicode: "∧", precedence: 4, associativity: left}
+              - name: if
+                type: "t -> t -> t"
+                classes: [sentential, conditional]
+                notation: {kind: infix, ascii: "=>", unicode: "⇒", precedence: 2, associativity: right}
+              - name: forall
+                type: "(a -> t) -> t"
+                quantifies: [a]
+                classes: [quantifier, universal]
+                notation: {kind: binder, ascii: forall, unicode: "∀", bodies: 1}
+            binders: {style: curry}
+            logic:
+              order: second
+              equality: false
+              negation: not
+              prover:
+                kind: tptp
+                engine: vampire
+                dialect: thf
+                timeout: 5.0
+                polymorphism: monomorphize
+              labeling: {budget: {}}
+            bounds:
+              Ty: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+              Tm: {layout: complete-tree, depth: 10, nodes: null, order: df, free_ranks: 0}
+              Cat: {layout: complete-tree, depth: 2, nodes: null, order: df, free_ranks: 0}
+          interpretation:
+            erasure: {kind: signature-morphism, atoms: {S: t}}
+            constants:
+              - {name: dog, type: "e -> t", classes: [predicate]}
+              - {name: rex, type: e, classes: [individual]}
+              - {name: fido, type: e, classes: [individual]}
+            meanings: {source: {kind: lexical}}
+        grammar:
+          formalism: declared
+          name: second-order-proof
+          signature:
+            primitives: [S]
+            constructors:
+              - name: "/"
+                kind: [Cat, Cat, Cat]
+                notation: {style: infix, spelling: /, precedence: 10, associativity: left}
+              - name: "\\"
+                kind: [Cat, Cat, Cat]
+                notation: {style: infix, spelling: "\\", precedence: 10, associativity: left}
+            functors:
+              - {name: "/", constructor: "/", argument_side: right, opposite: "\\"}
+              - {name: "\\", constructor: "\\", argument_side: left, opposite: "/"}
+          rules:
+            name: second-order-proof
+            rules:
+              - {rule: application, view: "/"}
+              - {rule: application, view: "\\"}
+          lexicon:
+            kind: inline
+            entries:
+              - form: premise
+                category: S
+                meaning: "(forall P:(e -> t). P(rex) => P(fido)) & dog(rex)"
+              - {form: hypothesis, category: S, meaning: "dog(fido)"}
+              - form: outside
+                category: S
+                meaning: "forall F:(t -> t). F(F(dog(rex)))"
+          goal: {kind: root, categories: [S]}
+          matching: {kind: identity}
+          budget: {unary_rounds: 1}

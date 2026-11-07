@@ -1,0 +1,4 @@
+{"subject":"Q-JOHN","property":"P31","object":"Q-SLEEPER","value":true}
+{"subject":"Q-MARY","property":"P31","object":"Q-SLEEPER","value":false}
+{"subject":"Q-JOHN","property":"P-SEE","object":"Q-MARY","value":true}
+{"subject":"Q-MARY","property":"P-SEE","object":"Q-JOHN","value":false}

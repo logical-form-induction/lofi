@@ -1,0 +1,61 @@
+"""Local CCGbank parsing and round-trip scoring; ``reader`` reads the corpus."""
+
+from lofi.data.corpora.ccgbank._auto_parse import (
+    AutoDerivation,
+    AutoFile,
+    AutoLeaf,
+    AutoNode,
+    AutoTree,
+    MalformedAutoError,
+    parse_auto,
+    write_auto,
+)
+from lofi.data.corpora.ccgbank._parg_parse import (
+    MalformedPargError,
+    PargDependency,
+    PargFile,
+    PargSentence,
+    parse_parg,
+    write_parg,
+)
+from lofi.data.corpora.ccgbank.roundtrip import (
+    CCGBANK_HEAD_SELECTIONS,
+    UNEVALUATED_DEPENDENCIES,
+    GoldSentence,
+    LabeledArc,
+    MarkedCategoryAlgebra,
+    RoundTripCounts,
+    ccgbank_round_trip_projector,
+    evaluated,
+    gold_sentence,
+    round_trip,
+    score_arcs,
+)
+
+__all__ = [
+    "CCGBANK_HEAD_SELECTIONS",
+    "UNEVALUATED_DEPENDENCIES",
+    "AutoDerivation",
+    "AutoFile",
+    "AutoLeaf",
+    "AutoNode",
+    "AutoTree",
+    "GoldSentence",
+    "LabeledArc",
+    "MalformedAutoError",
+    "MalformedPargError",
+    "MarkedCategoryAlgebra",
+    "PargDependency",
+    "PargFile",
+    "PargSentence",
+    "RoundTripCounts",
+    "ccgbank_round_trip_projector",
+    "evaluated",
+    "gold_sentence",
+    "parse_auto",
+    "parse_parg",
+    "round_trip",
+    "score_arcs",
+    "write_auto",
+    "write_parg",
+]

@@ -1,0 +1,7 @@
+kind: inference
+interval: {replicates: 1000, level: 0.95}
+reduction: null
+partitions: {fit_on: dev, score_on: test}
+bins: 10
+proof: null
+conventions: {punctuation: keep, unary_chains: keep, trivial_spans: keep, minimum_length: 0, aggregation: corpus, coverage: zero, self_arcs: allow, gold_derivation: canonical}

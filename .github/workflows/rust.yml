@@ -1,0 +1,323 @@
+name: Rust
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # the same weekly run as ci.yml: a yanked crate or a new advisory fails the
+    # supply-chain job with no commit to blame.
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+# the default token is read and write. Nothing here writes.
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  FORCE_COLOR: "1"
+  CARGO_TERM_COLOR: always
+
+jobs:
+  lint:
+    name: Format and clippy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Rust toolchain
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.14"
+      # PyO3's build script configures the binding crate from an interpreter,
+      # and the runner's own python3 is older than the abi3-py314 floor.
+      - name: Interpreter for PyO3
+        run: |
+          uv python install 3.14
+          echo "PYO3_PYTHON=$(uv python find 3.14)" >> "$GITHUB_ENV"
+
+      - name: Format
+        run: cargo fmt --all --check
+
+      - name: Clippy
+        if: ${{ !cancelled() }}
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+
+  test:
+    name: Tests and doctests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Rust toolchain
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.14"
+      # PyO3's build script configures the binding crate from an interpreter,
+      # and the runner's own python3 is older than the abi3-py314 floor.
+      - name: Interpreter for PyO3
+        run: |
+          uv python install 3.14
+          echo "PYO3_PYTHON=$(uv python find 3.14)" >> "$GITHUB_ENV"
+      - uses: taiki-e/install-action@8cca0918f8471c33515202b73f56ab27f2bed283 # v2.87.29
+        with:
+          tool: cargo-nextest@0.9.148
+
+      - name: Tests
+        run: cargo nextest run --workspace --locked
+
+      # nextest does not run doctests
+      - name: Doctests
+        if: ${{ !cancelled() }}
+        run: cargo test --workspace --doc --locked
+
+  supply-chain:
+    name: Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Rust toolchain
+        run: rustup toolchain install
+      - uses: taiki-e/install-action@8cca0918f8471c33515202b73f56ab27f2bed283 # v2.87.29
+        with:
+          tool: cargo-deny@0.20.2,cargo-shear@1.14.0
+
+      - name: Advisories, licenses, bans and sources
+        run: cargo deny check
+
+      - name: Unused dependencies
+        if: ${{ !cancelled() }}
+        run: cargo shear
+
+  stub:
+    name: Type stub
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Rust toolchain
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.14"
+
+      # the committed stub is maturin's output for the compiled module, unedited.
+      # A change to the module's Python surface that leaves the stub behind
+      # fails here.
+      - name: Regenerate the stub and compare it with the committed one
+        run: |
+          uvx maturin@1.15.0 generate-stubs --locked \
+            --features pyo3/experimental-inspect --out "$RUNNER_TEMP/stubs"
+          diff -u lofi/_native.pyi "$RUNNER_TEMP/stubs/lofi/_native.pyi"
+
+  miri:
+    name: Miri on the core
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # Miri exists only on nightly. The date is bumped by hand, like the stable
+      # pin in rust-toolchain.toml.
+      NIGHTLY: nightly-2026-10-15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Nightly toolchain with Miri
+        run: rustup toolchain install "$NIGHTLY" --profile minimal --component miri,rust-src
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: taiki-e/install-action@8cca0918f8471c33515202b73f56ab27f2bed283 # v2.87.29
+        with:
+          tool: cargo-nextest@0.9.148
+
+      # The binding crate calls into CPython, which Miri cannot execute. The
+      # ordinary nextest gate above covers the five excluded Rayon paths; Miri
+      # currently rejects their dependency-level Crossbeam retagging.
+      - name: Miri
+        env:
+          MIRIFLAGS: -Zmiri-disable-isolation
+        run: >-
+          cargo "+$NIGHTLY" miri nextest run -p lofi-chart --locked
+          -E 'not test(rule::tests::rule_program_parallel_batch_preserves_submission_order)
+          and not test(parallel_inside_cells_are_bitwise_deterministic)
+          and not test(parallel_forest_cells_are_bitwise_deterministic)
+          and not test(inside_sweep_preserves_exact_tags_and_closes_unary_weights)
+          and not test(forest_table_preserves_child_order_exact_tags_and_inside_weights)'
+
+  mutants:
+    name: Mutation testing of the changed core
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Rust toolchain
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: taiki-e/install-action@8cca0918f8471c33515202b73f56ab27f2bed283 # v2.87.29
+        with:
+          tool: cargo-mutants@27.1.0,cargo-nextest@0.9.148
+
+      # a surviving mutant fails the job. .cargo/mutants.toml runs the tests
+      # with nextest.
+      - name: Mutants on the changed lines
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git diff "$BASE...HEAD" > "$RUNNER_TEMP/pr.diff"
+          cargo mutants --in-diff "$RUNNER_TEMP/pr.diff" -p lofi-chart
+
+  wheels:
+    name: Wheel (${{ matrix.platform }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        # each wheel builds on a native runner of its own platform, so the
+        # install job below can load the very wheel this job built.
+        include:
+          - platform: manylinux_2_28-x86_64
+            runner: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            manylinux: "2_28"
+          - platform: manylinux_2_28-aarch64
+            runner: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-gnu
+            manylinux: "2_28"
+          - platform: macos-arm64
+            runner: macos-latest
+            target: aarch64-apple-darwin
+            manylinux: "off"
+          - platform: windows-x86_64
+            runner: windows-latest
+            target: x86_64-pc-windows-msvc
+            manylinux: "off"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # a manylinux build runs in a container that carries its own CPython 3.14.
+      # A build on the runner itself is given one, since the runner image's
+      # interpreter is older than the abi3-py314 floor and a Windows build links
+      # against the interpreter's import library.
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        if: matrix.manylinux == 'off'
+        with:
+          python-version: "3.14"
+      - name: Interpreter for maturin
+        if: matrix.manylinux == 'off'
+        shell: bash
+        run: |
+          uv python install 3.14
+          interpreter="$(uv python find 3.14)"
+          interpreter="${interpreter//\\//}"
+          echo "MATURIN_INTERPRETER=--interpreter $interpreter" >> "$GITHUB_ENV"
+      # maturin-action installs the toolchain rust-toolchain.toml pins
+      - uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        with:
+          target: ${{ matrix.target }}
+          manylinux: ${{ matrix.manylinux }}
+          args: --locked --profile dist --out dist ${{ env.MATURIN_INTERPRETER }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: wheel-${{ matrix.platform }}
+          path: dist/*.whl
+          if-no-files-found: error
+
+  sdist:
+    name: Source distribution
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
+        with:
+          command: sdist
+          args: --out dist
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+  wheel-install:
+    name: Install the wheel (${{ matrix.platform }})
+    needs: wheels
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: manylinux_2_28-x86_64
+            runner: ubuntu-latest
+            python: venv/bin/python
+          - platform: manylinux_2_28-aarch64
+            runner: ubuntu-24.04-arm
+            python: venv/bin/python
+          - platform: macos-arm64
+            runner: macos-latest
+            python: venv/bin/python
+          - platform: windows-x86_64
+            runner: windows-latest
+            python: venv/Scripts/python.exe
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.14"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: wheel-${{ matrix.platform }}
+          path: ${{ runner.temp }}/dist
+
+      # an empty environment and `uv pip install`, never `uv sync`, so the wheel
+      # is all that provides lofi. The tests run from outside the checkout under
+      # an empty pytest.ini, so neither the working directory nor pytest's
+      # `pythonpath` can put the source tree on the import path. Paths are
+      # relative to the runner's temporary directory, which bash on Windows
+      # spells with backslashes.
+      - name: Install into an empty environment
+        shell: bash
+        working-directory: ${{ runner.temp }}
+        run: |
+          uv venv venv
+          uv pip install --python venv dist/*.whl pytest
+          mkdir wheel-test
+          : > wheel-test/pytest.ini
+          cp "$GITHUB_WORKSPACE/tests/unit/test__native.py" \
+            "$GITHUB_WORKSPACE/tests/integration/test_wheel_native_parse.py" \
+            wheel-test/
+
+      # the extension's own test, then a self-contained public-interface parse.
+      - name: Test the installed extension and parse with it
+        shell: bash
+        working-directory: ${{ runner.temp }}/wheel-test
+        run: |
+          "../${{ matrix.python }}" -m pytest -p no:cacheprovider \
+            --import-mode=importlib test__native.py test_wheel_native_parse.py

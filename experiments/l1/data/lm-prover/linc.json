@@ -1,0 +1,37 @@
+{
+  "pipeline": "linc",
+  "model": "recorded-propositional-baseline@1",
+  "prompt_digest": "sha256:28edcab03eea6ff43190da1e9590fde4951a85e8b6ea1833e92e2805d5ebaf05",
+  "items": [
+    {"item_id": "dev-entails", "candidates": [
+      {"premise": "see(john)(mary)", "hypothesis": "see(john)(mary)"},
+      {"premise": "see(john)(mary)", "hypothesis": "see(john)(mary)"},
+      {"premise": "see(john)(mary)", "hypothesis": "see(john)(mary)"}
+    ]},
+    {"item_id": "dev-direction", "candidates": [
+      {"premise": "sleep(john)", "hypothesis": "sleep(mary)"},
+      {"premise": "sleep(john)", "hypothesis": "sleep(mary)"},
+      {"premise": "sleep(john)", "hypothesis": "sleep(mary)"}
+    ]},
+    {"item_id": "dev-neutral", "candidates": [
+      {"premise": "see(john)(mary)", "hypothesis": "see(mary)(john)"},
+      {"premise": "see(john)(mary)", "hypothesis": "see(mary)(john)"},
+      {"premise": "see(john)(mary)", "hypothesis": "see(mary)(john)"}
+    ]},
+    {"item_id": "test-entails", "candidates": [
+      {"premise": "see(mary)(john)", "hypothesis": "see(mary)(john)"},
+      {"premise": "see(mary)(john)", "hypothesis": "see(mary)(john)"},
+      {"premise": "see(mary)(john)", "hypothesis": "see(mary)(john)"}
+    ]},
+    {"item_id": "test-direction", "candidates": [
+      {"premise": "sleep(mary)", "hypothesis": "sleep(john)"},
+      {"premise": "sleep(mary)", "hypothesis": "sleep(john)"},
+      {"premise": "sleep(mary)", "hypothesis": "sleep(john)"}
+    ]},
+    {"item_id": "test-neutral", "candidates": [
+      {"premise": "see(mary)(john)", "hypothesis": "see(john)(mary)"},
+      {"premise": "see(mary)(john)", "hypothesis": "see(john)(mary)"},
+      {"premise": "see(mary)(john)", "hypothesis": "see(john)(mary)"}
+    ]}
+  ]
+}

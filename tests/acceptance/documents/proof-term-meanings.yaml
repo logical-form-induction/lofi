@@ -1,0 +1,22 @@
+# A logical-form-supervised parser whose internal span meanings are proof terms.
+defaults:
+  - form-supervision
+# Word decoding keeps the readout's bound: the form-supervision budget, so each
+# lexical frontier is held to the same omission as on the decoded route.
+approximation: {residual_mass: 0.9}
+model:
+  language: {from: data}
+  readouts:
+    forms:
+      # A derived cell keeps only the mass its children's frontiers retain, so
+      # its residual compounds every word beneath it. The corpus's longest
+      # sentence has three words, and three words each at the 0.9 word bound
+      # retain (1 - 0.9)^3 = 0.001 of their mass. The derived cell then loses
+      # more to its own frontier cap of 8 and to the untrained parser's mass on
+      # non-semantic actions, which a derived cell cannot give a meaning. The
+      # bound 1 - 0.001 * 0.01 = 0.99999 admits a hundredfold further loss and
+      # still refuses a phrase cell that retains nothing.
+      meanings: {kind: proof-term, weighting: distinct, residual_mass: 0.99999}
+      decoding: {strategy: exhaustive, cap: 8}
+trainer:
+  epochs: 1

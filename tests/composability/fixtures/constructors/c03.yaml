@@ -1,0 +1,27 @@
+# An undirected grammar over one self-opposite arrow.
+name: c03-undirected
+signature:
+  primitives: [S, P1, P2]
+  constructors:
+    - {name: "arrow", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: ->, precedence: 10, associativity: left}}
+  functors:
+    - {name: "arrow", constructor: "arrow", argument_side: either, opposite: "arrow"}
+rules:
+  name: application
+  rules:
+    - {rule: application, view: arrow}
+lexicon:
+  kind: inline
+  entries:
+    - {form: w0, category: P1}
+    - {form: w1, category: 'S->P1'}
+    - {form: w2, category: '(S->P1)->P2'}
+    - {form: w3, category: P2}
+    - {form: w4, category: 'P1->P2'}
+goal:
+  kind: root
+  categories: [S]
+matching:
+  kind: feature-erasure
+budget:
+  unary_rounds: 1

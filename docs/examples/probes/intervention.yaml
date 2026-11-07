@@ -1,0 +1,6 @@
+probes:
+  patch:
+    kind: intervention
+    interventions:
+      - site: {component: parser, role: RECEIVER_EDGE, key: [receiver]}
+        intervention: {kind: zero}

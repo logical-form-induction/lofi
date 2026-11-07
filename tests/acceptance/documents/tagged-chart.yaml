@@ -1,0 +1,11 @@
+# The tagged neural chart with a two-best decode and a declared unary depth.
+defaults:
+  - slash-point
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  parser:
+    kind: tagged
+    width: 4
+    unary_depth: 1
+    k_best: 2

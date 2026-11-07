@@ -1,0 +1,88 @@
+# Generated semantic-action pairs train the represented logical-form space.
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  encoders:
+    logical-forms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+  decoders:
+    form-identity: {kind: tree-rnn, width: 4}
+    form-application: {kind: tree-rnn, width: 4}
+  spaces:
+    forms:
+      sort: Tm
+      encoder: logical-forms
+      identity: form-identity
+      combinators:
+        merge: concatenate
+        decoders: {"application:/": form-application}
+data:
+  datasets:
+    train:
+      dataset:
+        kind: synthetic
+        retained: {validation: 0.25}
+        language:
+          name: synthesized-meanings
+          atomic_types: [{name: e}, {name: t, kind: proposition}]
+          constructors: [{name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}]
+          constants: []
+          binders: {style: curry}
+          logic:
+            equality: false
+            prover: {kind: truth-table, timeout: 5.0}
+            labeling: {budget: {}}
+          bounds:
+            Ty: {layout: complete-tree, depth: 3, nodes: null, order: df, free_ranks: 0}
+            Tm: {layout: complete-tree, depth: 2, nodes: null, order: df, free_ranks: 0}
+            Cat: {layout: complete-tree, depth: 2, nodes: null, order: df, free_ranks: 0}
+        grammar:
+          formalism: declared
+          name: synthesized-meanings
+          signature:
+            primitives: [S, NP]
+            constructors:
+              - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+              - {name: "\\", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: \\, precedence: 10, associativity: left}}
+            functors:
+              - {name: "/", constructor: "/", argument_side: right, opposite: "\\"}
+              - {name: "\\", constructor: "\\", argument_side: left, opposite: "/"}
+          rules:
+            name: synthesized-meanings
+            rules: [{rule: application, view: "/"}]
+          lexicon:
+            kind: inline
+            entries:
+              - {form: predicate, category: S/NP, meaning: p}
+              - {form: argument, category: NP, meaning: a}
+          goal: {kind: root, categories: [S]}
+          matching: {kind: identity}
+          budget: {unary_rounds: 1}
+        interpretation:
+          erasure:
+            kind: signature-morphism
+            atoms: {S: t, NP: e}
+          constants:
+            - {name: a, type: e, classes: [individual]}
+            - {name: p, type: "e -> t", classes: [predicate]}
+          meanings: {source: {kind: lexical}}
+        size: 2
+        seed: 5
+        length: {kind: uniform, min_length: 2, max_length: 2}
+trainer:
+  kind: terms
+  dataset: train
+  spaces: [forms]
+  steps: 2
+  batch_size: 2
+  generation: {max_depth: 2}
+  checkpoints: {interval: 2, keep: 1}
+release: {checkpoint: resume-latest}
+type_sampler: {kind: recursive, max_size: 3}
+pair_sampler: {kind: rule}
+optimizer: {kind: adamw, learning_rate: 0.03, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000

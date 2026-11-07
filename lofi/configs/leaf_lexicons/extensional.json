@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {"name": "jo", "type": "e", "classes": ["individual"]},
+    {"name": "sleep", "type": "e -> t", "classes": ["predicate"]},
+    {"name": "love", "type": "e -> e -> t", "classes": ["predicate"]},
+    {"name": "tall", "type": "(e -> t) -> e -> t", "classes": ["predicate"]},
+    {"name": "think", "type": "t -> e -> t", "classes": ["predicate"]}
+  ]
+}

@@ -1,0 +1,5 @@
+kind: ccgbank-reskin
+source: ${lofi.path:ccgbank}
+splits: [train]
+mapping: {prefix: type, minimum_frequency: 10}
+seed: derived

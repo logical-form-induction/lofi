@@ -1,0 +1,6 @@
+{
+  "grid": {"decomposition": ["flat", "cause-become"]},
+  "hypotheses": [
+    {"name": "decomposition", "left": "cause-become", "right": "flat", "family": "source-preflight"}
+  ]
+}

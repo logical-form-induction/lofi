@@ -1,0 +1,19 @@
+name: products
+atomic_types: [{name: e}, {name: t, kind: proposition}]
+constructors:
+  - {name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}
+  - {name: prod, kind: [Ty, Ty, Ty], notation: {style: prefix, spelling: prod}}
+constants:
+  - name: not
+    type: "t -> t"
+    classes: [sentential, negation]
+    notation: {kind: prefix, ascii: "not", unicode: "¬", precedence: 6}
+  - {name: pair, type: "a -> b -> prod(a, b)", quantifies: [a, b]}
+  - {name: fst, type: "prod(a, b) -> a", quantifies: [a, b]}
+  - {name: snd, type: "prod(a, b) -> b", quantifies: [a, b]}
+binders: {style: curry}
+logic:
+  equality: false
+  negation: not
+  prover: {kind: truth-table, timeout: 5.0}
+  labeling: {budget: {}}

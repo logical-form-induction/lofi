@@ -1,0 +1,15 @@
+# A packaged leaf signature joins a declared language before the point is built.
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.interpretation: first-order
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          leaf_lexicon: {kind: path, path: extensional.json}
+        interpretation:
+          constants:
+            - {name: john, type: e, classes: [individual]}
+            - {name: mary, type: e, classes: [individual]}
+            - {name: see, type: "e -> e -> t", classes: [predicate]}

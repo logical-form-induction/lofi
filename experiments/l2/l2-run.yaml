@@ -1,0 +1,188 @@
+defaults:
+  - model.grounding: nli-baseline
+  - model.spaces.categories.combinators: slash-run
+  - model.language.grammar: quantifier-free
+  - model.language.interpretation.meanings.source.structure: quantifier-free
+  - data.datasets.train.dataset: l2-pairs-run
+  - data.datasets.train.dataset.grammar: quantifier-free
+  - data.datasets.train.dataset.source.language: l2-language-run
+  - data.datasets.train.dataset.source.interpretation: l2-interpretation-run
+  - data.datasets.train.dataset.source.interpretation.meanings.source.structure: quantifier-free
+  - data.datasets.train.featurizer: pair
+parse: {retain: forest, reachability: all}
+approximation: {residual_mass: 0.9}
+comparison: {source: quantifier-free, condition: primary, direction: first-order, twin: observed}
+model:
+  language:
+    from: inline
+    language:
+      name: l2-learner-superset
+      atomic_types:
+        - {name: e, kind: individual}
+        - {name: v, kind: event}
+        - {name: t, kind: proposition}
+      constructors:
+        - name: "->"
+          kind: [Ty, Ty, Ty]
+          notation: {style: infix, spelling: "->", precedence: 1, associativity: right}
+      constants:
+        - name: not
+          type: "t -> t"
+          classes: [sentential, negation]
+          notation: {kind: prefix, ascii: "~", unicode: "¬", precedence: 6}
+        - name: and
+          type: "t -> t -> t"
+          classes: [sentential, conjunction]
+          notation: {kind: infix, ascii: "&", unicode: "∧", precedence: 4, associativity: left}
+        - name: or
+          type: "t -> t -> t"
+          classes: [sentential, disjunction]
+          notation: {kind: infix, ascii: "|", unicode: "∨", precedence: 3, associativity: left}
+        - name: if
+          type: "t -> t -> t"
+          classes: [sentential, conditional]
+          notation: {kind: infix, ascii: "=>", unicode: "⇒", precedence: 2, associativity: right}
+        - {name: cause, type: "t -> t -> t", classes: [sentential]}
+        - {name: become, type: "t -> t", classes: [sentential]}
+        - name: eq
+          type: "a -> a -> t"
+          quantifies: [a]
+          classes: [sentential, equality]
+          notation: {kind: infix, ascii: "=", unicode: "=", precedence: 5, associativity: left}
+        - name: forall
+          type: "(a -> t) -> t"
+          quantifies: [a]
+          classes: [quantifier, universal]
+          notation: {kind: binder, ascii: forall, unicode: "∀", bodies: 1}
+        - name: exists
+          type: "(a -> t) -> t"
+          quantifies: [a]
+          classes: [quantifier, existential]
+          notation: {kind: binder, ascii: exists, unicode: "∃", bodies: 1}
+      binders: {style: curry}
+      logic:
+        order: second
+        equality: true
+        negation: not
+        prover: {kind: tptp, engine: vampire, dialect: thf, timeout: 5.0, polymorphism: monomorphize}
+        labeling: {budget: {}}
+      bounds:
+        Ty: {layout: complete-tree, depth: 5, nodes: null, order: df, free_ranks: 0}
+        Tm: {layout: preorder-arity, depth: 8, nodes: 32, order: df, free_ranks: 0}
+        Cat: {layout: complete-tree, depth: 6, nodes: null, order: df, free_ranks: 0}
+    interpretation:
+      entity: e
+      truth: t
+      countermodels:
+        method: random
+        carriers: {e: 2, v: 1}
+        structures: 32
+        seed: 0
+        full_function_space_cap: 64
+      erasure:
+        kind: signature-morphism
+        atoms: {S: t, NP: e, N: "⟨e,t⟩"}
+      constants: []
+      meanings:
+        source: {kind: structured}
+  capacity: {kind: parameter-count, target: 65536}
+  parser: {kind: inside-outside, width: 4}
+  token_encoder: {kind: learned, width: 4}
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 4, activation: tanh}]}
+  encoders:
+    terms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+    logical-forms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+  decoders:
+    identity: {kind: tree-rnn, width: 4}
+    application: {kind: tree-rnn, width: 4}
+    form-identity:
+      kind: tree-rnn
+      width: 4
+      type_directed: {prefix: type-grammar, mask: known}
+  spaces:
+    categories: {sort: Cat, encoder: terms, identity: identity}
+    semantics: {sort: Tm, encoder: logical-forms, identity: form-identity}
+  readouts:
+    types:
+      kind: terms
+      space: categories
+      reads: inside
+      targets: grammar-goal
+      output: sentences
+    forms:
+      kind: terms
+      space: semantics
+      reads: inside
+      decoding: {strategy: exhaustive, cap: 16}
+loss:
+  terms:
+    - objective:
+        kind: inference
+        signal: likelihood
+        response: {kind: label}
+        auxiliary_weight: 0.0
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 1
+  batch_size: 2
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  max_grad_norm: null
+  active_groups:
+    - token_encoder
+    - terms
+    - logical-forms
+    - identity
+    - application
+    - form-identity
+    - controller
+    - parser
+  early_stopping:
+    metric: loss/inference
+    mode: min
+    patience: 2
+    minimum_delta: 0.0
+    keep_best: 1
+  checkpoints: {interval: 1, keep: 1}
+release: {checkpoint: validation-best}
+optimizer: {kind: adamw, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000
+evaluators:
+  fit:
+    kind: held-out-likelihood
+    interval: {replicates: 20, level: 0.95}
+    readout: types
+    output: sentences
+    measurements: [string, description-length]
+    symbol_cost: {kind: uniform, cost: 1.0}
+    conventions:
+      punctuation: keep
+      unary_chains: keep
+      trivial_spans: keep
+      minimum_length: 0
+      aggregation: sentence
+      coverage: zero
+      self_arcs: allow
+      gold_derivation: canonical
+  labels:
+    kind: inference
+    interval: {replicates: 20, level: 0.95}
+    reduction: null
+    partitions: {fit_on: dev, score_on: test}
+    bins: 5
+    proof: null
+    conventions:
+      punctuation: keep
+      unary_chains: keep
+      trivial_spans: keep
+      minimum_length: 0
+      aggregation: corpus
+      coverage: zero
+      self_arcs: allow
+      gold_derivation: canonical

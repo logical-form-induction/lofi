@@ -1,0 +1,73 @@
+{
+  "levels": 7,
+  "cases": [
+    {
+      "name": "full_scale",
+      "rows": [
+        {"participant": "a", "response": 0, "ridit": 0.07142857142857142},
+        {"participant": "a", "response": 1, "ridit": 0.21428571428571427},
+        {"participant": "a", "response": 2, "ridit": 0.35714285714285715},
+        {"participant": "a", "response": 3, "ridit": 0.5},
+        {"participant": "a", "response": 4, "ridit": 0.6428571428571429},
+        {"participant": "a", "response": 5, "ridit": 0.7857142857142857},
+        {"participant": "a", "response": 6, "ridit": 0.9285714285714286}
+      ]
+    },
+    {
+      "name": "unvarying",
+      "rows": [
+        {"participant": "a", "response": 4, "ridit": 0.5},
+        {"participant": "a", "response": 4, "ridit": 0.5},
+        {"participant": "a", "response": 4, "ridit": 0.5}
+      ]
+    },
+    {
+      "name": "skewed",
+      "rows": [
+        {"participant": "a", "response": 0, "ridit": 0.4},
+        {"participant": "a", "response": 0, "ridit": 0.4},
+        {"participant": "a", "response": 0, "ridit": 0.4},
+        {"participant": "a", "response": 0, "ridit": 0.4},
+        {"participant": "a", "response": 6, "ridit": 0.9}
+      ]
+    },
+    {
+      "name": "disjoint_ranges",
+      "rows": [
+        {"participant": "low", "response": 0, "ridit": 0.16666666666666666},
+        {"participant": "low", "response": 1, "ridit": 0.5},
+        {"participant": "low", "response": 2, "ridit": 0.8333333333333334},
+        {"participant": "high", "response": 2, "ridit": 0.16666666666666666},
+        {"participant": "high", "response": 5, "ridit": 0.5},
+        {"participant": "high", "response": 6, "ridit": 0.8333333333333334}
+      ]
+    },
+    {
+      "name": "repeats_and_gaps",
+      "rows": [
+        {"participant": "a", "response": 1, "ridit": 0.16666666666666666},
+        {"participant": "a", "response": 1, "ridit": 0.16666666666666666},
+        {"participant": "a", "response": 3, "ridit": 0.5833333333333334},
+        {"participant": "a", "response": 3, "ridit": 0.5833333333333334},
+        {"participant": "a", "response": 3, "ridit": 0.5833333333333334},
+        {"participant": "a", "response": 6, "ridit": 0.9166666666666666}
+      ]
+    },
+    {
+      "name": "interleaved",
+      "rows": [
+        {"participant": "a", "response": 0, "ridit": 0.25},
+        {"participant": "b", "response": 6, "ridit": 0.75},
+        {"participant": "a", "response": 6, "ridit": 0.75},
+        {"participant": "b", "response": 0, "ridit": 0.25}
+      ]
+    },
+    {
+      "name": "one_row_each",
+      "rows": [
+        {"participant": "a", "response": 2, "ridit": 0.5},
+        {"participant": "b", "response": 5, "ridit": 0.5}
+      ]
+    }
+  ]
+}

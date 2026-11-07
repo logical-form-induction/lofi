@@ -1,0 +1,11 @@
+kind: inline
+entries:
+  - {form: w0, category: NP}
+  - {form: w0, category: N}
+  - {form: w1, category: 'S\NP'}
+  - {form: w1, category: '(S\NP)/NP'}
+  - {form: w2, category: '(S\NP)/NP'}
+  - {form: w2, category: '((S\NP)/NP)/NP'}
+  - {form: w3, category: NP/N}
+  - {form: w3, category: 'N/N'}
+  - {form: w4, category: N}

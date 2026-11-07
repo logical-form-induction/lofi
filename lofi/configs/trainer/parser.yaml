@@ -1,0 +1,14 @@
+kind: parser
+dataset: train
+epochs: 100
+batch_size: 32
+batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+early_stopping:
+  metric: loss/grammaticality
+  mode: min
+  patience: 10
+  minimum_delta: 0.0
+  keep_best: 1
+checkpoints:
+  interval: 1
+  keep: 1

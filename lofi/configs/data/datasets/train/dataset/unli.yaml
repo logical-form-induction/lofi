@@ -1,0 +1,10 @@
+kind: unli
+sources:
+  - source: ${lofi.path:unli/train.csv}
+    release:
+      source_id: unli
+      release_id: u-snli  # https://nlp.jhu.edu/unli/
+      split: train
+      language: en
+      source_method: crowdsourced
+      spdx: NOASSERTION  # https://nlp.jhu.edu/unli/

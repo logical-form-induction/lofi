@@ -1,0 +1,4 @@
+# Capacity-matched parser point with noisy labeled strings.
+defaults:
+  - run/synthetic-labeled-strings
+  - s4-settings-run

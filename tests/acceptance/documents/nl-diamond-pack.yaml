@@ -1,0 +1,9 @@
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: nl-diamond
+  - model.spaces.categories.combinators: nl-diamond
+model:
+  parser: {kind: tagged, width: 4, unary_depth: 3}
+  readouts:
+    category-terms:
+      decoding: {strategy: exhaustive, cap: 1024}

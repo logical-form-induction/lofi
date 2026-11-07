@@ -1,0 +1,101 @@
+# Worked profile for an array launcher. Copy it outside the repository, replace
+# every placeholder with a site's values, and point LOFI_SITE_PROFILE at the copy.
+
+# Attempts a point receives across launches before infrastructure failure is final.
+
+[submission]
+# Command that submits one rendered array script.
+command = "site-submit-command"
+# Prefix placed before every native submission directive.
+directive_prefix = "#SITE"
+# Native option template spanning the first and last zero-based task indices.
+array_syntax = "--array={first}-{last}"
+# Native option template limiting how many array tasks run concurrently.
+throttle_syntax = "%{throttle}"
+# Native option template selecting the account charged for the array.
+account_syntax = "--account={account}"
+# Native option template selecting the partition that runs the array.
+partition_syntax = "--partition={partition}"
+# Native option template requesting an accelerator kind and per-node count.
+accelerator_syntax = "--accelerator={accelerator}:{accelerators_per_node}"
+# Environment variable through which the site exposes the current task index.
+task_index_variable = "SITE_ARRAY_TASK_INDEX"
+# Native option template granting each task its wall-clock minutes.
+walltime_syntax = "--walltime={minutes}"
+# Native option template granting each task its memory in mebibytes.
+memory_syntax = "--memory={megabytes}"
+# Native option template granting each task its processor cores.
+cpus_syntax = "--cpus={cpus}"
+# Native option template naming each task's log file under the submission directory.
+log_syntax = "--log={directory}/task.log"
+# Native option template naming the job every submission of one experiment shares.
+name_syntax = "--name={name}"
+# Text every job name starts with, before a digest of the experiment and freeze.
+job_prefix = "lofi-"
+# Argument vector, each word formatted with the job name, that cancels every job of the name.
+cancel_command = ["site-cancel-command", "--name={name}"]
+
+[placement]
+# Placeholder for the account that will be charged.
+account = "placeholder-account"
+# Placeholder for the partition or queue that will run the job.
+partition = "placeholder-partition"
+# Placeholder for the accelerator kind as the submission system names it.
+accelerator = "placeholder-accelerator"
+# Number of accelerators requested on each node.
+accelerators_per_node = 1
+# Number of processor cores each array task takes.
+cpus_per_task = 4
+
+[storage]
+# Absolute placeholder root under which run outputs will be written.
+scratch_root = "/placeholder/run"
+# Absolute placeholder root under which downloaded and derived data will be cached.
+cache_root = "/placeholder/cache"
+
+[storage.quota]
+# argument vector that prints the site's quota report for the scratch root
+command = ["placeholder-quota-report"]
+# regular expression whose group named used matches the amount the report holds
+used_pattern = "used (?P<used>[0-9]+)"
+# bytes one reported unit stands for
+unit_bytes = 1073741824
+# bytes reclamation keeps the scratch root under
+limit_bytes = 3000000000000
+
+# reclaimable files of a completed point, removed cheapest to remake first
+[[storage.artifacts]]
+# name reclamation reports the class under
+name = "representations"
+# glob, relative to a point's directory, the class's files match
+pattern = "representations"
+# accelerator-hours remaking one point's files of the class costs
+regeneration_hours = 0.5
+
+[[storage.artifacts]]
+# name reclamation reports the class under
+name = "checkpoints"
+# glob, relative to a point's directory, the class's files match
+pattern = "checkpoints"
+# accelerator-hours remaking one point's files of the class costs
+regeneration_hours = 4.0
+
+[environment]
+# Shell setup lines run before the interpreter, in order.
+preamble = ["site-environment-setup"]
+
+[interpreter]
+# Argument vector that invokes Python after the environment setup.
+command = ["python"]
+
+[transport]
+# Placeholder host used only by the remote launcher.
+host = "placeholder-host"
+# Argument vector that opens a remote session before the host is appended.
+command = ["remote-shell"]
+
+[allocation]
+# accelerator-hours the site grants
+accelerator_hours = 10000.0
+# largest fraction of the allocation one paper's admitted experiments may hold
+share = 0.6

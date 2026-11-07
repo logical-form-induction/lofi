@@ -1,0 +1,16 @@
+defaults:
+  - synthetic-parser
+evaluators:
+  coherence-diagnostics:
+    kind: coherence-diagnostics
+    interval: {replicates: 50, level: 0.95}
+    objective: coherence
+    readout: category-terms
+    root_mass: sentences
+    collapse_threshold: 0.99
+    astar:
+      strategy: {kind: binary}
+      root_mode: {kind: goal}
+      heuristic: {kind: supertag-outside}
+    decode: {kind: viterbi}
+    conventions: {punctuation: keep, unary_chains: keep, trivial_spans: keep, minimum_length: 0, aggregation: sentence, coverage: zero, self_arcs: allow, gold_derivation: canonical}

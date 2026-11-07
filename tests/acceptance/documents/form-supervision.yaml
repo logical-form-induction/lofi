@@ -1,0 +1,51 @@
+# Direct gold-form supervision over the interpreted higher-order corpus.
+defaults:
+  - higher-order-point
+approximation: {residual_mass: 0.9}
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          bounds:
+            Tm: {layout: complete-tree, depth: 8, nodes: null, order: df, free_ranks: 0}
+model:
+  language: {from: data}
+  encoders:
+    logical-forms:
+      kind: transformer
+      width: 4
+      heads: 1
+      layers: 1
+      feedforward_width: 4
+      structure: positions
+      norm_cap: null
+  decoders:
+    form-identity:
+      kind: tree-rnn
+      width: 4
+      type_directed: {prefix: type-grammar, mask: known}
+  spaces:
+    semantics: {sort: Tm, encoder: logical-forms, identity: form-identity}
+  readouts:
+    forms:
+      kind: terms
+      space: semantics
+      reads: inside
+      decoding: {strategy: exhaustive, cap: 32}
+loss:
+  terms:
+    - objective: {kind: form-supervision, readout: forms}
+trainer:
+  epochs: 3
+  active_groups:
+    - token_encoder
+    - terms
+    - logical-forms
+    - identity
+    - application
+    - form-identity
+    - controller
+    - parser
+  early_stopping:
+    metric: loss/form-supervision

@@ -1,0 +1,6 @@
+defaults:
+  - propositional
+  - _shared/equality-universal
+  - _shared/existential
+name: neo-davidsonian
+logic: {equality: true}

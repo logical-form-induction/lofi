@@ -1,0 +1,4 @@
+# Every occurrence is trained against the categories its surface form bears.
+defaults:
+  - induction
+data: {datasets: {train: {constraint_policy: {syntactic: {coverage: 1.0}}}}}

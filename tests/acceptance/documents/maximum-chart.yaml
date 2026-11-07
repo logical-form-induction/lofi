@@ -1,0 +1,34 @@
+# The neural chart scored under maximum reduction.
+defaults:
+  - slash-point
+parse: {retain: forest, reachability: all}
+data:
+  datasets:
+    train:
+      dataset:
+        retained: {dev: 0.25, test: 0.25}
+model:
+  language: {from: data}
+  parser:
+    reduction: {kind: maximum}
+  readouts:
+    types:
+      targets: null
+      output: null
+loss:
+  terms:
+    - objective:
+        kind: chart-scale
+trainer:
+  early_stopping:
+    metric: loss/chart-scale
+evaluators:
+  held-out:
+    kind: lexical-types
+    readout: category-terms
+    alignment:
+      kind: identity
+      fit_on: dev
+      score_on: test
+      random_floor: {replicates: 20, level: 0.95}
+      stability: {replicates: 20, level: 0.95}

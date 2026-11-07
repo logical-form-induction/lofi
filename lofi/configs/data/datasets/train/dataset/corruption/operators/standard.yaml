@@ -1,0 +1,7 @@
+defaults:
+  - swap-deletion
+entries+:
+  - operator: {kind: insertion, edits: 1}
+    weight: 1.0
+  - operator: {kind: substitution, edits: 1}
+    weight: 1.0

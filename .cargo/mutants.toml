@@ -1,0 +1,2 @@
+# cargo-mutants runs each mutant's tests with nextest, as the test gate does.
+test_tool = "nextest"

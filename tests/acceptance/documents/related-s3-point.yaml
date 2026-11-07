@@ -1,0 +1,10 @@
+# Synthetic CCG data with every approved related distribution factor declared.
+defaults:
+  - generated-point
+data:
+  datasets:
+    train:
+      dataset:
+        shape:
+          default:
+            attempts: 100

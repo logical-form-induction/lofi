@@ -1,0 +1,17 @@
+# Application written as pattern rules, its meanings derived as proof terms, and
+# a coordination rule whose meaning the document declares.
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: pattern-application
+  - model.spaces.categories.combinators: pattern-application
+  - data.datasets.train.dataset.interpretation: higher-order
+  - data.datasets.train.dataset.language: higher-order
+data:
+  datasets:
+    train:
+      dataset:
+        size: 8
+        length: {max_length: 4}
+        interpretation:
+          actions:
+            conjoin: '\a. \b. a && b'

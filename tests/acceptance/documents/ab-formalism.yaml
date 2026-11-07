@@ -1,0 +1,9 @@
+# The slash grammar read as an AB grammar rather than a CCG.
+defaults:
+  - slash-point
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          formalism: ab

@@ -1,0 +1,13 @@
+countermodels:
+  method: random
+  carriers: {e: 2, v: 1}
+  structures: 32
+  seed: 0
+  full_function_space_cap: 64
+erasure:
+  kind: signature-morphism
+  atoms: {S: t, NP: e, N: "⟨e,t⟩"}
+constants: []
+meanings:
+  source:
+    kind: structured

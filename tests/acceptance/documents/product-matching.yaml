@@ -1,0 +1,12 @@
+# The composition grammar packed by the intersection of two declared relations.
+defaults:
+  - composition-point
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          matching:
+            kind: product
+            left: {kind: identity}
+            right: {kind: feature-erasure}

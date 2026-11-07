@@ -1,0 +1,5 @@
+constants+:
+  - name: iff
+    type: "t -> t -> t"
+    classes: [sentential, biconditional]
+    notation: {kind: infix, ascii: "<=>", unicode: "⇔", precedence: 1, associativity: right}

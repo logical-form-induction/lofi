@@ -1,0 +1,42 @@
+name: defined-gq
+atomic_types: [{name: e}, {name: truth, kind: proposition}]
+constructors:
+  - {name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}
+constants:
+  - name: not
+    type: "truth -> truth"
+    classes: [sentential, negation]
+    notation: {kind: prefix, ascii: "~", unicode: "¬", precedence: 6}
+  - name: or
+    type: "truth -> truth -> truth"
+    classes: [sentential, disjunction]
+    notation: {kind: infix, ascii: "|", unicode: "∨", precedence: 3, associativity: left}
+  - name: and
+    type: "truth -> truth -> truth"
+    classes: [sentential]
+    notation: {kind: infix, ascii: "&", unicode: "∧", precedence: 4, associativity: left}
+    definition: '\p:truth. \q:truth. ~(~p | ~q)'
+  - name: eq
+    type: "a -> a -> truth"
+    quantifies: [a]
+    classes: [sentential, equality]
+    notation: {kind: infix, ascii: "=", unicode: "=", precedence: 5, associativity: left}
+  - name: forall
+    type: "(a -> truth) -> truth"
+    quantifies: [a]
+    classes: [quantifier, universal]
+    notation: {kind: binder, ascii: forall, unicode: "∀", bodies: 1}
+  - name: most
+    type: "(e -> truth) -> (e -> truth) -> truth"
+    classes: [quantifier]
+    notation: {kind: binder, ascii: most, unicode: most, bodies: 2}
+    semantics: most
+binders: {style: curry}
+logic:
+  order: higher
+  functions: true
+  equality: true
+  negation: not
+  prover: {kind: tptp, engine: vampire, dialect: thf, timeout: 5.0, polymorphism: monomorphize}
+  labeling: {budget: {}}
+  postulates: ['forall p. p | ~p']

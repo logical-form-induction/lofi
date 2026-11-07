@@ -1,0 +1,4 @@
+ambiguity: union
+selector: {kind: category-class, categories: [constant, predicate, connective]}
+coverage: 1.0
+seed: 0

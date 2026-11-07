@@ -1,0 +1,16 @@
+defaults: [slashes-application-k2-depth1]
+from: inline
+grammar:
+  name: slashes-composition-k16-depth3
+  signature:
+    name: slashes-composition-k16-depth3
+    primitives: [S, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15]
+  rules:
+    name: slashes-composition
+    rules:
+      - {rule: application, view: /}
+      - {rule: application, view: "\\"}
+      - {rule: composition, direction: unrestricted, order: 1, view: /}
+      - {rule: composition, direction: unrestricted, order: 1, view: "\\"}
+  lexicon:
+    max_depth: 3

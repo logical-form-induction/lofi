@@ -1,0 +1,4 @@
+name: application
+rules:
+  - {rule: application, view: /}
+  - {rule: application, view: "\\"}

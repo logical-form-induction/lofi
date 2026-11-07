@@ -1,0 +1,7 @@
+# Labeled inference over the slash grammar.
+defaults:
+  - inference-base
+  - data.datasets.train.dataset.source.language: propositional
+  - data.datasets.train.dataset.grammar: slash
+  - data.datasets.train.dataset.source.interpretation: first-order
+  - model.spaces.categories.combinators: slash

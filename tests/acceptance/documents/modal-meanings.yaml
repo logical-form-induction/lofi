@@ -1,0 +1,26 @@
+# The modal grammar interpreted into typed meanings, the modality erased to the
+# type of its operand, so that its introduction and elimination are identities.
+defaults:
+  - modal-point
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          logic:
+            equality: false
+            negation: not
+            prover: {kind: truth-table, timeout: 5.0}
+            labeling: {budget: {}}
+        interpretation:
+          erasure:
+            kind: signature-morphism
+            atoms: {S: t, NP: e}
+            constructors:
+              "<>": a0
+          constants:
+            - {name: john, type: e, classes: [individual]}
+            - {name: mary, type: e, classes: [individual]}
+            - {name: sleep, type: "e -> t", classes: [predicate]}
+            - {name: see, type: "e -> e -> t", classes: [predicate]}
+          meanings: {source: {kind: lexical}}

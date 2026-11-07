@@ -1,0 +1,29 @@
+{
+  "name": "existential-only",
+  "signature": {
+    "primitives": ["S", "NP", "N"],
+    "constructors": [
+      {"name": "/", "kind": ["Cat", "Cat", "Cat"], "notation": {"style": "infix", "spelling": "/", "precedence": 10, "associativity": "left"}},
+      {"name": "\\", "kind": ["Cat", "Cat", "Cat"], "notation": {"style": "infix", "spelling": "\\", "precedence": 10, "associativity": "left"}}
+    ],
+    "functors": [
+      {"name": "/", "constructor": "/", "argument_side": "right", "opposite": "\\"},
+      {"name": "\\", "constructor": "\\", "argument_side": "left", "opposite": "/"}
+    ]
+  },
+  "rules": {"name": "application", "rules": [{"rule": "application", "view": "/"}, {"rule": "application", "view": "\\"}]},
+  "lexicon": {
+    "kind": "inline",
+    "entries": [
+      {"form": "entity", "category": "NP"},
+      {"form": "noun", "category": "N"},
+      {"form": "predicate", "category": "S\\NP"},
+      {"form": "determiner", "category": "(S/(S\\NP))/N"},
+      {"form": "prefix", "category": "S/S"},
+      {"form": "infix", "category": "(S\\S)/S"}
+    ]
+  },
+  "goal": {"kind": "root", "categories": ["S"]},
+  "budget": {"unary_rounds": 1},
+  "formalism": "declared"
+}

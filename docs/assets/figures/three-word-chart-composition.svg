@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 570" role="img" aria-labelledby="title desc">
+  <title id="title">A type-raising and composition derivation in the chart</title>
+  <desc id="desc">John's NP is raised to S slash (S backslash NP) within span 0 to 1. Forward composition with sees, of category (S backslash NP) slash NP, produces S slash NP in span 0 to 2. Forward application to Mary's NP produces S for the full sentence. Only items and edges used in this derivation are shown; the alternative sees Mary cell is not expanded.</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#236c8a"/></marker></defs>
+  <rect width="780" height="570" rx="12" fill="#fff"/>
+  <g stroke="#b1bfca" stroke-width="1.5" fill="#f2f7fa">
+    <rect x="285" y="25" width="210" height="85" rx="4"/>
+    <rect x="170" y="165" width="210" height="85" rx="4"/>
+    <rect x="400" y="165" width="210" height="85" rx="4" fill="#fafafa" stroke-dasharray="5 4"/>
+    <rect x="55" y="305" width="210" height="135" rx="4"/>
+    <rect x="285" y="305" width="210" height="135" rx="4"/>
+    <rect x="515" y="305" width="210" height="135" rx="4"/>
+  </g>
+  <g fill="none" stroke="#236c8a" stroke-width="2">
+    <path d="M160 305 L275 280 L390 305"/>
+    <path d="M275 280 V252" marker-end="url(#arrow)"/>
+    <path d="M275 165 L390 140"/><path d="M620 305 C710 200 650 140 390 140"/>
+    <path d="M390 140 V112" marker-end="url(#arrow)"/>
+    <path d="M160 379 V352" marker-end="url(#arrow)"/>
+  </g>
+  <g font-family="Georgia, 'Times New Roman', serif" text-anchor="middle" fill="#162b3b" font-size="27">
+    <text x="390" y="62">S</text><text x="275" y="202">S/NP</text>
+    <text x="160" y="340" font-size="24">S/(S\NP)</text><text x="160" y="403">NP</text>
+    <text x="390" y="368">(S\NP)/NP</text><text x="620" y="368">NP</text>
+  </g>
+  <g font-family="system-ui, sans-serif" text-anchor="middle" fill="#455b6b" font-size="16">
+    <text x="390" y="91">[0,3)</text><text x="275" y="231">[0,2)</text>
+    <text x="505" y="191">alternative route</text><text x="505" y="214">not expanded here</text><text x="505" y="239">[1,3)</text>
+    <text x="160" y="425">[0,1)</text><text x="390" y="425">[1,2)</text><text x="620" y="425">[2,3)</text>
+    <text x="275" y="301" fill="#236c8a">&gt;B</text><text x="390" y="162" fill="#236c8a">&gt;</text>
+    <text x="188" y="373" fill="#236c8a">&gt;T</text>
+    <text x="390" y="543">&gt;T type raising     ·     &gt;B forward composition     ·     &gt; forward application</text>
+  </g>
+  <path d="M45 459 H735 M45 452 V466 M275 452 V466 M505 452 V466 M735 452 V466" stroke="#687782" fill="none"/>
+  <g font-family="Georgia, 'Times New Roman', serif" font-size="24" text-anchor="middle" fill="#162b3b">
+    <text x="160" y="499">John</text><text x="390" y="499">sees</text><text x="620" y="499">Mary</text>
+  </g>
+  <g font-family="system-ui, sans-serif" font-size="14" text-anchor="middle" fill="#455b6b">
+    <text x="45" y="488">0</text><text x="275" y="488">1</text><text x="505" y="488">2</text><text x="735" y="488">3</text>
+  </g>
+</svg>

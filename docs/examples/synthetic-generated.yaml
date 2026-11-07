@@ -1,0 +1,130 @@
+# The documentation run over a grammar declared by its primitives and rules.
+defaults:
+  - model.parser: inside-outside
+  - model.token_encoder: static
+  - model.subword_pooler: first
+  - model.encoders.terms: rnn
+  - model.controller: mlp
+  - model.decoders.identity: rnn
+  - model.decoders.application: rnn
+  - model.readouts: types
+  - data.datasets.train.dataset: synthetic
+  - data.datasets.train.dataset.grammar: directed
+  - data.datasets.train.featurizer: unlabeled
+  - optimizer: adamw
+  - scheduler: cosine
+  - device_policy: cpu
+parse: {retain: forest, reachability: all}
+model:
+  token_encoder:
+    vectors: lofi.resource:run/synthetic-parser.vec
+    vectors_format: glove
+    trainable: true
+  encoders:
+    terms:
+      width: 4
+      layers: 1
+      norm_cap: null
+  controller:
+    hidden: [{width: 4, activation: tanh}]
+  decoders:
+    identity:
+      width: 4
+    application:
+      width: 4
+  spaces:
+    categories:
+      sort: Cat
+      encoder: terms
+      identity: identity
+      combinators:
+        merge: concatenate
+        decoders:
+          "application:/": application
+          "application:\\": application
+loss:
+  terms:
+    - objective:
+        kind: grammaticality
+        readout: sentences
+        noise: 0.0
+      weight: 1.0
+    - objective:
+        kind: coherence
+        readout: types
+        space: categories
+        estimator: exact
+        divergence:
+          kind: kl
+        warmup: null
+      weight: 0.1
+data:
+  dataset:
+    retained: {validation: 0.25}
+    language:
+      name: synthetic-generated
+      atomic_types: [{name: e}, {name: t}]
+      constructors:
+        - {name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}
+      constants: []
+      binders: {style: curry}
+    grammar:
+      formalism: declared
+      name: synthetic-generated
+      signature:
+        primitives: [S, P1, P2, P3]
+      rules:
+        name: application
+        rules:
+          - {rule: application, view: /}
+          - {rule: application, view: "\\"}
+      lexicon:
+        kind: generated
+        forms: 8
+        categories: 6
+        category_shares: {kind: uniform}
+        ambiguity:
+          spelling: parametric
+          mean: 2.0
+          dispersion: 0.0
+          maximum: 2
+          placement: 0.0
+        rank_law: {kind: uniform}
+        seed: 3
+        max_depth: 2
+      goal:
+        categories: [S]
+      matching:
+        kind: feature-erasure
+      budget:
+        unary_rounds: 1
+    size: 16
+    seed: 5
+    length:
+      kind: uniform
+      min_length: 2
+      max_length: 4
+  featurizer:
+    padding: <pad>
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 1
+  batch_size: 2
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  accumulation_steps: 2
+  max_grad_norm: null
+  active_groups: [token_encoder, terms, identity, application, controller, parser]
+  early_stopping:
+    metric: loss/grammaticality
+    mode: min
+    patience: 2
+    minimum_delta: 0.0
+    keep_best: 1
+  checkpoints:
+    interval: 1
+    keep: 1
+release:
+  checkpoint: validation-best
+optimizer:
+  weight_decay: 0.0

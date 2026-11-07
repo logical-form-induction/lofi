@@ -1,0 +1,10 @@
+# Seed the represented category inventory before the inherited fitting stages.
+type_sampler: {kind: exhaustive, max_size: 5, weighting: {kind: uniform}}
+trainer:
+  base:
+    epochs: 3
+  +stages:
+    - name: category-inventory
+      step: {kind: terms, name: category-inventory, dataset: train, space: categories, combinators: false, generation: {max_depth: 3}}
+      active_groups: [terms, identity]
+      epochs: 1

@@ -1,0 +1,16 @@
+% Hand-written synthetic fixture distributed under the LoFI project license.
+:- op(601, xfx, (/)).
+:- op(601, xfx, (\)).
+ccg(fa,fa(np,t(np,fa,[lemma:fa,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:2]))).
+ccg(ba,ba(np,t(np,ba,[lemma:ba,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:2]))).
+ccg(rp,rp(np,t(np,rp,[lemma:rp,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:2]))).
+ccg(lx,lx(np,n,t(n,lx,[lemma:lx,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:2]))).
+ccg(bxc,bxc(np,t(np,bxc,[lemma:bxc,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:3]))).
+ccg(conj,conj(np,t(np,conj,[lemma:conj,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:4]))).
+ccg(fc,fc(np,t(np,fc,[lemma:fc,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:2]))).
+ccg(fxc,fxc(np,t(np,fxc,[lemma:fxc,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:3]))).
+ccg(gbxc,gbxc(np,t(np,gbxc,[lemma:gbxc,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:4]))).
+ccg(lp,lp(np,t(np,lp,[lemma:lp,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:2]))).
+ccg(bc,bc(np,t(np,bc,[lemma:bc,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:2]))).
+ccg(gfc,gfc(np,t(np,gfc,[lemma:gfc,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:3]))).
+ccg(gbc,gbc(np,t(np,gbc,[lemma:gbc,pos:'X',sem:'UNK',wordnet:'',verbnet:[],from:0,to:3]))).

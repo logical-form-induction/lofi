@@ -1,0 +1,6 @@
+terms:
+  - objective:
+      kind: coherence
+      readout: category-terms
+      space: categories
+      estimator: truncated

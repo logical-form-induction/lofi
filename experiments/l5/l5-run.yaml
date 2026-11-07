@@ -1,0 +1,121 @@
+defaults:
+  - data.datasets.train.dataset: l5-source
+  - data.datasets.train.constraint_policy.semantic: rank-50
+  - data.datasets.train.constraint_source: gold-logical-form
+parse: {retain: forest, reachability: all}
+approximation: {residual_mass: 0.75}
+model:
+  language: {from: data}
+  capacity: {kind: parameter-count, target: 250000}
+  parser: {kind: inside-outside, width: 4}
+  token_encoder: {kind: learned, width: 4}
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 4, activation: tanh}]}
+  encoders:
+    categories: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+    logical-forms: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+  decoders:
+    category-identity: {kind: tree-rnn, width: 4}
+    category-application: {kind: tree-rnn, width: 4}
+    form-identity:
+      kind: tree-rnn
+      width: 4
+      type_directed: {prefix: type-grammar, mask: known}
+  spaces:
+    syntax:
+      sort: Cat
+      encoder: categories
+      identity: category-identity
+      combinators:
+        merge: concatenate
+        decoders:
+          "application:/": category-application
+          "application:\\": category-application
+    semantics: {sort: Tm, encoder: logical-forms, identity: form-identity}
+  readouts:
+    types:
+      kind: terms
+      space: syntax
+      reads: inside
+      targets: grammar-goal
+      output: sentences
+    category-terms:
+      kind: terms
+      space: syntax
+      reads: inside
+      decoding: {strategy: exhaustive, cap: 128}
+    forms:
+      kind: terms
+      space: semantics
+      reads: inside
+      decoding: {strategy: exhaustive, cap: 64}
+loss:
+  terms:
+    - objective: {kind: grammaticality, readout: sentences}
+    - objective:
+        kind: coherence
+        readout: category-terms
+        space: syntax
+        estimator: truncated
+        warmup: null
+      weight: 0.1
+    - objective: {kind: vector-anchor, readout: forms}
+data:
+  datasets:
+    train:
+      featurizer: {kind: unlabeled}
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 1
+  batch_size: 4
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  max_grad_norm: null
+  active_groups:
+    - token_encoder
+    - categories
+    - logical-forms
+    - category-identity
+    - category-application
+    - form-identity
+    - controller
+    - parser
+  early_stopping:
+    metric: loss/grammaticality
+    mode: min
+    patience: 2
+    minimum_delta: 0.0
+    keep_best: 1
+  checkpoints: {interval: 1, keep: 1}
+release: {checkpoint: validation-best}
+optimizer: {kind: adamw, weight_decay: 0.0}
+device_policy:
+  device: cpu
+  compute_dtype: float32
+  deterministic: true
+  matmul_precision: highest
+  activation_memory_bytes: 8000000000
+evaluators:
+  logical-forms:
+    kind: logical-form
+    interval: {replicates: 20, level: 0.95}
+    readout: forms
+    measure: normal-form
+    restarts: 2
+    permutation_limit: 5040
+    alignment:
+      kind: many-to-one
+      tie_break: largest-gold-marginal
+      fit_on: dev
+      score_on: test
+      random_floor: {replicates: 20, level: 0.95}
+      stability: {replicates: 20, level: 0.95}
+    conventions:
+      punctuation: keep
+      unary_chains: keep
+      trivial_spans: keep
+      minimum_length: 0
+      aggregation: corpus
+      coverage: zero
+      self_arcs: forbid
+      gold_derivation: canonical

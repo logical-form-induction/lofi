@@ -1,0 +1,127 @@
+{
+    "machine_info": {
+        "node": "MacBookPro",
+        "processor": "arm",
+        "machine": "arm64",
+        "python_compiler": "Clang 17.0.0 (clang-1700.6.4.2)",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.14.5",
+        "python_version": "3.14.5",
+        "python_build": [
+            "main",
+            "May 10 2026 10:21:34"
+        ],
+        "release": "24.6.0",
+        "system": "Darwin",
+        "cpu": {
+            "python_version": "3.14.5.final.0 (64 bit)",
+            "cpuinfo_version": [
+                10,
+                1,
+                1
+            ],
+            "cpuinfo_version_string": "10.1.1",
+            "arch": "ARM_8",
+            "bits": 64,
+            "count": 10,
+            "arch_string_raw": "arm64"
+        }
+    },
+    "commit_info": {
+        "id": "2e73d5b2bba1e5463670ddb7f7e9cb0d9c5cb03c",
+        "time": "2026-10-07T21:34:16-04:00",
+        "author_time": "2026-10-07T21:34:16-04:00",
+        "dirty": true,
+        "project": "lofi",
+        "branch": "main"
+    },
+    "benchmarks": [
+        {
+            "group": null,
+            "name": "test_a_scope_validates_the_map_it_opens_over_within_budget",
+            "fullname": "tests/benchmarks/test_site_map.py::test_a_scope_validates_the_map_it_opens_over_within_budget",
+            "params": null,
+            "param": null,
+            "extra_info": {
+                "points": 7,
+                "mean_ms_per_scope": 0.0195090919660202,
+                "median_ms_per_scope": 0.00904199987417087,
+                "budget": "site-map"
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 8.791997970547527e-06,
+                "max": 0.029419541999232024,
+                "mean": 1.95090919660202e-05,
+                "stddev": 0.00031915439848092885,
+                "rounds": 19481,
+                "median": 9.04199987417087e-06,
+                "iqr": 1.6600097296759486e-07,
+                "q1": 8.95900302566588e-06,
+                "q3": 9.125003998633474e-06,
+                "iqr_outliers": 2008,
+                "stddev_outliers": 51,
+                "outliers": "51;2008",
+                "ld15iqr": 8.791997970547527e-06,
+                "hd15iqr": 9.374998626299202e-06,
+                "ops": 51258.15192945636,
+                "total": 0.38005662059003953,
+                "iterations": 1
+            }
+        },
+        {
+            "group": null,
+            "name": "test_an_open_observe_only_scope_reports_its_per_forward_overhead",
+            "fullname": "tests/benchmarks/test_site_map.py::test_an_open_observe_only_scope_reports_its_per_forward_overhead",
+            "params": null,
+            "param": null,
+            "extra_info": {
+                "mean_plain_us_per_forward": 25.8577215,
+                "mean_open_scope_us_per_forward": 31.243700794584587,
+                "mean_overhead_us_per_forward": 5.385979294584588,
+                "observed_points": 1,
+                "budget": "site-map"
+            },
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "precision": null,
+                "confidence": null,
+                "warmup": false
+            },
+            "stats": {
+                "min": 1.2652919976972044e-05,
+                "max": 0.0007540812499792082,
+                "mean": 3.1243700794584586e-05,
+                "stddev": 8.4278187371424e-05,
+                "rounds": 100,
+                "median": 1.2845624987676273e-05,
+                "iqr": 1.7291498807025992e-07,
+                "q1": 1.2761044963554014e-05,
+                "q3": 1.2933959951624274e-05,
+                "iqr_outliers": 15,
+                "stddev_outliers": 4,
+                "outliers": "4;15",
+                "ld15iqr": 1.2652919976972044e-05,
+                "hd15iqr": 1.3635420036735014e-05,
+                "ops": 32006.451686841407,
+                "total": 0.0031243700794584585,
+                "iterations": 100
+            }
+        }
+    ],
+    "datetime": "2026-10-08T01:40:02.303621+00:00",
+    "version": "5.3.0"
+}

@@ -1,0 +1,22 @@
+# Exclude every span that starts with word-2 and spans two words from the chart.
+defaults:
+  - run/synthetic-parser
+  - data.datasets.train.constraint_policy.syntactic: per-occurrence
+data:
+  datasets:
+    train:
+      constraint_source:
+        kind: declared
+        policy: syntactic
+        pins:
+          - {kind: span-pattern, pattern: [word-2, null], permitted: ["S\\NP"]}
+        clamp:
+          require_constituent: false
+          on_unsatisfiable: {kind: drop_clamp}
+loss:
+  terms:
+    - objective: {kind: grammaticality, readout: sentences}
+    - objective: {kind: coherence, readout: category-terms, space: categories,
+        estimator: truncated, warmup: null}
+      weight: 0.1
+    - objective: {kind: pinning}

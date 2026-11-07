@@ -1,0 +1,6 @@
+terms:
+  - objective: {kind: grammaticality, readout: sentences}
+  - objective: {kind: coherence, readout: category-terms, space: categories,
+      estimator: truncated, warmup: null}
+    weight: 0.1
+  - objective: {kind: pinning, readout: types}

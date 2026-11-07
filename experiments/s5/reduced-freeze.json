@@ -1,0 +1,14 @@
+{
+  "grid": {
+    "selection-policy": ["rank-50", "quantile-50", "closed-50"],
+    "frequency-class-coupling": [-0.75, 0.75]
+  },
+  "hypotheses": [
+    {
+      "name": "reduced-anchored-recovery-above-floor",
+      "left": "primitive-many-to-one-accuracy",
+      "right": "primitive-random-relabeling-floor",
+      "family": "reduced-syntactic-anchoring"
+    }
+  ]
+}

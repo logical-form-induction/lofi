@@ -1,0 +1,78 @@
+role: synthetic-known-grammar-lexicon-induction
+freeze_id: freeze/1
+config: {kind: run, path: s1-synthetic-run.yaml}
+launch: {kind: array, chunk_size: 1, throttle: 32}
+failure: {numerical: final, out_of_memory: halve-batch}
+sweep:
+  grid:
+    - path: data.datasets.train.dataset.size
+      values: [512, 2048, 8192]
+    - path: data.datasets.train.dataset.length
+      values:
+        - {kind: uniform, min_length: 2, max_length: 8}
+        - {kind: negative-binomial, min_length: 2, max_length: 16, r: 4.0, p: 0.6, out_of_support: resample}
+    - path: model.encoders.terms
+      values:
+        - {kind: tree-rnn, width: 16, layers: 1, norm_cap: null}
+        - {kind: hrr, width: 16}
+        - {kind: transformer, width: 16, heads: 4, layers: 1, feedforward_width: 32, structure: ancestor-and-sibling-bias, norm_cap: null}
+    - path: model.capacity.target
+      values: [250000, 500000]
+  seeds: [0, 1, 2, 3]
+  expected_points: 144
+seed_policy: {root: 112}
+rows:
+  - {evaluator: lexical, metric: supertag-accuracy}
+  - {evaluator: structural, metric: "dependency:labeled-directed:zero:micro-f-score"}
+  - {evaluator: types, metric: lexical-type-f1}
+  - {evaluator: types, metric: primitive-one-to-one-accuracy}
+  - {evaluator: types, metric: primitive-random-relabeling-floor}
+  - {evaluator: types, metric: constructor-one-to-one-accuracy}
+  - {evaluator: types, metric: constructor-random-relabeling-floor}
+  - {evaluator: lexical, metric: supertag-accuracy-frequency-unseen}
+  - {evaluator: lexical, metric: supertag-accuracy-frequency-rare}
+  - {evaluator: lexical, metric: supertag-accuracy-frequency-frequent}
+  - {evaluator: lexical, metric: supertag-accuracy-ambiguity-unseen}
+  - {evaluator: lexical, metric: supertag-accuracy-ambiguity-unambiguous}
+  - {evaluator: lexical, metric: supertag-accuracy-ambiguity-ambiguous}
+primary: {evaluator: types, metric: primitive-one-to-one-accuracy}
+preregistration: synthetic.json
+factors:
+  corpus-size: {axis: data.datasets.train.dataset.size}
+  length-law:
+    axis: data.datasets.train.dataset.length
+    levels:
+      - {level: uniform, value: {kind: uniform, min_length: 2, max_length: 8}}
+      - {level: negative-binomial, value: {kind: negative-binomial, min_length: 2, max_length: 16, r: 4.0, p: 0.6, out_of_support: resample}}
+  encoder:
+    axis: model.encoders.terms
+    levels:
+      - {level: tree-rnn, value: {kind: tree-rnn, width: 16, layers: 1, norm_cap: null}}
+      - {level: hrr, value: {kind: hrr, width: 16}}
+      - {level: transformer, value: {kind: transformer, width: 16, heads: 4, layers: 1, feedforward_width: 32, structure: ancestor-and-sibling-bias, norm_cap: null}}
+  capacity: {axis: model.capacity.target}
+compute: {kind: unpriced}
+pricing: {kind: length-batch, lengths: [4, 8, 16], batches: [4, 8, 16]}
+contraction:
+  rungs:
+    - {kind: seeds, floor: 4}
+    - {kind: fallback}
+  factorial: corpus size and length law crossed with encoder and matched capacity
+stop_rules:
+  - name: numerical failure
+    when: {kind: points, statuses: [numerical-failure], at_least: 1}
+decision_point:
+  date: "2027-02-15"
+  signal:
+    kind: metric
+    row: {evaluator: types, metric: primitive-one-to-one-accuracy}
+    statistic: mean
+    direction: above
+    threshold: 0.0
+  fallback: Synthetic known-grammar recovery does not exceed a nonzero aligned score.
+evaluation:
+  alpha: 0.05
+  correction: {kind: benjamini-hochberg}
+  dependence: prds
+  minimum_seeds: 4
+  seed_budget: {metric: primitive-one-to-one-accuracy, target: mean, precision: 0.05, level: 0.95}

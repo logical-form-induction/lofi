@@ -1,0 +1,10 @@
+ID=wsj_0200.1 PARSER=GOLD NUMPARSE=1
+(<T S[dcl] 0 2> (<L NP NNP NNP Alice NP>) (<L S[dcl]\NP VBZ VBZ sleeps S[dcl]\NP>) )
+ID=wsj_0200.2 PARSER=GOLD NUMPARSE=1
+(<T S[ng] 0 2> (<L NP NNP NNP Bob NP>) (<L S[ng]\NP VBG VBG running S[ng]\NP>) )
+ID=wsj_0200.3 PARSER=GOLD NUMPARSE=1
+(<T S[dcl] 0 2> (<L NP NNP NNP Carol NP>) (<L S[dcl]\NP VBZ VBZ waits S[dcl]\NP>) )
+ID=wsj_0200.4 PARSER=GOLD NUMPARSE=1
+(<T S[ng] 0 2> (<L NP NNP NNP Dan NP>) (<L S[ng]\NP VBG VBG resting S[ng]\NP>) )
+ID=wsj_0200.5 PARSER=GOLD NUMPARSE=1
+(<L PP IN IN nearby PP>)

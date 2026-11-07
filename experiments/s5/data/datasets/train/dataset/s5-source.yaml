@@ -1,0 +1,60 @@
+kind: synthetic
+retained: {dev: 0.25, test: 0.25}
+language:
+  name: syntactic-anchoring
+  atomic_types: [{name: e}, {name: t, kind: proposition}]
+  constructors:
+    - name: "->"
+      kind: [Ty, Ty, Ty]
+      notation: {style: infix, spelling: "->", precedence: 1, associativity: right}
+  constants: []
+  binders: {style: curry}
+  logic: {equality: false}
+grammar:
+  formalism: declared
+  name: syntactic-anchoring
+  signature:
+    name: syntactic-anchoring
+    primitives: [S, P1, P2, P3]
+    operators: []
+    constructors:
+      - name: /
+        kind: [Cat, Cat, Cat]
+        notation: {style: infix, spelling: /, precedence: 10, associativity: left}
+      - name: "\\"
+        kind: [Cat, Cat, Cat]
+        notation: {style: infix, spelling: "\\", precedence: 10, associativity: left}
+    functors:
+      - {name: /, constructor: /, argument_side: right, opposite: "\\"}
+      - {name: "\\", constructor: "\\", argument_side: left, opposite: /}
+    syntax: declared
+  rules:
+    name: application
+    rules:
+      - {rule: application, view: /}
+      - {rule: application, view: "\\"}
+  lexicon:
+    kind: generated
+    forms: 16
+    categories: 4
+    category_shares: {kind: power-law, exponent: 1.0}
+    coupling: 0.0
+    ambiguity:
+      spelling: parametric
+      mean: 1.5
+      dispersion: 0.0
+      maximum: 4
+      placement: 0.0
+    rank_law: {kind: power-law, exponent: 1.0}
+    seed: derived
+    max_depth: 2
+    derivation_depth: 4
+    expansion: 0.5
+    patience: 1000
+  goal: {kind: root, categories: [S]}
+  matching: {kind: feature-erasure}
+  budget: {unary_rounds: 1}
+size: 64
+seed: 511
+length: {kind: uniform, min_length: 2, max_length: 4}
+sampler: {kind: uniform}

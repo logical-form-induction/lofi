@@ -1,0 +1,51 @@
+participant	list	presentationorder	verb	frame	tense	response	nativeenglish	sentence	version
+p01	1.0	1	believe	NP _ that S	present	7.0	yes	Dana believes that Lee left.	2.0
+p01	1.0	2	think	NP _ that S	past	6.0	yes	Dana thought that Lee left.	2.0
+p01	1.0	3	know	NP _ that S	present	7.0	yes	Dana knows that Lee left.	2.0
+p01	1.0	4	say	NP _ that S	past	5.0	yes	Dana said that Lee left.	2.0
+p01	1.0	5	want	NP _ NP to VP	present	6.0	yes	Dana wants Lee to leave.	2.0
+p01	1.0	6	expect	NP _ NP to VP	past	5.0	yes	Dana expected Lee to leave.	2.0
+p01	1.0	7	persuade	NP _ NP to VP	present	7.0	yes	Dana persuades Lee to leave.	2.0
+p01	1.0	8	promise	NP _ to VP	present	6.0	yes	Dana promises to leave.	2.0
+p01	1.0	9	try	NP _ to VP	past	6.0	yes	Dana tried to leave.	2.0
+p01	1.0	10	manage	NP _ to VP	present	7.0	yes	Dana manages to leave.	2.0
+p02	2.0	1	believe	NP _ that S	present	6.0	yes	Dana believes that Lee left.	2.0
+p02	2.0	2	think	NP _ that S	past	5.0	yes	Dana thought that Lee left.	2.0
+p02	2.0	3	know	NP _ that S	present	7.0	yes	Dana knows that Lee left.	2.0
+p02	2.0	4	say	NP _ that S	past	4.0	yes	Dana said that Lee left.	2.0
+p02	2.0	5	want	NP _ NP to VP	present	5.0	yes	Dana wants Lee to leave.	2.0
+p02	2.0	6	expect	NP _ NP to VP	past	4.0	yes	Dana expected Lee to leave.	2.0
+p02	2.0	7	persuade	NP _ NP to VP	present	6.0	yes	Dana persuades Lee to leave.	2.0
+p02	2.0	8	promise	NP _ to VP	present	5.0	yes	Dana promises to leave.	2.0
+p02	2.0	9	try	NP _ to VP	past	5.0	yes	Dana tried to leave.	2.0
+p02	2.0	10	manage	NP _ to VP	present	6.0	yes	Dana manages to leave.	2.0
+p03	3.0	1	believe	NP _ that S	present	5.0	yes	Dana believes that Lee left.	2.0
+p03	3.0	2	think	NP _ that S	past	4.0	yes	Dana thought that Lee left.	2.0
+p03	3.0	3	know	NP _ that S	present	6.0	yes	Dana knows that Lee left.	2.0
+p03	3.0	4	say	NP _ that S	past	3.0	yes	Dana said that Lee left.	2.0
+p03	3.0	5	want	NP _ NP to VP	present		yes	Dana wants Lee to leave.	2.0
+p03	3.0	6	expect	NP _ NP to VP	past	3.0	yes	Dana expected Lee to leave.	2.0
+p03	3.0	7	persuade	NP _ NP to VP	present	5.0	yes	Dana persuades Lee to leave.	2.0
+p03	3.0	8	promise	NP _ to VP	present	4.0	yes	Dana promises to leave.	2.0
+p03	3.0	9	try	NP _ to VP	past	4.0	yes	Dana tried to leave.	2.0
+p03	3.0	10	manage	NP _ to VP	present	5.0	yes	Dana manages to leave.	2.0
+p04	4.0	1	believe	NP _ that S	present	4.0	yes	Dana believes that Lee left.	2.0
+p04	4.0	2	think	NP _ that S	past	3.0	yes	Dana thought that Lee left.	2.0
+p04	4.0	3	know	NP _ that S	present	5.0	yes	Dana knows that Lee left.	2.0
+p04	4.0	4	say	NP _ that S	past	2.0	yes	Dana said that Lee left.	2.0
+p04	4.0	5	want	NP _ NP to VP	present	3.0	yes	Dana wants Lee to leave.	2.0
+p04	4.0	6	expect	NP _ NP to VP	past	2.0	yes	Dana expected Lee to leave.	2.0
+p04	4.0	7	persuade	NP _ NP to VP	present	4.0	yes	Dana persuades Lee to leave.	2.0
+p04	4.0	8	promise	NP _ to VP	present	3.0	yes	Dana promises to leave.	2.0
+p04	4.0	9	try	NP _ to VP	past	3.0	yes	Dana tried to leave.	2.0
+p04	4.0	10	manage	NP _ to VP	present	4.0	yes	Dana manages to leave.	2.0
+p05	5.0	1	believe	NP _ that S	present	3.0	yes	Dana believes that Lee left.	2.0
+p05	5.0	2	think	NP _ that S	past	2.0	yes	Dana thought that Lee left.	2.0
+p05	5.0	3	know	NP _ that S	present	4.0	yes	Dana knows that Lee left.	2.0
+p05	5.0	4	say	NP _ that S	past	1.0	yes	Dana said that Lee left.	2.0
+p05	5.0	5	want	NP _ NP to VP	present	2.0	yes	Dana wants Lee to leave.	2.0
+p05	5.0	6	expect	NP _ NP to VP	past	1.0	yes	Dana expected Lee to leave.	2.0
+p05	5.0	7	persuade	NP _ NP to VP	present	3.0	yes	Dana persuades Lee to leave.	2.0
+p05	5.0	8	promise	NP _ to VP	present	2.0	yes	Dana promises to leave.	2.0
+p05	5.0	9	try	NP _ to VP	past	2.0	yes	Dana tried to leave.	2.0
+p05	5.0	10	manage	NP _ to VP	present	3.0	yes	Dana manages to leave.	2.0

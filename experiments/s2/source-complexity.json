@@ -1,0 +1,227 @@
+{
+  "grid": {
+    "source-grammar": [
+      "slashes-application-k2-depth1",
+      "arrow-composition-k4-depth2",
+      "slashes-raised-k8-depth3",
+      "arrow-generalized-composition-k16-depth1",
+      "arrow-application-k8-depth2",
+      "slashes-composition-k16-depth3",
+      "arrow-raised-k2-depth1",
+      "slashes-generalized-composition-k4-depth2"
+    ],
+    "candidate-grammar": [
+      "slashes-application-k2-depth1",
+      "arrow-composition-k4-depth2",
+      "slashes-raised-k8-depth3",
+      "arrow-generalized-composition-k16-depth1",
+      "arrow-application-k8-depth2",
+      "slashes-composition-k16-depth3",
+      "arrow-raised-k2-depth1",
+      "slashes-generalized-composition-k4-depth2"
+    ],
+    "data-size": [
+      16,
+      64,
+      256
+    ]
+  },
+  "hypotheses": [
+    {
+      "name": "grammar-contrast-01",
+      "left": "slashes-application-k2-depth1",
+      "right": "arrow-composition-k4-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-02",
+      "left": "slashes-application-k2-depth1",
+      "right": "slashes-raised-k8-depth3",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-03",
+      "left": "slashes-application-k2-depth1",
+      "right": "arrow-generalized-composition-k16-depth1",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-04",
+      "left": "slashes-application-k2-depth1",
+      "right": "arrow-application-k8-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-05",
+      "left": "slashes-application-k2-depth1",
+      "right": "slashes-composition-k16-depth3",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-06",
+      "left": "slashes-application-k2-depth1",
+      "right": "arrow-raised-k2-depth1",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-07",
+      "left": "slashes-application-k2-depth1",
+      "right": "slashes-generalized-composition-k4-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-08",
+      "left": "arrow-composition-k4-depth2",
+      "right": "slashes-raised-k8-depth3",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-09",
+      "left": "arrow-composition-k4-depth2",
+      "right": "arrow-generalized-composition-k16-depth1",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-10",
+      "left": "arrow-composition-k4-depth2",
+      "right": "arrow-application-k8-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-11",
+      "left": "arrow-composition-k4-depth2",
+      "right": "slashes-composition-k16-depth3",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-12",
+      "left": "arrow-composition-k4-depth2",
+      "right": "arrow-raised-k2-depth1",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-13",
+      "left": "arrow-composition-k4-depth2",
+      "right": "slashes-generalized-composition-k4-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-14",
+      "left": "slashes-raised-k8-depth3",
+      "right": "arrow-generalized-composition-k16-depth1",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-15",
+      "left": "slashes-raised-k8-depth3",
+      "right": "arrow-application-k8-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-16",
+      "left": "slashes-raised-k8-depth3",
+      "right": "slashes-composition-k16-depth3",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-17",
+      "left": "slashes-raised-k8-depth3",
+      "right": "arrow-raised-k2-depth1",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-18",
+      "left": "slashes-raised-k8-depth3",
+      "right": "slashes-generalized-composition-k4-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-19",
+      "left": "arrow-generalized-composition-k16-depth1",
+      "right": "arrow-application-k8-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-20",
+      "left": "arrow-generalized-composition-k16-depth1",
+      "right": "slashes-composition-k16-depth3",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-21",
+      "left": "arrow-generalized-composition-k16-depth1",
+      "right": "arrow-raised-k2-depth1",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-22",
+      "left": "arrow-generalized-composition-k16-depth1",
+      "right": "slashes-generalized-composition-k4-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-23",
+      "left": "arrow-application-k8-depth2",
+      "right": "slashes-composition-k16-depth3",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-24",
+      "left": "arrow-application-k8-depth2",
+      "right": "arrow-raised-k2-depth1",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-25",
+      "left": "arrow-application-k8-depth2",
+      "right": "slashes-generalized-composition-k4-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-26",
+      "left": "slashes-composition-k16-depth3",
+      "right": "arrow-raised-k2-depth1",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-27",
+      "left": "slashes-composition-k16-depth3",
+      "right": "slashes-generalized-composition-k4-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    },
+    {
+      "name": "grammar-contrast-28",
+      "left": "arrow-raised-k2-depth1",
+      "right": "slashes-generalized-composition-k4-depth2",
+      "family": "source-complexity",
+      "margin": 0.25
+    }
+  ]
+}

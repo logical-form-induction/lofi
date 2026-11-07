@@ -1,0 +1,7 @@
+retain: forest
+reachability: all
+strategy: {kind: cky}
+semiring: {kind: viterbi}
+span_index: {kind: contiguous}
+chart_store: {kind: native}
+pruner: {kind: top-k, width: 8, prune_lexical: false}

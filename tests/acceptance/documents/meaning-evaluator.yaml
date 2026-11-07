@@ -1,0 +1,49 @@
+# An evaluator that scores decoded logical forms against the synthesized meanings.
+defaults:
+  - slash-point
+  - data.datasets.train.dataset.interpretation: first-order
+data:
+  datasets:
+    train:
+      dataset:
+        retained: {dev: 0.25, test: 0.25}
+        length: {kind: uniform, min_length: 3, max_length: 3}
+        language:
+          bounds:
+            Tm: {layout: complete-tree, depth: 3, nodes: null, order: df, free_ranks: 0}
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  encoders:
+    form-encoder: {kind: tree-rnn, width: 4, layers: 1, norm_cap: null}
+  decoders:
+    form-identity: {kind: tree-rnn, width: 4}
+  spaces:
+    forms: {sort: Tm, encoder: form-encoder, identity: form-identity}
+  readouts:
+    decoded-forms:
+      kind: terms
+      space: forms
+      reads: inside
+      decoding: {strategy: beam, width: 8, clamp: see(mary)(john)}
+evaluators:
+  meanings:
+    kind: logical-form
+    readout: decoded-forms
+    measure: exact
+    interval: {replicates: 20, level: 0.95}
+    alignment:
+      kind: identity
+      fit_on: dev
+      score_on: test
+      random_floor: {replicates: 20, level: 0.95}
+      stability: {replicates: 20, level: 0.95}
+    conventions:
+      punctuation: keep
+      unary_chains: keep
+      trivial_spans: keep
+      minimum_length: 1
+      aggregation: corpus
+      coverage: zero
+      self_arcs: allow
+      gold_derivation: canonical

@@ -1,0 +1,45 @@
+# A slash pair with a unary modality, its introduction and elimination rules.
+name: modal
+signature:
+  primitives: [S, NP]
+  syntax: s-expression
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: "back", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: back, precedence: 10, associativity: left}}
+    - {name: "<>", kind: [Cat, Cat], notation: {style: prefix, spelling: <>}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: "back"}
+    - {name: "back", constructor: "back", argument_side: left, opposite: "/"}
+rules:
+  name: modal
+  rules:
+    - {rule: application, view: /}
+    - {rule: application, view: back}
+    - rule: pattern
+      name: diamond-elimination
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: "<>"}
+          arguments: [{pattern: term, name: X}]
+      conclusion: {pattern: term, name: X}
+    - rule: pattern
+      name: diamond-introduction
+      premises:
+        - &np {pattern: constant, name: NP}
+      conclusion:
+        pattern: node
+        operator: {kind: fixed, name: "<>"}
+        arguments: [*np]
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: '("<>" ("#const[Cat]" "NP"))', meaning: john}
+    - {form: mary, category: '("#const[Cat]" "NP")', meaning: mary}
+    - {form: sleeps, category: '("back" ("#const[Cat]" "S") ("#const[Cat]" "NP"))', meaning: '\x. sleep(x)'}
+    - {form: sees, category: '("/" ("back" ("#const[Cat]" "S") ("#const[Cat]" "NP")) ("#const[Cat]" "NP"))', meaning: '\y. \x. see(x)(y)'}
+goal:
+  kind: root
+  categories: ['("#const[Cat]" "S")']
+budget:
+  unary_rounds: 1
+formalism: declared

@@ -1,0 +1,37 @@
+# Controller pretraining over fixed held-out generated rule pairs.
+defaults:
+  - slash-point
+trainer:
+  kind: staged
+  validation_stage: null
+  base:
+    kind: parser
+    dataset: train
+    epochs: 1
+    batch_size: 2
+    batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+    max_grad_norm: null
+    active_groups: null
+    early_stopping:
+      metric: loss/grammaticality
+      mode: min
+      patience: 1
+      minimum_delta: 0.0
+      keep_best: 1
+    checkpoints: {interval: 1, keep: 1}
+  stages:
+    - name: controller
+      step:
+        kind: controller
+        name: controller
+        dataset: train
+        space: categories
+        max_depth: 2
+        stop:
+          metric: loss/controller/accuracy
+          target: 0.95
+          max_steps: 2
+      active_groups: [controller]
+      epochs: 1
+type_sampler: {kind: recursive, max_size: 3}
+pair_sampler: {kind: rule}

@@ -1,0 +1,13 @@
+{
+  "grid": {
+    "source-grammar": ["slashes-application-k2-depth1"],
+    "candidate-grammar": [
+      "slashes-application-k2-depth1",
+      "arrow-composition-k4-depth2"
+    ],
+    "data-size": [8]
+  },
+  "hypotheses": [
+    {"name": "application-composition", "left": "slashes-application-k2-depth1", "right": "arrow-composition-k4-depth2", "family": "source-complexity", "margin": 0.25}
+  ]
+}

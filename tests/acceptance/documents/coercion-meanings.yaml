@@ -1,0 +1,38 @@
+# A bare-plural coercion whose meaning cannot be derived from the rule, so the
+# document declares it with a description operator.
+defaults:
+  - coercion-point
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          name: descriptions
+          atomic_types: [{name: e}, {name: t, kind: proposition}]
+          constructors:
+            - {name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}
+          constants:
+            - name: not
+              type: "t -> t"
+              classes: [sentential, negation]
+              notation: {kind: prefix, ascii: "~", unicode: "¬", precedence: 6}
+            - name: iota
+              type: "(e -> t) -> e"
+              classes: [description]
+              notation: {kind: binder, ascii: iota, unicode: "ι", bodies: 1}
+          binders: {style: curry}
+          logic:
+            prover: {kind: truth-table, timeout: 5.0}
+            labeling: {budget: {}}
+        interpretation:
+          erasure:
+            kind: signature-morphism
+            atoms: {S: t, NP: e, N: "⟨e,t⟩"}
+          constants:
+            - {name: john, type: e, classes: [individual]}
+            - {name: dog, type: "e -> t", classes: [predicate]}
+            - {name: sleep, type: "e -> t", classes: [predicate]}
+            - {name: see, type: "e -> e -> t", classes: [predicate]}
+          meanings: {source: {kind: lexical}}
+          actions:
+            "bare-plural:0:N=>NP": '\p. iota x. p(x)'

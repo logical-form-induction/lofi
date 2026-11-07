@@ -1,0 +1,7 @@
+# the one compiler that builds the extension. A floating channel would let a new
+# lint fail a build with no commit to blame, so the version is bumped by hand, in
+# the same commit as `rust-version` in Cargo.toml.
+[toolchain]
+channel = "1.99.1"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

@@ -1,0 +1,5 @@
+# A declared retained split with training batches reshuffled every epoch.
+defaults:
+  - slash-point
+trainer:
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: true}

@@ -1,0 +1,4 @@
+# Positive-only capacity-matched parser point.
+defaults:
+  - run/synthetic-positive-only
+  - s4-settings-run

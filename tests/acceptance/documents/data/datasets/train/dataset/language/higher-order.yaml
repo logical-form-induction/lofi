@@ -1,0 +1,25 @@
+name: higher-order
+atomic_types: [{name: e}, {name: t, kind: proposition}]
+constructors:
+  - {name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}
+constants:
+  - name: not
+    type: "t -> t"
+    classes: [sentential, negation]
+    notation: {kind: prefix, ascii: "~", unicode: "¬", precedence: 6}
+  - name: every
+    type: "(a -> t) -> (a -> t) -> t"
+    quantifies: [a]
+    classes: [quantifier, generalized-universal]
+    notation: {kind: binder, ascii: every, unicode: every, bodies: 2}
+  - name: and
+    type: "a -> a -> a"
+    quantifies: [a]
+    classes: [sentential, conjunction]
+    notation: {kind: infix, ascii: "&&", unicode: "∧", precedence: 4, associativity: left}
+binders: {style: curry}
+logic:
+  order: higher
+  negation: not
+  prover: {kind: tptp, engine: vampire, dialect: thf, timeout: 5.0, polymorphism: monomorphize}
+  labeling: {budget: {}}

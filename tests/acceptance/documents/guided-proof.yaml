@@ -1,0 +1,19 @@
+# Binary universal and quantifier-free inference ranked by guided proof search.
+defaults:
+  - rte-inference
+  - model.grounding: guided-proof
+trainer:
+  active_groups:
+    - token_encoder
+    - terms
+    - logical-forms
+    - identity
+    - application
+    - form-identity
+    - controller
+    - parser
+    - scorer
+model:
+  readouts:
+    forms:
+      decoding: {strategy: exhaustive, cap: 32}

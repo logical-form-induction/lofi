@@ -1,0 +1,2 @@
+ID=lofi.1 PARSER=GOLD NUMPARSE=1
+(<T S[dcl] 1 2> (<T NP 0 1> (<T N 1 2> (<L N/N JJ JJ small N_1/N_1>) (<L N NN NN dog N>) ) ) (<L S[dcl]\NP VBD VBD barked S[dcl]_1\NP_2>) )

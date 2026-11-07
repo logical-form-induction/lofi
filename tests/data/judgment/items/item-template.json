@@ -1,0 +1,1 @@
+{"id": "9a3e5c71-1d2b-4f6a-8c4e-7b0d2e1f3a00", "name": "rated sentence", "judgment_type": "acceptability", "task_type": "ordinal_scale", "task_spec": {"prompt": "How natural is this sentence?"}, "presentation_spec": {}, "elements": [{"element_type": "filled_template_ref", "element_name": "sentence"}]}

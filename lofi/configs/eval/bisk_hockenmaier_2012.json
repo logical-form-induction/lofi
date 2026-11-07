@@ -1,0 +1,26 @@
+{
+  "source": {
+    "title": "Simple Robust Grammar Induction with Combinatory Categorial Grammars",
+    "authors": ["Yonatan Bisk", "Julia Hockenmaier"],
+    "venue": "AAAI 2012",
+    "url": "https://hockenmaier.cs.illinois.edu/Papers/AAAI2012/Induction.pdf",
+    "figure": "Figure 4(a)"
+  },
+  "metric": "unlabeled directed attachment",
+  "training_band": "wsj10",
+  "evaluation_section": 23,
+  "points": [
+    {
+      "metric": "dependencies-length-10",
+      "score_percent": 71.5
+    },
+    {
+      "metric": "dependencies-length-20",
+      "score_percent": 60.3
+    },
+    {
+      "metric": "dependencies-all-lengths",
+      "score_percent": 53.3
+    }
+  ]
+}

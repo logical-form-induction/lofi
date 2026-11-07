@@ -1,0 +1,3 @@
+defaults:
+  - fully-supervised
+  - inventory-seed

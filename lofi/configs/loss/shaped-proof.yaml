@@ -1,0 +1,11 @@
+terms:
+  - objective:
+      kind: shaped-proof
+      readout: forms
+      shaping:
+        ill_formed: 0.0
+        well_formed: 0.25
+        type_checks: 0.5
+        proved: 1.0
+        length: 0.001
+      budget: {calls_per_step: 8, wall_per_step: 10.0, cpu_seconds: null}

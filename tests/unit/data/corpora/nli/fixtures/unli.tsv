@@ -1,0 +1,3 @@
+ID	Premise	Hypothesis	NLI label	UNLI label
+unli-0	A singer performs.	A person makes music.	entailment	0.730
+unli-1	A child sleeps.	A child is awake.	contradiction	0.04

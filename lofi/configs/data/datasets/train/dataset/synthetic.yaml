@@ -1,0 +1,20 @@
+kind: synthetic
+retained: {validation: 0.1}
+language:
+  name: synthetic-parser
+  atomic_types: [{name: e}, {name: t, kind: proposition}]
+  constructors: [{name: "->", kind: [Ty, Ty, Ty], notation: {style: infix, spelling: "->", precedence: 1, associativity: right}}]
+  constants: []
+  binders: {style: curry}
+  logic: {equality: false}
+size: 20000
+seed: 20260101
+length:
+  kind: negative-binomial
+  min_length: 2
+  max_length: 24
+  r: 4.0
+  p: 0.6
+  out_of_support: resample
+sampler:
+  kind: uniform

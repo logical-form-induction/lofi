@@ -1,0 +1,19 @@
+kind: distance
+dataset: train
+encoder: terms
+sort: Ty
+steps: 1000
+batch_size: 32
+checkpoints:
+  interval: 100
+  keep: 2
+ball_radius: null
+depth_curriculum: null
+inverse_distance_power: 0.0
+embedding_penalty: 0.0
+child_depth: {kind: uniform}
+branching:
+  by_arity:
+    - {arity: 2, deepest: [0.5, 0.5]}
+constructor_weights: {}
+max_grad_norm: null

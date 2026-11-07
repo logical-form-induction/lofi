@@ -1,0 +1,51 @@
+role: syntactic-anchoring
+freeze_id: freeze/1
+config: {kind: run, path: s5-run.yaml}
+launch: {kind: serial}
+failure: {numerical: final, out_of_memory: retry}
+sweep:
+  grid:
+    - group: data.datasets.train.constraint_policy.syntactic
+      values: [rank-50, quantile-50, closed-50]
+    - group: data.datasets.train.dataset.grammar.lexicon
+      values: [coupling-negative, coupling-positive]
+    - path: data.datasets.train.dataset.size
+      values: [16]
+  seeds: [0]
+  expected_points: 6
+seed_policy: {root: 512}
+rows:
+  - {evaluator: lexical-recovery, metric: lexical-type-f1}
+  - {evaluator: lexical-recovery, metric: primitive-many-to-one-accuracy}
+  - {evaluator: lexical-recovery, metric: primitive-random-relabeling-floor}
+primary: {evaluator: lexical-recovery, metric: primitive-many-to-one-accuracy}
+preregistration: reduced-freeze.json
+factors:
+  selection-policy: {axis: data.datasets.train.constraint_policy.syntactic}
+  frequency-class-coupling:
+    axis: data.datasets.train.dataset.grammar.lexicon
+    levels:
+      - {level: -0.75, value: coupling-negative}
+      - {level: 0.75, value: coupling-positive}
+compute: {kind: unpriced}
+contraction:
+  rungs: [{kind: fallback}]
+  factorial: three selection policies crossed with both signs of frequency-class coupling
+stop_rules:
+  - name: numerical failure
+    when: {kind: points, statuses: [numerical-failure], at_least: 1}
+decision_point:
+  date: "2027-04-01"
+  signal:
+    kind: metric
+    row: {evaluator: lexical-recovery, metric: primitive-many-to-one-accuracy}
+    statistic: mean
+    direction: above
+    threshold: 0.0
+  fallback: The reduced anchoring freeze does not recover primitives above zero.
+evaluation:
+  alpha: 0.05
+  correction: {kind: benjamini-hochberg}
+  dependence: prds
+  minimum_seeds: 1
+  seed_budget: {metric: primitive-many-to-one-accuracy, target: mean, precision: 0.1, level: 0.95}

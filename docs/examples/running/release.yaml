@@ -1,0 +1,11 @@
+model_name: lofi-synthetic-parser
+datasets: [synthetic-parser]
+languages: [en]
+source_method: synthetic generation from a declared grammar
+license_expression: MIT
+licenses:
+  - {identifier: MIT, applies_to: null}
+eprint_refs: []
+code_uri: https://github.com/logical-form-induction/lofi
+command: uv run lofi run --config docs/examples/synthetic-parser.yaml --root runs/first --seed 11 --experiment-seed 5
+environment: uv sync from the committed lockfile

@@ -1,0 +1,6 @@
+{
+  "grid": {"optimizer.learning_rate": [0.001, 0.0005]},
+  "hypotheses": [
+    {"name": "recovery", "left": "induced", "right": "gold", "family": "primary"}
+  ]
+}

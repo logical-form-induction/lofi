@@ -1,0 +1,4 @@
+# Every observed token is trained against its gold lexical category.
+defaults:
+  - tag-dictionary
+data: {datasets: {train: {constraint_policy: {syntactic: {ambiguity: per-occurrence, coverage: 1.0}}}}}

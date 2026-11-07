@@ -1,0 +1,12 @@
+# A flat control cannot supply recursive constituent marginals.
+defaults:
+  - base
+  - data.datasets.train.dataset.grammar: slash
+  - model.spaces.categories.combinators: slash
+model:
+  language: {from: data}
+  parser:
+    kind: flat
+    width: 4
+    features: [left, right, bilinear]
+    projection_initialization: identity

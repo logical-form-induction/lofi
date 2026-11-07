@@ -1,0 +1,2 @@
+ID=wsj_0200.1 PARSER=GOLD NUMPARSE=1
+(<T S[dcl] 0 2> (<L NP NNP NNP John NP>) (<L S[dcl]\NP VBZ VBZ sleeps S[dcl]\NP>) )

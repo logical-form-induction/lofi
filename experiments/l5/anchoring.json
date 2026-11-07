@@ -1,0 +1,17 @@
+{
+  "grid": {
+    "selection-policy": [
+      "rank-25", "rank-50", "rank-75",
+      "quantile-25", "quantile-50", "quantile-75",
+      "classes-25", "classes-50", "classes-75"
+    ]
+  },
+  "hypotheses": [
+    {
+      "name": "logical-form-anchoring-above-fiber-floor",
+      "left": "fiber-relative-recovery",
+      "right": "fiber-floor",
+      "family": "logical-form-anchoring"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+merge: concatenate
+decoders:
+  'application:/': application
+  'application:\': application

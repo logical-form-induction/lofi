@@ -1,0 +1,26 @@
+# The undirected arrow grammar interpreted into typed first-order meanings, the
+# arrow's semantic image derived from its functor roles.
+defaults:
+  - arrow-point
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          logic:
+            equality: false
+            negation: not
+            prover: {kind: truth-table, timeout: 5.0}
+            labeling: {budget: {}}
+        interpretation:
+          erasure:
+            kind: signature-morphism
+            atoms: {S: t, NP: e}
+          constants:
+            - {name: john, type: e, classes: [individual]}
+            - {name: mary, type: e, classes: [individual]}
+            - {name: sleep, type: "e -> t", classes: [predicate]}
+            - {name: see, type: "e -> e -> t", classes: [predicate]}
+          meanings: {source: {kind: lexical}}
+          actions:
+            "application:arrow": '\a. \f. f(a)'

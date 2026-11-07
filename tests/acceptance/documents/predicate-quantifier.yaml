@@ -1,0 +1,23 @@
+# A meaning that quantifies over predicates with a binder over a variable of type e -> t.
+defaults:
+  - higher-order-point
+data:
+  datasets:
+    train:
+      dataset:
+        language:
+          constants+:
+            - name: someprop
+              type: "((e -> t) -> t) -> t"
+              classes: [quantifier, existential]
+              notation: {kind: binder, ascii: someprop, unicode: someprop, bodies: 1}
+        grammar:
+          lexicon:
+            kind: inline
+            entries:
+              - {form: john, category: NP, meaning: john}
+              - {form: mary, category: NP, meaning: mary}
+              - {form: sleeps, category: "S\\NP", meaning: '\x. someprop P:(e -> t). P(x) && snore(x)'}
+              - {form: sees, category: "S\\NP/NP", meaning: '\y. \x. see(x)(y) && sleep(y)'}
+        interpretation:
+          meanings: {source: {kind: lexical}}

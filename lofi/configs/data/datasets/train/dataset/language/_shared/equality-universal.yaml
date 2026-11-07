@@ -1,0 +1,11 @@
+constants+:
+  - name: eq
+    type: "a -> a -> t"
+    quantifies: [a]
+    classes: [sentential, equality]
+    notation: {kind: infix, ascii: "=", unicode: "=", precedence: 5, associativity: left}
+  - name: forall
+    type: "(a -> t) -> t"
+    quantifies: [a]
+    classes: [quantifier, universal]
+    notation: {kind: binder, ascii: forall, unicode: "∀", bodies: 1}

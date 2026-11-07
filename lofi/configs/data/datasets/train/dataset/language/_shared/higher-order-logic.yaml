@@ -1,0 +1,7 @@
+binders: {style: church}
+logic:
+  order: higher
+  equality: true
+  negation: not
+  prover: {kind: tptp, engine: vampire, dialect: thf, timeout: 10.0, polymorphism: monomorphize}
+  labeling: {budget: {}}

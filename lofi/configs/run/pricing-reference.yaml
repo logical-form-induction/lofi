@@ -1,0 +1,35 @@
+defaults:
+  - data.datasets.train.dataset: synthetic
+  - data.datasets.train.featurizer: unlabeled
+  - data.datasets.train.dataset.grammar: cfg-toy
+  - device_policy: cpu
+approximation: {residual_mass: 0.75}
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  parser: {kind: inside-outside, width: 64}
+  token_encoder: {kind: learned, width: 64}
+  subword_pooler: {kind: first}
+  controller: {kind: mlp, hidden: [{width: 64, activation: tanh}]}
+  encoders: {terms: {kind: tree-rnn, width: 64}}
+  decoders: {identity: {kind: tree-rnn, width: 64}}
+  spaces: {categories: {sort: Cat, encoder: terms, identity: identity}}
+  readouts:
+    types: {kind: terms, space: categories, reads: inside, targets: grammar-goal, output: sentences}
+loss:
+  terms:
+    - objective: {kind: simplicity, readout: types}
+data:
+  datasets:
+    train:
+      dataset: {retained: {validation: 0.5}, size: 64, seed: 7, length: {kind: uniform, min_length: 20, max_length: 20}}
+trainer:
+  kind: parser
+  dataset: train
+  epochs: 1
+  batch_size: 16
+  batch_sampler: {kind: length-bucket, bucket_factor: 100, reshuffle_each_epoch: false}
+  early_stopping: {metric: loss/simplicity, mode: min, patience: 1, minimum_delta: 0.0, keep_best: 1}
+  checkpoints: {interval: 1, keep: 1}
+release: {checkpoint: resume-latest}
+optimizer: {kind: sgd, learning_rate: 0.001}

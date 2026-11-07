@@ -1,0 +1,21 @@
+# Rules that declare the categories they may introduce and consume, so the
+# chart prunes toward the goal.
+defaults:
+  - composition-point
+parse: {retain: forest, reachability: roots}
+data:
+  datasets:
+    train:
+      dataset:
+        grammar:
+          formalism: declared
+          lexicon:
+            entries+:
+              - {form: might, category: NP}
+          rules:
+            rules:
+              - {rule: application, view: /, introduces: [S, "S\\NP"]}
+              - {rule: application, view: "\\", introduces: [S]}
+              - {rule: composition, direction: unrestricted, order: 1, view: /, consumes: ["(S\\NP)/(S\\NP)"]}
+              - {rule: composition, direction: unrestricted, order: 2, view: /, consumes: ["(S\\NP)/(S\\NP)"]}
+              - {rule: composition, direction: unrestricted, order: 1, view: "\\", crossed: true, consumes: ["S\\NP"]}

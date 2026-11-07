@@ -1,0 +1,15 @@
+grid:
+  - group: data.datasets.train.dataset.grammar.lexicon.max_arguments
+    values: [one, two]
+  - group: data.datasets.train.dataset.grammar.lexicon.max_order
+    values: [one, two]
+  - group: data.datasets.train.dataset.shape.default.depth
+    values: [shallow, deep]
+  - group: data.datasets.train.dataset.shape.default.right_branching
+    values: [low, high]
+  - group: data.datasets.train.dataset.shape.default.slash_balance
+    values: [low, high]
+  - group: data.datasets.train.dataset.shape.default.arity
+    values: [unary, binary]
+seeds: [0]
+expected_points: 64

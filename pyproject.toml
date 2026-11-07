@@ -1,0 +1,971 @@
+[project]
+name = "lofi"
+version = "0.1.0"
+description = "Induction of typed logical forms from inferential annotation."
+readme = "README.md"
+requires-python = ">=3.14"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Aaron Steven White", email = "aaronstevenwhite@gmail.com" }]
+keywords = [
+    "categorial grammar",
+    "ccg",
+    "grammar induction",
+    "logical form",
+    "semantics",
+    "computational psycholinguistics",
+    "nlp",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Text Processing :: Linguistic",
+    "Typing :: Typed",
+]
+# the base install is three pure-Python packages and nothing else: didactic, its
+# settings layer and panproto. that is what makes the symbolic core installable
+# and usable on its own; anything added here is added to every install of it.
+# didactic-settings reads JSON on its own and YAML only through its yaml extra,
+# which nothing in the base needs, so the extra stays out of it.
+dependencies = [
+    "didactic>=0.18.1",
+    "didactic-settings>=0.18.1",
+    "panproto>=0.76.1",
+]
+
+# an extra names a capability someone asks for, and declares only what that
+# capability imports directly. two capabilities may share a wheel: quivers
+# requires torch, so `judgments` gets torch too, without `nn` naming quivers.
+[project.optional-dependencies]
+nn = ["numpy>=2", "torch>=2", "transformers[sentencepiece]>=4"]
+corpora = ["lairs[conllu]>=0.9.0"]
+cross-engine = ["quivers>=0.25.2"]
+# quivers[diagnostics] rather than plain quivers: the PSIS-LOO and ELPD comparison
+# in lofi.eval calls quivers.diagnostics.compare, which quivers puts behind its own
+# diagnostics extra because it needs arviz. Without it the import fails at the point
+# a model comparison is run rather than at install. The calibration reducer calls
+# scipy.stats.kstest directly, so scipy is likewise a direct judgments dependency.
+judgments = [
+    "bead>=0.12.0",
+    "quivers[diagnostics]>=0.25.2",
+    "scipy>=1.18",
+    "torchdiffeq>=0.2.5",
+]
+reporting = ["pyarrow>=25"]
+publish = [
+    "huggingface-hub>=1",
+    "lairs>=0.9.0",
+    "numpy>=2",
+    "torch>=2",
+    "transformers[sentencepiece]>=4",
+]
+tracking = ["wandb", "mlflow", "trackio"]
+# the law suites under lofi.*.laws are exported so a plugin author can check an
+# implementation against them, and they check properties with Hypothesis. No package
+# imports them, so the base install stays didactic and panproto.
+laws = ["hypothesis>=6"]
+# The SMT arm runs the z3 executable installed by this wheel. TPTP users may
+# select E or Vampire from their site environment through the same prover API.
+provers = ["z3-solver>=4.15"]
+
+[project.urls]
+Homepage = "https://github.com/logical-form-induction/lofi"
+Repository = "https://github.com/logical-form-induction/lofi"
+Issues = "https://github.com/logical-form-induction/lofi/issues"
+
+[project.scripts]
+lofi = "lofi.run._entrypoint:main"
+
+# A component family registers its declaration root once. Each variant then
+# registers one plugin object under the group named by that root's family.
+[project.entry-points."lofi.families"]
+active_collector = "lofi.spec.acquisition.collectors:ActiveCollectorSpec"
+baseline_system = "lofi.spec.components.baseline:BaselineSystemSpec"
+batch_sampler = "lofi.spec.components.trainer:BatchSamplerSpec"
+constraint_source = "lofi.spec.components.data:ConstraintSourceSpec"
+controller = "lofi.spec.components.model:ControllerSpec"
+chart = "lofi.spec.components.model:ParserSpec"
+dataset = "lofi.spec.components.data:DatasetSpec"
+evaluator = "lofi.spec.components.run:EvaluatorSpec"
+featurizer = "lofi.spec.components.data:FeaturizerSpec"
+gold_aggregation = "lofi.spec.components.data:GoldAggregationSpec"
+grounding = "lofi.spec.components.model:GroundingSpec"
+loss = "lofi.spec.components.loss:LossSpec"
+optimizer = "lofi.spec.components.trainer:OptimizerSpec"
+pair_sampler = "lofi.spec.components.trainer:PairSamplerSpec"
+pair_scorer = "lofi.spec.components.model:PairScorerSpec"
+probe = "lofi.spec.components.run:ProbeSpec"
+prover = "lofi.spec.provers:ProverSpec"
+readout = "lofi.spec.components.model:ReadoutSpec"
+scheduler = "lofi.spec.components.trainer:SchedulerSpec"
+sink = "lofi.spec.components.run:SinkSpec"
+span_decoder = "lofi.spec.components.model:SpanDecoderSpec"
+subword_pooler = "lofi.spec.components.model:SubwordPoolerSpec"
+term_decoder = "lofi.spec.components.model:TermDecoderSpec"
+term_encoder = "lofi.spec.components.model:TermEncoderSpec"
+token_encoder = "lofi.spec.components.model:TokenEncoderSpec"
+tokenizer = "lofi.spec.components.data:TokenizerSpec"
+trainer = "lofi.spec.components.trainer:TrainerSpec"
+type_sampler = "lofi.spec.components.trainer:TypeSamplerSpec"
+
+# Interpolation callables register by the exact name used in a document.
+[project.entry-points."lofi.resolver"]
+"lofi.path" = "lofi.spec._interpolation:_lofi_path"
+"lofi.pkg" = "lofi.spec._interpolation:_lofi_pkg"
+"lofi.seed" = "lofi.spec._interpolation:_lofi_seed"
+
+# A plugin author discovers the same conformance modules the package documents
+# through this group.  They stay outside runtime imports and require the laws
+# extra only when loaded.
+[project.entry-points."lofi.laws"]
+data = "lofi.data.laws"
+deduction = "lofi.deduce.laws"
+evaluation = "lofi.eval.laws"
+interpretation = "lofi.interpret.laws"
+judgment = "lofi.judge.laws"
+lexicon = "lofi.lexicon.laws"
+neural-loss = "lofi.nn.loss.laws"
+probe = "lofi.probe.laws"
+run = "lofi.run.laws"
+statistics = "lofi.stats.laws"
+terms = "lofi.terms.laws"
+training = "lofi.train.laws"
+typing = "lofi.typecheck.laws"
+
+# a distribution contributing configuration groups lists the package directory
+# holding them here.
+[project.entry-points."lofi.config_dirs"]
+
+# Rule families publish their conformance cases through this group.
+[project.entry-points."lofi.rule_family"]
+pure_ccg = "lofi.judge:PURE_CCG"
+prefix_closed_vw_ccg = "lofi.judge:PREFIX_CLOSED_VW_CCG"
+[project.entry-points."lofi.rule_laws"]
+composition = "lofi.spec._composition_laws:provide_rule_laws"
+substitution = "lofi.spec._substitution_laws:provide_rule_laws"
+raising = "lofi.spec._raising_laws:provide_rule_laws"
+pattern = "lofi.spec._pattern_laws:provide_rule_laws"
+
+# Each swappable family has its own discovery group. An entry of a model family
+# names the variant's plugin object, which pairs its spec class with its builder.
+[project.entry-points."lofi.rule"]
+absorption = "lofi.spec._ccg_rules:ABSORPTION_PLUGIN"
+application = "lofi.spec._ccg_rules:APPLICATION_PLUGIN"
+clausal-adjunct = "lofi.spec._ccg_rules:CLAUSAL_ADJUNCT_PLUGIN"
+coercion = "lofi.spec._ccg_rules:COERCION_PLUGIN"
+composition = "lofi.spec._ccg_rules:COMPOSITION_PLUGIN"
+coordination = "lofi.spec._ccg_rules:COORDINATION_PLUGIN"
+pattern = "lofi.spec._ccg_rules:PATTERN_PLUGIN"
+substitution = "lofi.spec._ccg_rules:SUBSTITUTION_PLUGIN"
+type-raising = "lofi.spec._ccg_rules:TYPE_RAISING_PLUGIN"
+[project.entry-points."lofi.erasure"]
+signature-morphism = "lofi.spec.grammar._erasure:SignatureMorphismErasureSpec"
+[project.entry-points."lofi.matching"]
+alpha = "lofi.spec._matching:ALPHA_PLUGIN"
+feature-erasure = "lofi.spec._matching:FEATURE_ERASURE_PLUGIN"
+identity = "lofi.spec._matching:IDENTITY_PLUGIN"
+modal = "lofi.spec.grammar._packs:MODAL_MATCHING_PLUGIN"
+product = "lofi.spec._matching:PRODUCT_PLUGIN"
+subsumption = "lofi.spec._matching:SUBSUMPTION_PLUGIN"
+[project.entry-points."lofi.normal_form"]
+all-of = "lofi.spec.grammar._grammar:ALL_OF_NORMAL_FORM_PLUGIN"
+eisner = "lofi.spec.grammar._grammar:EISNER_NORMAL_FORM_PLUGIN"
+hockenmaier-bisk = "lofi.spec.grammar._grammar:HOCKENMAIER_BISK_NORMAL_FORM_PLUGIN"
+none = "lofi.spec.grammar._grammar:NONE_NORMAL_FORM_PLUGIN"
+undirected-eisner = "lofi.spec.grammar._grammar:UNDIRECTED_EISNER_NORMAL_FORM_PLUGIN"
+[project.entry-points."lofi.goal"]
+cover = "lofi.spec.grammar._grammar:COVER_GOAL_PLUGIN"
+root = "lofi.spec.grammar._grammar:ROOT_GOAL_PLUGIN"
+[project.entry-points."lofi.interpretation"]
+category = "lofi.spec.grammar._interpretation:CATEGORY_INTERPRETATION_PLUGIN"
+dependency = "lofi.spec.grammar._interpretation:DEPENDENCY_INTERPRETATION_PLUGIN"
+meaning = "lofi.spec.grammar._interpretation:MEANING_INTERPRETATION_PLUGIN"
+string = "lofi.spec.grammar._interpretation:STRING_INTERPRETATION_PLUGIN"
+[project.entry-points."lofi.parse_strategy"]
+cky = "lofi.spec.components.run:CKY_STRATEGY_PLUGIN"
+[project.entry-points."lofi.span_index"]
+contiguous = "lofi.spec.components.run:CONTIGUOUS_SPAN_INDEX_PLUGIN"
+[project.entry-points."lofi.chart_store"]
+native = "lofi.spec.components.run:NATIVE_CHART_STORE_PLUGIN"
+[project.entry-points."lofi.cell_pruner"]
+top-k = "lofi.spec.components.run:TOP_K_PRUNER_PLUGIN"
+[project.entry-points."lofi.semiring"]
+boolean = "lofi.spec.components.run:BOOLEAN_SEMIRING_PLUGIN"
+counting = "lofi.spec.components.run:COUNTING_SEMIRING_PLUGIN"
+expectation = "lofi.spec.components.run:EXPECTATION_SEMIRING_PLUGIN"
+forest = "lofi.spec.components.run:FOREST_SEMIRING_PLUGIN"
+k-best = "lofi.spec.components.run:K_BEST_SEMIRING_PLUGIN"
+log-inside = "lofi.spec.components.run:LOG_INSIDE_SEMIRING_PLUGIN"
+viterbi = "lofi.spec.components.run:VITERBI_SEMIRING_PLUGIN"
+[project.entry-points."lofi.astar_strategy"]
+binary = "lofi.spec.evaluators.decode:BINARY_ASTAR_STRATEGY_PLUGIN"
+linear = "lofi.spec.evaluators.decode:LINEAR_ASTAR_STRATEGY_PLUGIN"
+[project.entry-points."lofi.astar_root_mode"]
+free = "lofi.spec.evaluators.decode:FREE_ASTAR_ROOT_PLUGIN"
+goal = "lofi.spec.evaluators.decode:GOAL_ASTAR_ROOT_PLUGIN"
+[project.entry-points."lofi.astar_heuristic"]
+supertag-outside = "lofi.spec.evaluators.decode:SUPERTAG_OUTSIDE_HEURISTIC_PLUGIN"
+zero = "lofi.spec.evaluators.decode:ZERO_HEURISTIC_PLUGIN"
+[project.entry-points."lofi.astar_proposer"]
+supertag-beam = "lofi.spec.evaluators.decode:SUPERTAG_BEAM_PROPOSER_PLUGIN"
+[project.entry-points."lofi.mbr_utility"]
+constituent = "lofi.spec.evaluators.decode:CONSTITUENT_UTILITY_PLUGIN"
+[project.entry-points."lofi.intervention"]
+mean = "lofi.probe._boundary:MeanDecl"
+noise = "lofi.probe._boundary:NoiseDecl"
+resample = "lofi.probe._boundary:ResampleDecl"
+shuffle = "lofi.probe._boundary:ShuffleDecl"
+zero = "lofi.probe._boundary:ZeroDecl"
+[project.entry-points."lofi.acdc_threshold"]
+absolute = "lofi.probe._boundary:AbsoluteThresholdDecl"
+relative = "lofi.probe._boundary:RelativeThresholdDecl"
+[project.entry-points."lofi.artifact_source"]
+hub = "lofi.spec.artifacts:HubSourceSpec"
+url = "lofi.spec.artifacts:UrlSourceSpec"
+[project.entry-points."lofi.diora_backend"]
+released-mlp = "lofi.run._boundary.external_probe:ReleasedMlpBackendDecl"
+[project.entry-points."lofi.das_search"]
+boundless = "lofi.probe._boundary:BoundlessSearchDecl"
+fixed-rank = "lofi.probe._boundary:FixedRankSearchDecl"
+[project.entry-points."lofi.decode_method"]
+mbr = "lofi.spec.evaluators.decode:MBR_DECODE_PLUGIN"
+viterbi = "lofi.spec.evaluators.decode:VITERBI_DECODE_PLUGIN"
+[project.entry-points."lofi.formalism"]
+ab = "lofi.spec.grammar._packs:AB_PLUGIN"
+cfg = "lofi.spec.grammar._packs:CFG_PLUGIN"
+tlg = "lofi.spec.grammar._packs:TLG_PLUGIN"
+undirected-ccg = "lofi.spec.grammar._packs:UNDIRECTED_CCG_PLUGIN"
+[project.entry-points."lofi.lf_language"]
+neo-davidsonian = "lofi.spec.language._standard:_neo_davidsonian"
+propositional = "lofi.spec.language._standard:_propositional"
+[project.entry-points."lofi.lf_complexity"]
+connective_count = "lofi.data.synthetic._complexity:CONNECTIVE_COUNT"
+meaning_depth = "lofi.data.synthetic._complexity:MEANING_DEPTH"
+operator_nesting = "lofi.data.synthetic._complexity:OPERATOR_NESTING"
+predicate_count = "lofi.data.synthetic._complexity:PREDICATE_COUNT"
+quantifier_depth = "lofi.data.synthetic._complexity:QUANTIFIER_DEPTH"
+variable_count = "lofi.data.synthetic._complexity:VARIABLE_COUNT"
+[project.entry-points."lofi.lf_class"]
+quantifier = "lofi.data.synthetic._semantics:QUANTIFIER_CLASS"
+connective = "lofi.data.synthetic._semantics:CONNECTIVE_CLASS"
+predicate = "lofi.data.synthetic._semantics:PREDICATE_CLASS"
+identity = "lofi.data.synthetic._semantics:IDENTITY_CLASS"
+constant = "lofi.data.synthetic._semantics:CONSTANT_CLASS"
+[project.entry-points."lofi.pair_strategy"]
+independent = "lofi.data.synthetic.spec.pairing:INDEPENDENT_PLUGIN"
+overlap-matched = "lofi.data.synthetic.spec.pairing:OVERLAP_MATCHED_PLUGIN"
+[project.entry-points."lofi.corruption"]
+swap = "lofi.data.synthetic._corrupt:SWAP_PLUGIN"
+deletion = "lofi.data.synthetic._corrupt:DELETION_PLUGIN"
+insertion = "lofi.data.synthetic._corrupt:INSERTION_PLUGIN"
+substitution = "lofi.data.synthetic._corrupt:SUBSTITUTION_PLUGIN"
+[project.entry-points."lofi.ill_typing"]
+argument-swap = "lofi.data.synthetic._injection:ARGUMENT_SWAP_PLUGIN"
+over-application = "lofi.data.synthetic._injection:OVER_APPLICATION_PLUGIN"
+sort-mismatch = "lofi.data.synthetic._injection:SORT_MISMATCH_PLUGIN"
+[project.entry-points."lofi.token_encoder"]
+static = "lofi.nn.tokens.embedder:PLUGIN"
+pretrained = "lofi.nn.tokens.pretrained:PLUGIN"
+learned = "lofi.nn.tokens.learned:PLUGIN"
+llm2vec = "lofi.nn.tokens.llm2vec:PLUGIN"
+[project.entry-points."lofi.subword_pooler"]
+first = "lofi.nn.tokens.pool:FIRST_PLUGIN"
+mean = "lofi.nn.tokens.pool:MEAN_PLUGIN"
+attention = "lofi.nn.tokens.pool:ATTENTION_PLUGIN"
+[project.entry-points."lofi.term_encoder"]
+hrr = "lofi.nn.encoders.hrr:PLUGIN"
+linear-rnn = "lofi.nn.encoders.linear:PLUGIN"
+tree-rnn = "lofi.nn.encoders.rnn:PLUGIN"
+transformer = "lofi.nn.encoders.transformer:PLUGIN"
+[project.entry-points."lofi.term_decoder"]
+hrr = "lofi.nn.decoders.hrr:PLUGIN"
+linear-rnn = "lofi.nn.decoders.linear:PLUGIN"
+tree-rnn = "lofi.nn.decoders.rnn:PLUGIN"
+transformer = "lofi.nn.decoders.transformer:PLUGIN"
+diffusion = "lofi.nn.decoders.diffusion:PLUGIN"
+[project.entry-points."lofi.chart"]
+inside-outside = "lofi.nn.parsers._scorer:PLUGIN"
+tagged = "lofi.nn.parsers._tagged_scorer:PLUGIN"
+flat = "lofi.nn.parsers.flat:PLUGIN"
+span-crf = "lofi.nn.parsers._span_crf:PLUGIN"
+[project.entry-points."lofi.chart_composition"]
+mean-field = "lofi.nn.parsers.composition:MEAN_FIELD_PLUGIN"
+gated-residual = "lofi.nn.parsers.composition:GATED_RESIDUAL_PLUGIN"
+[project.entry-points."lofi.split_weigher"]
+marginal = "lofi.nn.parsers._weigher:MARGINAL_PLUGIN"
+attend = "lofi.nn.parsers._weigher:ATTEND_PLUGIN"
+[project.entry-points."lofi.span_function"]
+mlp = "lofi.nn.parsers.functions:MLP_PLUGIN"
+bilinear = "lofi.nn.parsers.functions:BILINEAR_PLUGIN"
+cp-bilinear = "lofi.nn.parsers.functions:CP_BILINEAR_PLUGIN"
+gated-mlp = "lofi.nn.parsers.functions:GATED_MLP_PLUGIN"
+hrr = "lofi.nn.parsers.functions:HRR_PLUGIN"
+transformer = "lofi.nn.parsers.functions:TRANSFORMER_PLUGIN"
+[project.entry-points."lofi.controller"]
+mlp = "lofi.nn.controllers.mlp:PLUGIN"
+bilinear = "lofi.nn.controllers.bilinear:PLUGIN"
+transformer = "lofi.nn.controllers.transformer:PLUGIN"
+[project.entry-points."lofi.launcher"]
+serial = "lofi.run._launcher_plugin:SERIAL_PLUGIN"
+array = "lofi.run._launcher_plugin:ARRAY_PLUGIN"
+remote = "lofi.run._launcher_plugin:REMOTE_PLUGIN"
+[project.entry-points."lofi.correction"]
+bonferroni = "lofi.run._correction_builtins:BONFERRONI_PLUGIN"
+holm = "lofi.run._correction_builtins:HOLM_PLUGIN"
+benjamini-hochberg = "lofi.run._correction_builtins:BENJAMINI_HOCHBERG_PLUGIN"
+benjamini-yekutieli = "lofi.run._correction_builtins:BENJAMINI_YEKUTIELI_PLUGIN"
+[project.entry-points."lofi.report_format"]
+markdown = "lofi.report.markdown:MARKDOWN"
+latex = "lofi.report.latex:LATEX"
+[project.entry-points."lofi.experiment_config"]
+run = "lofi.run._run_configuration:PLUGIN"
+judgment-fit = "lofi.run._experiment_kinds:JUDGMENT_FIT_PLUGIN"
+baseline-fit = "lofi.run._baseline_fit_configuration:PLUGIN"
+active-learning = "lofi.run._experiment_kinds:ACTIVE_LEARNING_PLUGIN"
+[project.entry-points."lofi.pricing"]
+stack-bootstrap = "lofi.run._cost_model_builtins:STACK_BOOTSTRAP_PLUGIN"
+length-batch = "lofi.run._cost_model_builtins:LENGTH_BATCH_PLUGIN"
+[project.entry-points."lofi.contraction_rung"]
+unpreregistered-cells = "lofi.run._rung_builtins:UNPREREGISTERED_CELLS_PLUGIN"
+resolution-iv = "lofi.run._rung_builtins:RESOLUTION_IV_PLUGIN"
+languages = "lofi.run._rung_builtins:LANGUAGES_PLUGIN"
+seeds = "lofi.run._rung_builtins:SEEDS_PLUGIN"
+corpus-scale = "lofi.run._rung_builtins:CORPUS_SCALE_PLUGIN"
+fallback = "lofi.run._rung_builtins:FALLBACK_PLUGIN"
+[project.entry-points."lofi.sweep_design"]
+grid = "lofi.run._design:GRID_PLUGIN"
+random = "lofi.run._design:RANDOM_PLUGIN"
+latin-hypercube = "lofi.run._design:LATIN_HYPERCUBE_PLUGIN"
+fractional-factorial = "lofi.run._design:FRACTIONAL_FACTORIAL_PLUGIN"
+[project.entry-points."lofi.activation"]
+tanh = "lofi.nn._layers:TANH"
+relu = "lofi.nn._layers:RELU"
+gelu = "lofi.nn._layers:GELU"
+silu = "lofi.nn._layers:SILU"
+[project.entry-points."lofi.recurrent_cell"]
+gru = "lofi.nn._layers:GRU"
+lstm = "lofi.nn._layers:LSTM"
+elman-tanh = "lofi.nn._layers:ELMAN_TANH"
+elman-relu = "lofi.nn._layers:ELMAN_RELU"
+[project.entry-points."lofi.decoding_strategy"]
+greedy = "lofi.nn.loss._decoding:GREEDY"
+beam = "lofi.nn.loss._decoding:BEAM"
+exhaustive = "lofi.nn.loss._decoding:EXHAUSTIVE"
+sample = "lofi.nn.loss._decoding:SAMPLE"
+[project.entry-points."lofi.pair_feature"]
+left = "lofi.nn.controllers._features:LEFT"
+right = "lofi.nn.controllers._features:RIGHT"
+difference = "lofi.nn.controllers._features:DIFFERENCE"
+product = "lofi.nn.controllers._features:PRODUCT"
+[project.entry-points."lofi.sampling_restriction"]
+full = "lofi.nn.sampling:FULL"
+top-k = "lofi.nn.sampling:TOP_K"
+nucleus = "lofi.nn.sampling:NUCLEUS"
+[project.entry-points."lofi.similarity_kernel"]
+cosine = "lofi.nn.grounding._similarity:COSINE"
+rbf = "lofi.nn.grounding._similarity:RBF"
+[project.entry-points."lofi.transformer_structure"]
+positions = "lofi.nn.transformer:POSITIONS"
+positions-with-depth = "lofi.nn.transformer:POSITIONS_WITH_DEPTH"
+ancestor-mask = "lofi.nn.transformer:ANCESTOR_MASK"
+ancestor-and-sibling-bias = "lofi.nn.transformer:ANCESTOR_AND_SIBLING_BIAS"
+parent-recurrence = "lofi.nn.transformer:PARENT_RECURRENCE"
+[project.entry-points."lofi.vector_format"]
+glove = "lofi.nn.tokens.embedder:GLOVE"
+word2vec = "lofi.nn.tokens.embedder:WORD2VEC"
+[project.entry-points."lofi.description_cost"]
+uniform = "lofi.nn.loss._description_cost:UNIFORM_PLUGIN"
+log-alphabet = "lofi.nn.loss._description_cost:LOG_ALPHABET_PLUGIN"
+per-constructor = "lofi.nn.loss._description_cost:PER_CONSTRUCTOR_PLUGIN"
+[project.entry-points."lofi.oov_initialization"]
+zeros = "lofi.nn.tokens.embedder:ZERO_OOV"
+normal = "lofi.nn.tokens.embedder:NORMAL_OOV"
+[project.entry-points."lofi.pair_selection"]
+forced-choice = "lofi.data.featurizers.pair:FORCED_CHOICE"
+relational = "lofi.data.featurizers.pair:RELATIONAL"
+relational-scalar = "lofi.data.featurizers.pair:RELATIONAL_SCALAR"
+[project.entry-points."lofi.mask_replacement"]
+mixed = "lofi.nn.tokens.llm2vec:MIXED"
+mask = "lofi.nn.tokens.llm2vec:MASK"
+[project.entry-points."lofi.adaptation"]
+full = "lofi.nn.tokens.llm2vec:FULL"
+lora = "lofi.nn.tokens.llm2vec:LORA"
+[project.entry-points."lofi.overflow_policy"]
+refuse = "lofi.nn.tokens.window:REFUSE"
+report = "lofi.nn.tokens.window:REPORT"
+[project.entry-points."lofi.encoder_architecture"]
+encoder-only = "lofi.nn.tokens.pretrained:ENCODER_ONLY"
+t5-encoder = "lofi.nn.tokens.pretrained:T5_ENCODER"
+[project.entry-points."lofi.readout"]
+terms = "lofi.nn.loss._readout:PLUGIN"
+[project.entry-points."lofi.meaning_weighting"]
+distinct = "lofi.typecheck._quotient:DISTINCT_PLUGIN"
+multiplicity = "lofi.typecheck._quotient:MULTIPLICITY_PLUGIN"
+[project.entry-points."lofi.span_decoder"]
+rnn-span-decoder = "lofi.nn.tokens.decoder:PLUGIN"
+[project.entry-points."lofi.loss"]
+coherence = "lofi.nn.loss._coherence:PLUGIN"
+grammaticality = "lofi.nn.loss._grammaticality:PLUGIN"
+pinning = "lofi.nn.loss._pinning:PLUGIN"
+vector-anchor = "lofi.nn.loss._anchor:PLUGIN"
+simplicity = "lofi.nn.loss._simplicity:PLUGIN"
+chart-scale = "lofi.nn.loss._scale:PLUGIN"
+derivation-entropy = "lofi.nn.loss._entropy:PLUGIN"
+span-reconstruction = "lofi.nn.loss._reconstruct:PLUGIN"
+outside-reconstruction = "lofi.nn.loss._outside_reconstruction:PLUGIN"
+inference = "lofi.nn.loss._inference:PLUGIN"
+form-supervision = "lofi.nn.loss._form_supervision:PLUGIN"
+shaped-proof = "lofi.nn.loss._proof:PLUGIN"
+form-typing = "lofi.nn.loss._form_typing:PLUGIN"
+[project.entry-points."lofi.inference_response"]
+label = "lofi.nn._inference_response:LABEL_PLUGIN"
+judgment = "lofi.nn._inference_response:JUDGMENT_PLUGIN"
+[project.entry-points."lofi.inference_labeling"]
+three-way = "lofi.lf._labeling:THREE_WAY"
+rte = "lofi.lf._labeling:RTE"
+graded = "lofi.lf._labeling:GRADED"
+[project.entry-points."lofi.grounding"]
+pairwise = "lofi.nn.grounding._pairwise:PLUGIN"
+expected-embedding = "lofi.nn.grounding._embedding:PLUGIN"
+[project.entry-points."lofi.control_variate"]
+moving = "lofi.control_variate:MOVING_PLUGIN"
+[project.entry-points."lofi.lexicon_generator"]
+entailment-graph = "lofi.data.corpora.entailment_graph._generator:ENTAILMENT_GRAPH_PLUGIN"
+masked-lm = "lofi.judgment._items:MASKED_LM_PLUGIN"
+[project.entry-points."lofi.entailment_graph_reader"]
+edge-list = "lofi.data.corpora.entailment_graph._reader:EDGE_LIST_PLUGIN"
+[project.entry-points."lofi.acquisition"]
+"rc2.1" = "lofi.judgment._acquisition:RC21_ACQUISITION_PLUGIN"
+[project.entry-points."lofi.active_collector"]
+bead = "lofi.run._active_collectors:BEAD_COLLECTOR_PLUGIN"
+drawn-effects = "lofi.run._active_collectors:DRAWN_EFFECTS_COLLECTOR_PLUGIN"
+predictor-truth = "lofi.run._active_collectors:PREDICTOR_TRUTH_COLLECTOR_PLUGIN"
+registered-design = "lofi.run._active_collectors:REGISTERED_DESIGN_COLLECTOR_PLUGIN"
+[project.entry-points."lofi.judgment_source"]
+predicted = "lofi.judgment._predicted:PREDICTED_JUDGMENT_SOURCE_PLUGIN"
+[project.entry-points."lofi.pair_scorer"]
+prover = "lofi.nn.grounding._prover_scorer:PLUGIN"
+model-checking = "lofi.nn.grounding._model_checking:PLUGIN"
+guided-proof = "lofi.nn.grounding._guided_proof:PLUGIN"
+neural-proof = "lofi.nn.grounding._neural_proof:PLUGIN"
+
+[project.entry-points."lofi.fuzzy_logic"]
+product = "lofi.lf.models:PRODUCT"
+goedel = "lofi.lf.models:GOEDEL"
+lukasiewicz = "lofi.lf.models:LUKASIEWICZ"
+
+[project.entry-points."lofi.fuzzy_implication"]
+residuum = "lofi.lf.models:RESIDUUM"
+material = "lofi.lf.models:MATERIAL"
+
+[project.entry-points."lofi.fuzzy_quantifier"]
+tnorm = "lofi.lf.models:TNORM_QUANTIFIER"
+extreme = "lofi.lf.models:EXTREME"
+
+[project.entry-points."lofi.fuzzy_equality"]
+crisp = "lofi.lf.models:CRISP"
+margin = "lofi.lf.models:MARGIN"
+
+[project.entry-points."lofi.atomic_sampling"]
+uniform = "lofi.lf.models:UNIFORM_ATOMIC"
+
+[project.entry-points."lofi.denotation_streams"]
+independent = "lofi.lf.models:INDEPENDENT_STREAMS"
+
+[project.entry-points."lofi.function_sampling"]
+table = "lofi.lf.models:TABLE_FUNCTIONS"
+
+[project.entry-points."lofi.truth_sampling"]
+bernoulli = "lofi.lf.models:BERNOULLI_TRUTH"
+
+[project.entry-points."lofi.structure_source"]
+sampled = "lofi.lf.models:SAMPLED"
+given = "lofi.nn.grounding._given:GIVEN"
+learned = "lofi.nn.grounding._learned:LEARNED"
+
+[project.entry-points."lofi.unmapped_constant"]
+undecided = "lofi.lf.models:UNDECIDED_CONSTANT"
+
+[project.entry-points."lofi.knowledge_base"]
+wikidata = "lofi.lf.models:WIKIDATA"
+
+[project.entry-points."lofi.prover"]
+truth-table = "lofi.data._provers:TRUTH_TABLE_PLUGIN"
+smt = "lofi.data._provers:SMT_PLUGIN"
+tptp = "lofi.data._provers:TPTP_PLUGIN"
+[project.entry-points."lofi.smt_engine"]
+z3 = "lofi.lf.provers:Z3"
+cvc5 = "lofi.lf.provers:CVC5"
+[project.entry-points."lofi.tptp_engine"]
+eprover = "lofi.lf.provers:EPROVER"
+vampire = "lofi.lf.provers:VAMPIRE"
+leo3 = "lofi.lf.provers:LEO3"
+[project.entry-points."lofi.logical_role"]
+negation = "lofi.lf._roles:NEGATION"
+conjunction = "lofi.lf._roles:CONJUNCTION"
+disjunction = "lofi.lf._roles:DISJUNCTION"
+conditional = "lofi.lf._roles:CONDITIONAL"
+biconditional = "lofi.lf._roles:BICONDITIONAL"
+exclusive-or = "lofi.lf._roles:EXCLUSIVE_OR"
+equality = "lofi.lf._roles:EQUALITY"
+universal = "lofi.lf._roles:UNIVERSAL"
+existential = "lofi.lf._roles:EXISTENTIAL"
+generalized-universal = "lofi.lf._roles:GENERALIZED_UNIVERSAL"
+[project.entry-points."lofi.logical_constant"]
+atom = "lofi.lf._plural:ATOM"
+choice = "lofi.lf._constants:CHOICE"
+most = "lofi.lf._semantics:MOST"
+part-of = "lofi.lf._plural:PART_OF"
+sum = "lofi.lf._plural:SUM"
+[project.entry-points."lofi.constraint_source"]
+declared = "lofi.data.synthetic._declared_constraints:PLUGIN"
+gold-derivation = "lofi.data.synthetic._gold_sources:GOLD_DERIVATION_PLUGIN"
+gold-lexicon = "lofi.data.synthetic._gold_sources:GOLD_LEXICON_PLUGIN"
+gold-logical-form = "lofi.data.synthetic._gold_sources:GOLD_LOGICAL_FORM_PLUGIN"
+[project.entry-points."lofi.batch_sampler"]
+length-bucket = "lofi.training_plugins.batch_sampler:LENGTH_BUCKET_PLUGIN"
+random = "lofi.training_plugins.batch_sampler:RANDOM_PLUGIN"
+sequential = "lofi.training_plugins.batch_sampler:SEQUENTIAL_PLUGIN"
+[project.entry-points."lofi.unsatisfiable_policy"]
+error = "lofi.spec.constraint_sources:ERROR_POLICY_PLUGIN"
+drop_clamp = "lofi.spec.constraint_sources:DROP_CLAMP_POLICY_PLUGIN"
+skip_item = "lofi.spec.constraint_sources:SKIP_ITEM_POLICY_PLUGIN"
+[project.entry-points."lofi.type_sampler"]
+recursive = "lofi.data.synthetic._types:RECURSIVE_PLUGIN"
+exhaustive = "lofi.data.synthetic._types:EXHAUSTIVE_PLUGIN"
+[project.entry-points."lofi.pair_sampler"]
+rule = "lofi.data.synthetic._pairs:PLUGIN"
+[project.entry-points."lofi.dataset"]
+ccgbank = "lofi.data.ccgbank:PLUGIN"
+ccgbank-reskin = "lofi.data.ccgbank_reskin:PLUGIN"
+chaosnli = "lofi.data.collected:CHAOS_NLI_PLUGIN"
+expert-ratings = "lofi.data.expert:PLUGIN"
+fracas = "lofi.data.collected:FRACAS_PLUGIN"
+mnli = "lofi.data.collected:MNLI_PLUGIN"
+pmb-ccg = "lofi.data.collected:PMB_CCG_PLUGIN"
+pmb-drs = "lofi.data.collected:PMB_DRS_PLUGIN"
+snli = "lofi.data.collected:SNLI_PLUGIN"
+synthetic = "lofi.data.synthetic.spec.corpus:PLUGIN"
+synthetic-inference = "lofi.data.synthetic.spec.inference:PLUGIN"
+unli = "lofi.data.collected:UNLI_PLUGIN"
+[project.entry-points."lofi.baseline_system"]
+bisk-hockenmaier = "lofi.eval._baseline_systems:BISK_HOCKENMAIER_PLUGIN"
+lm-prover = "lofi.eval._lm_prover_baseline:PLUGIN"
+[project.entry-points."lofi.featurizer"]
+unlabeled = "lofi.data.featurizers.unlabeled:PLUGIN"
+scalar = "lofi.data.featurizers.scalar:PLUGIN"
+derivation = "lofi.data.featurizers.derivation:PLUGIN"
+span-constraint = "lofi.data.featurizers.span_constraint:PLUGIN"
+pair = "lofi.data.featurizers.pair:PLUGIN"
+[project.entry-points."lofi.tokenizer"]
+regex = "lofi.data.tokenizers:PLUGIN"
+[project.entry-points."lofi.gold_aggregation"]
+majority = "lofi.data.gold:PLUGIN"
+[project.entry-points."lofi.probe"]
+causal = "lofi.probe._causal_probe:PLUGIN"
+circuit = "lofi.probe._circuit_probe:PLUGIN"
+classifier = "lofi.probe._classifier_probe:PLUGIN"
+diagnostics = "lofi.probe._diagnostics_probe:PLUGIN"
+external = "lofi.run._external_probe:PLUGIN"
+intervention = "lofi.probe._intervention_probe:PLUGIN"
+sae = "lofi.probe._sae:PLUGIN"
+[project.entry-points."lofi.diagnostic"]
+action-margin = "lofi.probe._margin:ActionMargin"
+atomic-complex-differentiation = "lofi.probe._differentiation:AtomicDifferentiation"
+attention-patterns = "lofi.probe._transformer:AttentionPatterns"
+constructor-embedding = "lofi.probe._constructors:ConstructorEmbedding"
+controller-choice = "lofi.probe._controller_choice:ControllerChoice"
+controller-relations = "lofi.probe._controller_relations:ControllerRelations"
+cutpoint-entropy = "lofi.probe._chart:CutpointEntropy"
+depth-graded-encoding = "lofi.probe._grading:DepthGrading"
+feed-forward-specialization = "lofi.probe._transformer:FeedForwardSpecialization"
+finite-readings = "lofi.probe._finite:FiniteReadings"
+gate-patterns = "lofi.probe._recurrent:GatePatterns"
+hidden-state-evolution = "lofi.probe._recurrent:HiddenStateEvolution"
+memory-cell-dynamics = "lofi.probe._recurrent:MemoryCellDynamics"
+recurrent-connection-analysis = "lofi.probe._recurrent:RecurrentConnectionAnalysis"
+recursion-spread = "lofi.probe._recursion:RecursionSpread"
+residual-contributions = "lofi.probe._transformer:ResidualContributions"
+split-posterior-kl = "lofi.probe._diora:SplitPosteriorKL"
+span-length-bias = "lofi.probe._chart:SpanLengthBias"
+superposition-interference = "lofi.probe._superposition:SuperpositionInterference"
+[project.entry-points."lofi.optimizer"]
+adamw = "lofi.nn.optimizers:ADAMW_PLUGIN"
+adam = "lofi.nn.optimizers:ADAM_PLUGIN"
+sgd = "lofi.nn.optimizers:SGD_PLUGIN"
+[project.entry-points."lofi.scheduler"]
+cosine = "lofi.nn.schedules:COSINE_PLUGIN"
+linear = "lofi.nn.schedules:LINEAR_PLUGIN"
+constant = "lofi.nn.schedules:CONSTANT_PLUGIN"
+[project.entry-points."lofi.trainer"]
+alternating = "lofi.training_plugins.alternating:PLUGIN"
+parser = "lofi.training_plugins.parser:PLUGIN"
+distance = "lofi.training_plugins.distance:PLUGIN"
+staged = "lofi.training_plugins.staged:PLUGIN"
+terms = "lofi.training_plugins.terms:PLUGIN"
+[project.entry-points."lofi.mixing"]
+round-robin = "lofi.training_plugins.mixing:ROUND_ROBIN_PLUGIN"
+proportional = "lofi.training_plugins.mixing:PROPORTIONAL_PLUGIN"
+ratio = "lofi.training_plugins.mixing:RATIO_PLUGIN"
+temperature = "lofi.training_plugins.mixing:TEMPERATURE_PLUGIN"
+[project.entry-points."lofi.step"]
+alternating = "lofi.training_plugins.steps:ALTERNATING_PLUGIN"
+controller = "lofi.training_plugins.steps:CONTROLLER_PLUGIN"
+grounded = "lofi.training_plugins.steps:GROUNDED_PLUGIN"
+judgment = "lofi.training_plugins.steps:JUDGMENT_PLUGIN"
+parser = "lofi.training_plugins.steps:PARSER_PLUGIN"
+supervised-warm-start = "lofi.training_plugins.steps:SUPERVISED_WARM_START_PLUGIN"
+terms = "lofi.training_plugins.steps:TERMS_PLUGIN"
+token-warm-up = "lofi.training_plugins.steps:TOKEN_WARMUP_PLUGIN"
+[project.entry-points."lofi.sink"]
+wandb = "lofi.run._wandb:PLUGIN"
+trackio = "lofi.run._trackio:PLUGIN"
+mlflow = "lofi.run._mlflow:PLUGIN"
+[project.entry-points."lofi.evaluator"]
+bracketing = "lofi.eval._bracketing_evaluator:PLUGIN"
+category-side = "lofi.eval._category_side:PLUGIN"
+coherence-square = "lofi.eval._coherence_square_evaluator:PLUGIN"
+coherence-diagnostics = "lofi.eval._coherence_diagnostics:PLUGIN"
+constructor-diagnostics = "lofi.eval._constructor_diagnostics:PLUGIN"
+decode = "lofi.eval._decode_evaluator:PLUGIN"
+equivalence = "lofi.eval._equivalence_evaluator:PLUGIN"
+expert-categories = "lofi.eval._expert:PLUGIN"
+grammaticality = "lofi.eval._grammaticality_evaluator:PLUGIN"
+held-out-likelihood = "lofi.eval._held_out_likelihood_evaluator:PLUGIN"
+inference = "lofi.eval._inference_evaluator:PLUGIN"
+lexical-diagnostics = "lofi.eval._lexical_diagnostics:PLUGIN"
+lexical-types = "lofi.eval._lexical_type_evaluator:PLUGIN"
+logical-form = "lofi.eval._logical_form_evaluator:PLUGIN"
+reachability = "lofi.eval._reachability:PLUGIN"
+structural-diagnostics = "lofi.eval._structural_diagnostics:PLUGIN"
+[project.entry-points."lofi.reducer"]
+coherence-collapse = "lofi.eval._diagnostic_reducers:COHERENCE_COLLAPSE_PLUGIN"
+cross-lingual = "lofi.eval._diagnostic_reducers:CROSSLINGUAL_PLUGIN"
+crossed-recovery = "lofi.eval._diagnostic_reducers:CROSSED_RECOVERY_PLUGIN"
+encoder-ablation = "lofi.eval._diagnostic_reducers:ENCODER_ABLATION_PLUGIN"
+node-vocabulary = "lofi.eval._node_vocabulary:PLUGIN"
+residual-structure = "lofi.eval._diagnostic_reducers:RESIDUAL_STRUCTURE_PLUGIN"
+restitutive-coverage = "lofi.eval._restitutive_coverage:PLUGIN"
+variance = "lofi.eval._reducers:VARIANCE_PLUGIN"
+rescoring = "lofi.eval._reducers:RESCORING_PLUGIN"
+rank-churn = "lofi.eval._reducers:RANK_CHURN_PLUGIN"
+source-comparison = "lofi.eval._reducers:SOURCE_COMPARISON_PLUGIN"
+transfer = "lofi.eval._diagnostic_reducers:TRANSFER_PLUGIN"
+[project.entry-points."lofi.prediction_format"]
+lofi-json = "lofi.eval._rescoring:read_predictions"
+[project.entry-points."lofi.rescoring_metric"]
+recall-homogeneity = "lofi.eval._rescoring:RECALL_HOMOGENEITY_METRIC"
+[project.entry-points."lofi.publisher"]
+layers-records = "lofi.eval._publish:LayersPredictionLens"
+[project.entry-points."lofi.guide"]
+mean_field = "lofi.judgment.guides:MEAN_FIELD_GUIDE"
+structured = "lofi.judgment.guides:PARTIALLY_FACTORIZED_GUIDE"
+[project.entry-points."lofi.linking"]
+linear = "lofi.judgment.linear:linear_steps"
+logit = "lofi.judgment.mass:logit_steps"
+morcela = "lofi.judgment.morcela:morcela_steps"
+probability = "lofi.judgment.mass:probability_steps"
+[project.entry-points."lofi.splitter"]
+kfold = "lofi.judgment.splits:kfold"
+leave-one-group-out = "lofi.judgment.splits:leave_one_group_out"
+[project.entry-points."lofi.judgment_design"]
+known-random-effects = "lofi.judgment.synthetic_designs:KNOWN_RANDOM_EFFECTS"
+prior-predictive-reference = "lofi.judgment.synthetic_designs:PRIOR_PREDICTIVE_REFERENCE"
+megaacceptability = "lofi.run.corpus_designs:MEGAACCEPTABILITY"
+megaacceptability-morcela = "lofi.run.corpus_designs:MEGAACCEPTABILITY_MORCELA"
+megaintensionality = "lofi.run.corpus_designs:MEGAINTENSIONALITY"
+meganegraising = "lofi.run.corpus_designs:MEGANEGRAISING"
+megaveridicality = "lofi.run.corpus_designs:MEGAVERIDICALITY"
+
+[project.entry-points."lairs.codecs"]
+ccgbank-auto = "lofi.data.corpora.ccgbank._auto:CcgbankAutoCodec"
+ccgbank-parg = "lofi.data.corpora.ccgbank._parg:PargCodec"
+chaosnli = "lofi.data.corpora.nli._codec:ChaosNliCodec"
+fracas = "lofi.data.corpora.fracas._codec:FracasCodec"
+layers-export = "lofi.data.corpora.layers._codec:LayersExportCodec"
+megaacceptability = "lofi.data.corpora.megaacceptability._codec:MegaAcceptabilityCodec"
+megaintensionality = "lofi.data.corpora.megaattitude._codec:MegaIntensionalityCodec"
+meganegraising = "lofi.data.corpora.megaattitude._codec:MegaNegRaisingCodec"
+megaveridicality = "lofi.data.corpora.megaattitude._codec:MegaVeridicalityCodec"
+mnli = "lofi.data.corpora.nli._codec:MnliCodec"
+pmb-ccg = "lofi.data.corpora.pmb._codec:PmbCcgCodec"
+pmb-drs = "lofi.data.corpora.pmb._drs:PmbDrsCodec"
+snli = "lofi.data.corpora.nli._codec:SnliCodec"
+unli = "lofi.data.corpora.nli._codec:UnliCodec"
+
+[build-system]
+requires = ["maturin>=1.15,<2"]
+build-backend = "maturin"
+
+# the Rust workspace under crates/ builds the one extension module, lofi._native,
+# beside the Python package at the repository root.
+[tool.maturin]
+manifest-path = "crates/lofi-native/Cargo.toml"
+module-name = "lofi._native"
+# every build compiles the committed Cargo.lock, as every install resolves uv.lock.
+locked = true
+profile = "release"
+# an editable install is what the tests and the benchmarks run against, and a
+# debug build would time the compiler's defaults rather than the kernel.
+editable-profile = "release"
+# Local files are never part of a release distribution.
+exclude = [".local/**"]
+# a source build compiles with the toolchain the repository pins.
+include = [{ path = "rust-toolchain.toml", format = "sdist" }]
+
+[tool.uv]
+# uv rebuilds the project only when a cache key changes. The extension is built
+# from these files, so an edit to any of them rebuilds it on the next sync. A
+# file key compares modification times, which a deleted file does not move, so
+# the directory key is what makes a missing crates/ rebuild, and fail.
+cache-keys = [
+    { dir = "crates" },
+    { file = "pyproject.toml" },
+    { file = "Cargo.toml" },
+    { file = "Cargo.lock" },
+    { file = "rust-toolchain.toml" },
+    { file = "crates/**/*.rs" },
+    { file = "crates/**/Cargo.toml" },
+]
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "ty",
+    "pytest",
+    "pytest-cov",
+    "pytest-benchmark",
+    "hypothesis",
+    "import-linter",
+    "pre-commit",
+    "pyyaml",
+    "lofi[nn]",
+    "lofi[corpora]",
+    "lofi[cross-engine]",
+    "lofi[judgments]",
+    "lofi[tracking]",
+  "lofi[provers]",
+]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 88
+src = ["lofi", "tests", "scripts"]
+# Local files are excluded. The extension's stub is maturin's output,
+# regenerated from the compiled module and read by ty.
+extend-exclude = [".local", "lofi/_native.pyi"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D203",   # mutually exclusive with D211; ruff refuses to run with both on
+    "D213",   # mutually exclusive with D212; likewise
+    "COM812", # ruff documents this as incompatible with `ruff format`
+    "ISC001", # likewise
+    "CPY001", # the LICENSE states the terms once; no substrate package carries per-file headers
+    "PLR2004", # a literal at its use site is normal Python; naming every one produced 97 single-use constants
+    "PLR0913", # a constructor that injects one argument per port takes as many arguments as it has ports
+    "PLR0917", # likewise for positional count
+    "C901",    # the closure engine and proof search are the algorithms; splitting them for a metric obscures them
+    "PLR0912", # likewise: branch count in the proof search
+    "PLR0915", # likewise: statement count in the proof search
+    "S311",    # random here is for reproducible synthetic data, never for security
+]
+
+[tool.ruff.lint.isort]
+# `src` names the roots modules resolve against, which leaves the distribution's
+# own package looking third-party to the import sorter.
+known-first-party = ["lofi"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.flake8-type-checking]
+# didactic reads a Model's field annotations at class creation, so its imports are runtime imports.
+# ruff resolves only a class's direct bases, so a variant of a component root
+# declared in another module names that root here.
+runtime-evaluated-base-classes = [
+    "didactic.api.Model",
+    "didactic.api.TaggedUnion",
+    "didactic.api.Settings",
+    "lofi.spec.components.baseline.BaselineSystemSpec",
+    "lofi.spec.components.data.DatasetSpec",
+    "lofi.spec.components.model.ReadoutSpec",
+    "lofi.spec.components.model.PairScorerSpec",
+    "lofi.spec.components.model.GroundingSpec",
+    "lofi.spec.components.model.ParserSpec",
+    "lofi.spec.components.model.TermDecoderSpec",
+    "lofi.spec.components.model.TermEncoderSpec",
+    "lofi.spec.components.model.TokenEncoderSpec",
+    "lofi.spec.components.run.EvaluatorSpec",
+    "lofi.spec.components.run.ProbeSpec",
+    "lofi.spec.components.trainer.TrainerSpec",
+    "lofi.spec.lexicon_generators.LexiconGeneratorSpec",
+    "lofi.spec.structures.sampled.StructureSourceSpec",
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+# an import climbing more than one level is the shape a layering violation takes.
+# forbidding it forces the same edge to be written absolutely, where import-linter sees it.
+ban-relative-imports = "parents"
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"typing.Any".msg = "Use dx.TaggedUnion, PEP 695 generics, a concrete union, a Protocol, or JsonValue."
+"inspect.signature".msg = "Signature reflection is not dispatch. Register with an explicit string tag."
+"inspect.getmembers".msg = "Reflection over members is not dispatch."
+"torch.set_default_device".msg = "No global torch mutation."
+"torch.set_default_dtype".msg = "No global torch mutation."
+"torch.cuda.is_available".msg = "Device selection happens once, in the run policy."
+
+[tool.ruff.lint.per-file-ignores]
+# The citation hook parses local Pandoc output, not untrusted XML input.
+"scripts/docs/citations.py" = ["S314"]
+# Documentation checks use unittest so the docs environment needs no pytest.
+"scripts/docs/test_citations.py" = ["PT009", "PT027"]
+# the launcher runs the site profile's declared submit and transport commands as an
+# argument vector, never shell text, so the subprocess audit rule does not apply (S603).
+"lofi/run/_launch.py" = ["S603"]
+# the execution environment runs git with fixed argument vectors and no shell to
+# read and verify the executing checkout's revision (S603).
+"lofi/run/_environment.py" = ["S603"]
+# These modules execute a validated absolute prover path with fixed argument
+# vectors and no shell interpolation; subprocesses are their public boundary.
+"lofi/lf/provers/smt.py" = ["S603"]
+"lofi/lf/provers/tptp.py" = ["S603"]
+# the public-release preflight runs four named tools with fixed argument vectors and
+# no shell interpolation; subprocess is the boundary it is specifically checking.
+"scripts/preflight/public_release.py" = ["S603"]
+# the freeze command runs git with fixed argument vectors and no shell, reading
+# tracked blobs as exact bytes and feeding the tag object on standard input (S603).
+"lofi/run/freezing.py" = ["S603"]
+# This conformance law must turn any third-party manifest failure into a named law
+# failure so the backend and violated law remain visible.
+"tests/conformance/experiment_manifest.py" = ["BLE001"]
+# tests assert, compare against bare numbers, and need no API docstrings.
+# a test that pickles a value it built itself is not deserializing untrusted data (S301).
+"tests/**" = [
+    "S101",
+    "PLR2004",
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+    "INP001",
+    "S301",
+    # Tests launch fixed local interpreters and fixtures, never user-controlled programs.
+    "S603",
+]
+# contract tests inspect callable surfaces; they do not dispatch at runtime.
+"tests/contract/**" = ["TID251"]
+# a didactic eliminator body is a lambda whose parameters must name every input in
+# declaration order, and a case branch one per binder, whether or not the body
+# reads them; ARG005 reads a required name as an unused one.
+"tests/conventions/test_substrate.py" = ["ARG005"]
+# This test deliberately aggregates arbitrary backend failures to assert symmetry.
+"tests/conformance/response_backend.py" = ["BLE001"]
+# This concurrency test must transport even BaseException failures from worker
+# threads and re-raise the original failure on the controlling thread.
+# These focused tests inspect parse-local dispatch and memoization by design.
+"tests/unit/deduce/test__engine.py" = ["SLF001"]
+# the frozen-value suite checks that each value's refusal messages name the noun and
+# the cause the class declares, which means reading those declarations (SLF001).
+"tests/conformance/frozen.py" = ["SLF001"]
+# declaration modules hold value declarations rather than behavior. PLR0913 and PLR0917
+# count arguments as a heuristic aimed at a behavioral function whose parameter list has
+# grown untended; a record with six fields has six because the thing it describes has six
+# properties, and splitting that constructor would split the concept.
+"lofi/**/_values.py" = ["PLR0913", "PLR0917"]
+"lofi/**/_ports.py" = ["PLR0913", "PLR0917"]
+# the report API names each parser dependency; packing them would hide public ports.
+"lofi/deduce/_report.py" = ["PLR0913"]
+# S311 warns that the standard pseudo-random generator is unsuitable for
+# cryptography. Resampling inference is not cryptography: a permutation test and
+# a bootstrap need a reproducible stream from a declared seed, which is exactly
+# what random.Random gives and what a cryptographic source would not.
+"lofi/stats/**" = ["S311"]
+
+[tool.ty.src]
+# Local files are excluded from source checking.
+# The extension's stub is maturin's output: ty resolves imports through it but does
+# not check its layout.
+exclude = [".local", "lofi/_native.pyi"]
+
+[tool.ty.environment]
+python-version = "3.14"
+
+[tool.ty.rules]
+# every rule that does not already default to error is promoted to one.
+ambiguous-protocol-member = "error"
+blanket-ignore-comment = "error"
+deprecated = "error"
+division-by-zero = "error"
+experimental-syntax = "error"
+ignore-comment-unknown-rule = "error"
+ineffective-final = "error"
+invalid-enum-member-annotation = "error"
+invalid-ignore-comment = "error"
+invalid-legacy-positional-parameter = "error"
+invalid-named-tuple-override = "error"
+mismatched-type-name = "error"
+missing-override-decorator = "error"
+missing-type-argument = "error"
+possibly-missing-implicit-call = "error"
+possibly-missing-import = "error"
+possibly-missing-submodule = "error"
+possibly-unresolved-reference = "error"
+redundant-cast = "error"
+redundant-final-classvar = "error"
+subclass-of-dataclass-with-order = "error"
+undefined-reveal = "error"
+unresolved-global = "error"
+unresolved-import = "error"
+unresolved-reference = "error"
+unsupported-base = "error"
+unsupported-dynamic-base = "error"
+unused-awaitable = "error"
+unused-ignore-comment = "error"
+unused-type-ignore-comment = "error"
+useless-overload-body = "error"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+    "--strict-markers",
+    "-ra",
+    "--benchmark-skip",
+    "--benchmark-storage=tests/benchmarks/baselines",
+]
+testpaths = ["tests"]
+pythonpath = ["."]
+# a benchmark's absolute wall-clock budget holds on the fixed benchmark machine.
+# the hosted comparison of a commit against its parent sets this false and gates
+# on the relative regression instead.
+wall_clock_budgets = true
+markers = [
+    "integration: real IO, optional deps or credentials (needs --run-integration)",
+    "slow: long-running (needs --run-slow)",
+    "generality: trains on large generated declarations (needs --run-generality)",
+    "conformance: a protocol conformance suite run against one implementation",
+    "corpus: needs a licensed corpus named by an environment variable",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["lofi"]
+
+[tool.coverage.report]
+# a smoke alarm on the unit job, not a target. coverage is never in addopts,
+# because tracing inflates the benchmark timings several-fold.
+fail_under = 80
+show_missing = true

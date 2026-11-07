@@ -1,0 +1,3 @@
+defaults:
+  - prange
+  - inventory-seed

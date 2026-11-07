@@ -1,0 +1,36 @@
+# The slash pair with a product constructor and its first projection.
+name: slash-product
+signature:
+  primitives: [S, NP]
+  constructors:
+    - {name: "/", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: /, precedence: 10, associativity: left}}
+    - {name: '\', kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '\', precedence: 10, associativity: left}}
+    - {name: "*", kind: [Cat, Cat, Cat], notation: {style: infix, spelling: '*', precedence: 10, associativity: left}}
+  functors:
+    - {name: "/", constructor: "/", argument_side: right, opposite: '\'}
+    - {name: '\', constructor: '\', argument_side: left, opposite: "/"}
+rules:
+  name: slash-product
+  rules:
+    - {rule: application, view: /}
+    - {rule: application, view: "\\"}
+    - rule: pattern
+      name: first
+      premises:
+        - pattern: node
+          operator: {kind: fixed, name: "*"}
+          arguments: [{pattern: term, name: A}, {pattern: term, name: B}]
+      conclusion: {pattern: term, name: A}
+lexicon:
+  kind: inline
+  entries:
+    - {form: john, category: NP, meaning: john}
+    - {form: couple, category: "NP*NP", meaning: "pair(john)(mary)"}
+    - {form: sleeps, category: "S\\NP", meaning: '\x. sleep(x)'}
+    - {form: sees, category: "S\\NP/NP", meaning: '\y. \x. see(x)(y)'}
+goal:
+  kind: root
+  categories: [S]
+budget:
+  unary_rounds: 1
+formalism: declared

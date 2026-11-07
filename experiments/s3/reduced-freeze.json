@@ -1,0 +1,13 @@
+{
+  "grid": {
+    "ambiguity-frequency": [-0.75, 0.75]
+  },
+  "hypotheses": [
+    {
+      "name": "reduced-recovery-above-floor",
+      "left": "primitive-many-to-one-accuracy",
+      "right": "primitive-random-relabeling-floor",
+      "family": "reduced-lexical-ambiguity"
+    }
+  ]
+}

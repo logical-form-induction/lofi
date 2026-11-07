@@ -1,0 +1,40 @@
+# Inference pairs synthesized from the interpreted arrow and product grammar,
+# whose curry combinator carries its meaning, trained through the shared
+# inference grounding point.
+defaults:
+  - inference-base
+  - data.datasets.train.dataset.grammar: arrow-product
+  - data.datasets.train.dataset.source.interpretation: products
+  - data.datasets.train.dataset.source.language: products
+  - model.spaces.categories.combinators: arrow-product
+# The first term decode runs on untrained weights, whose unaccounted mass for
+# this grammar sits near 0.92 whatever the seed; the bound admits that.
+approximation: {residual_mass: 0.95}
+model:
+  language: {from: data}
+  parser:
+    kind: tagged
+    width: 4
+    unary_depth: 1
+  readouts:
+    forms:
+      decoding: {cap: 17}
+data:
+  datasets:
+    train:
+      dataset:
+        retained: '${oc.create:{"validation":0.3333333333333333}}'
+        source:
+          interpretation:
+            erasure:
+              constructors:
+                "*": "prod(a0, a1)"
+            constants:
+              - {name: john, type: e, classes: [individual]}
+              - {name: mary, type: e, classes: [individual]}
+              - {name: sleep, type: "e -> t", classes: [predicate]}
+              - {name: see, type: "prod(e, e) -> t", classes: [predicate]}
+            meanings: {source: {kind: lexical}}
+            actions:
+              pair: '\a. \b. pair(a)(b)'
+              curry: '\f. \z. \y. f(pair(y)(z))'

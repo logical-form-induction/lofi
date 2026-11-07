@@ -1,0 +1,29 @@
+# Labeled inference grounded by conditional satisfaction in sampled structures.
+defaults:
+  - inference-point
+  - model.grounding: model-checking-sampled
+parse: {retain: forest, reachability: all}
+model:
+  language: {from: data}
+  encoders:
+    logical-forms:
+      kind: transformer
+      width: 4
+      heads: 1
+      layers: 1
+      feedforward_width: 4
+      structure: positions
+      norm_cap: null
+  readouts:
+    forms:
+      decoding: {strategy: exhaustive, cap: 64}
+data:
+  datasets:
+    train:
+      dataset:
+        source:
+          language:
+            bounds:
+              Ty: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+              Tm: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
+              Cat: {layout: complete-tree, depth: 4, nodes: null, order: df, free_ranks: 0}
