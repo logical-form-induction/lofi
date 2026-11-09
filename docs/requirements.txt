@@ -12,5 +12,5 @@ mkdocs-autorefs==1.4.5
 pypandoc-binary==1.17
 griffelib==2.4.1
 pymdown-extensions==12.3
-markdown==3.11.2
+markdown==3.11.3
 pygments==2.21.0
